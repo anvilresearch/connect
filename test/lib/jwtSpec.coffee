@@ -1,3 +1,21 @@
+# Test dependencies
+cwd         = process.cwd()
+path        = require 'path'
+#Faker       = require 'Faker'
+chai        = require 'chai'
+# sinon       = require 'sinon'
+# sinonChai   = require 'sinon-chai'
+expect      = chai.expect
+
+# Assertions
+# chai.use sinonChai
+chai.should()
+
+JWT = require path.join cwd, 'lib/JWT'
+
+
+
+
 #   JSON Web Token (JWT)
 #   draft-ietf-oauth-json-web-token-18
 #
@@ -85,7 +103,8 @@ describe 'JWT', ->
 
   describe 'supported algorithms', ->
 
-    it 'should be enumerated'
+    it 'should be enumerated', ->
+      JWT.algorithms.should.be.an.array
 
 
 
@@ -136,7 +155,8 @@ describe 'JWT', ->
     #   The "iss" value is a case-sensitive string containing a StringOrURI
     #   value.  Use of this claim is OPTIONAL.
 
-    it 'should specify "iss" as a StringOrURI'
+    it 'should specify "iss" as a StringOrURI', ->
+      JWT.registeredClaims.iss.format.should.equal 'StringOrURI'
 
 
 
@@ -153,7 +173,8 @@ describe 'JWT', ->
     #   "sub" value is a case-sensitive string containing a StringOrURI
     #   value.  Use of this claim is OPTIONAL.
 
-    it 'should specify "sub" as a StringOrURI'
+    it 'should specify "sub" as a StringOrURI', ->
+      JWT.registeredClaims.sub.format.should.equal 'StringOrURI'
 
 
 
@@ -174,8 +195,8 @@ describe 'JWT', ->
     #   interpretation of audience values is generally application specific.
     #   Use of this claim is OPTIONAL.
 
-    it 'should specify "aud" as an array of StringOrURI values'
-    it 'should specify "aud" as a StringOrURI'
+    it 'should specify "aud" as an array of StringOrURI values', ->
+      JWT.registeredClaims.aud.format.should.equal 'StringOrURI*'
 
 
 
@@ -192,7 +213,8 @@ describe 'JWT', ->
     #   a few minutes, to account for clock skew.  Its value MUST be a number
     #   containing an IntDate value.  Use of this claim is OPTIONAL.
 
-    it 'should specify "exp" as an IntDate'
+    it 'should specify "exp" as an IntDate', ->
+      JWT.registeredClaims.exp.format.should.equal 'IntDate'
 
 
 
@@ -209,7 +231,8 @@ describe 'JWT', ->
     #   account for clock skew.  Its value MUST be a number containing an
     #   IntDate value.  Use of this claim is OPTIONAL.
 
-    it 'should specify "nbf" as an IntDate'
+    it 'should specify "nbf" as an IntDate', ->
+      JWT.registeredClaims.nbf.format.should.equal 'IntDate'
 
 
 
@@ -223,7 +246,8 @@ describe 'JWT', ->
     #   value MUST be a number containing an IntDate value.  Use of this
     #   claim is OPTIONAL.
 
-    it 'should specify "iat" as an IntDate'
+    it 'should specify "iat" as an IntDate', ->
+      JWT.registeredClaims.iat.format.should.equal 'IntDate'
 
 
 
@@ -239,7 +263,8 @@ describe 'JWT', ->
     #   can be used to prevent the JWT from being replayed.  The "jti" value
     #   is a case-sensitive string.  Use of this claim is OPTIONAL.
 
-    it 'should specify "jti" as a case-sensitive string'
+    it 'should specify "jti" as a case-sensitive string', ->
+      JWT.registeredClaims.jti.format.should.equal 'CaseSensitiveString'
 
 
 
