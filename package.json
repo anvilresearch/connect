@@ -1,0 +1,16 @@
+{
+  "name": "anvil-connect",
+  "description": "OpenID Connect Provider",
+  "version": "0.0.0",
+  "author": {
+    "name": "Christian Smith",
+    "email": "smith@anvil.io",
+    "url": "http://anvil.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christiansmith/anvil-connect.git"
+  },
+  "main": "server.js",
+  "license": "MIT"
+}
