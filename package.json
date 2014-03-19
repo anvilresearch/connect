@@ -7,9 +7,19 @@
     "email": "smith@anvil.io",
     "url": "http://anvil.io"
   },
+  "contributors": [
+    {
+      "name": "Tom Kersten",
+      "email": "tom@whitespur.com",
+      "url": "http://tomkersten.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/christiansmith/anvil-connect.git"
+  },
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register --watch -R spec test/**/*.coffee"
   },
   "main": "server.js",
   "license": "MIT"
