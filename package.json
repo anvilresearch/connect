@@ -22,5 +22,11 @@
     "test": "mocha --compilers coffee:coffee-script/register --watch -R spec test/**/*.coffee"
   },
   "main": "server.js",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "~1.9.1"
+  },
+  "dependencies": {
+    "base64url": "0.0.6"
+  }
 }

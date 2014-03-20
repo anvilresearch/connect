@@ -1,17 +1,24 @@
 # Test dependencies
 cwd         = process.cwd()
 path        = require 'path'
-#Faker       = require 'Faker'
 chai        = require 'chai'
 # sinon       = require 'sinon'
 # sinonChai   = require 'sinon-chai'
 expect      = chai.expect
 
+
+
+
 # Assertions
 # chai.use sinonChai
 chai.should()
 
+
+
+
+# Code under test
 JWT = require path.join cwd, 'lib/JWT'
+base64url = require 'base64url'
 
 
 
@@ -309,7 +316,7 @@ describe 'JWT', ->
   #   of the following Header Parameters in both the cases where the JWT is
   #   a JWS and where it is a JWE.
 
-  describe 'header', ->
+  describe 'registered headers', ->
 
 
 
@@ -335,7 +342,14 @@ describe 'JWT', ->
     #   [JWA]; the initial contents of this registry are the values defined
     #   in Section 3.1 of the JSON Web Algorithms (JWA) [JWA] specification.
 
-    it 'must require a valid "alg" parameter'
+    it 'should specify "alg" to be required', ->
+      JWT.registeredHeaders.alg.required.should.equal true
+
+    it 'should specify "alg" to be a StringOrURI', ->
+      JWT.registeredHeaders.alg.format.should.equal 'StringOrURI'
+
+    it 'should specify "alg" to require a supported algorithm', ->
+      JWT.registeredHeaders.alg.enum.should.equal JWT.algorithms
 
 
 
@@ -383,7 +397,11 @@ describe 'JWT', ->
     #   using the JWS JSON Serialization or the JWE JSON Serialization.
     #   Other type values can also be used by applications.
 
-    it 'may contain a "typ" parameter of "JWT"'
+    it 'should specify "typ" to be a String', ->
+      JWT.registeredHeaders.typ.format.should.equal 'String'
+
+    it 'should specify "typ" to default to "JWT"', ->
+      JWT.registeredHeaders.typ.default.should.equal 'JWT'
 
 
 
@@ -430,8 +448,14 @@ describe 'JWT', ->
     #   type "application/example;part="1/2"" cannot be shortened to
     #   "example;part="1/2"".
 
-    it 'must require a "cty" parameter of "JWT" if the JWT is nested'
-    it 'should not contain a "cty" parameter unless the JWT is nested'
+    it 'should specify "cty" to be a String', ->
+      JWT.registeredHeaders.cty.format.should.equal 'String'
+
+    it 'should specify "cty" to require "JWT" as the value', ->
+      JWT.registeredHeaders.cty.enum.length.should.equal 1
+      JWT.registeredHeaders.cty.enum.should.contain 'JWT'
+
+    it 'should specify "cty" to be required if the JWT is nested'
 
 
 
@@ -450,8 +474,8 @@ describe 'JWT', ->
     #   per Section 3.1 of HTTP Over TLS [RFC2818].  Use of this Header
     #   Parameter is OPTIONAL.
 
-    it 'may contain a "jku" parameter'
-    it 'must require a "jku" value to be a URI'
+    it 'should specify "jku" to be a URI', ->
+      JWT.registeredHeaders.jku.format.should.equal 'URI'
 
 
 
@@ -465,8 +489,8 @@ describe 'JWT', ->
     #   represented as a JSON Web Key [JWK].  Use of this Header Parameter is
     #   OPTIONAL.
 
-    it 'may contain a "jwk" parameter'
-    it 'should require a "jwk" value to be a JSON Web Key'
+    it 'should specify "jwk" to be a JWK', ->
+      JWT.registeredHeaders.jwk.format.should.equal 'JWK'
 
 
 
@@ -484,8 +508,8 @@ describe 'JWT', ->
     #   When used with a JWK, the "kid" value is used to match a JWK "kid"
     #   parameter value.
 
-    it 'may contain a "kid" parameter'
-    it 'must require a "kid" value to be a string'
+    it 'should specify "kid" to be a String', ->
+      JWT.registeredHeaders.kid.format.should.equal 'String'
 
 
 
@@ -509,8 +533,8 @@ describe 'JWT', ->
     #   server MUST be validated, as per Section 3.1 of HTTP Over TLS
     #   [RFC2818].  Use of this Header Parameter is OPTIONAL.
 
-    it 'may contain a "x5u" parameter'
-    it 'must require a "x5u" value to be a URI'
+    it 'should specify "x5u" to be a URI', ->
+      JWT.registeredHeaders.x5u.format.should.equal 'URI'
 
 
 
@@ -536,7 +560,8 @@ describe 'JWT', ->
     #
     #   See Appendix B for an example "x5c" value.
 
-    it 'may contain a "x5c" parameter'
+    it 'should specify "x5c" to be a CertificateOrChain', ->
+      JWT.registeredHeaders.x5c.format.should.equal 'CertificateOrChain'
 
 
 
@@ -559,7 +584,8 @@ describe 'JWT', ->
     #   the IANA JSON Web Signature and Encryption Header Parameters registry
     #   defined in Section 9.1.
 
-    it 'may contain a "x5t" parameter'
+    it 'should specify "x5t" to be a CertificateThumbprint', ->
+      JWT.registeredHeaders.x5t.format.should.equal 'CertificateThumbprint'
 
 
 
@@ -595,7 +621,8 @@ describe 'JWT', ->
     #      "exp":1363284000
     #     }
 
-    it 'may contain a "crit" parameter'
+    it 'should specify "crit" to be a ParameterList', ->
+      JWT.registeredHeaders.crit.format.should.equal 'ParameterList'
 
 
 
@@ -719,9 +746,25 @@ describe 'JWT', ->
 
     describe 'plaintext', ->
 
-      it 'should base64url encode the header'
-      it 'should base64url encode the payload'
-      it 'should append an empty signature'
+      {jwt,header,headerJSON,payload,payloadJSON,signature} = {}
+
+      before ->
+        header = { alg: 'none' }
+        headerJSON = JSON.stringify(header)
+        payload = { iss: 'http://anvil.io' }
+        payloadJSON = JSON.stringify(payload)
+
+        JWT.header = header
+        jwt = JWT.encode { iss: 'http://anvil.io' }
+
+      it 'should base64url encode the header', ->
+        base64url.decode(jwt.split('.')[0]).should.equal headerJSON
+
+      it 'should base64url encode the payload', ->
+        base64url.decode(jwt.split('.')[1]).should.equal payloadJSON
+
+      it 'should append an empty signature', ->
+        jwt.split('.')[2].should.equal ''
 
 
 
