@@ -754,8 +754,8 @@ describe 'JWT', ->
         payload = { iss: 'http://anvil.io' }
         payloadJSON = JSON.stringify(payload)
 
-        JWT.header = header
-        jwt = JWT.encode { iss: 'http://anvil.io' }
+        MyJWT = JWT.define {header}
+        jwt = MyJWT.encode { iss: 'http://anvil.io' }
 
       it 'should base64url encode the header', ->
         base64url.decode(jwt.split('.')[0]).should.equal headerJSON
@@ -826,11 +826,57 @@ describe 'JWT', ->
 
     describe 'with signature', ->
 
+      {MyJWT,header,payload,jwt} = {}
+
       describe 'via HS256', ->
+
+        before ->
+          header = { alg: 'HS256' }
+          payload = { iss: 'http://anvil.io' }
+
+          MyJWT = JWT.define {header}
+          jwt = MyJWT.encode { iss: 'http://anvil.io' }, 'secret'
+
+        it 'should include the base64url encoded header', ->
+          jwt.split('.')[0].should.equal MyJWT.headerB64u
+
+        it 'should base64url encode the payload', ->
+          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+
+        it 'should append a HMAC SHA256 signature', ->
+          jwt.split('.')[2].length.should.equal 43
+
+
+
 
       describe 'via RS256', ->
 
+        before ->
+          header = { alg: 'RS256' }
+          payload = { iss: 'http://anvil.io' }
+          privateKey = require('fs')
+            .readFileSync('test/lib/keys/private.pem')
+            .toString('ascii')
+
+          MyJWT = JWT.define {header}
+          jwt = MyJWT.encode { iss: 'http://anvil.io' }, privateKey
+
+        it 'should include the base64url encoded header', ->
+          jwt.split('.')[0].should.equal MyJWT.headerB64u
+
+        it 'should base64url encode the payload', ->
+          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+
+        it 'should append a RSA SHA256 signature', ->
+          jwt.split('.')[2].length.should.equal 342
+
+
+
       describe 'via ES256', ->
+
+        it 'should include the base64url encoded header'
+        it 'should base64url encode the payload'
+        it 'should append a RSA SHA256 signature'
 
 
 
@@ -1011,5 +1057,32 @@ describe 'JWT', ->
 
 
   describe 'define', ->
+
+    {MyJWT,header,claims} = {}
+
+    before ->
+      header = { alg: 'none' }
+      claims = ['iss', 'sub', 'aud']
+      MyJWT = JWT.define {header,claims}
+
+
+    it 'should return a specified JWT', ->
+      expect(new MyJWT).to.be.instanceof JWT
+
+    it 'should validate the provided header'
+
+    it 'should set the header object', ->
+      MyJWT.header.should.equal header
+
+    it 'should validate the header object'
+
+    it 'should stringify the header object', ->
+      MyJWT.headerJSON.should.equal JSON.stringify(header)
+
+    it 'should base64url encode the header object', ->
+      MyJWT.headerB64u.should.equal base64url(JSON.stringify(header))
+
+    it 'should set the algorithm', ->
+      MyJWT.algorithm.should.equal header.alg
 
     # should create an application specific JWT definition

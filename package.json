@@ -27,6 +27,7 @@
     "chai": "~1.9.1"
   },
   "dependencies": {
-    "base64url": "0.0.6"
+    "base64url": "0.0.6",
+    "lodash": "~2.4.1"
   }
 }
