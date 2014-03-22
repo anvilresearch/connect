@@ -874,9 +874,25 @@ describe 'JWT', ->
 
       describe 'via ES256', ->
 
-        it 'should include the base64url encoded header'
-        it 'should base64url encode the payload'
-        it 'should append a RSA SHA256 signature'
+        before ->
+          header = { alg: 'ES256' }
+          payload = { iss: 'http://anvil.io' }
+          privateKey = require('fs')
+            .readFileSync('test/lib/keys/private.pem')
+            .toString('ascii')
+
+          MyJWT = JWT.define {header}
+          jwt = MyJWT.encode { iss: 'http://anvil.io' }, privateKey
+
+        it 'should include the base64url encoded header', ->
+          jwt.split('.')[0].should.equal MyJWT.headerB64u
+
+        it 'should base64url encode the payload', ->
+          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+
+        it 'should append a ECDSA SHA256 signature', ->
+          jwt.split('.')[2].length.should.equal 342
+
 
 
 
