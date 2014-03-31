@@ -2,15 +2,15 @@
 cwd         = process.cwd()
 path        = require 'path'
 chai        = require 'chai'
-# sinon       = require 'sinon'
-# sinonChai   = require 'sinon-chai'
+sinon       = require 'sinon'
+sinonChai   = require 'sinon-chai'
 expect      = chai.expect
 
 
 
 
 # Assertions
-# chai.use sinonChai
+chai.use sinonChai
 chai.should()
 
 
@@ -61,6 +61,304 @@ base64url = require 'base64url'
 
 
 describe 'JWT', ->
+
+
+
+  describe 'traverse', ->
+
+    {keys,schema,operation,descriptorA} = {}
+
+    beforeEach ->
+      keys = ['a','b']
+      descriptorA = { format: 'String' }
+      descriptorB = { format: 'String' }
+      schema =
+        a: descriptorA
+        b: descriptorB
+      operation = sinon.spy()
+
+    it 'should not traverse an undefined source', ->
+      JWT.traverse(keys, schema, undefined, {}, operation, {})
+      operation.should.not.have.been.called
+
+    it 'should not traverse a null source', ->
+      JWT.traverse(keys, schema, null, {}, operation, {})
+      operation.should.not.have.been.called
+
+    it 'should iterate over a set of keys', ->
+      JWT.traverse(keys, schema, {}, {}, operation, {})
+      operation.should.have.been.calledWith 'a'
+      operation.should.have.been.calledWith 'b'
+
+    it 'should fail with unrecognized schema properties', ->
+      expect(-> JWT.traverse(['x'], {}, {}, {}, (->), {})).to.throw Error
+
+    it 'should ignore unrecognized source properties', ->
+      JWT.traverse(keys, schema, { x: 'x' }, {}, operation, {})
+      operation.should.not.have.been.calledWith 'x'
+
+    it 'should operate on a target object', ->
+      source = { a: 'a', b: 'b' }
+      target = {}
+      options = {}
+      JWT.traverse(keys, schema, source, target, operation, options)
+      operation.should.have.been.calledWith 'a', descriptorA, source, target, options
+
+
+
+
+  describe 'assignValid', ->
+
+    {key,descriptor,source,target,options} = {}
+
+    beforeEach ->
+      key = 'a'
+      descriptor = format: 'String'
+      source = { a: 'a' }
+      target = {}
+      options = {}
+
+    it 'should set a target property from a source object', ->
+      JWT.assignValid(key, descriptor, source, target, options)
+      target.a.should.equal source.a
+
+    it 'should set a target property from a source object by mapping', ->
+      descriptor =
+        format: 'String'
+        from: 'a'
+      JWT.assignValid('b', descriptor, source, target, options)
+      target.b.should.equal source.a
+
+    it 'should set a target property from a default value', ->
+      descriptor =
+        format: 'String'
+        default: 'd'
+      JWT.assignValid('b', descriptor, source, target, options)
+      target.b.should.equal descriptor.default
+
+    it 'should set a target property from a default function', ->
+      descriptor =
+        format: 'String'
+        default: -> 'generated'
+      JWT.assignValid('b', descriptor, source, target, options)
+      target.b.should.equal 'generated'
+
+    it 'should fail with an invalid format', ->
+      source = { a: 1 }
+      expect(-> JWT.assignValid(key, descriptor, source, target, options)).to.throw Error
+
+    it 'should fail with an unenumerated value', ->
+      descriptor =
+        format: 'String'
+        enum: ['x','y']
+      expect(-> JWT.assignValid(key, descriptor, source, target, options)).to.throw Error
+
+    it 'should fail with an undefined required property', ->
+      descriptor =
+        format: 'String'
+        required: true
+      expect(-> JWT.assignValid(key, descriptor, {}, target, options)).to.throw Error
+
+
+
+
+  describe 'assertFormat', ->
+
+    it 'should verify a value matching a prescribed format', ->
+      JWT.assertFormat('key', 123456789, { format: 'IntDate' }).should.be.true
+
+    it 'should fail with a value not matching a prescribed format', ->
+      expect(-> JWT.assertFormat('key', false, { format: 'IntDate' })).to.throw Error
+
+    it 'should fail with an unrecognized format', ->
+      expect(-> JWT.assertFormat('key', false, { format: 'Unknown' })).to.throw Error
+
+
+
+
+  describe 'StringOrURI', ->
+
+    it 'should accept a string', ->
+      JWT.formats['StringOrURI']('string').should.be.true
+
+    it 'should accept a uri'
+
+    it 'should not accept an invalid uri'
+
+    it 'should not accept a non-string', ->
+      JWT.formats['StringOrURI'](true).should.be.false
+      JWT.formats['StringOrURI'](123).should.be.false
+      JWT.formats['StringOrURI']([]).should.be.false
+      JWT.formats['StringOrURI']({}).should.be.false
+      JWT.formats['StringOrURI'](->).should.be.false
+      JWT.formats['StringOrURI'](null).should.be.false
+
+
+
+
+  describe 'StringOrURI*', ->
+
+
+  describe 'String', ->
+
+    it 'should accept a string', ->
+      JWT.formats['String']('true').should.be.true
+
+    it 'should not accept a non-string', ->
+      JWT.formats['String'](false).should.be.false
+
+
+
+
+  describe 'CaseSensitiveString', ->
+
+
+
+
+
+  describe 'IntDate', ->
+
+    it 'should accept a valid integer', ->
+      JWT.formats['IntDate'](Date.now()).should.be.true
+
+    it 'should not accept a non-integer', ->
+      JWT.formats['IntDate'](null).should.be.false
+      JWT.formats['IntDate'](true).should.be.false
+      JWT.formats['IntDate'](123.45).should.be.false
+      JWT.formats['IntDate']('foo').should.be.false
+      JWT.formats['IntDate'](->).should.be.false
+      JWT.formats['IntDate']({}).should.be.false
+
+
+
+
+  describe 'URI', ->
+  describe 'JWK', ->
+  describe 'CertificateOrChain', ->
+  describe 'CertificateThumbprint', ->
+  describe 'ParameterList', ->
+
+
+
+
+  describe 'assertEnumerated', ->
+
+    it 'should verify an enumerated value', ->
+      JWT.assertEnumerated('key', 'z', {
+        format: 'String',
+        enum: ['x','y','z']
+      }).should.be.true
+
+    it 'should fail with an unenumerated value', ->
+      expect(-> JWT.assertEnumerated('key', 'z', {
+        format: 'String'
+        enum: ['x','y']
+      })).to.throw Error
+
+
+
+
+
+  describe 'assertPresence', ->
+
+    it 'should verify the presence of a required value', ->
+      JWT.assertPresence('key', 'value', { required: true }).should.be.true
+
+    it 'should not fail if a value is not required', ->
+      JWT.assertPresence('key', undefined, {}).should.be.true
+
+    it 'should fail with an absent required value', ->
+      expect(-> JWT.assertPresence('key', undefined, { required: true })).to.throw Error
+
+
+
+
+  describe 'header initialization', ->
+
+    {header,constructor,instance} = {}
+
+
+    before ->
+      header =
+        alg: 'none'
+      constructor =
+        headers: ['alg'],
+        registeredHeaders: JWT.registeredHeaders
+      instance = {constructor}
+      sinon.spy(JWT, 'traverse')
+      JWT.prototype.initializeHeader.call(instance, { alg: 'none' })
+
+    after ->
+      JWT.traverse.restore()
+
+    it 'should assign a valid set of parameters', ->
+      JWT.traverse.should.have.been.calledWith(
+        constructor.headers
+        constructor.registeredHeaders
+        header
+        instance.header
+        JWT.assignValid
+      )
+
+    it 'should base64url encode the header', ->
+      base64url.decode(instance.headerB64u).should.equal JSON.stringify(header)
+
+
+
+  describe 'payload initialization', ->
+
+    {payload,constructor,instance} = {}
+
+    before ->
+      payload =
+        iss: 'http://anvil.io'
+      constructor =
+        claims: ['iss'],
+        registeredClaims: JWT.registeredClaims
+      instance = {constructor}
+      sinon.spy(JWT, 'traverse')
+      JWT.prototype.initializePayload.call(instance, payload)
+
+    after ->
+      JWT.traverse.restore()
+
+    it 'should assign a valid set of claims', ->
+      JWT.traverse.should.have.been.calledWith(
+        constructor.claims
+        constructor.registeredClaims
+        payload
+        instance.payload
+        JWT.assignValid
+      )
+
+
+
+  describe 'constructor', ->
+
+    {payload,header} = {}
+
+    before ->
+      payload = { iss: 'http://anvil.io' }
+      header = { alg: 'none' }
+      sinon.spy(JWT.prototype, 'initializeHeader')
+      sinon.spy(JWT.prototype, 'initializePayload')
+      new JWT(payload, header)
+
+    after ->
+      JWT.prototype.initializeHeader.restore()
+      JWT.prototype.initializePayload.restore()
+
+
+    it 'should initialize the provided header if provided', ->
+      JWT.prototype.initializeHeader.should.have.been.calledWith header
+
+    it 'should initialize the provided payload', ->
+      JWT.prototype.initializePayload.should.have.been.calledWith payload
+
+    it 'should initialize a signature if provided'
+
+
+
 
   #   3.1.  "alg" (Algorithm) Header Parameter Values for JWS
   #
@@ -349,7 +647,7 @@ describe 'JWT', ->
       JWT.registeredHeaders.alg.format.should.equal 'StringOrURI'
 
     it 'should specify "alg" to require a supported algorithm', ->
-      JWT.registeredHeaders.alg.enum.should.equal JWT.algorithms
+      JWT.registeredHeaders.alg.enum.should.eql JWT.algorithms
 
 
 
@@ -627,6 +925,58 @@ describe 'JWT', ->
 
 
 
+  describe 'define', ->
+
+    {MyJWT,header,headers,claims} = {}
+
+    before ->
+      registeredHeaders =
+        alg: { format: 'String', enum: ['RS256'] }
+        new: { format: 'IntDate' }
+
+      registeredClaims =
+        iss: { format: 'StringOrURI', required: true }
+
+      header = { alg: 'RS256' }
+      headers = ['alg']
+      claims = ['iss', 'sub', 'aud']
+
+      MyJWT = JWT.define {
+        registeredHeaders
+        registeredClaims
+        headers
+        header
+        claims
+      }
+
+    it 'should return a subclass of JWT', ->
+      expect(new MyJWT).to.be.instanceof JWT
+
+    it 'should set the correct constructor', ->
+      MyJWT.prototype.constructor.should.equal MyJWT
+
+    it 'should register header definitions', ->
+      MyJWT.registeredHeaders.alg.enum.length.should.equal 1
+      #MyJWT.registeredHeaders.alg.required.should.equal true
+      #MyJWT.registeredHeaders.alg.format.should.equal 'StringOrURI'
+      MyJWT.registeredHeaders.new.format.should.equal 'IntDate'
+
+    it 'should register claim definitions', ->
+      MyJWT.registeredClaims.iss.required.should.equal true
+
+    it 'should select applicable headers', ->
+      MyJWT.headers.should.equal headers
+
+    it 'should select applicable claims', ->
+      MyJWT.claims.should.equal claims
+
+    it 'should initialize a default header', ->
+      MyJWT.prototype.header.alg.should.equal header.alg
+      MyJWT.prototype.headerB64u.should.equal base64url(JSON.stringify(header))
+
+
+
+
   #   7.  Rules for Creating and Validating a JWT
   #
   #   http://tools.ietf.org/html/draft-ietf-oauth-json-web-token-18#section-7
@@ -668,7 +1018,8 @@ describe 'JWT', ->
 
   describe 'encode', ->
 
-
+    it 'should assert the presence of a payload'
+    it 'should ensure the presence of a header'
 
 
     #   4.  JWT Claims
@@ -746,25 +1097,27 @@ describe 'JWT', ->
 
     describe 'plaintext', ->
 
-      {jwt,header,headerJSON,payload,payloadJSON,signature} = {}
+      {jwt,token,header,headerJSON,payload,payloadJSON,signature} = {}
 
       before ->
         header = { alg: 'none' }
         headerJSON = JSON.stringify(header)
+        headers = ['alg']
         payload = { iss: 'http://anvil.io' }
         payloadJSON = JSON.stringify(payload)
 
-        MyJWT = JWT.define {header}
-        jwt = MyJWT.encode { iss: 'http://anvil.io' }
+        MyJWT = JWT.define {header,headers}
+        jwt = new MyJWT { iss: 'http://anvil.io' }
+        token = jwt.encode()
 
       it 'should base64url encode the header', ->
-        base64url.decode(jwt.split('.')[0]).should.equal headerJSON
+        base64url.decode(token.split('.')[0]).should.equal headerJSON
 
       it 'should base64url encode the payload', ->
-        base64url.decode(jwt.split('.')[1]).should.equal payloadJSON
+        base64url.decode(token.split('.')[1]).should.equal payloadJSON
 
       it 'should append an empty signature', ->
-        jwt.split('.')[2].should.equal ''
+        token.split('.')[2].should.equal ''
 
 
 
@@ -826,25 +1179,27 @@ describe 'JWT', ->
 
     describe 'with signature', ->
 
-      {MyJWT,header,payload,jwt} = {}
+      {MyJWT,header,payload,jwt,token} = {}
 
       describe 'via HS256', ->
 
         before ->
           header = { alg: 'HS256' }
+          headers = ['alg']
           payload = { iss: 'http://anvil.io' }
 
-          MyJWT = JWT.define {header}
-          jwt = MyJWT.encode { iss: 'http://anvil.io' }, 'secret'
+          MyJWT = JWT.define {header,headers}
+          jwt = new MyJWT payload
+          token = jwt.encode('secret')
 
         it 'should include the base64url encoded header', ->
-          jwt.split('.')[0].should.equal MyJWT.headerB64u
+          token.split('.')[0].should.equal MyJWT.prototype.headerB64u
 
         it 'should base64url encode the payload', ->
-          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+          base64url.decode(token.split('.')[1]).should.equal JSON.stringify(payload)
 
         it 'should append a HMAC SHA256 signature', ->
-          jwt.split('.')[2].length.should.equal 43
+          token.split('.')[2].length.should.equal 58
 
 
 
@@ -853,22 +1208,24 @@ describe 'JWT', ->
 
         before ->
           header = { alg: 'RS256' }
+          headers = ['alg']
           payload = { iss: 'http://anvil.io' }
           privateKey = require('fs')
             .readFileSync('test/lib/keys/private.pem')
             .toString('ascii')
 
-          MyJWT = JWT.define {header}
-          jwt = MyJWT.encode { iss: 'http://anvil.io' }, privateKey
+          MyJWT = JWT.define {header,headers}
+          jwt = new MyJWT payload
+          token = jwt.encode(privateKey)
 
         it 'should include the base64url encoded header', ->
-          jwt.split('.')[0].should.equal MyJWT.headerB64u
+          token.split('.')[0].should.equal MyJWT.prototype.headerB64u
 
         it 'should base64url encode the payload', ->
-          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+          base64url.decode(token.split('.')[1]).should.equal JSON.stringify(payload)
 
         it 'should append a RSA SHA256 signature', ->
-          jwt.split('.')[2].length.should.equal 342
+          token.split('.')[2].length.should.equal 456
 
 
 
@@ -876,22 +1233,24 @@ describe 'JWT', ->
 
         before ->
           header = { alg: 'ES256' }
+          headers = ['alg']
           payload = { iss: 'http://anvil.io' }
           privateKey = require('fs')
             .readFileSync('test/lib/keys/private.pem')
             .toString('ascii')
 
-          MyJWT = JWT.define {header}
-          jwt = MyJWT.encode { iss: 'http://anvil.io' }, privateKey
+          MyJWT = JWT.define {header,headers}
+          jwt = new MyJWT payload
+          token = jwt.encode(privateKey)
 
         it 'should include the base64url encoded header', ->
-          jwt.split('.')[0].should.equal MyJWT.headerB64u
+          token.split('.')[0].should.equal MyJWT.prototype.headerB64u
 
         it 'should base64url encode the payload', ->
-          base64url.decode(jwt.split('.')[1]).should.equal JSON.stringify(payload)
+          base64url.decode(token.split('.')[1]).should.equal JSON.stringify(payload)
 
         it 'should append a ECDSA SHA256 signature', ->
-          jwt.split('.')[2].length.should.equal 342
+          token.split('.')[2].length.should.equal 456
 
 
 
@@ -990,9 +1349,30 @@ describe 'JWT', ->
   describe 'decode', ->
 
 
+    it 'should verify the token is well formed', ->
+      JWT.decode('notajot').message.should.equal 'Malformed JWT'
+
+
+
 
 
     describe 'with plaintext', ->
+
+      {token,jwt} = {}
+
+      before ->
+        token = 'eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJodHRwOi8vYW52aWwuaW8ifQ.'
+        jwt = JWT.decode token
+
+      it 'should base64url decode the header', ->
+        jwt.header.alg.should.equal 'none'
+
+      it 'should base64url decode the payload', ->
+        jwt.payload.iss.should.equal 'http://anvil.io'
+
+      it 'should have an empty signature', ->
+        jwt.signature.should.equal ''
+
 
 
 
@@ -1064,7 +1444,86 @@ describe 'JWT', ->
 
     describe 'with signature', ->
 
+      describe 'via HS256', ->
 
+        {token,jwt} = {}
+
+        before ->
+          token = 'eyJhbGciOiJIUzI1NiJ9.' +
+                  'eyJpc3MiOiJodHRwOi8vYW52aWwuaW8ifQ.' +
+                  'UjFRb0dUSmN6RFpxc2VOUXQ5eVhUM1lvT1kxamtURVBBeEZ5SzkzaFktOA'
+          MyJWT = JWT.define
+            header: { alg: 'HS256' }
+            headers: ['alg']
+            claims: ['iss']
+
+          jwt = MyJWT.decode token, 'secret'
+
+        it 'should base64url decode the header', ->
+          jwt.header.alg.should.equal 'HS256'
+
+        it 'should base64url decode the payload', ->
+          jwt.payload.iss.should.equal 'http://anvil.io'
+
+        it 'should have an empty signature', ->
+          jwt.signature.should.equal 'R1QoGTJczDZqseNQt9yXT3YoOY1jkTEPAxFyK93hY-8'
+
+
+      describe 'via RS256', ->
+
+        {token,jwt} = {}
+
+        before ->
+          token = 'eyJhbGciOiJSUzI1NiJ9.' +
+                  'eyJpc3MiOiJodHRwOi8vYW52aWwuaW8ifQ.' +
+                  'UEMyUkdJanZMaHUyU20tZFpncUJtRmd5OEZXU3M0SkZXUVg0ZTN4T2xyN2I3eHhGUzAwQW90V3ZaQ1RlbWV5aWdVdmhpQlhuUUFLcjhtbzR1WElFRWQybkhLMDhZdW4tQnpuOW0yYnVZcWVkRk8wX3h0UDVURzFtTm00akdRM0RRcFpTM0NrVWl6cHZJN21iN3hnb3lERklrZnQ3b2ZFSUxJaGJ4eXNtTTd5RmVTb1VYbkw0TVBXd2prQmtFWVNtTmpiVHJaUzBpRG1rNTI5S3lpa0hJS2RrbExka0R0dENESTdBN0JGNUZiMmZ1QnNYdU54bGtETGRkb2FlRTdzeVJOZDV1czQ1QzB2b2tKSUNxUll1NUsyR1BKOEdudGo4Qk9tZWpiWmVvVDA3RVRvTWhoTkJVc09MamdtQkR5ZmN3MWU4bDE4R1BLcEJ0S0pPOUl3NnBB'
+          MyJWT = JWT.define
+            header: { alg: 'RS256' }
+            headers: ['alg']
+            claims: ['iss']
+
+          publicKey = require('fs')
+            .readFileSync('./test/lib/keys/public.pem')
+            .toString('ascii')
+
+          jwt = MyJWT.decode token, publicKey
+
+        it 'should base64url decode the header', ->
+          jwt.header.alg.should.equal 'RS256'
+
+        it 'should base64url decode the payload', ->
+          jwt.payload.iss.should.equal 'http://anvil.io'
+
+        it 'should have a signature', ->
+          jwt.signature.should.equal 'PC2RGIjvLhu2Sm-dZgqBmFgy8FWSs4JFWQX4e3xOlr7b7xxFS00AotWvZCTemeyigUvhiBXnQAKr8mo4uXIEEd2nHK08Yun-Bzn9m2buYqedFO0_xtP5TG1mNm4jGQ3DQpZS3CkUizpvI7mb7xgoyDFIkft7ofEILIhbxysmM7yFeSoUXnL4MPWwjkBkEYSmNjbTrZS0iDmk529KyikHIKdklLdkDttCDI7A7BF5Fb2fuBsXuNxlkDLddoaeE7syRNd5us45C0vokJICqRYu5K2GPJ8Gntj8BOmejbZeoT07EToMhhNBUsOLjgmBDyfcw1e8l18GPKpBtKJO9Iw6pA'
+
+
+      describe 'via ES256', ->
+
+        {jwt,token} = {}
+
+
+        before ->
+          token = 'eyJhbGciOiJFUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYW52aWwuaW8ifQ.SHJ6eXY3eUNXbm1EV0Z2RHJmMmZSVktKSW9ZbVB4a1hpb0ZOUS1NVmxhSE1aTFFiYzZsR2tQTV9pRTlnTHc5NU55c3d1MlZnd3hxUm9hdDRDWGl6MlV6RU9wMUxaU2FSRTRBQy1WSWVNT3gwRi1iQi1wOFAtYVYzRTkwb24xcU1OUld1SjlKLUk2RmF4c1Q0ZE8zRm44Zi0wZ0JrMEtMTTZCZW9YXzNoRXRVX2tqWHdhN1pkZ0dBUGdsWEpIWXFnNFhLbm9tUVNycFVBT0NsUFpDbE5aWndKbG9DcERVU05OcnRhY2p1U09FVlFvMXZXV0hNWE5TMzhWeUQtVzFkSXZSVGJMTWhUd0wxUndhZTJnQ2pCWUIxZ3IzeFpzcU0tTXZQWGxYMkJ1ZHR5WXgtbmNEU2tMS3lMRXVDdDJ1WGNhMlVqZndmY0NYbXNPZUQ2MElzTHZn'
+          MyJWT = JWT.define
+            header: { alg: 'ES256' }
+            headers: ['alg']
+            claims: ['iss']
+
+          publicKey = require('fs')
+            .readFileSync('./test/lib/keys/public.pem')
+            .toString('ascii')
+
+          jwt = MyJWT.decode token, publicKey
+
+        it 'should base64url decode the header', ->
+          jwt.header.alg.should.equal 'ES256'
+
+        it 'should base64url decode the payload', ->
+          jwt.payload.iss.should.equal 'http://anvil.io'
+
+        it 'should have a signature', ->
+          jwt.signature.should.equal 'Hrzyv7yCWnmDWFvDrf2fRVKJIoYmPxkXioFNQ-MVlaHMZLQbc6lGkPM_iE9gLw95Nyswu2VgwxqRoat4CXiz2UzEOp1LZSaRE4AC-VIeMOx0F-bB-p8P-aV3E90on1qMNRWuJ9J-I6FaxsT4dO3Fn8f-0gBk0KLM6BeoX_3hEtU_kjXwa7ZdgGAPglXJHYqg4XKnomQSrpUAOClPZClNZZwJloCpDUSNNrtacjuSOEVQo1vWWHMXNS38VyD-W1dIvRTbLMhTwL1Rwae2gCjBYB1gr3xZsqM-MvPXlX2BudtyYx-ncDSkLKyLEuCt2uXca2UjfwfcCXmsOeD60IsLvg'
 
 
     describe 'with encryption', ->
@@ -1072,33 +1531,3 @@ describe 'JWT', ->
 
 
 
-  describe 'define', ->
-
-    {MyJWT,header,claims} = {}
-
-    before ->
-      header = { alg: 'none' }
-      claims = ['iss', 'sub', 'aud']
-      MyJWT = JWT.define {header,claims}
-
-
-    it 'should return a specified JWT', ->
-      expect(new MyJWT).to.be.instanceof JWT
-
-    it 'should validate the provided header'
-
-    it 'should set the header object', ->
-      MyJWT.header.should.equal header
-
-    it 'should validate the header object'
-
-    it 'should stringify the header object', ->
-      MyJWT.headerJSON.should.equal JSON.stringify(header)
-
-    it 'should base64url encode the header object', ->
-      MyJWT.headerB64u.should.equal base64url(JSON.stringify(header))
-
-    it 'should set the algorithm', ->
-      MyJWT.algorithm.should.equal header.alg
-
-    # should create an application specific JWT definition

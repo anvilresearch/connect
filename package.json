@@ -24,7 +24,9 @@
   "main": "server.js",
   "license": "MIT",
   "devDependencies": {
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "sinon": "~1.9.0",
+    "sinon-chai": "~2.5.0"
   },
   "dependencies": {
     "base64url": "0.0.6",
