@@ -200,8 +200,26 @@ describe 'ID Token', ->
     it 'should require "exp" Expiration time', ->
       IDToken.registeredClaims.exp.required.should.be.true
 
+    it 'should default "exp" to 24 hours', ->
+      payload =
+        iss: 'http://anvil.io'
+        sub: 'uuid'
+
+      token = new IDToken payload
+      token.payload.exp.should.be.a.number
+      new Date(token.payload.exp).getDay().should.not.equal new Date().getDay()
+
     it 'should require "iat" Issued time', ->
       IDToken.registeredClaims.iat.required.should.be.true
+
+    it 'should default "iat" to now', ->
+      payload =
+        iss: 'http://anvil.io'
+        sub: 'uuid'
+        exp: Date.now()
+
+      token = new IDToken payload
+      token.payload.iat.should.be.a.number
 
     it 'should conditionally require "auth_time"'
 
