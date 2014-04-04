@@ -181,9 +181,13 @@ describe 'JWT', ->
     it 'should accept a string', ->
       JWT.formats['StringOrURI']('string').should.be.true
 
-    it 'should accept a uri'
+    it 'should accept a valid URI', ->
+      JWT.formats['StringOrURI']("http://anvil.io").should.be.true
+      JWT.formats['StringOrURI']("anvil.io").should.be.true
 
-    it 'should not accept an invalid uri'
+    it 'should not accept an invalid URI', ->
+      JWT.formats['StringOrURI']("http://an%vil.io").should.be.false
+      #JWT.formats['StringOrURI']("an%vil.io").should.be.false
 
     it 'should not accept a non-string', ->
       JWT.formats['StringOrURI'](true).should.be.false
@@ -233,6 +237,18 @@ describe 'JWT', ->
 
 
   describe 'URI', ->
+
+    it 'should accept a valid URI', ->
+      JWT.formats['URI']("http://anvil.io").should.be.true
+      JWT.formats['URI']("anvil.io").should.be.true
+
+    it 'should not accept an invalid URI', ->
+      JWT.formats['URI']("http://an%vil.io").should.be.false
+      JWT.formats['URI']("an%vil.io").should.be.false
+
+
+
+
   describe 'JWK', ->
   describe 'CertificateOrChain', ->
   describe 'CertificateThumbprint', ->

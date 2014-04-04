@@ -1,3 +1,29 @@
+# Test dependencies
+cwd         = process.cwd()
+path        = require 'path'
+chai        = require 'chai'
+sinon       = require 'sinon'
+sinonChai   = require 'sinon-chai'
+expect      = chai.expect
+
+
+
+
+# Assertions
+chai.use sinonChai
+chai.should()
+
+
+
+
+# Code under test
+IDToken = require path.join cwd, 'models/IDToken'
+JWT = require path.join cwd, 'lib/JWT'
+base64url = require 'base64url'
+
+
+
+
 # OpenID Connect Core 1.0
 #
 # http://openid.net/specs/openid-connect-core-1_0.html#IDToken
@@ -129,25 +155,62 @@
 
 describe 'ID Token', ->
 
+  it 'should be a subclass of JWT', ->
+    IDToken.super.should.equal JWT
+
+
+
 
   describe 'header', ->
 
-    it 'must not use "none" as "alg" value'
-    it 'should not use "x5u", "x5c", "jku", or "jwk" header parameter fields'
+    it 'must not use "none" as "alg" value', ->
+      expect(-> new IDToken({}, { alg: 'none'})).to.throw Error
+
+    it 'should not use "x5u", "x5c", "jku", or "jwk" header parameter fields', ->
+      header =
+        alg: 'RS256'
+        x5u: 'x5u'
+        x5c: 'x5c'
+        jku: 'jku'
+        jwk: 'jwk'
+      payload =
+        iss: 'http://anvil.io'
+        sub: 'uuid'
+        exp: Date.now()
+        iat: Date.now()
+      token = new IDToken payload, header
+      expect(token.header.x5u).to.be.undefined
+      expect(token.header.x5c).to.be.undefined
+      expect(token.header.jku).to.be.undefined
+      expect(token.header.jwk).to.be.undefined
 
 
 
 
   describe 'claims', ->
 
-    it 'should require "iss" Issuer Identifier'
-    it 'should require "sub" Subject Identifier'
+    it 'should require "iss" Issuer Identifier', ->
+      IDToken.registeredClaims.iss.required.should.be.true
+
+    it 'should require "sub" Subject Identifier', ->
+      IDToken.registeredClaims.sub.required.should.be.true
+
     it 'should require "aud" Audience array or string'
-    it 'should require "exp" Expiration time'
-    it 'should require "iat" Issued time'
+
+    it 'should require "exp" Expiration time', ->
+      IDToken.registeredClaims.exp.required.should.be.true
+
+    it 'should require "iat" Issued time', ->
+      IDToken.registeredClaims.iat.required.should.be.true
+
     it 'should conditionally require "auth_time"'
-    it 'should include "nonce"'
-    it 'should optionally include "acr"'
+
+    it 'should include "nonce"', ->
+      IDToken.registeredClaims.nonce.should.be.defined
+
+    it 'should optionally include "acr"', ->
+      IDToken.registeredClaims.acr.should.be.defined
+
     it 'should optionally include "amr"'
     it 'should optionally include "azp"'
     it 'should optionally include other claims defined by the specification'
