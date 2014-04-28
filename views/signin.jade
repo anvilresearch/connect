@@ -1,0 +1,25 @@
+h1 Sign In
+
+ul
+  each provider in Object.keys(providers)
+    li
+      a(href='/connect/' + provider + '?' + params)= provider
+
+
+form(method='POST', action='/signin')
+  p= error
+  input(type='hidden', name='response_type', value=request.response_type)
+  input(type='hidden', name='client_id', value=request.client_id)
+  input(type='hidden', name='redirect_uri', value=request.redirect_uri)
+  input(type='hidden', name='scope', value=request.scope)
+  input(type='hidden', name='state', value=request.state)
+
+  input(type='text', name='email', placeholder='Email')
+  br
+  input(type='password', name='password', placeholder='Password')
+  br
+  input(type='submit', value='Sign in')
+
+
+p= 'New here? '
+  a(href='/signup?' + params) Create a new account.

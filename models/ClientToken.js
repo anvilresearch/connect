@@ -6,27 +6,10 @@ var JWT = require('../lib/JWT');
 
 
 /**
- * Expires
+ * Client Access Token
  */
 
-function expires (duration) {
-  var fromNow = {
-    day:   (1000 * 60 * 60 * 24),
-    week:  (1000 * 60 * 60 * 24 * 7),
-    month: (1000 * 60 * 60 * 24 * 30)
-  };
-
-  return function () {
-    return Date.now() + fromNow[duration];
-  };
-}
-
-
-/**
- * ID Token
- */
-
-var IDToken = JWT.define({
+var ClientToken = JWT.define({
 
   // default header
   header: {
@@ -48,17 +31,32 @@ var IDToken = JWT.define({
     iss:   { format: 'StringOrURI', required: true },
     sub:   { format: 'StringOrURI', required: true },
     aud:   { format: 'StringOrURI', required: true },
-    exp:   { format: 'IntDate',     required: true, default: expires('day')  },
+    //exp:   { format: 'IntDate',     required: true, default: expires('day')  },
     iat:   { format: 'IntDate',     required: true, default: Date.now },
-    nonce: { format: 'String' },
-    acr:   { format: 'String' }
+    scp:   { format: 'String',      required: true, default: 'register' }
   }
 
 });
 
 
 /**
+ * Issue
+ */
+
+ClientToken.issue = function (claims, privateKey, callback) {
+  try {
+    var token = new ClientToken(claims);
+    var jwt = token.encode(privateKey);
+    return callback(null, jwt);
+  } catch (err) {
+    callback(err)
+    //callback(new Error('Unable to issue client access token'));
+  }
+};
+
+
+/**
  * Exports
  */
 
-module.exports = IDToken;
+module.exports = ClientToken;

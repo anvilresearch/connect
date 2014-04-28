@@ -1,0 +1,38 @@
+h1 Authorize
+
+
+p= user.name || user.email
+
+if client.logo_uri
+  img(src=client.logo_uri)
+
+h3= client.client_name || client._id
+
+p This app would like to:
+
+ul
+  each scope in scopes
+    li= scope.description
+
+form(action='/authorize', method='POST')
+  input(type='hidden', name='response_type', value=request.response_type)
+  input(type='hidden', name='client_id', value=request.client_id)
+  input(type='hidden', name='redirect_uri', value=request.redirect_uri)
+  input(type='hidden', name='scope', value=request.scope)
+  input(type='hidden', name='state', value=request.state)
+  input(type='hidden', name='authorize', value='true')
+  input(type='submit', value='Accept')
+
+
+form(action='/authorize', method='POST')
+  input(type='hidden', name='response_type', value=request.response_type)
+  input(type='hidden', name='client_id', value=request.client_id)
+  input(type='hidden', name='redirect_uri', value=request.redirect_uri)
+  input(type='hidden', name='scope', value=request.scope)
+  input(type='hidden', name='state', value=request.state)
+  input(type='hidden', name='authorize', value='false')
+  input(type='submit', value='Cancel')
+
+
+p= 'Not ' + user.email + '? '
+  a(href='/signout') Signout
