@@ -26,7 +26,7 @@ module.exports = function (server) {
     function (req, res, next) {
       res.render('signup', {
         params:    FormUrlencoded.encode(req.query),
-        request: req.query,
+        request:   req.query,
         providers: server.settings.providers
       });
     });
@@ -44,7 +44,6 @@ module.exports = function (server) {
 
     function (req, res, next) {
       User.insert(req.body, { private: true }, function (err, user) {
-        console.log('SIGNUP INSERT USER', user);
         if (err) {
           res.render('signup', {
             params:    FormUrlencoded.encode(req.body),

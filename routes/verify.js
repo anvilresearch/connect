@@ -15,7 +15,7 @@ var oidc = require('../lib/oidc')
 module.exports = function (server) {
 
   function verifyAccessToken (req, res, next) {
-    var token = req[oidc.lookupField[req.method]].access_token;
+    var token = req.connectParams.access_token;
 
     AccessToken.get(token, function (err, at) {
       if (err) {
@@ -48,8 +48,19 @@ module.exports = function (server) {
     });
   }
 
-  server.get('/token/verify', verifyAccessToken);
-  server.post('/token/verify', verifyAccessToken);
+
+  server.get('/token/verify',
+    oidc.selectConnectParams,
+    oidc.verifyClientToken(server),
+    verifyAccessToken
+  );
+
+
+  server.post('/token/verify',
+    oidc.selectConnectParams,
+    oidc.verifyClientToken(server),
+    verifyAccessToken
+  );
 
 };
 
