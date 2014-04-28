@@ -18,7 +18,7 @@ module.exports = function (server) {
     oidc.requireSignin,
     oidc.determineScope,
     oidc.promptToAuthorize,
-    oidc.authorize
+    oidc.authorize(server)
   );
 
   server.post('/authorize',
@@ -28,7 +28,7 @@ module.exports = function (server) {
     oidc.requireSignin,
     oidc.determineScope,
     oidc.promptToAuthorize,
-    oidc.authorize
+    oidc.authorize(server)
   );
 
 };

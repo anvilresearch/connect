@@ -67,7 +67,7 @@ module.exports = function (server) {
 
     oidc.determineScope,
     oidc.promptToAuthorize,
-    oidc.authorize
+    oidc.authorize(server)
   );
 
 };
