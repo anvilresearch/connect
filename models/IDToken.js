@@ -43,15 +43,19 @@ var IDToken = JWT.define({
     alg:   { format: 'StringOrURI', required: true, enum: ['RS256'] }
   },
 
+  // permitted claims
+  claims: ['iss', 'sub', 'aud', 'exp', 'iat', 'nonce', 'acr', 'at_hash'],
+
   // modify payload schema
   registeredClaims: {
-    iss:   { format: 'StringOrURI', required: true },
-    sub:   { format: 'StringOrURI', required: true },
-    aud:   { format: 'StringOrURI', required: true },
-    exp:   { format: 'IntDate',     required: true, default: expires('day')  },
-    iat:   { format: 'IntDate',     required: true, default: Date.now },
-    nonce: { format: 'String' },
-    acr:   { format: 'String' }
+    iss:      { format: 'StringOrURI', required: true },
+    sub:      { format: 'StringOrURI', required: true },
+    aud:      { format: 'StringOrURI', required: true },
+    exp:      { format: 'IntDate',     required: true, default: expires('day')  },
+    iat:      { format: 'IntDate',     required: true, default: Date.now },
+    nonce:    { format: 'String' },
+    acr:      { format: 'String' },
+    at_hash:  { format: 'String' }
   }
 
 });
