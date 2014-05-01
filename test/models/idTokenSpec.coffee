@@ -176,6 +176,7 @@ describe 'ID Token', ->
       payload =
         iss: 'http://anvil.io'
         sub: 'uuid'
+        aud: 'uuid'
         exp: Date.now()
         iat: Date.now()
       token = new IDToken payload, header
@@ -204,6 +205,7 @@ describe 'ID Token', ->
       payload =
         iss: 'http://anvil.io'
         sub: 'uuid'
+        aud: 'uuid'
 
       token = new IDToken payload
       token.payload.exp.should.be.a.number
@@ -216,6 +218,7 @@ describe 'ID Token', ->
       payload =
         iss: 'http://anvil.io'
         sub: 'uuid'
+        aud: 'uuid'
         exp: Date.now()
 
       token = new IDToken payload
