@@ -43,7 +43,8 @@ var AccessToken = Modinha.define('accesstokens', {
   // refresh token
   rt: {
     type:     'string',
-    default:  random(10)
+    default:  random(10),
+    unique:   true
   },
 
   // client id
@@ -140,6 +141,7 @@ AccessToken.mappings.exchange = {
   'scope': 'scope'
 };
 
+
 /**
  * Issue access token
  */
@@ -152,7 +154,7 @@ AccessToken.issueFromCode = function (ac, callback) {
   var token = AccessToken.initialize(ac, { mapping: 'exchange' });
   this.insert(token, function (err, token) {
     if (err) { return callback(err); }
-    callback(null, token.project('issue'));
+    callback(null, token);
   });
 };
 
@@ -166,6 +168,42 @@ AccessToken.issue = function (request, callback) {
     callback(null, token.project('issue'));
   });
 };
+
+
+/**
+ * Refresh access token
+ */
+
+AccessToken.refresh = function (refreshToken, clientId, callback) {
+  AccessToken.getByRt(refreshToken, function (err, at) {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!at) {
+      return callback(new InvalidTokenError('Unknown refresh token'));
+    }
+
+    if (at.cid !== clientId) {
+      return callback(new InvalidTokenError('Mismatching client id'));
+    }
+
+    AccessToken.insert({
+      uid: at.uid,
+      cid: at.cid,
+      scope: at.scope
+    }, function (err, token) {
+      if (err) { return callback(err); }
+
+      // we should destroy the current token
+      AccessToken.delete(at.at, function (err) {
+        if (err) { return callback(err); }
+        callback(null, token);
+      });
+    });
+  });
+};
+
 
 /**
  * Revoke access token
