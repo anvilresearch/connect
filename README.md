@@ -30,6 +30,12 @@ Enabling other developers to create value for your users by building on your API
 
 We're building Anvil Connect for small teams like us that want to build fast, grow exponentially and need Identity and Access Management to be a solved problem. Our implementation choices are deliberately forward thinking. We won't be supporting some features that may be required in a legacy enterprise environment. On the other hand, Anvil may be a perfect fit for greenfield projects and ventures that don't need the baggage.
 
+### Get Started
+
+* [Documentation](https://github.com/christiansmith/anvil-connect/wiki/Documentation)
+* [References](https://github.com/christiansmith/anvil-connect/wiki/References)
+
+
 ## MIT License
 
 Copyright (c) 2014 Christian Smith http://anvil.io
