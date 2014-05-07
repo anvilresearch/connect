@@ -133,6 +133,41 @@ User.extend(Document);
 User.__client = client;
 
 
+/**
+ * User intersections
+ */
+
+User.intersects('roles');
+
+
+/**
+ * Authorized scope
+ */
+
+User.prototype.authrorizedScope = function (callback) {
+  var client = User.__client;
+
+  client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
+    if (err) { return callback(err); }
+
+    if (!roles || roles.length === 0) {
+      return callback(null, []);
+    }
+
+    var multi = client.multi();
+
+    roles.forEach(function (role) {
+      multi.zrange('roles:' + role + ':scopes', 0, -1);
+    });
+
+    multi.exec(function (err, results) {
+      if (err) { return callback(err); }
+      callback(null, [].concat.apply(['openid', 'profile'], results));
+    });
+
+  });
+};
+
 
 /**
  * Verify password

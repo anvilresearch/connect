@@ -34,6 +34,13 @@ Scope.__client = client;
 
 
 /**
+ * Scope intersections
+ */
+
+Scope.intersects('roles');
+
+
+/**
  * Exports
  */
 
