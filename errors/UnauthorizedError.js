@@ -11,7 +11,7 @@ var util = require('util');
 
 function UnauthorizedError(options, status) {
   this.name              = 'UnauthorizedError';
-  this.error             = options.error || 'invalid_request';
+  this.error             = options.error;
   this.error_description = options.error_description;
   this.realm             = options.realm;
   this.scope             = options.scope;
