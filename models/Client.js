@@ -551,9 +551,8 @@ var Client = Modinha.define('clients', {
    *    authorization server.
    */
 
-  trusted_client: {
-    type: 'boolean',
-    default: false
+  trusted: {
+    type: 'string'
   },
 
   /**

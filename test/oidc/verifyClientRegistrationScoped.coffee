@@ -45,11 +45,11 @@ describe 'Verify Scoped Client Registration', ->
     it 'should provide a realm', ->
       err.realm.should.equal 'user'
 
-    it 'should NOT provide an error code', ->
-      expect(err.error).to.be.undefined
+    it 'should provide an error code', ->
+      err.error.should.equal 'invalid_request'
 
-    it 'should NOT provide an error description', ->
-      expect(err.error_description).to.be.undefined
+    it 'should provide an error description', ->
+      err.error_description.should.equal 'Missing access token'
 
     it 'should provide a status code', ->
       err.statusCode.should.equal 400
@@ -62,7 +62,7 @@ describe 'Verify Scoped Client Registration', ->
     before (done) ->
       req =
         headers:
-          authorization: 'Bearer invalid'
+          authorization: 'Bearer invalid.jwt'
         body: {}
 
       res = {}
@@ -99,7 +99,7 @@ describe 'Verify Scoped Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -139,7 +139,7 @@ describe 'Verify Scoped Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: { trusted: "false" }
 
 
@@ -180,7 +180,7 @@ describe 'Verify Scoped Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -212,7 +212,7 @@ describe 'Verify Scoped Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: {}
 
       res = {}

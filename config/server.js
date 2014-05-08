@@ -33,6 +33,8 @@ module.exports = function (server) {
   server.engine('.jade', require('jade').__express);
   server.set('views', path.join(cwd, 'views'));
   server.set('view engine', 'jade');
+  server.set('client_registration', 'scoped');
+  server.set('trusted_registration_scope', 'realm');
 
   // config file settings
   Object.keys(config).forEach(function (key) {

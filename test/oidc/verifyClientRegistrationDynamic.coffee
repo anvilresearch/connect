@@ -53,7 +53,7 @@ describe 'Verify Dynamic Client Registration', ->
     before (done) ->
       req =
         headers:
-          authorization: 'Bearer invalid'
+          authorization: 'Bearer invalid.jwt'
         body: {}
 
       res = {}
@@ -90,7 +90,7 @@ describe 'Verify Dynamic Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -130,7 +130,7 @@ describe 'Verify Dynamic Client Registration', ->
       sinon.stub(IDToken, 'decode').returns token
       req =
         headers:
-          authorization: 'Bearer valid'
+          authorization: 'Bearer valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -159,7 +159,7 @@ describe 'Verify Dynamic Client Registration', ->
       sinon.stub(IDToken, 'decode').returns { payload: {} }
 
       req =
-        headers: {}
+        headers: { authorization: 'Bearer valid.jwt' }
         body: {}
 
       res = {}

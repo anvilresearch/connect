@@ -18,28 +18,30 @@ module.exports = function (server) {
    * Client Registration Endpoint
    */
 
-  server.post('/register', function (req, res, next) {
-    Client.insert(req.body, function (err, client) {
-      if (err) { return next(err); }
-
-      ClientToken.issue({
-
-        iss: server.settings.issuer,
-        sub: client._id,
-        aud: client._id
-
-      }, server.settings.privateKey, function (err, token) {
+  server.post('/register',
+    oidc.verifyClientRegistration(server),
+    function (req, res, next) {
+      Client.insert(req.body, function (err, client) {
         if (err) { return next(err); }
 
-        res.set({
-          'Cache-Control': 'no-store',
-          'Pragma': 'no-cache'
-        });
+        ClientToken.issue({
 
-        res.json(201, client.configuration(server, token));
+          iss: server.settings.issuer,
+          sub: client._id,
+          aud: client._id
+
+        }, server.settings.privateKey, function (err, token) {
+          if (err) { return next(err); }
+
+          res.set({
+            'Cache-Control': 'no-store',
+            'Pragma': 'no-cache'
+          });
+
+          res.json(201, client.configuration(server, token));
+        });
       });
     });
-  });
 
 
   /**
@@ -59,7 +61,12 @@ module.exports = function (server) {
 
 
   server.patch('/register/:clientId',
-    oidc.verifyClientToken(server),
+    oidc.verifyClientToken(server), // should do this or...
+    // oidc.verifyClientRegistration(server)
+    // with dynamic client registration it should probably stay as is?
+    // except what if they pass "trusted"? do we need to add checks for that
+    // to `verifyClientToken`?
+    // with token/scoped registration we should be using `verifyClientRegistration`?
     oidc.verifyClientIdentifiers,
     function (req, res, next) {
       if (req.is('json')) {
