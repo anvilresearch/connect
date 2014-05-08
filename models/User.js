@@ -144,7 +144,7 @@ User.intersects('roles');
  * Authorized scope
  */
 
-User.prototype.authrorizedScope = function (callback) {
+User.prototype.authorizedScope = function (callback) {
   var client = User.__client;
 
   client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
