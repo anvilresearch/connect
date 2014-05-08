@@ -5,6 +5,7 @@
 var client = require('../config/redis')
   , Modinha = require('modinha')
   , Document = require('modinha-redis')
+  , User     = require('./User')
   ;
 
 
@@ -556,6 +557,16 @@ var Client = Modinha.define('clients', {
   },
 
   /**
+   * user_id
+   *    The UUID of the user who registered the client.
+   */
+
+  userId: {
+    type: 'string',
+    reference: User
+  },
+
+  /**
    * origins
    *    List of URIs for this client from which requests to the authorization
    *    server can originate.
@@ -572,6 +583,12 @@ var Client = Modinha.define('clients', {
 });
 
 
+/**
+ * Document persistence
+ */
+
+Client.extend(Document);
+Client.__client = client;
 
 
 /**
@@ -608,14 +625,6 @@ Client.prototype.configuration = function (server, token) {
 
   return configuration;
 };
-
-
-/**
- * Document persistence
- */
-
-Client.extend(Document);
-Client.__client = client;
 
 
 /**

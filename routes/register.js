@@ -21,6 +21,12 @@ module.exports = function (server) {
   server.post('/register',
     oidc.verifyClientRegistration(server),
     function (req, res, next) {
+
+      // client should reference user if possible
+      if (req.token) {
+        req.body.userId = req.token.sub || req.token.uid;
+      }
+
       Client.insert(req.body, function (err, client) {
         if (err) { return next(err); }
 
