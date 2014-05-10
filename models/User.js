@@ -145,13 +145,15 @@ User.intersects('roles');
  */
 
 User.prototype.authorizedScope = function (callback) {
-  var client = User.__client;
+  var client   = User.__client
+    , defaults = ['openid', 'profile']
+    ;
 
   client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
     if (err) { return callback(err); }
 
     if (!roles || roles.length === 0) {
-      return callback(null, []);
+      return callback(null, defaults);
     }
 
     var multi = client.multi();
@@ -162,7 +164,7 @@ User.prototype.authorizedScope = function (callback) {
 
     multi.exec(function (err, results) {
       if (err) { return callback(err); }
-      callback(null, [].concat.apply(['openid', 'profile'], results));
+      callback(null, [].concat.apply(defaults, results));
     });
 
   });
