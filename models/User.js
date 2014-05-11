@@ -19,7 +19,9 @@ var client                = require('../config/redis')
 var User = Modinha.define('users', {
 
   // OpenID Connect Standard Claims
-  //sub:                  { type: 'string', uniqueId: true },
+  //
+  // NOTE: The "sub" claim is stored as `_id`.
+  //       Expose it as `sub` via mappings.
   name:                 { type: 'string' },
   givenName:            { type: 'string' },
   familyName:           { type: 'string' },
