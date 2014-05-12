@@ -1,0 +1,24 @@
+{
+  "issuer": "https://your.authorization.server",
+  "client_registration": "dynamic",
+  "providers": {
+    "google": {
+      "clientID": "<CLIENT_ID>",
+      "clientSecret": "<CLIENT_SECRET>",
+      "callbackURL": "https://accounts.anvil.io/connect/google/callback",
+      "passReqToCallback": true,
+      "scope": [
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email"
+      ]
+    }
+  },
+  "keypair": {
+    "private": "./path/to/keys/private.pem",
+    "public": "./path/to/keys/public.pem"
+  },
+  "redis": {
+    "url": "redis://HOST:PORT",
+    "auth": "PASSWORD"
+  }
+}
