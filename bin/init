@@ -8,6 +8,8 @@ var async = require('async')
   , server = require('../server')
   , Role  = require('../models/Role')
   , Scope = require('../models/Scope')
+  , Client = require('../models/Client')
+  , ClientToken = require('../models/ClientToken')
   ;
 
 
@@ -32,6 +34,11 @@ var defaultRoleScopes = [
   ['developer', 'client']
 ];
 
+var defaultClients = [
+  { client_name: 'Anvil Connect Authority', redirect_uris: ['http://127.0.0.1/callback'], trusted: 'true' },
+  { client_name: 'Anvil Connect Developer', redirect_uris: ['http://127.0.0.1/callback'], trusted: 'true' },
+  { client_name: 'Anvil Connect Account',   redirect_uris: ['http://127.0.0.1/callback'], trusted: 'true' }
+];
 
 /**
  * Persist
@@ -70,7 +77,36 @@ function assignScopesToRoles (done) {
   })
 }
 
-async.parallel([insertRoles, insertScopes, assignScopesToRoles], function (err, results) {
+function insertClients (done) {
+  async.map(defaultClients, function (client, callback) {
+    Client.insert(client, function (err, instance) {
+      if (err) { return callback(err); }
+
+      ClientToken.issue({
+        iss: server.settings.issuer,
+        sub: instance._id,
+        aud: instance._id
+      }, server.settings.privateKey, function (err, token) {
+        if (err) { return callback(err); }
+        console.log('Created ' + instance.client_name);
+        console.log(instance.configuration(server, token));
+        callback(null, instance);
+      });
+
+    });
+
+  }, function (err, scopes) {
+    console.log('Created default clients.');
+    done(err, scopes);
+  });
+}
+
+async.parallel([
+  insertRoles,
+  insertScopes,
+  assignScopesToRoles,
+  insertClients
+], function (err, results) {
   console.log('Ready to run.');
   process.exit();
 });
