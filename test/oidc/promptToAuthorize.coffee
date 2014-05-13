@@ -135,7 +135,7 @@ describe 'Prompt to Authorize', ->
       before ->
         req =
           connectParams: {}
-          client: { trusted: true }
+          client: { trusted: 'true' }
           user:   {}
           scopes: {}
           path:   '/authorize'
