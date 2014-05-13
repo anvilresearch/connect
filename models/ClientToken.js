@@ -26,6 +26,9 @@ var ClientToken = JWT.define({
     alg:   { format: 'StringOrURI', required: true, enum: ['RS256'] }
   },
 
+  // permitted claims
+  claims: ['iss', 'sub', 'aud', 'iat', 'scope'],
+
   // modify payload schema
   registeredClaims: {
     iss:   { format: 'StringOrURI', required: true },
@@ -33,7 +36,7 @@ var ClientToken = JWT.define({
     aud:   { format: 'StringOrURI', required: true },
     //exp:   { format: 'IntDate',     required: true, default: expires('day')  },
     iat:   { format: 'IntDate',     required: true, default: Date.now },
-    scp:   { format: 'String',      required: true, default: 'register' }
+    scope: { format: 'String',      required: true, default: 'client' }
   }
 
 });
