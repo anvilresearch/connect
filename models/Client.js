@@ -549,6 +549,15 @@ var Client = Modinha.define('clients', {
   },
 
 
+  /**
+   * client_secret
+   */
+
+  client_secret: {
+    type: 'string',
+    default: Modinha.defaults.random(10)
+  },
+
 
   /**
    * Anvil Connect specific properties
