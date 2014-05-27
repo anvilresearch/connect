@@ -11,7 +11,7 @@ module.exports = function (server) {
       issuer:                                           issuer,
       authorization_endpoint:                           issuer + '/authorize',
       token_endpoint:                                   issuer + '/token',
-      token_endpoint_auth_methods_supported:            undefined, // [],
+      token_endpoint_auth_methods_supported:            ['client_secret_basic', 'client_secret_post', 'client_secret_jwt'],
       token_endpoint_auth_signing_alg_values_supported: undefined, //[],
       userinfo_endpoint:                                issuer + '/userinfo',
       check_session_iframe:                             undefined,
