@@ -7,6 +7,7 @@ var client = require('../config/redis')
   , Document = require('modinha-redis')
   , User     = require('./User')
   , AuthorizationError = require('../errors/AuthorizationError')
+  , base64url = require('base64url')
   ;
 
 
@@ -694,7 +695,7 @@ Client.authenticate = function (req, callback) {
       }));
     }
 
-    method = 'client_jwt';
+    method = 'client_secret_jwt';
   }
 
   // Missing authentication parameters
@@ -832,7 +833,56 @@ var authenticators = {
   },
 
 
-  //'client_jwt': function () {},
+  'client_secret_jwt': function (req, callback) {
+    // peek at the JWT body to get the sub
+    var jwt     = req.body.client_assertion
+      , payloadB64u = jwt.split('.')[1]
+      , payload     = JSON.parse(base64url.decode(payloadB64u))
+      ;
+
+
+    if (!payload || !payload.sub) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Cannot extract client id from JWT',
+        statusCode:          400
+      }));
+    }
+
+    Client.get(payload.sub, function (err, client) {
+      if (err) { return callback(err); }
+
+      if (!client) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Unknown client identifier',
+          statusCode:          400
+        }));
+      }
+
+      if (!client.client_secret) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Missing client secret',
+          statusCode:          400
+        }));
+      }
+
+      var token;// = ClientSecretToken.decode(jwt, client.client_secret);
+
+      if (!token || token instanceof Error) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Invalid client JWT',
+          statusCode:          400
+        }));
+      }
+
+      // TODO: validate the payload
+
+      callback(null, client, token);
+    });
+  },
 
 
   //'private_key_jwt': function () {},

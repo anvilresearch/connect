@@ -18,8 +18,9 @@ chai.should()
 
 
 # Code under test
-Modinha = require 'modinha'
-Client     = require path.join(cwd, 'models/Client')
+Modinha   = require 'modinha'
+Client    = require path.join(cwd, 'models/Client')
+base64url = require('base64url')
 
 
 
@@ -298,7 +299,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Must use only one authentication method'
 
       it 'should provide a status code', ->
@@ -328,7 +329,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Must use only one authentication method'
 
       it 'should provide a status code', ->
@@ -357,7 +358,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Invalid client assertion type'
 
       it 'should provide a status code', ->
@@ -386,7 +387,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Missing client assertion'
 
       it 'should provide a status code', ->
@@ -412,7 +413,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Missing client credentials'
 
       it 'should provide a status code', ->
@@ -441,7 +442,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Malformed HTTP Basic credentials'
 
       it 'should provide a status code', ->
@@ -470,7 +471,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Invalid authorization scheme'
 
       it 'should provide a status code', ->
@@ -499,7 +500,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Missing client credentials'
 
       it 'should provide a status code', ->
@@ -533,7 +534,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Unknown client identifier'
 
       it 'should provide a status code', ->
@@ -567,7 +568,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Mismatching client secret'
 
       it 'should provide a status code', ->
@@ -628,7 +629,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Missing client credentials'
 
       it 'should provide a status code', ->
@@ -663,7 +664,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Unknown client identifier'
 
       it 'should provide a status code', ->
@@ -671,6 +672,7 @@ describe 'Client', ->
 
       it 'should not provide a client', ->
         expect(client).to.be.undefined
+
 
 
 
@@ -697,7 +699,7 @@ describe 'Client', ->
       it 'should provide an error', ->
         err.error.should.equal 'unauthorized_client'
 
-      it 'should profide an error_description', ->
+      it 'should provide an error_description', ->
         err.error_description.should.equal 'Mismatching client secret'
 
       it 'should provide a status code', ->
@@ -709,7 +711,140 @@ describe 'Client', ->
 
 
 
-    describe 'with client secret JWT', ->
+    describe 'with client secret JWT and missing client id', ->
+
+      before (done) ->
+        req =
+          body:
+            client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+            client_assertion: 'header.' + base64url('{}') + '.signature'
+
+        callback = sinon.spy (error, instance) ->
+          err = error
+          client = instance
+          done()
+
+        Client.authenticate req, callback
+
+      it 'should provide an error', ->
+        err.error.should.equal 'unauthorized_client'
+
+      it 'should provide an error_description', ->
+        err.error_description.should.equal 'Cannot extract client id from JWT'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 400
+
+      it 'should not provide a client', ->
+        expect(client).to.be.undefined
+
+
+
+
+    describe 'with client secret JWT and unknown client identifier', ->
+
+      before (done) ->
+        sinon.stub(Client, 'get').callsArgWith(1, null, null)
+        req =
+          body:
+            client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+            client_assertion: 'header.' + base64url('{"sub":"UNKNOWN"}') + '.signature'
+
+        callback = sinon.spy (error, instance) ->
+          err = error
+          client = instance
+          done()
+
+        Client.authenticate req, callback
+
+      after ->
+        Client.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'unauthorized_client'
+
+      it 'should provide an error_description', ->
+        err.error_description.should.equal 'Unknown client identifier'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 400
+
+      it 'should not provide a client', ->
+        expect(client).to.be.undefined
+
+
+
+
+    describe 'with client secret JWT and missing client secret', ->
+
+      before (done) ->
+        sinon.stub(Client, 'get').callsArgWith(1, null, {})
+
+        req =
+          body:
+            client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+            client_assertion: 'header.' + base64url('{"sub":"id"}') + '.signature'
+
+        callback = sinon.spy (error, instance) ->
+          err = error
+          client = instance
+          done()
+
+        Client.authenticate req, callback
+
+      after ->
+        Client.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'unauthorized_client'
+
+      it 'should provide an error_description', ->
+        err.error_description.should.equal 'Missing client secret'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 400
+
+      it 'should not provide a client', ->
+        expect(client).to.be.undefined
+
+
+
+
+    describe 'with client secret JWT and unverifiable token', ->
+
+      before (done) ->
+        sinon.stub(Client, 'get').callsArgWith(1, null, {
+          client_secret: 'secret'
+        })
+
+        req =
+          body:
+            client_assertion_type: 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+            client_assertion: 'header.' + base64url('{"sub":"id"}') + '.signature'
+
+        callback = sinon.spy (error, instance) ->
+          err = error
+          client = instance
+          done()
+
+        Client.authenticate req, callback
+
+      after ->
+        Client.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'unauthorized_client'
+
+      it 'should provide an error_description', ->
+        err.error_description.should.equal 'Invalid client JWT'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 400
+
+      it 'should not provide a client', ->
+        expect(client).to.be.undefined
+
+
 
 
     describe 'with private key JWT', ->
