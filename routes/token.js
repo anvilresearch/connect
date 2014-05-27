@@ -14,7 +14,7 @@ module.exports = function (server) {
   server.post('/token',
     oidc.selectConnectParams,
     oidc.validateTokenParams,
-    oidc.verifyClientToken(server),
+    oidc.authenticateClient,
     oidc.verifyAuthorizationCode,
     oidc.token
   );
