@@ -6,6 +6,7 @@ var client = require('../config/redis')
   , Modinha = require('modinha')
   , Document = require('modinha-redis')
   , User     = require('./User')
+  , AuthorizationError = require('../errors/AuthorizationError')
   ;
 
 
@@ -367,7 +368,7 @@ var Client = Modinha.define('clients', {
    *    supported by the OP and the RP MAY be used.
    */
 
-  request_object_signin_alg: {
+  request_object_signing_alg: {
     type: 'string'
   },
 
@@ -415,7 +416,15 @@ var Client = Modinha.define('clients', {
    */
 
   token_endpoint_auth_method: {
-    type: 'string'
+    type: 'string',
+    enum: [
+      'client_secret_basic',
+      'client_secret_post',
+      'client_secret_jwt',
+      'private_key_jwt',
+      //'none'
+    ],
+    default: 'client_secret_basic'
   },
 
   /**
@@ -624,6 +633,212 @@ Client.prototype.configuration = function (server, token) {
   }
 
   return configuration;
+};
+
+
+/**
+ * Authenticate
+ */
+
+Client.authenticate = function (req, callback) {
+  var method;
+
+  // Use HTTP Basic Authentication Method
+  if (req.headers && req.headers.authorization) {
+    method = 'client_secret_basic';
+  }
+
+  // Use HTTP Post Authentication Method
+  if (req.body && req.body.client_secret) {
+
+    // Fail if multiple authentication methods are attempted
+    if (method) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Must use only one authentication method',
+        statusCode:          400
+      }));
+    }
+
+    method = 'client_secret_post';
+  }
+
+  // Use Client JWT Authentication Method
+  if (req.body && req.body.client_assertion_type) {
+    var type = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+
+    // Fail if multiple authentication methods are attempted
+    if (method) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Must use only one authentication method',
+        statusCode:          400
+      }));
+    }
+
+    // Invalid client assertion type
+    if (req.body.client_assertion_type !== type) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Invalid client assertion type',
+        statusCode:          400
+      }));
+    }
+
+    // Missing client assertion
+    if (!req.body.client_assertion) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Missing client assertion',
+        statusCode:          400
+      }));
+    }
+
+    method = 'client_jwt';
+  }
+
+  // Missing authentication parameters
+  if (!method) {
+    return callback(new AuthorizationError({
+      error:              'unauthorized_client',
+      error_description:  'Missing client credentials',
+      statusCode:          400
+    }));
+  }
+
+  // Apply the appropriate authentication method
+  authenticators[method](req, callback);
+};
+
+
+/**
+ *
+ */
+
+var authenticators = {
+
+  /**
+   * HTTP Basic Authentication w/client_id and client_secret
+   */
+
+  'client_secret_basic': function (req, callback) {
+
+    var authorization = req.headers.authorization.split(' ')
+      , scheme        = authorization[0]
+      , credentials   = new Buffer(authorization[1], 'base64')
+                        .toString('ascii')
+                        .split(':')
+      , clientId      = credentials[0]
+      , clientSecret  = credentials[1]
+      ;
+
+    // malformed credentials
+    if (credentials.length !== 2) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Malformed HTTP Basic credentials',
+        statusCode:          400
+      }));
+    }
+
+    // invalid authorization scheme
+    if (!/^Basic$/i.test(scheme)) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Invalid authorization scheme',
+        statusCode:          400
+      }));
+    }
+
+    // missing credentials
+    if (!clientId || !clientSecret) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Missing client credentials',
+        statusCode:          400
+      }));
+    }
+
+
+    Client.get(clientId, function (err, client) {
+      if (err) { return callback(err); }
+
+      // Unknown client
+      if (!client) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Unknown client identifier',
+          statusCode:          401
+        }));
+      }
+
+      // Mismatching secret
+      if (client.client_secret !== clientSecret) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Mismatching client secret',
+          statusCode:          401
+        }));
+      }
+
+      callback(null, client);
+    });
+
+  },
+
+
+  /**
+   * HTTP POST body authentication
+   */
+
+  'client_secret_post': function (req, callback) {
+    var params       = req.body
+      , clientId     = params.client_id
+      , clientSecret = params.client_secret
+      ;
+
+    // missing credentials
+    if (!clientId || !clientSecret) {
+      return callback(new AuthorizationError({
+        error:              'unauthorized_client',
+        error_description:  'Missing client credentials',
+        statusCode:          400
+      }));
+    }
+
+    Client.get(clientId, function (err, client) {
+      if (err) { return next(err); }
+
+      // Unknown client
+      if (!client) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Unknown client identifier',
+          statusCode:          401
+        }));
+      }
+
+      // Mismatching secret
+      if (client.client_secret !== clientSecret) {
+        return callback(new AuthorizationError({
+          error:              'unauthorized_client',
+          error_description:  'Mismatching client secret',
+          statusCode:          401
+        }));
+      }
+
+      callback(null, client);
+    });
+  },
+
+
+  //'client_jwt': function () {},
+
+
+  //'private_key_jwt': function () {},
+
+
+  //'none': function () {}
 };
 
 
