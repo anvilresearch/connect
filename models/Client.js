@@ -616,6 +616,7 @@ Client.__client = client;
 
 Client.mappings.registration = {
   _id:                        'client_id',
+  client_secret:              'client_secret',
   client_name:                'client_name',
   logo_uri:                   'logo_uri',
   contacts:                   'contacts',
