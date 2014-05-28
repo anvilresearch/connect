@@ -47,7 +47,7 @@
     "passport-google": "~0.3.0",
     "passport-twitter": "~1.0.2",
     "passport-google-oauth": "~0.1.5",
-    "modinha": "0.0.20",
+    "modinha": "0.0.21",
     "bcrypt": "~0.7.7",
     "mellt": "~1.0.0",
     "modinha-redis": "0.0.11",
