@@ -19,6 +19,7 @@
     "url": "https://github.com/christiansmith/anvil-connect.git"
   },
   "scripts": {
+    "start": "node server.js",
     "test": "mocha --compilers coffee:coffee-script/register -R spec --watch"
   },
   "main": "server.js",
