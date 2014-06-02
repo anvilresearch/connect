@@ -56,6 +56,8 @@
     "form-urlencoded": "0.0.6",
     "express": "~4.1.1",
     "jwa": "0.0.2",
-    "async": "~0.8.0"
+    "async": "~0.8.0",
+    "optimist": "~0.6.1",
+    "fs-extra": "~0.9.1"
   }
 }
