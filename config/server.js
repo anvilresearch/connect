@@ -66,6 +66,12 @@ module.exports = function (server) {
   server.set('trusted_registration_scope', 'realm');
 
   /**
+   * providers
+   */
+
+  server.set('providers', {});
+
+  /**
    * OpenID Provider Metadata Default Values
    * http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata
    *
