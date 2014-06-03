@@ -562,7 +562,7 @@ module.exports = function (server) {
    * Request Parsing
    */
 
-  server.use(cookieParser('secret'));
+  server.use(cookieParser(server.settings.cookie_secret));
   server.use(bodyParser());
 
 
@@ -572,7 +572,7 @@ module.exports = function (server) {
 
   server.use(session({
     store: sessionStore,
-    secret: 'asdf'
+    secret: server.settings.session_secret
   }));
 
 
