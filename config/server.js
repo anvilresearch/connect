@@ -589,4 +589,12 @@ module.exports = function (server) {
    */
 
   server.use(cors());
+
+
+  /**
+   * Serve Static Files
+   */
+
+  server.use(express.static(path.join(cwd, 'public')));
+
 };
