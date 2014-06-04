@@ -552,15 +552,31 @@ module.exports = function (server) {
    * Load Key Pair
    */
 
-  try {
-    var privateKey, publicKey;
-    privateKey = fs.readFileSync(config.keypair.private).toString('ascii');
-    publicKey  = fs.readFileSync(config.keypair.public).toString('ascii');
+  if (env === 'development') {
+    try {
+      var privateKey, publicKey;
+      privateKey = fs.readFileSync(config.keypair.private).toString('ascii');
+      publicKey  = fs.readFileSync(config.keypair.public).toString('ascii');
+      server.set('privateKey', privateKey);
+      server.set('publicKey', publicKey);
+    } catch (err) {
+      console.log('Cannot load keypair');
+      process.exit(1);
+    }
+  }
+
+  if (env === 'production') {
+    var privateKey = process.env.ANVIL_CONNECT_PRIVATE_KEY
+      , publicKey  = process.env.ANVIL_CONNECT_PUBLIC_KEY
+      ;
+
     server.set('privateKey', privateKey);
-    server.set('publicKey', publicKey);
-  } catch (err) {
-    console.log('Cannot load keypair');
-    process.exit(1);
+    server.set('publicKey',  publicKey);
+
+    if (!privateKey || !publicKey) {
+      console.log('Cannot load keypair');
+      process.exit(1);
+    }
   }
 
 
