@@ -16,7 +16,7 @@ module.exports = function (server) {
     oidc.validateTokenParams,
     oidc.authenticateClient,
     oidc.verifyAuthorizationCode,
-    oidc.token
+    oidc.token(server)
   );
 
 };
