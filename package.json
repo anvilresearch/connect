@@ -22,6 +22,9 @@
     "start": "node server.js",
     "test": "mocha --compilers coffee:coffee-script/register -R spec --watch"
   },
+  "bin": {
+    "nv": "./bin/nv"
+  },
   "main": "server.js",
   "license": "MIT",
   "devDependencies": {
