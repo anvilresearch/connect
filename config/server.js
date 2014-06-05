@@ -16,6 +16,7 @@ var cwd          = process.cwd()
   , RedisStore   = require('connect-redis')(session)
   , sessionStore = new RedisStore({ client: client })
   , cors         = require('cors')
+  , morgan       = require('morgan')
   ;
 
 
@@ -612,6 +613,14 @@ module.exports = function (server) {
 
   server.use(cors());
 
+
+  /**
+   * Logging
+   */
+
+  if (env === 'development') {
+    server.use(morgan('dev'))
+  }
 
   /**
    * Serve Static Files
