@@ -3,23 +3,13 @@
 /**
  * Module dependencies
  */
-var cwd = process.cwd()
-  , path = require('path')
+var path = require('path')
+  , cli = require(path.join(__dirname, '../lib/cli'))
   ;
-var cli = require(path.join(__dirname, '../lib/cli'));
 
-
-/**
- * Parse options
- */
-
-var argv = require('optimist')
-  .usage('Usage: $0 command')
-  .argv
-  ;
 
 /**
  * Run the command
  */
 
-cli.run(argv);
+cli.run();

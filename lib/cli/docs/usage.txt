@@ -1,0 +1,12 @@
+Usage: nv [--version] [--help] <command> [<args>]
+
+nv is a command line interface for Anvil Connect. Use it to generate
+deployment repositories, initialize a database, and manage roles,
+scope, and user permissions.
+
+The most commonly used nv commands are:
+
+  nv init deployment          Initialize a new deployment repository
+  nv init db                  Initialize a database
+  nv assign <email> <role>    Assign a role to a user
+  nv revoke <email> <role>    Revoke a role from a user
