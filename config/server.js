@@ -8,6 +8,7 @@ var cwd          = process.cwd()
   , path         = require('path')
   , config       = require(path.join(cwd, 'config.' + env + '.json'))
   , client       = require('./redis')(config.redis)
+  , logger       = require('./logger')(config.logger)
   , express      = require('express')
   , passport     = require('passport')
   , cookieParser = require('cookie-parser')
@@ -16,7 +17,6 @@ var cwd          = process.cwd()
   , RedisStore   = require('connect-redis')(session)
   , sessionStore = new RedisStore({ client: client })
   , cors         = require('cors')
-  , morgan       = require('morgan')
   ;
 
 
@@ -618,9 +618,8 @@ module.exports = function (server) {
    * Logging
    */
 
-  if (env === 'development') {
-    server.use(morgan('dev'))
-  }
+  server.use(logger.middleware());
+
 
   /**
    * Serve Static Files
