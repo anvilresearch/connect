@@ -553,31 +553,34 @@ module.exports = function (server) {
    * Load Key Pair
    */
 
-  if (env === 'development') {
-    try {
-      var privateKey, publicKey;
-      privateKey = fs.readFileSync(config.keypair.private).toString('ascii');
-      publicKey  = fs.readFileSync(config.keypair.public).toString('ascii');
-      server.set('privateKey', privateKey);
-      server.set('publicKey', publicKey);
-    } catch (err) {
-      console.log('Cannot load keypair');
-      process.exit(1);
-    }
+  var privateKey, publicKey
+    , defaultPublicKeyFile  = path.join(cwd, 'keys', 'public.pem')
+    , defaultPrivateKeyFile = path.join(cwd, 'keys', 'private.pem')
+    ;
+
+  // first, look for environment variables.
+  // in production, the files should not be present
+  privateKey = process.env.ANVIL_CONNECT_PRIVATE_KEY
+  publicKey  = process.env.ANVIL_CONNECT_PUBLIC_KEY
+
+  // next, try to read the key files
+  // if they are available locally, they should override
+  // any found environment variables
+  try {
+    privateKey = fs.readFileSync(defaultPrivateKeyFile).toString('ascii');
+    publicKey  = fs.readFileSync(defaultPublicKeyFile).toString('ascii');
+  } catch (err) {}
+
+  // ensure the key pair has been loaded
+  if (!privateKey || !publicKey) {
+    console.log('Cannot load keypair');
+    process.exit(1);
   }
 
-  if (env === 'production') {
-    var privateKey = process.env.ANVIL_CONNECT_PRIVATE_KEY
-      , publicKey  = process.env.ANVIL_CONNECT_PUBLIC_KEY
-      ;
-
+  // assign the values discovered
+  else {
     server.set('privateKey', privateKey);
     server.set('publicKey',  publicKey);
-
-    if (!privateKey || !publicKey) {
-      console.log('Cannot load keypair');
-      process.exit(1);
-    }
   }
 
 
