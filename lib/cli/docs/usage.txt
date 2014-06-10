@@ -7,6 +7,16 @@ scope, and user permissions.
 The most commonly used nv commands are:
 
   nv init deployment          Initialize a new deployment repository
+
   nv init db                  Initialize a database
+
   nv assign <email> <role>    Assign a role to a user
+
   nv revoke <email> <role>    Revoke a role from a user
+
+  nv copy <filepath>          Copy file to clipboard as Base64.
+                              This value is used to represent
+                              public/private keys in environment
+                              variables.
+
+  nv config                   View the server's OpenID Provider Metadata
