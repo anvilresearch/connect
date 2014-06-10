@@ -560,8 +560,8 @@ module.exports = function (server) {
 
   // first, look for environment variables.
   // in production, the files should not be present
-  privateKey = process.env.ANVIL_CONNECT_PRIVATE_KEY
-  publicKey  = process.env.ANVIL_CONNECT_PUBLIC_KEY
+  privateKey = process.env.ANVIL_CONNECT_PRIVATE_KEY.toString('ascii')
+  publicKey  = process.env.ANVIL_CONNECT_PUBLIC_KEY.toString('ascii')
 
   // next, try to read the key files
   // if they are available locally, they should override
