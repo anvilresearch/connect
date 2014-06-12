@@ -40,7 +40,7 @@ require('./routes/error')(server);
 server.start = function () {
   server.listen(server.settings.port, function () {
     console.log(
-      'Anvil Connect is running on port ' + server.settings.port
+      'Anvil Connect pid %s is running on port %s', process.pid, server.settings.port
     );
   });
 };
