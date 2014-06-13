@@ -6,12 +6,10 @@
 
 ### Why run your own OpenID Connect Povider?
 
-* You have many apps and APIs to protect and you need a shared identity and authorization service
-* Your users want...
-  * a seamless authentication experience across several apps
-  * to grant third party apps limited access to their account
-  * to be able to sign in via other providers like Google+
-* Other developers want to rely on you for establishing a user's identity
+* Protect your apps and APIs with a shared identity and authorization service *that you control*
+* Provide your users with a seamless authentication experience across several apps, as well as social signin via other providers like Google+
+* Authorize third party access to your APIs on a user's behalf
+* Be the bedrock of an ecosystem as an identity provider for other developers
 
 
 ### Why use **Anvil Connect**?
