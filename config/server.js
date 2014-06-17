@@ -6,6 +6,7 @@ var cwd          = process.cwd()
   , env          = process.env.NODE_ENV || 'development'
   , fs           = require('fs')
   , path         = require('path')
+  , pkg          = require(path.join(__dirname, '..', 'package.json'))
   , config       = require(path.join(cwd, 'config.' + env + '.json'))
   , client       = require('./redis')(config.redis)
   , logger       = require('./logger')(config.logger)
@@ -31,6 +32,14 @@ module.exports = function (server) {
    */
 
   server.disable('x-powered-by');
+
+
+  /**
+   * Anvil Connect Version
+   */
+
+  server.set('version', pkg.version);
+
 
   /**
    * Server Port
