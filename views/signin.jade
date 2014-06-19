@@ -3,7 +3,7 @@ html(lang="en")
   head
     title
       | Sign in to Anvil Connect
-    
+
     link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/app.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300')
@@ -22,6 +22,7 @@ html(lang="en")
         input(type='hidden', name='redirect_uri', value=request.redirect_uri)
         input(type='hidden', name='scope', value=request.scope)
         input(type='hidden', name='state', value=request.state)
+        input(type='hidden', name='nonce', value=request.nonce)
         hr.textsep.signinwith
         ul.providers
           each provider in Object.keys(providers)
@@ -34,11 +35,11 @@ html(lang="en")
         button.callout.full(type='submit', value='Sign in')
           | Sign in
         p
-          | Don't have an account? 
-          a(href='/signup?' + params) 
+          | Don't have an account?
+          a(href='/signup?' + params)
             | Get Registered in Seconds
 
-      
 
 
-   
+
+
