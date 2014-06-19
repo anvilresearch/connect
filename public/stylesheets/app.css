@@ -1,0 +1,268 @@
+body {
+  background: #fafafa;
+  font-family: 'Roboto', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:hover {
+  transition: .3s background;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Raleway', sans-serif;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+a {
+  text-decoration: none;
+  color: #00a35f;
+}
+
+.logomark {
+  width: 140px;
+  background-origin: content-box;
+  margin: 0 auto;
+  display: block;
+}
+
+.logotype {
+  font-family: 'Playfair Display', sans-serif;
+  font-weight: 800;
+  font-size: 72px;
+  color: #00d97f;
+  width: 100%;
+  margin: -.2em auto 30px;
+}
+
+.thin {
+  font-weight: 100;
+  display: block;
+  font-size: 18px;
+  color: #000;
+  letter-spacing: 1.3em;
+  margin-right: -1.3em;
+  line-height: 0em;
+}
+
+.anvilform {
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 60px;
+  min-height: 200px;
+  position: relative;
+}
+
+.anvilform h1 {
+  text-align: center;
+}
+
+.anvilform .textsep {
+  color: #999;
+  border: solid 1px #ccc;
+  text-align: center;
+  position: relative;
+  height: 0px;
+  border-width: 1px 0 0;
+}
+
+.anvilform .textsep:before {
+  content: '';
+  display: inline-block;
+  position: relative;
+  top: -14px;
+  padding: 0 10px;
+  background: #fff;
+  color: #8c8b8b;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.anvilform .textsep.signinwith:before {
+  content: 'sign in with';
+}
+
+.anvilform .textsep.signupwith:before {
+  content: 'sign up with';
+}
+
+.anvilform .textsep.or:before {
+  content: 'or';
+}
+
+.anvilform .panel {
+  background: #ffffff;
+  border: 1px solid #ccc;
+  padding: 30px;
+  width: 400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.anvilform .error {
+  background: #f15a24;
+  color: #fff;
+  padding: 10px;
+  position: relative;
+  top: -16px;
+}
+
+.anvilform .panel .providers {
+  padding: 0px;
+  list-style-type: none;
+}
+
+.anvilform form input[type="text"], .anvilform form input[type="password"] {
+  background: #fafafa;
+  border: 1px solid #ccc;
+  height: 65px;
+  display: block;
+  padding: 20px;
+  width: 100%;
+  margin: 10px 0 0;
+  font-size: 18px;
+}
+
+.singlebutton {
+  display: inline-block;
+  margin-right: 2px;
+}
+
+.singlebutton.cancel {
+  margin-right: 0;
+}
+
+.anvilform button {
+  height: 65px;
+  margin: 10px 2px 0 0;
+  border: 0px solid #ccc;
+  background: #ccc;
+  cursor: pointer;
+  font-size: 24px;
+  text-transform: uppercase;
+  font-family: 'Raleway', sans-serif;
+  text-decoration: none;
+  font-weight: 100;
+  padding: 20px;
+  width: 168px;
+  transition: .3s background;
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+
+.anvilform button:hover {
+  background: #aaa;
+}
+
+.anvilform button.callout {
+  background: #21d782;
+  font-weight: 400;
+  color: #fff;
+}
+
+.anvilform button.full {
+  width: 100%;
+}
+
+.anvilform button.smalltext {
+  font-size: 12px;
+  position: relative;
+  top: -7px;
+}
+
+.anvilform button.callout:hover {
+  background: #4ddf9b;
+}
+
+.anvilform button:last-child {
+  margin-right: 0px;
+}
+
+.anvilform button a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 100;
+}
+
+.providers li {
+  display: inline-block;
+  margin: 0 2px 4px;
+  height: 63px;
+  width: 63px;
+}
+
+.provider {
+  background: #aaa;
+  color: #fff;
+  display: inline-block;
+  padding: 15px;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  transition: .3s background;
+}
+
+.provider.google {
+  background: #dd4b39;
+}
+
+.provider.google:hover {
+  background: #a6382b;
+}
+
+.provider.facebook {
+  background: #3b5998;
+}
+
+.provider.facebook:hover {
+  background: #2c4372;
+}
+
+.provider.twitter {
+  background: #55acee;
+}
+
+.provider.twitter:hover {
+  background: #4993CC;
+}
+
+.provider.github, .provider.codepen {
+  background: #000;
+}
+
+.provider.github:hover, .provider.codepen:hover {
+  background: #333;
+}
+
+.provider.dribbble {
+  background: #ea4c89;
+}
+
+.provider.dribbble:hover {
+  background: #c06185;
+}
+
+.provider.instagram {
+  background: #517fa4;
+}
+
+.provider.instagram:hover {
+  background: #24557b;
+}
+
+.provider.wordpress {
+  background: #21759b;
+}
+
+.provider.wordpress:hover {
+  background: #195874;
+}

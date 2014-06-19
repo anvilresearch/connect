@@ -1,40 +1,57 @@
-h1 Authorize
+html(lang="en")
+  head
+    title
+      | Sign in to Anvil Connect
+    
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300')
+  body
+
+    .anvilform
+      img.logomark(src='/images/anvil.svg')
+      h1.logotype Anvil
+        span.thin Connect
+      .panel
+        h2
+          | Hello 
+          = user.name || user.email
+          | ,
+
+        //- if client.logo_uri
+        //-   img(src=client.logo_uri)
+
+        //- h3= client.client_name || client._id
+
+        p This app would like to:
+
+        ul
+          each scope in scopes
+            li= scope.description
+
+        form.singlebutton(action='/authorize', method='POST')
+          input(type='hidden', name='response_type', value=request.response_type)
+          input(type='hidden', name='client_id', value=request.client_id)
+          input(type='hidden', name='redirect_uri', value=request.redirect_uri)
+          input(type='hidden', name='scope', value=request.scope)
+          input(type='hidden', name='nonce', value=request.nonce)
+          input(type='hidden', name='state', value=request.state)
+          input(type='hidden', name='authorize', value='true')
+          button.callout(type='submit', value='Accept')
+            | Accept
 
 
-p= user.name || user.email
-
-if client.logo_uri
-  img(src=client.logo_uri)
-
-h3= client.client_name || client._id
-
-p This app would like to:
-
-ul
-  each scope in scopes
-    li= scope.description
-
-form(action='/authorize', method='POST')
-  input(type='hidden', name='response_type', value=request.response_type)
-  input(type='hidden', name='client_id', value=request.client_id)
-  input(type='hidden', name='redirect_uri', value=request.redirect_uri)
-  input(type='hidden', name='scope', value=request.scope)
-  input(type='hidden', name='nonce', value=request.nonce)
-  input(type='hidden', name='state', value=request.state)
-  input(type='hidden', name='authorize', value='true')
-  input(type='submit', value='Accept')
+        form.singlebutton.cancel(action='/authorize', method='POST')
+          input(type='hidden', name='response_type', value=request.response_type)
+          input(type='hidden', name='client_id', value=request.client_id)
+          input(type='hidden', name='redirect_uri', value=request.redirect_uri)
+          input(type='hidden', name='scope', value=request.scope)
+          input(type='hidden', name='nonce', value=request.nonce)
+          input(type='hidden', name='state', value=request.state)
+          input(type='hidden', name='authorize', value='false')
+          button(type='submit', value='Cancel')
+            | Cancel
 
 
-form(action='/authorize', method='POST')
-  input(type='hidden', name='response_type', value=request.response_type)
-  input(type='hidden', name='client_id', value=request.client_id)
-  input(type='hidden', name='redirect_uri', value=request.redirect_uri)
-  input(type='hidden', name='scope', value=request.scope)
-  input(type='hidden', name='nonce', value=request.nonce)
-  input(type='hidden', name='state', value=request.state)
-  input(type='hidden', name='authorize', value='false')
-  input(type='submit', value='Cancel')
-
-
-p= 'Not ' + user.email + '? '
-  a(href='/signout') Signout
+        p= 'Not ' + user.email + '? '
+          a(href='/signout') Signout
