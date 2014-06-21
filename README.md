@@ -38,7 +38,7 @@ $ nv init deployment
 $ npm install
 
 # Initialize the local database
-$ nv init db
+$ nv migrate
 
 # Create the first user account
 $ nv signup
