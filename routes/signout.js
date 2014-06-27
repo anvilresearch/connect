@@ -3,15 +3,24 @@ module.exports = function (server) {
 
   /**
    * Logout
-   *
-   * What else do we need to do here besides kill the
-   * local session? Redirect to a page that will wipe
-   * localStorage?
    */
 
   function signout (req, res) {
+    var redirectUri = req.query.redirect_uri;
+
     req.logout();
-    res.send(204);
+
+    res.set({
+      'Cache-Control': 'no-store',
+      'Pragma': 'no-cache'
+    });
+
+    if (redirectUri) {
+      res.redirect(redirectUri);
+    } else {
+      res.send(204);
+    }
+
   }
 
   server.get('/signout', signout);
