@@ -32,7 +32,7 @@ $ mkdir path/to/project
 $ cd path/to/project
 
 # Generate a deployment repository
-$ nv init deployment
+$ nv init
 
 # Install dependencies
 $ npm install
