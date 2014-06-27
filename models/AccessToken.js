@@ -43,7 +43,6 @@ var AccessToken = Modinha.define('accesstokens', {
   // refresh token
   rt: {
     type:     'string',
-    default:  random(10),
     unique:   true
   },
 
@@ -152,6 +151,7 @@ AccessToken.mappings.exchange = {
 // mapping directly with insert.
 AccessToken.issueFromCode = function (ac, callback) {
   var token = AccessToken.initialize(ac, { mapping: 'exchange' });
+  token.rt = random(10)();
   this.insert(token, function (err, token) {
     if (err) { return callback(err); }
     callback(null, token);
