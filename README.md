@@ -69,6 +69,21 @@ $ modulus deploy
 Support for other deployment targets is in the works.
 
 
+### Connect your apps and APIs
+
+We aim to make it effortless.
+
+* [AngularJS](https://github.com/christiansmith/anvil-connect-js)
+* [Node.js](https://github.com/christiansmith/anvil-connect-nodejs)
+* more SDKs on the way
+
+Any compliant OpenID Connect client should be compatible. For example:
+
+* Express with [Passport](http://passportjs.org/)'s [OpenID Connect strategy](https://github.com/jaredhanson/passport-openidconnect)
+
+If all else fails, you can use the [HTTP API](https://github.com/christiansmith/anvil-connect/wiki/Documentation#http-api) from any language, framework or platform. Please let us know if you write or test a client library. We'll list it here.
+
+
 ### Configure and customize
 
 * [Documentation](https://github.com/christiansmith/anvil-connect/wiki/Documentation)
