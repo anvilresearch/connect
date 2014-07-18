@@ -6,9 +6,9 @@ scope, and user permissions.
 
 The most commonly used nv commands are:
 
-  nv init deployment            Initialize a new deployment repository
+  nv init                       Initialize a new deployment repository
 
-  nv init db                    Initialize a database
+  nv migrate                    Initialize a database
 
   nv assign <email> <role>      Assign a role to a user
 

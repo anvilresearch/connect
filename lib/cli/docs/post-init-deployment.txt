@@ -9,10 +9,10 @@ Your Anvil Connect deployment repository is initialized. Next steps:
    your development and production databases.
 
       // development
-      $ nv init db
+      $ nv migrate
 
       // production
-      $ NODE_ENV=production nv init db
+      $ NODE_ENV=production nv migrate
 
 3. Run Anvil Connect in development mode
 
