@@ -23,6 +23,8 @@ We're building Anvil Connect for small teams like us that want to build fast, gr
 
 ### Lightning fast setup
 
+Be sure to have recent versions of Node.js, npm, and Redis installed on your system before you begin.
+
 ```bash
 # Install the CLI
 $ npm install -g anvil-connect
