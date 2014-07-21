@@ -137,6 +137,7 @@ AccessToken.mappings.issue = {
 AccessToken.mappings.exchange = {
   'cid':   'client_id',
   'uid':   'user_id',
+  'ei':    'max_age',
   'scope': 'scope'
 };
 
@@ -149,8 +150,8 @@ AccessToken.mappings.exchange = {
 // insert method to merge options for
 // initialization so we can use the
 // mapping directly with insert.
-AccessToken.issueFromCode = function (ac, callback) {
-  var token = AccessToken.initialize(ac, { mapping: 'exchange' });
+AccessToken.issueFromCode = function (request, callback) {
+  var token = AccessToken.initialize(request.code, { mapping: 'exchange' });
   token.rt = random(10)();
   this.insert(token, function (err, token) {
     if (err) { return callback(err); }
@@ -162,6 +163,7 @@ AccessToken.issue = function (request, callback) {
   this.insert({
     uid: request.user._id,
     cid: request.client._id,
+    ei:  (request.connectParams && parseInt(request.connectParams.max_age)) || request.client.default_max_age,
     scope: request.scope
   }, function (err, token) {
     if (err) { return callback(err); }
@@ -191,6 +193,7 @@ AccessToken.refresh = function (refreshToken, clientId, callback) {
     AccessToken.insert({
       uid: at.uid,
       cid: at.cid,
+      ei:  at.ei,
       scope: at.scope
     }, function (err, token) {
       if (err) { return callback(err); }

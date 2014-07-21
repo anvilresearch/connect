@@ -39,6 +39,10 @@ var AuthorizationCode = Modinha.define('authorizationcodes', {
     format:   'url'
   },
 
+  max_age: {
+    type: 'number'
+  },
+
   user_id: {
     type:     'string',
     required: true
