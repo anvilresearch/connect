@@ -61,7 +61,14 @@ describe 'Prompt to Authorize', ->
 
       before ->
         req =
-          connectParams: {}
+          connectParams:
+            response_type:  'code'
+            client_id:      'uuid'
+            redirect_uri:   'https://host/callback'
+            scope:          'openid profile'
+            nonce:          'n0nc3'
+            state:          'st4t3'
+            max_age:        '1000'
           client: {}
           user:   {}
           scopes: {}
@@ -79,7 +86,16 @@ describe 'Prompt to Authorize', ->
         res.render.should.not.have.been.called
 
       it 'should redirect to the authorize endpoint', ->
-        res.redirect.should.have.been.calledWith '/authorize?'
+        res.redirect.should.have.been.calledWith sinon.match('/authorize?')
+
+      it 'should include original authorization params', ->
+        res.redirect.should.have.been.calledWith sinon.match('response_type=code')
+        res.redirect.should.have.been.calledWith sinon.match('client_id=uuid')
+        res.redirect.should.have.been.calledWith sinon.match('redirect_uri=')
+        res.redirect.should.have.been.calledWith sinon.match('scope=openid')
+        res.redirect.should.have.been.calledWith sinon.match('nonce=n0nc3')
+        res.redirect.should.have.been.calledWith sinon.match('state=st4t3')
+        res.redirect.should.have.been.calledWith sinon.match('max_age=1000')
 
       it 'should not continue', ->
         next.should.not.have.been.called
