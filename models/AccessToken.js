@@ -160,10 +160,15 @@ AccessToken.issueFromCode = function (request, callback) {
 };
 
 AccessToken.issue = function (request, callback) {
+  if (!request.user || !request.client) {
+    return callback(new Error('invalid_request'));
+  }
+
   this.insert({
     uid: request.user._id,
     cid: request.client._id,
-    ei:  (request.connectParams && parseInt(request.connectParams.max_age)) || request.client.default_max_age,
+    ei:  (request.connectParams && parseInt(request.connectParams.max_age))
+          || request.client.default_max_age,
     scope: request.scope
   }, function (err, token) {
     if (err) { return callback(err); }
