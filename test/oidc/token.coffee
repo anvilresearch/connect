@@ -33,7 +33,7 @@ describe 'Token response', ->
 
     before (done) ->
       at = AccessToken.initialize()
-      sinon.stub(AccessToken, 'issueFromCode').callsArgWith(1, null, at)
+      sinon.stub(AccessToken, 'exchange').callsArgWith(1, null, at)
 
       req =
         body:
@@ -53,7 +53,7 @@ describe 'Token response', ->
       done()
 
     after ->
-      AccessToken.issueFromCode.restore()
+      AccessToken.exchange.restore()
 
     it 'should respond with access_token', ->
       res.json.should.have.been.calledWith sinon.match({ access_token: at.at })

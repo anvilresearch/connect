@@ -143,14 +143,14 @@ AccessToken.mappings.exchange = {
 
 
 /**
- * Issue access token
+ * Exchange authorization code for access token
  */
 
 // TODO: Need to modify modinha-redis
 // insert method to merge options for
 // initialization so we can use the
 // mapping directly with insert.
-AccessToken.issueFromCode = function (request, callback) {
+AccessToken.exchange = function (request, callback) {
   var token = AccessToken.initialize(request.code, { mapping: 'exchange' });
   token.rt = random(10)();
   this.insert(token, function (err, token) {
@@ -158,6 +158,11 @@ AccessToken.issueFromCode = function (request, callback) {
     callback(null, token);
   });
 };
+
+
+/**
+ * Issue access token
+ */
 
 AccessToken.issue = function (request, callback) {
   if (!request.user || !request.client) {

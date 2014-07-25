@@ -128,6 +128,67 @@ describe 'AccessToken', ->
 
   describe 'exchange', ->
 
+    {res, instance} = {}
+
+    describe 'with invalid request', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'insert').callsArgWith(1, new Error)
+        req =
+          code:
+            user_id:    'uuid1'
+            client_id:   false    # this will cause a validation error
+            max_age:     600
+            scope:      'openid profile'
+        AccessToken.exchange req, (error, response) ->
+          err = error
+          res = response
+          done()
+
+      after ->
+        AccessToken.insert.restore()
+
+      it 'should provide an error', ->
+        expect(err).to.be.an.object
+
+      it 'should not provide a value', ->
+        expect(res).to.equal undefined
+
+
+    describe 'with valid request', ->
+
+      before (done) ->
+        instance = new AccessToken
+        sinon.stub(AccessToken, 'insert').callsArgWith(1, null, instance)
+        req =
+          code:
+            user_id:    'uuid1'
+            client_id:  'uuid2'    # this will cause a validation error
+            max_age:     600
+            scope:      'openid profile'
+
+        AccessToken.exchange req, (error, result) ->
+          err = error
+          instance = result
+          done()
+
+      after ->
+        AccessToken.insert.restore()
+
+      it 'should provide a null error', ->
+        expect(err).to.be.null
+
+      it 'should provide an instance', ->
+        expect(instance).to.be.instanceof AccessToken
+
+      it 'should provide a refresh token', ->
+        AccessToken.insert.should.have.been.calledWith sinon.match({
+          rt: sinon.match.string
+        })
+
+      it 'should expire in the default duration', ->
+        instance.ei.should.equal AccessToken.schema.ei.default
+
 
 
 
@@ -228,156 +289,77 @@ describe 'AccessToken', ->
         })
 
 
+
+
   describe 'refresh', ->
 
-  describe 'revoke', ->
+    describe 'with unknown refresh token', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'getByRt').callsArgWith(1, null, null)
+        AccessToken.refresh 'r3fr3sh', 'uuid', (error, result) ->
+          err = error
+          instance = result
+          done()
+
+      after ->
+        AccessToken.getByRt.restore()
+
+      it 'should provide an error', ->
+        expect(err).to.be.instanceof AccessToken.InvalidTokenError
+
+      it 'should not provide a token', ->
+        expect(instance).to.be.undefined
 
 
+    describe 'with mismatching client id', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'getByRt').callsArgWith(1, null, { cid: 'uuid' })
+        AccessToken.refresh 'r3fr3sh', 'wrong', (error, result) ->
+          err = error
+          instance = result
+          done()
+
+      after ->
+        AccessToken.getByRt.restore()
+
+      it 'should provide an error', ->
+        expect(err).to.be.instanceof AccessToken.InvalidTokenError
+
+      it 'should not provide a token', ->
+        expect(instance).to.be.undefined
 
 
+    describe 'with valid token', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'delete').callsArgWith(1, null)
+        sinon.stub(AccessToken, 'getByRt').callsArgWith(1, null, {
+          at:     't0k3n'
+          uid:    'uuid1'
+          cid:    'uuid2'
+          ei:      600
+          scope:  'openid profile'
+        })
+        AccessToken.refresh 'r3fr3sh', 'uuid2', (error, result) ->
+          err = error
+          instance = result
+          done()
+
+      after ->
+        AccessToken.delete.restore()
+        AccessToken.getByRt.restore()
+
+      it 'should delete the existing token', ->
+        AccessToken.delete.should.have.been.calledWith 't0k3n'
+
+      it 'should provide a null error', ->
+        expect(err).to.be.null
+
+      it 'should provide a new token instance', ->
+        expect(instance).to.be.instanceof AccessToken
 
 
-  #describe 'existing', ->
-
-
-  #  beforeEach (done) ->
-  #    token = tokens[0]
-  #    sinon.stub(client, 'hget').callsArgWith 2, null, token.access
-  #    sinon.stub(Token, 'get').callsArgWith 1, null, token
-  #    Token.existing token.appId, token.accountId, (error, instance) ->
-  #      err = error
-  #      token = instance
-  #      done()
-
-  #  afterEach ->
-  #    Token.get.restore()
-  #    client.hget.restore()
-
-  #  it 'should provide a null error', ->
-  #    expect(err).to.be.null
-
-  #  it 'should provide a projection', ->
-  #    expect(token).not.to.be.instanceof Token
-
-  #  it 'should have an access_token', ->
-  #    token.access_token.should.equal tokens[0].access
-
-
-
-
-
-
-  #describe 'revoke', ->
-
-  #  beforeEach (done) ->
-  #    token =  tokens[0]
-  #    sinon.stub(client, 'hget').callsArgWith 2, null, 'fakeId'
-  #    sinon.stub(Token, 'delete').callsArgWith 1, null, true
-  #    Token.revoke token.accountId, token.appId, (error, result) ->
-  #      err = error
-  #      deleted = result
-  #      done()
-
-  #  afterEach ->
-  #    client.hget.restore()
-  #    Token.delete.restore()
-
-  #  it 'should provide a null error', ->
-  #    expect(err).to.be.null
-
-  #  it 'should provide confirmation', ->
-  #    deleted.should.be.true
-
-
-
-  #describe 'verification', ->
-
-  #  describe 'with valid details', ->
-
-  #    before (done) ->
-  #      token = tokens[0]
-  #      sinon.stub(Token, 'get').callsArgWith(1, null, token)
-  #      Token.verify token.access, token.scope, (error, result) ->
-  #        err = error
-  #        instance = result
-  #        done()
-
-  #    after ->
-  #      Token.get.restore()
-
-  #    it 'should provide a null error', ->
-  #      expect(err).to.be.null
-
-  #    it 'should provide the token', ->
-  #      expect(token).to.be.instanceof Token
-
-
-  #  describe 'with unknown access token', ->
-
-  #    before (done) ->
-  #      token = tokens[0]
-  #      sinon.stub(Token, 'get').callsArgWith(1, null, null)
-  #      Token.verify token.access, token.scope, (error, result) ->
-  #        err = error
-  #        instance = result
-  #        done()
-
-  #    after ->
-  #      Token.get.restore()
-
-  #    it 'should provide an "InvalidTokenError"', ->
-  #      err.name.should.equal 'InvalidTokenError'
-
-  #    it 'should not provide verification', ->
-  #      expect(instance).to.be.undefined
-
-
-  #  describe 'with expired access token', ->
-
-  #    it 'should provide an "InvalidTokenError"'
-  #    it 'should not provide verification'
-
-
-  #  describe 'with insufficient scope', ->
-
-  #    before (done) ->
-  #      token = tokens[0]
-  #      sinon.stub(Token, 'get').callsArgWith(1, null, token)
-  #      Token.verify token.access, 'insufficient', (error, result) ->
-  #        err = error
-  #        instance = result
-  #        done()
-
-  #    after ->
-  #      Token.get.restore()
-
-  #    it 'should provide an "InsufficientScopeError"', ->
-  #      err.name.should.equal 'InsufficientScopeError'
-
-  #    it 'should not provide verification', ->
-  #      expect(instance).to.be.undefined
-
-
-  #  describe 'with omitted scope', ->
-
-  #    before (done) ->
-  #      token = tokens[0]
-  #      sinon.stub(Token, 'get').callsArgWith(1, null, token)
-  #      Token.verify token.access, undefined, (error, result) ->
-  #        err = error
-  #        instance = result
-  #        done()
-
-  #    after ->
-  #      Token.get.restore()
-
-  #    it 'should provide an "InsufficientScopeError"', ->
-  #      err.name.should.equal 'InsufficientScopeError'
-
-  #    it 'should not provide verification', ->
-  #      expect(instance).to.be.undefined
-
-
-  #  describe 'with omitted scope and defined default', ->
 
 
