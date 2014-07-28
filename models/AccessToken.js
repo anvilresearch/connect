@@ -3,6 +3,7 @@
  */
 
 var client   = require('../config/redis')
+  , JWT      = require('../lib/JWT')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')
   , random   = Modinha.defaults.random
@@ -44,6 +45,11 @@ var AccessToken = Modinha.define('accesstokens', {
   rt: {
     type:     'string',
     unique:   true
+  },
+
+  // issuer
+  iss: {
+    type:     'string'
   },
 
   // client id
@@ -124,7 +130,7 @@ AccessToken.defineIndex({
 
 
 /**
- * Issue mapping
+ * Mappings
  */
 
 AccessToken.mappings.issue = {
@@ -267,48 +273,49 @@ AccessToken.revoke = function (accountId, appId, callback) {
  * JWT AccessToken
  */
 
-//var cwd = process.cwd()
-//  , path = require('path')
-//  , env = process.env.NODE_ENV || 'development'
-//  , config = require(path.join(cwd, 'config.' + env + '.json'))
-//  , JWT = require('../lib/JWT')
-//  ;
+var AccessJWT = JWT.define({
 
-//var AccessJWT = JWT.define({
+  // default header
+  header: {
+    alg: 'RS256'
+  },
 
-//  // default header
-//  header: {
-//    alg: 'RS256'
-//  },
+  headers: [
+    'alg'
+  ],
 
-//  headers: [
-//    'alg'
-//  ],
+  // modify header schema
+  registeredHeaders: {
+    alg: { format: 'StringOrURI', required: true, enum: ['RS256'] }
+  },
 
-//  // modify header schema
-//  registeredHeaders: {
-//    alg: { format: 'StringOrURI', required: true, enum: ['RS256'] }
-//  },
+  // permitted claims
+  claims: ['jti', 'iss', 'sub', 'aud', 'exp', 'iat', 'scope'],
 
-//  // modify payload schema
-//  registeredClaims: {
-//    iss: { format: 'URI', required: true },
-//    iat: { format: 'IntDate', required: true, default: Date.now },
-//    exp: { format: 'IntDate', required: true, default: expires },
-//    sub: { format: 'String', required: true, from: 'uid' },
-//    aud: { format: 'String', required: true, from: 'cid' },
-//    scp: { format: 'String', required: true, from: 'scope' },
-//  }
+  // modify payload schema
+  registeredClaims: {
+    jti:    { format: 'String',  required: true, from: 'at' },
+    iss:    { format: 'URI',     required: true },
+    iat:    { format: 'IntDate', required: true, default: Date.now },
+    exp:    { format: 'IntDate', required: true, default: expires },
+    sub:    { format: 'String',  required: true, from: 'uid' },
+    aud:    { format: 'String',  required: true, from: 'cid' },
+    scope:  { format: 'String',  required: true },
+  }
 
-//});
+});
 
-//function expires () {
-//  return Date.now() + (3600 * 1000);
-//}
+function expires () {
+  return Date.now() + (3600 * 1000);
+}
 
-//AccessToken.AccessJWT = AccessJWT;
+AccessToken.AccessJWT = AccessJWT;
 
-
+AccessToken.prototype.toJWT = function (secret) {
+  var jwt = new AccessJWT(this);
+  jwt.payload.exp = Date.now() + (this.ei * 1000);
+  return jwt.encode(secret);
+}
 
 
 

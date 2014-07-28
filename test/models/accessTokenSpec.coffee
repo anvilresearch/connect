@@ -23,6 +23,7 @@ chai.should()
 
 
 # Code under test
+server      = require path.join(cwd, 'server')
 Modinha     = require 'modinha'
 AccessToken = require path.join(cwd, 'models/AccessToken')
 
@@ -363,3 +364,38 @@ describe 'AccessToken', ->
 
 
 
+  describe 'toJWT', ->
+
+    {token,issued,decoded} = {}
+
+    describe 'with missing secret', ->
+
+    describe 'with invalid secret', ->
+
+    describe 'with invalid payload', ->
+
+    describe 'with valid payload and secret', ->
+
+      before ->
+        token = new AccessToken
+          iss:     server.settings.issuer
+          uid:    'uid'
+          cid:    'cid'
+          scope:  'openid'
+        issued = token.toJWT(server.settings.privateKey)
+        decoded = AccessToken.AccessJWT.decode(issued, server.settings.publicKey)
+
+
+      it 'should issue a signed JWT', ->
+        issued.split('.').length.should.equal 3
+
+      it 'should set the jti claim to the access token identifier', ->
+        decoded.payload.jti.should.equal token.at
+
+      it 'should set iss to the issuer', ->
+        decoded.payload.iss.should.equal server.settings.issuer
+
+      it 'should calculate exp', ->
+        decoded.payload.exp.should.equal(
+          decoded.payload.iat + (token.ei * 1000)
+        )
