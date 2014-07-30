@@ -33,7 +33,7 @@ describe 'Token response', ->
 
     before (done) ->
       at = AccessToken.initialize()
-      sinon.stub(AccessToken, 'exchange').callsArgWith(1, null, at)
+      sinon.stub(AccessToken, 'exchange').callsArgWith(2, null, at)
 
       req =
         body:
@@ -81,7 +81,7 @@ describe 'Token response', ->
 
     before (done) ->
       at = AccessToken.initialize({cid:'uuid2',uid: 'uuid1'})
-      sinon.stub(AccessToken, 'refresh').callsArgWith(2, null, at)
+      sinon.stub(AccessToken, 'refresh').callsArgWith(3, null, at)
 
       req =
         body:

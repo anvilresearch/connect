@@ -142,7 +142,7 @@ describe 'AccessToken', ->
             client_id:   false    # this will cause a validation error
             max_age:     600
             scope:      'openid profile'
-        AccessToken.exchange req, (error, response) ->
+        AccessToken.exchange req, server, (error, response) ->
           err = error
           res = response
           done()
@@ -169,7 +169,7 @@ describe 'AccessToken', ->
             max_age:     600
             scope:      'openid profile'
 
-        AccessToken.exchange req, (error, result) ->
+        AccessToken.exchange req, server, (error, result) ->
           err = error
           instance = result
           done()
@@ -205,7 +205,7 @@ describe 'AccessToken', ->
         req =
           user: {}
           client: {}
-        AccessToken.issue req, (error, response) ->
+        AccessToken.issue req, server, (error, response) ->
           err = error
           res = response
           done()
@@ -228,7 +228,7 @@ describe 'AccessToken', ->
         req =
           user:   { _id: 'uuid1' }
           client: { _id: 'uuid2' }
-        AccessToken.issue req, (error, response) ->
+        AccessToken.issue req, server, (error, response) ->
           err = error
           res = response
           done()
@@ -255,7 +255,7 @@ describe 'AccessToken', ->
           user:   { _id: 'uuid1' }
           client: { _id: 'uuid2', default_max_age: 7777 }
           connectParams: { max_age: '1000' }
-        AccessToken.issue req, (error, response) ->
+        AccessToken.issue req, server, (error, response) ->
           err = error
           res = response
           done()
@@ -277,7 +277,7 @@ describe 'AccessToken', ->
         req =
           user:   { _id: 'uuid1' }
           client: { _id: 'uuid2', default_max_age: 7777 }
-        AccessToken.issue req, (error, response) ->
+        AccessToken.issue req, server, (error, response) ->
           err = error
           res = response
           done()
@@ -299,7 +299,7 @@ describe 'AccessToken', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'getByRt').callsArgWith(1, null, null)
-        AccessToken.refresh 'r3fr3sh', 'uuid', (error, result) ->
+        AccessToken.refresh 'r3fr3sh', 'uuid', server, (error, result) ->
           err = error
           instance = result
           done()
@@ -318,7 +318,7 @@ describe 'AccessToken', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'getByRt').callsArgWith(1, null, { cid: 'uuid' })
-        AccessToken.refresh 'r3fr3sh', 'wrong', (error, result) ->
+        AccessToken.refresh 'r3fr3sh', 'wrong', server, (error, result) ->
           err = error
           instance = result
           done()
@@ -344,7 +344,7 @@ describe 'AccessToken', ->
           ei:      600
           scope:  'openid profile'
         })
-        AccessToken.refresh 'r3fr3sh', 'uuid2', (error, result) ->
+        AccessToken.refresh 'r3fr3sh', 'uuid2', server, (error, result) ->
           err = error
           instance = result
           done()

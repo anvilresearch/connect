@@ -149,7 +149,7 @@ describe 'Authorize', ->
 
     before (done) ->
       response = AccessToken.initialize().project('issue')
-      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
+      sinon.stub(AccessToken, 'issue').callsArgWith(2, null, response)
 
       req =
         client:

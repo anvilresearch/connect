@@ -158,8 +158,9 @@ AccessToken.mappings.exchange = {
 // insert method to merge options for
 // initialization so we can use the
 // mapping directly with insert.
-AccessToken.exchange = function (request, callback) {
+AccessToken.exchange = function (request, server, callback) {
   var token = AccessToken.initialize(request.code, { mapping: 'exchange' });
+  token.iss = server.settings.issuer;
   token.rt = random(10)();
   this.insert(token, function (err, token) {
     if (err) { return callback(err); }
@@ -172,12 +173,13 @@ AccessToken.exchange = function (request, callback) {
  * Issue access token
  */
 
-AccessToken.issue = function (request, callback) {
+AccessToken.issue = function (request, server, callback) {
   if (!request.user || !request.client) {
     return callback(new Error('invalid_request'));
   }
 
   this.insert({
+    iss: server.settings.issuer,
     uid: request.user._id,
     cid: request.client._id,
     ei:  (request.connectParams && parseInt(request.connectParams.max_age))
@@ -194,7 +196,7 @@ AccessToken.issue = function (request, callback) {
  * Refresh access token
  */
 
-AccessToken.refresh = function (refreshToken, clientId, callback) {
+AccessToken.refresh = function (refreshToken, clientId, server, callback) {
   AccessToken.getByRt(refreshToken, function (err, at) {
     if (err) {
       return callback(err);
@@ -209,6 +211,7 @@ AccessToken.refresh = function (refreshToken, clientId, callback) {
     }
 
     AccessToken.insert({
+      iss: server.settings.issuer,
       uid: at.uid,
       cid: at.cid,
       ei:  at.ei,
@@ -284,10 +287,10 @@ AccessToken.verify = function (token, options, callback) {
 
           if (!instance) {
             return done(new UnauthorizedError({
-              realm: 'user',
-              error: 'invalid_request',
-              error_description: 'Unknown access token',
-              statusCode: 401
+              realm:              'user',
+              error:              'invalid_request',
+              error_description:  'Unknown access token',
+              statusCode:          401
             }));
           }
 
@@ -321,27 +324,29 @@ AccessToken.verify = function (token, options, callback) {
     // mismatching issuer
     if (claims.iss !== issuer) {
       return callback(new UnauthorizedError({
-        error: 'invalid_token',
-        error_description: 'Mismatching issuer',
-        statusCode: 403
+        error:              'invalid_token',
+        error_description:  'Mismatching issuer',
+        statusCode:          403
       }));
     }
 
     // expired token
     if (Date.now() > claims.exp) {
       return callback(new UnauthorizedError({
-        error: 'invalid_token',
-        error_description: 'Expired access token',
-        statusCode: 403
+        realm:              'user',
+        error:              'invalid_token',
+        error_description:  'Expired access token',
+        statusCode:          403
       }));
     }
 
     // insufficient scope
     if (scope && claims.scope.indexOf(scope) === -1) {
       return callback(new UnauthorizedError({
-        error: 'insufficient_scope',
-        error_description: 'Insufficient scope',
-        statusCode: 403
+        realm:              'user',
+        error:              'insufficient_scope',
+        error_description:  'Insufficient scope',
+        statusCode:          403
       }));
     }
 

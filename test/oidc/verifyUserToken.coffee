@@ -11,6 +11,7 @@ chai.should()
 
 
 
+server = require '../../server'
 AccessToken = require '../../models/AccessToken'
 {verifyUserToken} = require '../../lib/oidc'
 
@@ -28,7 +29,7 @@ describe 'Verify User Token', ->
       res  = {}
       next = sinon.spy()
 
-      verifyUserToken('profile') req, res, (error) ->
+      verifyUserToken(server, 'profile') req, res, (error) ->
         err = error
         done()
 
@@ -58,7 +59,11 @@ describe 'Verify User Token', ->
 
       before (done) ->
         token =
-          scope: 'openid profile'
+          at:       'r4nd0m'
+          iss:      server.settings.issuer
+          uid:      'uuid1'
+          cid:      'uuid2'
+          scope:    'openid profile'
           created: Date.now()
           ei: 1000
 
@@ -70,13 +75,13 @@ describe 'Verify User Token', ->
           err = error
           done()
 
-        verifyUserToken('profile') req, res, next
+        verifyUserToken(server, 'profile') req, res, next
 
       after ->
         AccessToken.get.restore()
 
       it 'should reference the retrieved token object', ->
-        req.token.should.equal token
+        req.token.jti.should.equal token.at
 
       it 'should continue', ->
         next.should.have.been.called
@@ -93,7 +98,7 @@ describe 'Verify User Token', ->
         res  = {}
         next = sinon.spy()
 
-        verifyUserToken('profile') req, res, (error) ->
+        verifyUserToken(server, 'profile') req, res, (error) ->
           err = error
           done()
 
@@ -107,7 +112,7 @@ describe 'Verify User Token', ->
         err.realm.should.equal 'user'
 
       it 'should provide an error code', ->
-        err.error.should.equal 'invalid_token'
+        err.error.should.equal 'invalid_request'
 
       it 'should provide an error description', ->
         err.error_description.should.equal 'Unknown access token'
@@ -122,6 +127,7 @@ describe 'Verify User Token', ->
 
       before (done) ->
         token =
+          iss: server.settings.issuer
           created: Date.now() - 10000000
           ei: 1000
 
@@ -131,7 +137,8 @@ describe 'Verify User Token', ->
         res  = {}
         next = sinon.spy()
 
-        verifyUserToken('profile') req, res, (error) ->
+        verifyUserToken(server, 'profile') req, res, (error) ->
+          console.log('ERROOOOOOOR', error)
           err = error
           done()
 
@@ -151,7 +158,7 @@ describe 'Verify User Token', ->
         err.error_description.should.equal 'Expired access token'
 
       it 'should provide a status code', ->
-        err.statusCode.should.equal 401
+        err.statusCode.should.equal 403
 
 
 
@@ -160,9 +167,10 @@ describe 'Verify User Token', ->
 
       before (done) ->
         token =
-          scope: ''
-          created: Date.now()
-          ei: 1000
+          iss:      server.settings.issuer
+          scope:    ''
+          created:  Date.now()
+          ei:       1000
 
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, token)
 
@@ -170,7 +178,7 @@ describe 'Verify User Token', ->
         res  = {}
         next = sinon.spy()
 
-        verifyUserToken('profile') req, res, (error) ->
+        verifyUserToken(server, 'profile') req, res, (error) ->
           err = error
           done()
 
@@ -187,7 +195,7 @@ describe 'Verify User Token', ->
         err.error.should.equal 'insufficient_scope'
 
       it 'should provide an error description', ->
-        err.error_description.should.equal 'Insufficient access token scope'
+        err.error_description.should.equal 'Insufficient scope'
 
       it 'should provide a status code', ->
         err.statusCode.should.equal 403
