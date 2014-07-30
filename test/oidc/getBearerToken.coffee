@@ -30,7 +30,7 @@ describe 'Get Bearer Token', ->
       getBearerToken(req, res, next)
 
     it 'should not set token on the request', ->
-      expect(req.token).to.be.undefined
+      expect(req.bearer).to.be.undefined
 
     it 'should continue', ->
       expect(err).to.be.undefined
@@ -162,7 +162,7 @@ describe 'Get Bearer Token', ->
       getBearerToken(req, res, next)
 
     it 'should set token on the request', ->
-      req.token.should.equal 'whatever'
+      req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
       next.should.have.been.calledWith undefined
@@ -184,7 +184,7 @@ describe 'Get Bearer Token', ->
       getBearerToken(req, res, next)
 
     it 'should set token on the request', ->
-      req.token.should.equal 'whatever'
+      req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
       next.should.have.been.calledWith undefined
@@ -208,7 +208,7 @@ describe 'Get Bearer Token', ->
       getBearerToken(req, res, next)
 
     it 'should set token on the request', ->
-      req.token.should.equal 'whatever'
+      req.bearer.should.equal 'whatever'
 
     it 'should continue', ->
       next.should.have.been.calledWith undefined

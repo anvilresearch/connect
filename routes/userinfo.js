@@ -10,6 +10,8 @@ module.exports = function (server) {
    */
 
   server.get('/userinfo',
+    oidc.parseAuthorizationHeader,
+    oidc.getBearerToken,
     oidc.verifyUserToken('profile'),
     function (req, res, next) {
       User.get(req.token.uid || req.token.payload.sub, function (err, user) {

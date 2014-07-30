@@ -64,7 +64,7 @@ describe 'Verify User Token', ->
 
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, token)
 
-        req  = headers: { authorization: 'Bearer valid' }
+        req  = { bearer: 'valid' }
         res  = {}
         next = sinon.spy (error) ->
           err = error
@@ -89,7 +89,7 @@ describe 'Verify User Token', ->
       before (done) ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, null)
 
-        req  = headers: { authorization: 'Bearer unknown' }
+        req  = { bearer: 'unknown' }
         res  = {}
         next = sinon.spy()
 
@@ -127,7 +127,7 @@ describe 'Verify User Token', ->
 
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, token)
 
-        req  = headers: { authorization: 'Bearer unknown' }
+        req  = { bearer: 'expired' }
         res  = {}
         next = sinon.spy()
 
@@ -166,7 +166,7 @@ describe 'Verify User Token', ->
 
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, token)
 
-        req  = headers: { authorization: 'Bearer unknown' }
+        req  = { bearer: 'insufficient' }
         res  = {}
         next = sinon.spy()
 
