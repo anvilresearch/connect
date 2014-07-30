@@ -26,6 +26,7 @@ chai.should()
 server      = require path.join(cwd, 'server')
 Modinha     = require 'modinha'
 AccessToken = require path.join(cwd, 'models/AccessToken')
+AccessJWT   = AccessToken.AccessJWT
 
 
 
@@ -399,3 +400,282 @@ describe 'AccessToken', ->
         decoded.payload.exp.should.equal(
           decoded.payload.iat + (token.ei * 1000)
         )
+
+
+
+
+  describe 'verify', ->
+
+    {claims} = {}
+    describe 'with undecodable JWT', ->
+
+      before (done) ->
+        token = 'bad.jwt'
+        options =
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      it 'should provide an error', ->
+        expect(err).to.be.instanceof Error
+
+      it 'should not provide claims', ->
+        expect(claims).to.be.undefined
+
+
+    describe 'with decodable JWT and mismatching issuer', ->
+
+      before (done) ->
+        token = (new AccessJWT({
+          at: 'r4nd0m',
+          iss: 'MISMATCHING'
+          uid: 'uuid1'
+          cid: 'uuid2'
+          scope: 'openid'
+        })).encode(server.settings.privateKey)
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'invalid_token'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Mismatching issuer'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'with decodable JWT that has expired', ->
+
+      before (done) ->
+        token = (new AccessJWT({
+          at: 'r4nd0m',
+          iss: server.settings.issuer
+          uid: 'uuid1'
+          cid: 'uuid2'
+          exp: Date.now() - 10000
+          scope: 'openid'
+        })).encode(server.settings.privateKey)
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'invalid_token'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Expired access token'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'with decodable JWT that has insufficient scope', ->
+
+      before (done) ->
+        token = (new AccessJWT({
+          at: 'r4nd0m',
+          iss: server.settings.issuer
+          uid: 'uuid1'
+          cid: 'uuid2'
+          scope: 'openid'
+        })).encode(server.settings.privateKey)
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+          scope: 'other'
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'insufficient_scope'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Insufficient scope'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'with random string and unknown token', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'get').callsArgWith(1, null, null)
+        token = 'r4nd0m'
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      after ->
+        AccessToken.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'invalid_request'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Unknown access token'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 401
+
+
+    describe 'with random string and mismatching issuer', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
+          iss: 'MISMATCH'
+        })
+        token = 'r4nd0m'
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      after ->
+        AccessToken.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'invalid_token'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Mismatching issuer'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'with random string and expired token', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
+          iss:      server.settings.issuer
+          ei:       -10000
+          created:  Date.now()
+        })
+        token = 'r4nd0m'
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      after ->
+        AccessToken.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'invalid_token'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Expired access token'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'with random string and insufficient scope', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
+          iss:      server.settings.issuer
+          ei:       10000
+          scope:    'openid'
+          created:  Date.now()
+        })
+        token = 'r4nd0m'
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+          scope: 'other'
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      after ->
+        AccessToken.get.restore()
+
+      it 'should provide an error', ->
+        err.error.should.equal 'insufficient_scope'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Insufficient scope'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 403
+
+
+    describe 'valid token', ->
+
+      before (done) ->
+        instance =
+          at:       'r4nd0m'
+          iss:      server.settings.issuer
+          uid:      'uuid1'
+          cid:      'uuid2'
+          ei:       10000
+          scope:    'openid'
+          created:  Date.now()
+
+        sinon.stub(AccessToken, 'get').callsArgWith(1, null, instance)
+        token = 'r4nd0m'
+        options =
+          iss: server.settings.issuer
+          key: server.settings.publicKey
+        AccessToken.verify token, options, (error, data) ->
+          err    = error
+          claims = data
+          done()
+
+      after ->
+        AccessToken.get.restore()
+
+      it 'should provide a null error', ->
+        expect(err).to.be.null
+
+      it 'should provide "jti" claim', ->
+        claims.jti.should.equal instance.at
+
+      it 'should provide "iss" claim', ->
+        claims.iss.should.equal instance.iss
+
+      it 'should provide "sub" claim', ->
+        claims.sub.should.equal instance.uid
+
+      it 'should provide "aud" claim', ->
+        claims.aud.should.equal instance.cid
+
+      it 'should provide "iat" claim', ->
+        claims.iat.should.equal instance.created
+
+      it 'should provide "exp" claim', ->
+        claims.exp.should.equal instance.created + (instance.ei * 1000)
+
+      it 'should provide "scope" claim', ->
+        claims.scope.should.equal instance.scope
+
+
+
+

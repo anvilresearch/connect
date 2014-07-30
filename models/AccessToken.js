@@ -2,12 +2,14 @@
  * Module dependencies
  */
 
-var client   = require('../config/redis')
+var async    = require('async')
+  , client   = require('../config/redis')
   , JWT      = require('../lib/JWT')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')
   , random   = Modinha.defaults.random
   , InvalidTokenError = require('../errors/InvalidTokenError')
+  , UnauthorizedError = require('../errors/UnauthorizedError')
   , InsufficientScopeError = require('../errors/InsufficientScopeError')
   ;
 
@@ -249,23 +251,103 @@ AccessToken.revoke = function (accountId, appId, callback) {
  * Verify access token
  */
 
-//AccessToken.verify = function (access, scope, callback) {
-//  this.get(access, function (err, token) {
-//    if (!token) {
-//      return callback(new InvalidTokenError('Unknown access token'));
-//    }
+AccessToken.verify = function (token, options, callback) {
 
-//    if (new Date() > token.expires_at) {
-//      return callback(new InvalidTokenError('Expired access token'));
-//    }
+  async.parallel({
 
-//    if (token.scope.indexOf(scope) === -1) {
-//      return callback(new InsufficientScopeError());
-//    }
+    // Handle JWT
+    jwt: function (done) {
+      // the token is a JWT
+      if (token.indexOf('.') !== -1) {
+        var decoded = AccessJWT.decode(token, options.key);
+        if (!decoded || decoded instanceof Error) {
+          done(decoded || new Error('Invalid JWT'));
+        } else {
+          done(null, decoded);
+        }
+      }
 
-//    callback(null, token);
-//  });
-//};
+      // the token is not a JWT
+      else {
+        done();
+      }
+    },
+
+    // Fetch from database
+    random: function (done) {
+      // the token is random
+      if (token.indexOf('.') === -1) {
+        AccessToken.get(token, function (err, instance) {
+          if (err) {
+            return done(err);
+          }
+
+          if (!instance) {
+            return done(new UnauthorizedError({
+              realm: 'user',
+              error: 'invalid_request',
+              error_description: 'Unknown access token',
+              statusCode: 401
+            }));
+          }
+
+          done(null, {
+            jti:    instance.at,
+            iss:    instance.iss,
+            sub:    instance.uid,
+            aud:    instance.cid,
+            iat:    instance.created,
+            exp:    instance.created + (instance.ei * 1000),
+            scope:  instance.scope
+          });
+        });
+      }
+
+      // the token is not random
+      else {
+        done();
+      }
+    }
+
+  }, function (err, result) {
+    if (err) { return callback(err); }
+
+    var claims = result.random || result.jwt.payload
+      , issuer = options.iss
+      , scope  = options.scope
+      ;
+
+
+    // mismatching issuer
+    if (claims.iss !== issuer) {
+      return callback(new UnauthorizedError({
+        error: 'invalid_token',
+        error_description: 'Mismatching issuer',
+        statusCode: 403
+      }));
+    }
+
+    // expired token
+    if (Date.now() > claims.exp) {
+      return callback(new UnauthorizedError({
+        error: 'invalid_token',
+        error_description: 'Expired access token',
+        statusCode: 403
+      }));
+    }
+
+    // insufficient scope
+    if (scope && claims.scope.indexOf(scope) === -1) {
+      return callback(new UnauthorizedError({
+        error: 'insufficient_scope',
+        error_description: 'Insufficient scope',
+        statusCode: 403
+      }));
+    }
+
+    callback(null, claims);
+  });
+};
 
 
 
