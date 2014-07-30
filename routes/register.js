@@ -19,6 +19,8 @@ module.exports = function (server) {
    */
 
   server.post('/register',
+    oidc.parseAuthorizationHeader,
+    oidc.getBearerToken,
     oidc.verifyClientRegistration(server),
     function (req, res, next) {
 

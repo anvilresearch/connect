@@ -13,7 +13,8 @@ chai.should()
 
 
 server          = require '../../server'
-IDToken         = require '../../models/IDToken'
+AccessToken     = require '../../models/AccessToken'
+AccessJWT       = AccessToken.AccessJWT
 verifyClientReg = require('../../lib/oidc').verifyClientRegistration
   settings:
     client_registration:        'dynamic'
@@ -52,8 +53,7 @@ describe 'Verify Dynamic Client Registration', ->
 
     before (done) ->
       req =
-        headers:
-          authorization: 'Bearer invalid.jwt'
+        bearer: 'invalid.jwt'
         body: {}
 
       res = {}
@@ -84,13 +84,11 @@ describe 'Verify Dynamic Client Registration', ->
 
     before (done) ->
       token =
-        payload:
-          scope: 'insufficient'
+        scope: 'insufficient'
 
-      sinon.stub(IDToken, 'decode').returns token
+      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, token)
       req =
-        headers:
-          authorization: 'Bearer valid.jwt'
+        bearer: 'valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -100,7 +98,7 @@ describe 'Verify Dynamic Client Registration', ->
         done()
 
     after ->
-      IDToken.decode.restore()
+      AccessToken.verify.restore()
 
     it 'should provide an UnauthorizedError', ->
       err.name.should.equal 'UnauthorizedError'
@@ -124,13 +122,11 @@ describe 'Verify Dynamic Client Registration', ->
 
     before (done) ->
       token =
-        payload:
-          scope: 'realm other'
+        scope: 'realm other'
 
-      sinon.stub(IDToken, 'decode').returns token
+      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, token)
       req =
-        headers:
-          authorization: 'Bearer valid.jwt'
+        bearer: 'valid.jwt'
         body: { trusted: "true" }
 
       res = {}
@@ -141,7 +137,7 @@ describe 'Verify Dynamic Client Registration', ->
       verifyClientReg req, res, next
 
     after ->
-      IDToken.decode.restore()
+      AccessToken.verify.restore()
 
     it 'should not provide an error', ->
       expect(err).to.be.undefined
@@ -156,10 +152,12 @@ describe 'Verify Dynamic Client Registration', ->
 
     before (done) ->
 
-      sinon.stub(IDToken, 'decode').returns { payload: {} }
+      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {
+        scope: 'realm'
+      })
 
       req =
-        headers: { authorization: 'Bearer valid.jwt' }
+        bearer: 'valid.jwt'
         body: {}
 
       res = {}
@@ -170,7 +168,7 @@ describe 'Verify Dynamic Client Registration', ->
       verifyClientReg req, res, next
 
     after ->
-      IDToken.decode.restore()
+      AccessToken.verify.restore()
 
     it 'should not provide an error', ->
       expect(err).to.be.undefined

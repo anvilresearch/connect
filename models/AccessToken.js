@@ -264,7 +264,12 @@ AccessToken.verify = function (token, options, callback) {
       if (token.indexOf('.') !== -1) {
         var decoded = AccessJWT.decode(token, options.key);
         if (!decoded || decoded instanceof Error) {
-          done(decoded || new Error('Invalid JWT'));
+          done(new UnauthorizedError({
+            realm: 'user',
+            error: 'invalid_token',
+            error_description: 'Invalid access token',
+            statusCode: 401
+          }));
         } else {
           done(null, decoded);
         }
