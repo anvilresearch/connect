@@ -49,46 +49,13 @@ describe 'Verify Dynamic Client Registration', ->
 
 
 
-  describe 'with invalid JWT bearer token', ->
-
-    before (done) ->
-      req =
-        bearer: 'invalid.jwt'
-        body: {}
-
-      res = {}
-
-      verifyClientReg req, res, (error) ->
-        err = error
-        done()
-
-    it 'should provide an UnauthorizedError', ->
-      err.name.should.equal 'UnauthorizedError'
-
-    it 'should provide a realm', ->
-      err.realm.should.equal 'user'
-
-    it 'should provide an error code', ->
-      err.error.should.equal 'invalid_token'
-
-    it 'should provide an error description', ->
-      err.error_description.should.equal 'Invalid access token'
-
-    it 'should provide a status code', ->
-      err.statusCode.should.equal 401
-
-
-
-
   describe 'with insufficient trusted scope', ->
 
     before (done) ->
-      token =
-        scope: 'insufficient'
-
-      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, token)
       req =
         bearer: 'valid.jwt'
+        claims:
+          sub: 'uuid1'
         body: { trusted: "true" }
 
       res = {}
@@ -96,9 +63,6 @@ describe 'Verify Dynamic Client Registration', ->
       verifyClientReg req, res, (error) ->
         err = error
         done()
-
-    after ->
-      AccessToken.verify.restore()
 
     it 'should provide an UnauthorizedError', ->
       err.name.should.equal 'UnauthorizedError'
@@ -121,12 +85,11 @@ describe 'Verify Dynamic Client Registration', ->
   describe 'with sufficient trusted scope', ->
 
     before (done) ->
-      token =
-        scope: 'realm other'
-
-      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, token)
       req =
         bearer: 'valid.jwt'
+        claims:
+          sub: 'uuid1'
+          scope: 'realm other'
         body: { trusted: "true" }
 
       res = {}
@@ -135,9 +98,6 @@ describe 'Verify Dynamic Client Registration', ->
         done()
 
       verifyClientReg req, res, next
-
-    after ->
-      AccessToken.verify.restore()
 
     it 'should not provide an error', ->
       expect(err).to.be.undefined
@@ -152,11 +112,7 @@ describe 'Verify Dynamic Client Registration', ->
 
     before (done) ->
 
-      sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {
-        scope: 'realm'
-      })
-
-      req =
+     req =
         bearer: 'valid.jwt'
         body: {}
 
@@ -166,9 +122,6 @@ describe 'Verify Dynamic Client Registration', ->
         done()
 
       verifyClientReg req, res, next
-
-    after ->
-      AccessToken.verify.restore()
 
     it 'should not provide an error', ->
       expect(err).to.be.undefined

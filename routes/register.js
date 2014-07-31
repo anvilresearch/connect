@@ -21,12 +21,26 @@ module.exports = function (server) {
   server.post('/register',
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
+
+    // We'll check downstream for the
+    // presence and scope of the token.
+    oidc.verifyAccessToken({
+      iss: server.settings.issuer,
+      key: server.settings.publicKey,
+      required: false
+    }),
+
+    // rename this for clarity and remove
+    // access token verification. Instead,
+    // rely on the verifyAccessToken fn.
     oidc.verifyClientRegistration(server),
+
+
     function (req, res, next) {
 
       // client should reference user if possible
-      if (req.token) {
-        req.body.userId = req.token.sub || req.token.uid;
+      if (req.claims && req.claims.sub) {
+        req.body.userId = req.claims.sub;
       }
 
       Client.insert(req.body, function (err, client) {
