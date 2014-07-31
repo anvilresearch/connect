@@ -2,10 +2,7 @@
  * Module dependencies
  */
 
-var oidc = require('../lib/oidc')
-  , AccessToken = require('../models/AccessToken')
-  , InvalidTokenError = require('../errors/InvalidTokenError')
-  ;
+var oidc = require('../lib/oidc');
 
 
 /**
@@ -14,33 +11,25 @@ var oidc = require('../lib/oidc')
 
 module.exports = function (server) {
 
-  // HOW IS THIS ENDPOINT DIFFERENT THAN GENERAL ACCESS TOKEN VERIFICATION?
-  // WE'RE NOT ACTUALLY USING THE TOKEN TO GAIN ACCESS. WE'RE SENDING IT TO
-  // BE VERIFIED WITH THE VERIFICATION BEING THE RESPONSE. SO IS IT APPROPRIATE
-  // AND USEFUL TO RETURN THE SAME KINDS OF ERROR RESPONSES?
+  server.all('/token/verify',
+    oidc.authenticateClient,
+    oidc.parseAuthorizationHeader,
+    oidc.getBearerToken,
+    oidc.verifyAccessToken({
+      iss: server.settings.issuer,
+      key: server.settings.publicKey
+    }),
+    function (req, res, next) {
 
-  function verifyAccessToken (req, res, next) {
-    AccessToken.verify(req.bearer, server, function (err, claims) {
-      if (err) {
-        return next(err);
-      }
-
+      // don't cache this response
       res.set({
         'Cache-Control': 'no-store',
         'Pragma': 'no-cache'
       });
 
+      // respond with decoded/retrieved claims
       res.json(claims);
-    });
-  }
-
-
-  server.all('/token/verify',
-    oidc.parseAuthorizationHeader,
-    oidc.getBearerToken,
-    oidc.authenticateClient,
-    //oidc.verifyClientToken(server),
-    verifyAccessToken
+    }
   );
 
 };
