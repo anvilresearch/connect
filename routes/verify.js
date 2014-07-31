@@ -14,22 +14,15 @@ var oidc = require('../lib/oidc')
 
 module.exports = function (server) {
 
-  function verifyAccessToken (req, res, next) {
-    var token = req.connectParams.access_token;
+  // HOW IS THIS ENDPOINT DIFFERENT THAN GENERAL ACCESS TOKEN VERIFICATION?
+  // WE'RE NOT ACTUALLY USING THE TOKEN TO GAIN ACCESS. WE'RE SENDING IT TO
+  // BE VERIFIED WITH THE VERIFICATION BEING THE RESPONSE. SO IS IT APPROPRIATE
+  // AND USEFUL TO RETURN THE SAME KINDS OF ERROR RESPONSES?
 
-    AccessToken.get(token, function (err, at) {
+  function verifyAccessToken (req, res, next) {
+    AccessToken.verify(req.bearer, server, function (err, claims) {
       if (err) {
         return next(err);
-      }
-
-      if (!at) {
-        return next(new InvalidTokenError('Unknown access token'));
-      }
-
-      var expiration = (at.created + (at.ei * 1000));
-
-      if (Date.now() > expiration) {
-        return next(new InvalidTokenError('Expired access token'));
       }
 
       res.set({
@@ -37,28 +30,15 @@ module.exports = function (server) {
         'Pragma': 'no-cache'
       });
 
-      res.json({
-        iss: server.settings.issuer,
-        sub: at.uid,
-        aud: at.cid,
-        iat: at.created,
-        exp: expiration,
-        scope: at.scope
-      });
+      res.json(claims);
     });
   }
 
 
-  server.get('/token/verify',
-    oidc.selectConnectParams,
-    oidc.verifyClientToken(server),
-    verifyAccessToken
-  );
-
-
-  server.post('/token/verify',
-    oidc.selectConnectParams,
-    oidc.verifyClientToken(server),
+  server.all('/token/verify',
+    oidc.parseAuthorizationHeader,
+    oidc.getBearerToken,
+    oidc.verifyClientToken(server), // replace this with something that calls Client.authenticate
     verifyAccessToken
   );
 

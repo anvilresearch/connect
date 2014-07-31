@@ -138,7 +138,6 @@ describe 'Verify User Token', ->
         next = sinon.spy()
 
         verifyUserToken(server, 'profile') req, res, (error) ->
-          console.log('ERROOOOOOOR', error)
           err = error
           done()
 
