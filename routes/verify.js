@@ -28,7 +28,7 @@ module.exports = function (server) {
       });
 
       // respond with decoded/retrieved claims
-      res.json(claims);
+      res.json(req.claims);
     }
   );
 
