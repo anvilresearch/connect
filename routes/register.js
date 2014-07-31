@@ -2,9 +2,10 @@
  * Module dependencies
  */
 
-var oidc        = require('../lib/oidc')
-  , Client      = require('../models/Client')
-  , ClientToken = require('../models/ClientToken')
+var oidc            = require('../lib/oidc')
+  , Client          = require('../models/Client')
+  , ClientToken     = require('../models/ClientToken')
+  , ValidationError = require('../errors/ValidationError')
   ;
 
 
@@ -44,7 +45,15 @@ module.exports = function (server) {
       }
 
       Client.insert(req.body, function (err, client) {
-        if (err) { return next(err); }
+        if (err) {
+          // QUICK AND DIRTY WRAPPER AROUND MODINHA ERROR
+          // CONTEMPLATING A BETTER WAY TO DO THIS.
+          return next(
+            (err.name === 'ValidationError')
+              ? new ValidationError(err)
+              : err
+          );
+        }
 
         ClientToken.issue({
 
