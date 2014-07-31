@@ -38,7 +38,8 @@ module.exports = function (server) {
   server.all('/token/verify',
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
-    oidc.verifyClientToken(server), // replace this with something that calls Client.authenticate
+    oidc.authenticateClient,
+    //oidc.verifyClientToken(server),
     verifyAccessToken
   );
 
