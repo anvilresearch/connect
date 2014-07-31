@@ -12,9 +12,13 @@ module.exports = function (server) {
   server.get('/userinfo',
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
-    oidc.verifyUserToken(server, 'profile'),
+    oidc.verifyAccessToken({
+      iss:    server.settings.issuer,
+      key:    server.settings.publicKey,
+      scope: 'profile'
+    }),
     function (req, res, next) {
-      User.get(req.token.sub, function (err, user) {
+      User.get(req.claims.sub, function (err, user) {
         if (err)   { return next(err); }
         if (!user) { return next(new NotFoundError()); }
         res.json(200, user.project('userinfo'));
