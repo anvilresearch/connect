@@ -187,7 +187,15 @@ AccessToken.issue = function (request, server, callback) {
     scope: request.scope
   }, function (err, token) {
     if (err) { return callback(err); }
-    callback(null, token.project('issue'));
+    var response = token.project('issue');
+
+    // Unless the client is set to issue a random token,
+    // transform it to a signed JWT.
+    if (request.client.access_token_type !== 'random') {
+      response.access_token = token.toJWT(server.settings.privateKey);
+    }
+
+    callback(null, response);
   });
 };
 

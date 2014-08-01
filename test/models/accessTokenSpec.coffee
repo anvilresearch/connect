@@ -224,6 +224,10 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
+          iss: server.settings.issuer
+          uid: 'uuid1'
+          cid: 'uuid2'
+          scope: 'openid profile'
         sinon.stub(AccessToken, 'insert').callsArgWith(1, null, instance)
         req =
           user:   { _id: 'uuid1' }
@@ -240,7 +244,7 @@ describe 'AccessToken', ->
         expect(err).to.be.null
 
       it 'should provide an "issue" projection of the token', ->
-        res.access_token.length.should.equal 20
+        res.access_token.length.should.equal 682
 
       it 'should expire in the default duration', ->
         res.expires_in.should.equal AccessToken.schema.ei.default
@@ -250,6 +254,10 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
+          iss: server.settings.issuer
+          uid: 'uuid1'
+          cid: 'uuid2'
+          scope: 'openid profile'
         sinon.stub(AccessToken, 'insert').callsArgWith(1, null, instance)
         req =
           user:   { _id: 'uuid1' }
@@ -273,6 +281,10 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
+          iss: server.settings.issuer
+          uid: 'uuid1'
+          cid: 'uuid2'
+          scope: 'openid profile'
         sinon.stub(AccessToken, 'insert').callsArgWith(1, null, instance)
         req =
           user:   { _id: 'uuid1' }
