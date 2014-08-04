@@ -49,6 +49,7 @@ module.exports = function (server) {
 
   server.get('/connect/:provider/callback',
     oidc.unstashParams,
+    oidc.verifyClient,
 
     function (req, res, next) {
       if (server.settings.providers[req.params.provider]) {
