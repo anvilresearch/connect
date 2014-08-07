@@ -273,14 +273,89 @@ User.authenticate = function (email, password, callback) {
 
 
 /**
+ * Get by provider profile (Passport callback profile)
+ */
+
+User.getByProviderProfile = function (provider, profile, options, callback) {
+  var index = User.collection + ':' + provider + 'Id';
+
+  if (typeof callback !== 'function') {
+    callback = options;
+    options = {}
+  }
+
+  User.__client.hget(index, profile.id, function (err, id) {
+    if (err) { return callback(err); }
+
+    User.get(id, options, function (err, instance) {
+      if (err) { return callback(err); }
+      callback(null, instance);
+    });
+  });
+};
+
+
+/**
+ * Connect
+ */
+
+User.connect = function (options, callback) {
+  var provider = options.provider
+    , provKey  = provider + 'Id'
+    , user     = options.user
+    , token    = options.token
+    , secret   = options.secret
+    , profile  = options.profile
+    , update   = {}
+    ;
+
+  // prepare the update object
+  update[provKey] = profile.id;
+
+  // connect to authenticated user
+  if (user) {
+    User.patch(user._id, update, function (err, user) {
+      if (err) { return callback(err); }
+      callback(null, user);
+    })
+  }
+
+  // connect to unauthenticated user
+  else {
+
+    User.getByProviderProfile(provider, profile, function (err, user) {
+
+      // create a new user
+      if (!user) {
+        User.insert(profile, {
+          mapping:  provider,
+          password: false
+        }, function (err, user) {
+          if (err) { return callback(err); }
+          callback(null, user);
+        });
+      }
+
+      // update an existing user
+      else {
+        User.patch(user._id, update, function (err, user) {
+          if (err) { return callback(err); }
+          callback(null, user);
+        });
+      }
+
+    });
+
+  }
+};
+
+
+/**
  * Errors
  */
 
 User.PasswordRequiredError = PasswordRequiredError;
 User.InsecurePasswordError = InsecurePasswordError;
-
-
-
 
 
 /**

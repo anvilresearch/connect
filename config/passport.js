@@ -78,7 +78,7 @@ module.exports = function (passport) {
     if (typeof providers.google === 'object') {
       passport.use(new GoogleStrategy(
         providers.google,
-        function (request, token, tokenSecret, profile, done) {
+        function (request, token, secret, profile, done) {
 
           try {
             var profile = JSON.parse(profile._raw);
@@ -86,51 +86,16 @@ module.exports = function (passport) {
             return done(e);
           }
 
-          // connect to existing authenticated user
-          if (request.user) {
-            User.patch(request.user._id, {
-              googleId: profile.id
-            }, function (err, user) {
-              // consider handling UniqueValueError
-              // explicitly here to give a more
-              // user friendly error message
-              if (err) { return done(err); }
-              done(null, user);
-            });
-          }
-
-          // authenticate the unauthenticated user
-          else {
-            User.getByGoogleId(profile.id, function (err, user) {
-
-              if (err) {
-                return done(err, false);
-              }
-
-              // create a new user
-              if (!user) {
-                User.insert(profile, {
-                  mapping: 'google',
-                  password: false
-                }, function (err, user) {
-                  if (err) { return done(err); }
-                  done(null, user);
-                });
-              }
-
-              // update an existing user
-              else {
-                User.patch(user._id, {
-                  googleId: profile.id
-                }, function (err, user) {
-                  if (err) { return done(err); }
-                  done(null, user);
-                });
-              }
-
-            });
-          }
-
+          User.connect({
+            provider: 'google',
+            user:      request.user,
+            token:     token,
+            secret:    secret,
+            profile:   profile
+          }, function (err, user) {
+            if (err) { return done(err); }
+            done(null, user);
+          });
         }
       ));
     }

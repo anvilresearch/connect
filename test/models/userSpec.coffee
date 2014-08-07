@@ -502,10 +502,150 @@ describe 'User', ->
 
 
 
+  describe 'get by provider profile', ->
+
+    before (done) ->
+      provider = 'anvil'
+      profile =
+        id: '1234'
+      sinon.stub(rclient, 'hget').callsArgWith(2, null, 'r4nd0m')
+      sinon.stub(User, 'get').callsArgWith(2, null, new User _id: 'r4nd0m')
+      User.getByProviderProfile provider, profile, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      rclient.hget.restore()
+      User.get.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
 
 
 
 
+  describe 'connect with authenticated user', ->
+
+    before (done) ->
+      user = new User()
+
+      options =
+        provider: 'google'
+        user: user
+        token: 'r4nd0m'
+        secret: 's3cr3t'
+        profile:
+          id: 'g00gl3'
+
+      sinon.stub(User, 'patch').callsArgWith(2, null, user)
+
+      User.connect options, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      User.patch.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
+
+    it 'should update the provider id', ->
+      User.patch.should.have.been.calledWith user._id, { 'googleId': 'g00gl3' }
+
+
+
+
+  describe 'connect with unauthenticated existing user', ->
+
+    before (done) ->
+      user = new User()
+
+      options =
+        provider: 'google'
+        token: 'r4nd0m'
+        secret: 's3cr3t'
+        profile:
+          id: 'g00gl3_2'
+
+      sinon.stub(User, 'getByProviderProfile').callsArgWith(2, null, user)
+      sinon.stub(User, 'patch').callsArgWith(2, null, user)
+
+      User.connect options, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      User.getByProviderProfile.restore()
+      User.patch.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
+
+    it 'should update the provider id', ->
+      User.patch.should.have.been.calledWith user._id, { 'googleId': 'g00gl3_2' }
+
+
+
+
+  describe 'connect with new user', ->
+
+    before (done) ->
+      user = new User()
+
+      options =
+        provider: 'google'
+        token: 'r4nd0m'
+        secret: 's3cr3t'
+        profile:
+          id: 'g00gl3_3'
+          given_name: 'John'
+          family_name: 'Smith'
+
+      sinon.stub(User, 'getByProviderProfile').callsArgWith(2, null, null)
+      sinon.stub(User, 'insert').callsArgWith(2, null, user)
+
+      User.connect options, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      User.getByProviderProfile.restore()
+      User.insert.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
+
+    it 'should insert the user profile', ->
+      User.insert.should.have.been.calledWith sinon.match({
+        given_name: 'John'
+        family_name: 'Smith'
+      })
+
+    it 'should include a mapping in the options', ->
+      User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
+        mapping: 'google'
+      })
+
+    it 'should disable the password requirement', ->
+      User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
+        password: false
+      })
 
 
 

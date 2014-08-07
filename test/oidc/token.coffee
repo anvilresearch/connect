@@ -42,6 +42,8 @@ describe 'Token response', ->
         code:
           user_id: 'uuid1'
           client_id: 'uuid2'
+        client:
+          access_token_type: 'random'
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -89,6 +91,7 @@ describe 'Token response', ->
           state: 'st4t3'
         client:
           _id: 'uuid2'
+          access_token_type: 'random'
       res =
         set: sinon.spy()
         json: sinon.spy()
