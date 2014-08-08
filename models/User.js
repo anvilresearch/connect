@@ -33,7 +33,7 @@ var User = Modinha.define('users', {
   website:              { type: 'string' },
   email:                {
                           type:     'string',
-                          required: true,
+                          //required: true,
                           unique:   true,
                           format:   'email'
                         },
@@ -126,6 +126,17 @@ User.mappings.google = {
   googleId:       'id'
 };
 
+User.mappings.facebook = {
+  emailVerified:  'verified',
+  name:           'name',
+  givenName:      'first_name',
+  familyName:     'last_name',
+  profile:        'link',
+  gender:         'gender',
+  //zoneinfo:       'timezone',
+  locale:         'locale',
+  facebookId:     'id'
+};
 
 /**
  * Document persistence

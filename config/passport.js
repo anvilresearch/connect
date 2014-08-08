@@ -60,15 +60,30 @@ module.exports = function (passport) {
      * Facebook
      */
 
-    //if (typeof providers.facebook === 'object') {
-    //  providers.facebook.callbackURL = server.host + '/connect/facebook/callback';
-    //  passport.use(new FacebookStrategy(
-    //    config.facebook,
-    //    function (accessToken, refreshToken, profile, done) {
-    //      // can we have a standard function that we call here in each strategy?
-    //    }
-    //  ));
-    //}
+    if (typeof providers.facebook === 'object') {
+      passport.use(new FacebookStrategy(
+        providers.facebook,
+        function (request, accessToken, refreshToken, profile, done) {
+
+          try {
+            var profile = JSON.parse(profile._raw);
+          } catch (e) {
+            return done(e);
+          }
+
+          User.connect({
+            provider: 'facebook',
+            user:      request.user,
+            token:     accessToken,
+            //secret:    secret,
+            profile:   profile
+          }, function (err, user) {
+            if (err) { return done(err); }
+            done(null, user);
+          });
+        }
+      ));
+    }
 
 
     /**
@@ -106,10 +121,12 @@ module.exports = function (passport) {
      */
 
     //if (typeof providers.twitter === 'object') {
-    //  providers.twitter.callbackURL = server.host + '/connect/twitter/callback';
     //  passport.use(new TwitterStrategy(
-    //    config.twitter,
-    //    function (token, tokenSecret, profile, done) {
+    //    providers.twitter,
+    //    function (request, token, secret, profile, done) {
+
+    //      console.log('TWITTER PROFILE', token, secret, profile)
+
     //      // ...
     //    }
     //  ));
