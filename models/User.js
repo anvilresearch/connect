@@ -58,6 +58,9 @@ var User = Modinha.define('users', {
   facebookAccessToken:  { type: 'string' },
   googleId:             { type: 'string', unique: true },
   googleAccessToken:    { type: 'string' },
+  githubId:             { type: 'string', unique: true },
+  githubAccessToken:    { type: 'string' },
+
 
 });
 
@@ -137,6 +140,17 @@ User.mappings.facebook = {
   locale:         'locale',
   facebookId:     'id'
 };
+
+User.mappings.github = {
+  email: 'email',
+  name: 'name',
+  website: 'blog',
+  preferredUsername: 'login',
+  profile: 'html_url',
+  picture: 'avatar_url',
+  githubId: 'id'
+};
+
 
 /**
  * Document persistence

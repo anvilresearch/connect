@@ -9,6 +9,7 @@ var cwd              = process.cwd()
   , LocalStrategy    = require('passport-local').Strategy
   , BearerStrategy   = require('passport-http-bearer').Strategy
   , FacebookStrategy = require('passport-facebook').Strategy
+  , GitHubStrategy   = require('passport-github').Strategy
   , GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy
   , TwitterStrategy  = require('passport-twitter').Strategy
   , base64url        = require('base64url')
@@ -106,6 +107,37 @@ module.exports = function (passport) {
             user:      request.user,
             token:     token,
             secret:    secret,
+            profile:   profile
+          }, function (err, user) {
+            if (err) { return done(err); }
+            done(null, user);
+          });
+        }
+      ));
+    }
+
+
+    /**
+     * GitHub
+     */
+
+    if (typeof providers.github === 'object') {
+      passport.use(new GitHubStrategy(
+        providers.github,
+        function (request, accessToken, refreshToken, profile, done) {
+
+          console.log('GITHUB SIGNIN', profile)
+          try {
+            var profile = JSON.parse(profile._raw);
+          } catch (e) {
+            return done(e);
+          }
+
+          User.connect({
+            provider: 'github',
+            user:      request.user,
+            token:     accessToken,
+            //secret:    secret,
             profile:   profile
           }, function (err, user) {
             if (err) { return done(err); }
