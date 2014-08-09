@@ -58,6 +58,17 @@ module.exports = function (passport) {
   if (providers) {
 
     /**
+     * Cut the verbosity of the config files
+     */
+
+    Object.keys(providers).forEach(function (name) {
+      var callbackUrl = config.issuer + '/connect/' + name + '/callback';
+      providers[name].callbackURL = callbackUrl;
+      providers[name].passReqToCallback = true;
+    });
+
+
+    /**
      * Facebook
      */
 
@@ -126,7 +137,6 @@ module.exports = function (passport) {
         providers.github,
         function (request, accessToken, refreshToken, profile, done) {
 
-          console.log('GITHUB SIGNIN', profile)
           try {
             var profile = JSON.parse(profile._raw);
           } catch (e) {
