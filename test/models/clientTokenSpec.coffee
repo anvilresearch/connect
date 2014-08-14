@@ -18,7 +18,7 @@ chai.should()
 
 # Code under test
 ClientToken = require path.join cwd, 'models/ClientToken'
-JWT = require path.join cwd, 'lib/JWT'
+JWT = require 'anvil-connect-jwt'
 base64url = require 'base64url'
 server = require path.join cwd, 'server'
 

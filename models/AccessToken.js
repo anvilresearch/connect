@@ -4,7 +4,7 @@
 
 var async    = require('async')
   , client   = require('../config/redis')
-  , JWT      = require('../lib/JWT')
+  , JWT      = require('anvil-connect-jwt')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')
   , random   = Modinha.defaults.random

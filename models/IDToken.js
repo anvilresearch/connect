@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var JWT = require('../lib/JWT');
+var JWT = require('anvil-connect-jwt');
 
 
 /**
