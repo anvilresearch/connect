@@ -509,7 +509,7 @@ module.exports = function (server) {
    *   match those in the certificate.
    */
 
-  server.set('jwks_uri', undefined);
+  server.set('jwks_uri', issuer + '/jwks');
 
   /**
    * registration_endpoint
