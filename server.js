@@ -30,6 +30,7 @@ require('./routes/signup')(server);
 require('./routes/signout')(server);
 require('./routes/connect')(server);
 require('./routes/verify')(server);
+require('./routes/jwks')(server);
 require('./routes/error')(server);
 
 

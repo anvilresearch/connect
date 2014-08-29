@@ -18,6 +18,7 @@ var cwd          = process.cwd()
   , RedisStore   = require('connect-redis')(session)
   , sessionStore = new RedisStore({ client: client })
   , cors         = require('cors')
+  , jwk          = require('../lib/jwk')
   ;
 
 
@@ -596,6 +597,10 @@ module.exports = function (server) {
     server.set('privateKey', privateKey);
     server.set('publicKey',  publicKey);
   }
+
+
+  // JWKs
+  server.set('jwks', [jwk(publicKey)]);
 
 
   /**
