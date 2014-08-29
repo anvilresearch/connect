@@ -47,7 +47,7 @@ module.exports = function (server) {
    * Handle Third Party Authorization
    */
 
-  server.get('/connect/:provider/callback',
+  var handler = [
     oidc.unstashParams,
     oidc.verifyClient,
 
@@ -74,7 +74,13 @@ module.exports = function (server) {
     oidc.determineScope,
     oidc.promptToAuthorize,
     oidc.authorize(server)
-  );
+  ];
+
+  if (oidc.beforeAuthorize) {
+    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize);
+  }
+
+  server.get('/connect/:provider/callback', handler);
 
 };
 

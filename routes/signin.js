@@ -35,7 +35,7 @@ module.exports = function (server) {
    * Password signin handler
    */
 
-  server.post('/signin',
+  var handler = [
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
@@ -58,7 +58,13 @@ module.exports = function (server) {
     oidc.determineScope,
     oidc.promptToAuthorize,
     oidc.authorize(server)
-  );
+  ];
+
+  if (oidc.beforeAuthorize) {
+    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize)
+  }
+
+  server.post('/signin', handler);
 
 };
 

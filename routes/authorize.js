@@ -10,8 +10,7 @@ var oidc = require('../lib/oidc');
  */
 
 module.exports = function (server) {
-
-  server.get('/authorize',
+  var handler = [
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
@@ -19,16 +18,12 @@ module.exports = function (server) {
     oidc.determineScope,
     oidc.promptToAuthorize,
     oidc.authorize(server)
-  );
+  ];
 
-  server.post('/authorize',
-    oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
-    oidc.verifyClient,
-    oidc.requireSignin,
-    oidc.determineScope,
-    oidc.promptToAuthorize,
-    oidc.authorize(server)
-  );
+  if (oidc.beforeAuthorize) {
+    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize)
+  }
 
+  server.get('/authorize', handler);
+  server.post('/authorize', handler);
 };
