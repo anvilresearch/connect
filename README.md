@@ -3,6 +3,10 @@
 **Anvil Connect** aims to be a scalable, full-featured, ready-to-run
 [**OpenID Connect**](http://openid.net/connect/) + [**OAuth 2.0**](http://tools.ietf.org/html/rfc6749) **Provider**.
 
+<a href="https://www.google.com/calendar/selfsched?sstoken=UUx1dWZaTzBaY2lCfGRlZmF1bHR8MGViMzcyZDg0OTUyOGZkOTNjM2M2ZDMxMmYwMWM0Yjg" title="Pair program with me!">
+  <img  src="http://pairprogramwith.me/badge.png"
+        alt="Pair program with me!" />
+</a>
 
 ### Why run your own OpenID Connect Povider?
 
