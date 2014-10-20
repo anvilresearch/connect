@@ -244,7 +244,7 @@ describe 'AccessToken', ->
         expect(err).to.be.null
 
       it 'should provide an "issue" projection of the token', ->
-        res.access_token.length.should.equal 682
+        res.access_token.length.should.equal 568
 
       it 'should expire in the default duration', ->
         res.expires_in.should.equal AccessToken.schema.ei.default

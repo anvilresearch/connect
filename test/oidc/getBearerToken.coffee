@@ -22,7 +22,7 @@ describe 'Get Bearer Token', ->
   describe 'with no token present', ->
 
     before (done) ->
-      req = { headers: {} }
+      req = { headers: {}, authorization: {} }
       res = {}
       next = sinon.spy (error) ->
         done()
@@ -70,6 +70,7 @@ describe 'Get Bearer Token', ->
 
     before (done) ->
       req =
+        authorization: {}
         query:
           access_token: 'whatever'
         body:
@@ -125,6 +126,7 @@ describe 'Get Bearer Token', ->
 
     before (done) ->
       req =
+        authorization: {}
         headers: {}
         body:
           access_token: 'whatever'
@@ -174,6 +176,7 @@ describe 'Get Bearer Token', ->
 
     before (done) ->
       req =
+        authorization: {}
         query:
           access_token: 'whatever'
       res = {}
@@ -196,6 +199,7 @@ describe 'Get Bearer Token', ->
 
     before (done) ->
       req =
+        authorization: {}
         headers:
           'content-type': 'application/x-www-form-urlencoded'
         body:
