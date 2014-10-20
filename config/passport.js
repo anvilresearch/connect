@@ -162,17 +162,26 @@ module.exports = function (passport) {
      * Twitter
      */
 
-    //if (typeof providers.twitter === 'object') {
-    //  passport.use(new TwitterStrategy(
-    //    providers.twitter,
-    //    function (request, token, secret, profile, done) {
+    if (typeof providers.twitter === 'object') {
+      passport.use(new TwitterStrategy(
+        providers.twitter,
+        function (request, token, secret, profile, done) {
 
-    //      console.log('TWITTER PROFILE', token, secret, profile)
+          User.connect({
+            provider: 'twitter',
+            user:      request.user,
+            token:     token,
+            secret:    secret,
+            profile:   profile._json
+          }, function (err, user) {
+            if (err) { return done(err); }
+            done(null, user);
+          });
 
-    //      // ...
-    //    }
-    //  ));
-    //}
+          // ...
+        }
+      ));
+    }
 
   }
 

@@ -58,8 +58,10 @@ var User = Modinha.define('users', {
   facebookAccessToken:  { type: 'string' },
   googleId:             { type: 'string', unique: true },
   googleAccessToken:    { type: 'string' },
-  githubId:             { type: 'string', unique: true },
+  githubId:             { type: 'number', unique: true },
   githubAccessToken:    { type: 'string' },
+  twitterId:            { type: 'number', unique: true },
+  twitterAccessToken:   { type: 'string' },
 
 
 });
@@ -142,13 +144,21 @@ User.mappings.facebook = {
 };
 
 User.mappings.github = {
-  email: 'email',
-  name: 'name',
-  website: 'blog',
-  preferredUsername: 'login',
-  profile: 'html_url',
-  picture: 'avatar_url',
-  githubId: 'id'
+  email:              'email',
+  name:               'name',
+  website:            'blog',
+  preferredUsername:  'login',
+  profile:            'html_url',
+  picture:            'avatar_url',
+  githubId:           'id'
+};
+
+User.mappings.twitter = {
+  name:               'name',
+  preferredUsername:  'screen_name',
+  profile:            'url',
+  picture:            'profile_image_url',
+  twitterId:          'id'
 };
 
 
