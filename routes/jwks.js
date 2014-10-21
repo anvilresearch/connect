@@ -12,7 +12,6 @@ var oidc = require('../lib/oidc');
 module.exports = function (server) {
 
   server.get('/jwks',
-    oidc.authenticateClient,
     function (req, res, next) {
       res.json(server.settings.jwks);
     }
