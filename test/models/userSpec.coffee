@@ -558,7 +558,10 @@ describe 'User', ->
       user.should.be.instanceof User
 
     it 'should update the provider id', ->
-      User.patch.should.have.been.calledWith user._id, { 'googleId': 'g00gl3' }
+      User.patch.should.have.been.calledWith user._id, {
+        'googleId': 'g00gl3'
+        'googleAccessToken': 'r4nd0m'
+      }
 
 
 
@@ -594,7 +597,10 @@ describe 'User', ->
       user.should.be.instanceof User
 
     it 'should update the provider id', ->
-      User.patch.should.have.been.calledWith user._id, { 'googleId': 'g00gl3_2' }
+      User.patch.should.have.been.calledWith user._id, {
+        'googleId': 'g00gl3_2',
+        'googleAccessToken': 'r4nd0m'
+      }
 
 
 

@@ -76,19 +76,11 @@ module.exports = function (passport) {
       passport.use(new FacebookStrategy(
         providers.facebook,
         function (request, accessToken, refreshToken, profile, done) {
-
-          try {
-            var profile = JSON.parse(profile._raw);
-          } catch (e) {
-            return done(e);
-          }
-
           User.connect({
             provider: 'facebook',
             user:      request.user,
             token:     accessToken,
-            //secret:    secret,
-            profile:   profile
+            profile:   profile._json
           }, function (err, user) {
             if (err) { return done(err); }
             done(null, user);
@@ -106,19 +98,12 @@ module.exports = function (passport) {
       passport.use(new GoogleStrategy(
         providers.google,
         function (request, token, secret, profile, done) {
-
-          try {
-            var profile = JSON.parse(profile._raw);
-          } catch (e) {
-            return done(e);
-          }
-
           User.connect({
             provider: 'google',
             user:      request.user,
             token:     token,
             secret:    secret,
-            profile:   profile
+            profile:   profile._json
           }, function (err, user) {
             if (err) { return done(err); }
             done(null, user);
@@ -136,19 +121,11 @@ module.exports = function (passport) {
       passport.use(new GitHubStrategy(
         providers.github,
         function (request, accessToken, refreshToken, profile, done) {
-
-          try {
-            var profile = JSON.parse(profile._raw);
-          } catch (e) {
-            return done(e);
-          }
-
           User.connect({
             provider: 'github',
             user:      request.user,
             token:     accessToken,
-            //secret:    secret,
-            profile:   profile
+            profile:   profile._json
           }, function (err, user) {
             if (err) { return done(err); }
             done(null, user);
@@ -166,19 +143,15 @@ module.exports = function (passport) {
       passport.use(new TwitterStrategy(
         providers.twitter,
         function (request, token, secret, profile, done) {
-
           User.connect({
             provider: 'twitter',
             user:      request.user,
             token:     token,
-            secret:    secret,
             profile:   profile._json
           }, function (err, user) {
             if (err) { return done(err); }
             done(null, user);
           });
-
-          // ...
         }
       ));
     }

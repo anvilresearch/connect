@@ -335,17 +335,22 @@ User.getByProviderProfile = function (provider, profile, options, callback) {
  */
 
 User.connect = function (options, callback) {
-  var provider = options.provider
-    , provKey  = provider + 'Id'
-    , user     = options.user
-    , token    = options.token
-    , secret   = options.secret
-    , profile  = options.profile
-    , update   = {}
+  var provider  = options.provider
+    , provKey   = provider + 'Id'
+    , provToken = provider + 'AccessToken'
+    , user      = options.user
+    , token     = options.token
+    , secret    = options.secret
+    , profile   = options.profile
+    , update    = {}
     ;
 
   // prepare the update object
   update[provKey] = profile.id;
+  update[provToken] = token;
+
+  profile[provKey] = profile.id;
+  profile[provToken] = token;
 
   // connect to authenticated user
   if (user) {
