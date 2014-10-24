@@ -31,6 +31,19 @@ require('./routes/signout')(server);
 require('./routes/connect')(server);
 require('./routes/verify')(server);
 require('./routes/jwks')(server);
+
+
+/**
+ * REST Routes
+ */
+
+require('./routes/rest/v1/users')(server);
+
+
+/**
+ * Error Handler
+ */
+
 require('./routes/error')(server);
 
 
