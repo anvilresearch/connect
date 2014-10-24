@@ -36,7 +36,7 @@
     "supertest": "^0.14.0"
   },
   "dependencies": {
-    "anvil-connect-jwt": "^0.1.1",
+    "anvil-connect-jwt": "^0.1.2",
     "async": "~0.8.0",
     "base64url": "0.0.6",
     "bcrypt": "~0.7.7",
