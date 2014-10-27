@@ -273,6 +273,33 @@ describe 'RESTful User Routes', ->
         res.body.error_description.should.equal 'An access token is required'
 
 
+    describe 'with unknown user id', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'patch').callsArgWith(2, null, null)
+        request
+          .patch('/v1/users/uuid')
+          .set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.patch.restore()
+
+      it 'should respond 404', ->
+        res.statusCode.should.equal 404
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'text/html'
+
+      it 'should respond with "Not found."', ->
+        res.text.should.equal 'Not found.'
+
+
     describe 'with valid data', ->
 
       user = new User name: 'Jim'
