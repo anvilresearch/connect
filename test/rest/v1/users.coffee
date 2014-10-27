@@ -87,3 +87,84 @@ describe 'RESTful User Routes', ->
 
 
 
+  describe 'GET /v1/users/:id', ->
+
+    describe 'without valid token', ->
+
+      before (done) ->
+        request
+          .get('/v1/users/uuid')
+          #.set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      it 'should respond 400', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with error', ->
+        res.body.error.should.equal 'invalid_request'
+
+      it 'should respond with error_description', ->
+        res.body.error_description.should.equal 'An access token is required'
+
+
+    describe 'with unknown user id', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'get').callsArgWith(1, null, null)
+        request
+          .get('/v1/users/uuid')
+          .set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.get.restore()
+
+      it 'should respond 404', ->
+        res.statusCode.should.equal 404
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'text/html'
+
+      it 'should respond with "Not found."', ->
+        res.text.should.equal 'Not found.'
+
+
+    describe 'with valid token and known user id', ->
+
+      user = new User name: 'Joe'
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'get').callsArgWith(1, null, user)
+        request
+          .get('/v1/users/uuid')
+          .set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.get.restore()
+
+      it 'should respond 200', ->
+        res.statusCode.should.equal 200
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'application/json'
+
+      it 'should respond with a list of users', ->
+        res.body.name.should.equal user.name
+
+
+
+
