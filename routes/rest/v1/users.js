@@ -50,4 +50,16 @@ module.exports = function (server) {
     });
   });
 
+
+  /**
+   * POST /v1/users
+   */
+
+  server.post('/v1/users', authorize, function (req, res, next) {
+    User.insert(req.body, function (err, instance) {
+      if (err) { return next(err); }
+      res.json(201, instance);
+    });
+  });
+
 };

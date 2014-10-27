@@ -44,7 +44,6 @@ describe 'RESTful User Routes', ->
       before (done) ->
         request
           .get('/v1/users')
-          #.set('Authorization', 'Bearer valid.signed.token')
           .end (error, response) ->
             err = error
             res = response
@@ -94,7 +93,6 @@ describe 'RESTful User Routes', ->
       before (done) ->
         request
           .get('/v1/users/uuid')
-          #.set('Authorization', 'Bearer valid.signed.token')
           .end (error, response) ->
             err = error
             res = response
@@ -164,6 +162,91 @@ describe 'RESTful User Routes', ->
 
       it 'should respond with a list of users', ->
         res.body.name.should.equal user.name
+
+
+
+
+  describe 'POST /v1/users', ->
+
+    describe 'without valid token', ->
+
+      before (done) ->
+        request
+          .post('/v1/users')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      it 'should respond 40x', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with error', ->
+        res.body.error.should.equal 'invalid_request'
+
+      it 'should respond with error_description', ->
+        res.body.error_description.should.equal 'An access token is required'
+
+
+    describe 'with valid data', ->
+
+      user = new User name: 'Joe'
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'insert').callsArgWith(1, null, user)
+        request
+          .post("/v1/users")
+          .set('Authorization', 'Bearer valid.signed.token')
+          .send({ name: 'Joe' })
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.insert.restore()
+
+      it 'should respond 201', ->
+        res.statusCode.should.equal 201
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'application/json'
+
+      it 'should respond with the resource', ->
+        res.body.should.have.property 'name'
+
+
+    describe 'with invalid data', ->
+
+      user = new User name: false
+      validation = user.validate()
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'insert').callsArgWith(1, validation, undefined)
+        request
+          .post("/v1/users")
+          .set('Authorization', 'Bearer valid.signed.token')
+          .send({ name: false })
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.insert.restore()
+
+      it 'should respond 400', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'application/json'
+
+      it 'should respond with an error', ->
+        res.body.error.should.equal 'Validation error.'
 
 
 
