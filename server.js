@@ -38,6 +38,7 @@ require('./routes/jwks')(server);
  */
 
 require('./routes/rest/v1/users')(server);
+require('./routes/rest/v1/clients')(server);
 
 
 /**
