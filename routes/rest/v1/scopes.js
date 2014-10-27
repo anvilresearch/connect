@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var Client        = require('../../../models/Client')
+var Scope         = require('../../../models/Scope')
   , NotFoundError = require('../../../errors/NotFoundError')
   , oidc          = require('../../../lib/oidc')
   ;
@@ -29,11 +29,11 @@ module.exports = function (server) {
 
 
   /**
-   * GET /v1/clients
+   * GET /v1/scopes
    */
 
-  server.get('/v1/clients', authorize, function (req, res, next) {
-    Client.list({
+  server.get('/v1/scopes', authorize, function (req, res, next) {
+    Scope.list({
       // options
     }, function (err, instances) {
       if (err) { return next(err); }
@@ -43,11 +43,11 @@ module.exports = function (server) {
 
 
   /**
-   * GET /v1/clients/:id
+   * GET /v1/scopes/:id
    */
 
-  server.get('/v1/clients/:id', authorize, function (req, res, next) {
-    Client.get(req.params.id, function (err, instance) {
+  server.get('/v1/scopes/:id', authorize, function (req, res, next) {
+    Scope.get(req.params.id, function (err, instance) {
       if (err) { return next(err); }
       if (!instance) { return next(new NotFoundError()); }
       res.json(instance);
@@ -56,11 +56,11 @@ module.exports = function (server) {
 
 
   /**
-   * POST /v1/clients
+   * POST /v1/scopes
    */
 
-  server.post('/v1/clients', authorize, function (req, res, next) {
-    Client.insert(req.body, function (err, instance) {
+  server.post('/v1/scopes', authorize, function (req, res, next) {
+    Scope.insert(req.body, function (err, instance) {
       if (err) { return next(err); }
       res.json(201, instance);
     });
@@ -68,11 +68,11 @@ module.exports = function (server) {
 
 
   /**
-   * PATCH /v1/clients/:id
+   * PATCH /v1/scopes/:id
    */
 
-  server.patch('/v1/clients/:id', authorize, function (req, res, next) {
-    Client.patch(req.params.id, req.body, function (err, instance) {
+  server.patch('/v1/scopes/:id', authorize, function (req, res, next) {
+    Scope.patch(req.params.id, req.body, function (err, instance) {
       if (err) { return next(err); }
       if (!instance) { return next(new NotFoundError()); }
       res.json(instance);
@@ -81,11 +81,11 @@ module.exports = function (server) {
 
 
   /**
-   * DELETE /v1/clients/:id
+   * DELETE /v1/scopes/:id
    */
 
-  server.del('/v1/clients/:id', authorize, function (req, res, next) {
-    Client.delete(req.params.id, function (err, result) {
+  server.del('/v1/scopes/:id', authorize, function (req, res, next) {
+    Scope.delete(req.params.id, function (err, result) {
       if (err) { return next(err); }
       if (!result) { return next(new NotFoundError()); }
       res.send(204);
