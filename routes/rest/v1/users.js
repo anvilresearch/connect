@@ -62,4 +62,15 @@ module.exports = function (server) {
     });
   });
 
+
+  /**
+   * PATCH /v1/users/:id
+   */
+
+  server.patch('/v1/users/:id', authorize, function (req, res, next) {
+    User.patch(req.params.id, req.body, function (err, instance) {
+      if (err) { return next(err); }
+      res.json(instance);
+    });
+  });
 };

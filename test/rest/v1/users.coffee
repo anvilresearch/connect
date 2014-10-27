@@ -251,3 +251,88 @@ describe 'RESTful User Routes', ->
 
 
 
+  describe 'PATCH /v1/users/:id', ->
+
+    describe 'without valid token', ->
+
+      before (done) ->
+        request
+          .patch('/v1/users/uuid')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      it 'should respond 40x', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with error', ->
+        res.body.error.should.equal 'invalid_request'
+
+      it 'should respond with error_description', ->
+        res.body.error_description.should.equal 'An access token is required'
+
+
+    describe 'with valid data', ->
+
+      user = new User name: 'Jim'
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'patch').callsArgWith(2, null, user)
+        request
+          .patch("/v1/users/uuid")
+          .set('Authorization', 'Bearer valid.signed.token')
+          .send({ name: 'Jim' })
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.patch.restore()
+
+      it 'should respond 200', ->
+        res.statusCode.should.equal 200
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'application/json'
+
+      it 'should respond with the resource', ->
+        res.body.name.should.equal user.name
+
+
+    describe 'with invalid data', ->
+
+      user = new User name: false
+      validation = user.validate()
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'patch').callsArgWith(2, validation, undefined)
+        request
+          .patch("/v1/users/uuid")
+          .set('Authorization', 'Bearer valid.signed.token')
+          .send({ name: false })
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.patch.restore()
+
+      it 'should respond 400', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'application/json'
+
+      it 'should respond with an error', ->
+        res.body.error.should.equal 'Validation error.'
+
+
+
+
