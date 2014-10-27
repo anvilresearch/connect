@@ -70,7 +70,23 @@ module.exports = function (server) {
   server.patch('/v1/users/:id', authorize, function (req, res, next) {
     User.patch(req.params.id, req.body, function (err, instance) {
       if (err) { return next(err); }
+      if (!instance) { return next(new NotFoundError()); }
       res.json(instance);
     });
   });
+
+
+  /**
+   * DELETE /v1/users/:id
+   */
+
+  server.del('/v1/users/:id', authorize, function (req, res, next) {
+    User.delete(req.params.id, function (err, result) {
+      if (err) { return next(err); }
+      if (!result) { return next(new NotFoundError()); }
+      res.send(204);
+    });
+  });
+
+
 };

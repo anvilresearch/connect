@@ -336,3 +336,77 @@ describe 'RESTful User Routes', ->
 
 
 
+  describe 'DELETE /v1/users/:id', ->
+
+    describe 'without valid token', ->
+
+      before (done) ->
+        request
+          .del('/v1/users/uuid')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      it 'should respond 40x', ->
+        res.statusCode.should.equal 400
+
+      it 'should respond with error', ->
+        res.body.error.should.equal 'invalid_request'
+
+      it 'should respond with error_description', ->
+        res.body.error_description.should.equal 'An access token is required'
+
+
+    describe 'with unknown user id', ->
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'delete').callsArgWith(1, null, null)
+        request
+          .del('/v1/users/uuid')
+          .set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.delete.restore()
+
+      it 'should respond 404', ->
+        res.statusCode.should.equal 404
+
+      it 'should respond with JSON', ->
+        res.headers['content-type'].should.contain 'text/html'
+
+      it 'should respond with "Not found."', ->
+        res.text.should.equal 'Not found.'
+
+
+    describe 'with valid request', ->
+
+      user = new User name: 'Joe'
+
+      before (done) ->
+        sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'delete').callsArgWith(1, null, user)
+        request
+          .del('/v1/users/uuid')
+          .set('Authorization', 'Bearer valid.signed.token')
+          .end (error, response) ->
+            err = error
+            res = response
+            done()
+
+      after ->
+        AccessToken.verify.restore()
+        User.delete.restore()
+
+      it 'should respond 204', ->
+        res.statusCode.should.equal 204
+
+
+
+
