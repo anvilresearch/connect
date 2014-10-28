@@ -62,6 +62,8 @@ var User = Modinha.define('users', {
   githubAccessToken:    { type: 'string' },
   twitterId:            { type: 'number', unique: true },
   twitterAccessToken:   { type: 'string' },
+  dropboxId:            { type: 'number', unique: true },
+  dropboxAccessToken:   { type: 'string' },
 
 
 });
@@ -161,6 +163,13 @@ User.mappings.twitter = {
   twitterId:          'id'
 };
 
+User.mappings.dropbox = {
+  email:              'email',
+  emailVerified:      'email_verified',
+  name:               'display_name',
+  locale:             'country',
+  dropboxId:          'uid'
+}
 
 /**
  * Document persistence

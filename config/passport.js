@@ -12,6 +12,7 @@ var cwd              = process.cwd()
   , GitHubStrategy   = require('passport-github').Strategy
   , GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy
   , TwitterStrategy  = require('passport-twitter').Strategy
+  , DropboxStrategy  = require('passport-dropbox-oauth2').Strategy
   , base64url        = require('base64url')
   , User             = require('../models/User')
   ;
@@ -155,6 +156,31 @@ module.exports = function (passport) {
         }
       ));
     }
+
+
+    /**
+     * Dropbox
+     */
+
+    if (typeof providers.dropbox === 'object') {
+      passport.use('dropbox', new DropboxStrategy(
+        providers.dropbox,
+        function (request, accessToken, refreshToken, profile, done) {
+          console.log(profile._json)
+          User.connect({
+            provider: 'dropbox',
+            user:      request.user,
+            token:     accessToken,
+            profile:   profile._json
+          }, function (err, user) {
+            if (err) { return done(err); }
+            done(null, user);
+          });
+        }
+      ));
+    }
+
+
 
   }
 

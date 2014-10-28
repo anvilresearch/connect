@@ -60,6 +60,7 @@
     "modinha": "0.0.21",
     "modinha-redis": "0.0.11",
     "passport": "~0.2.0",
+    "passport-dropbox-oauth2": "^0.1.6",
     "passport-facebook": "~1.0.3",
     "passport-github": "^0.1.5",
     "passport-google": "~0.3.0",
