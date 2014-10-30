@@ -72,73 +72,6 @@ module.exports = function (passport) {
 
 
     /**
-     * Facebook
-     */
-
-    if (typeof providers.facebook === 'object') {
-      passport.use(new FacebookStrategy(
-        providers.facebook,
-        function (request, accessToken, refreshToken, profile, done) {
-          User.connect({
-            provider: 'facebook',
-            user:      request.user,
-            token:     accessToken,
-            profile:   profile._json
-          }, function (err, user) {
-            if (err) { return done(err); }
-            done(null, user);
-          });
-        }
-      ));
-    }
-
-
-    /**
-     * Google
-     */
-
-    if (typeof providers.google === 'object') {
-      passport.use(new GoogleStrategy(
-        providers.google,
-        function (request, token, secret, profile, done) {
-          User.connect({
-            provider: 'google',
-            user:      request.user,
-            token:     token,
-            secret:    secret,
-            profile:   profile._json
-          }, function (err, user) {
-            if (err) { return done(err); }
-            done(null, user);
-          });
-        }
-      ));
-    }
-
-
-    /**
-     * GitHub
-     */
-
-    if (typeof providers.github === 'object') {
-      passport.use(new GitHubStrategy(
-        providers.github,
-        function (request, accessToken, refreshToken, profile, done) {
-          User.connect({
-            provider: 'github',
-            user:      request.user,
-            token:     accessToken,
-            profile:   profile._json
-          }, function (err, user) {
-            if (err) { return done(err); }
-            done(null, user);
-          });
-        }
-      ));
-    }
-
-
-    /**
      * Twitter
      */
 
@@ -159,29 +92,6 @@ module.exports = function (passport) {
       ));
     }
 
-
-    /**
-     * Dropbox
-     */
-
-    //if (typeof providers.dropbox === 'object') {
-    //  passport.use('dropbox', new DropboxStrategy(
-    //    providers.dropbox,
-    //    function (request, accessToken, refreshToken, profile, done) {
-    //      console.log(profile._json)
-    //      User.connect({
-    //        provider: 'dropbox',
-    //        user:      request.user,
-    //        token:     accessToken,
-    //        profile:   profile._json
-    //      }, function (err, user) {
-    //        if (err) { return done(err); }
-    //        done(null, user);
-    //      });
-    //    }
-    //  ));
-    //}
-
   }
 
 
@@ -195,14 +105,72 @@ module.exports = function (passport) {
       profileURL:       'https://api.dropbox.com/1/account/info',
       scopeSeparator:   ',',
       mapping: {
-        'id':             'uid',
-        'name':           'display_name',
-        'email':          'email',
-        'emailVerified':  'email_verified',
-        'locale':         'country'
+        id:             'uid',
+        name:           'display_name',
+        email:          'email',
+        emailVerified:  'email_verified',
+        locale:         'country'
       }
     },
 
+    facebook: {
+      name:             'facebook',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://www.facebook.com/dialog/oauth',
+      tokenURL:         'https://graph.facebook.com/oauth/access_token',
+      profileURL:       'https://graph.facebook.com/me',
+      scopeSeparator:   ',',
+      mapping: {
+        id:             'id',
+        emailVerified:  'verified',
+        name:           'name',
+        givenName:      'first_name',
+        familyName:     'last_name',
+        profile:        'link',
+        gender:         'gender',
+        //zoneinfo:       'timezone',
+        locale:         'locale',
+      }
+    },
+
+    github: {
+      name:             'github',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://github.com/login/oauth/authorize',
+      tokenURL:         'https://github.com/login/oauth/access_token',
+      profileURL:       'https://api.github.com/user',
+      scopeSeparator:   ',',
+      useAuthorizationHeaderforGET: true,
+      mapping: {
+        id:                 'id',
+        email:              'email',
+        name:               'name',
+        website:            'blog',
+        preferredUsername:  'login',
+        profile:            'html_url',
+        picture:            'avatar_url',
+      }
+    },
+
+    google: {
+      name:             'google',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://accounts.google.com/o/oauth2/auth',
+      tokenURL:         'https://accounts.google.com/o/oauth2/token',
+      profileURL:       'https://www.googleapis.com/oauth2/v1/userinfo',
+      mapping: {
+        id:             'id',
+        email:          'email',
+        emailVerified:  'verified_email',
+        name:           'name',
+        givenName:      'given_name',
+        familyName:     'family_name',
+        profile:        'link',
+        picture:        'picture',
+        gender:         'gender',
+        locale:         'locale',
+      }
+    },
   };
 
   // This is a list of user configured providers with credentials and metadata
@@ -295,10 +263,9 @@ module.exports = function (passport) {
   };
 
 
-
   configuredProviders.forEach(function (provider) {
     // eventually we can drop this `if` wrapper
-    if (['dropbox'].indexOf(provider.name) !== -1) {
+    if (['dropbox', 'github', 'facebook', 'google'].indexOf(provider.name) !== -1) {
       var name       = provider.name
         , superclass = PassportStrategies[provider.protocol]
         , callback   = PassportCallbacks[provider.protocol]

@@ -120,41 +120,6 @@ User.mappings.userinfo = {
  * Third Party User Profile Mappings
  */
 
-User.mappings.google = {
-  email:          'email',
-  emailVerified:  'verified_email',
-  name:           'name',
-  givenName:      'given_name',
-  familyName:     'family_name',
-  profile:        'link',
-  picture:        'picture',
-  gender:         'gender',
-  locale:         'locale',
-  googleId:       'id'
-};
-
-User.mappings.facebook = {
-  emailVerified:  'verified',
-  name:           'name',
-  givenName:      'first_name',
-  familyName:     'last_name',
-  profile:        'link',
-  gender:         'gender',
-  //zoneinfo:       'timezone',
-  locale:         'locale',
-  facebookId:     'id'
-};
-
-User.mappings.github = {
-  email:              'email',
-  name:               'name',
-  website:            'blog',
-  preferredUsername:  'login',
-  profile:            'html_url',
-  picture:            'avatar_url',
-  githubId:           'id'
-};
-
 User.mappings.twitter = {
   name:               'name',
   preferredUsername:  'screen_name',
@@ -163,13 +128,6 @@ User.mappings.twitter = {
   twitterId:          'id'
 };
 
-//User.mappings.dropbox = {
-//  email:              'email',
-//  emailVerified:      'email_verified',
-//  name:               'display_name',
-//  locale:             'country',
-//  dropboxId:          'uid'
-//}
 
 /**
  * Document persistence
