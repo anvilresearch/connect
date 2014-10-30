@@ -163,13 +163,13 @@ User.mappings.twitter = {
   twitterId:          'id'
 };
 
-User.mappings.dropbox = {
-  email:              'email',
-  emailVerified:      'email_verified',
-  name:               'display_name',
-  locale:             'country',
-  dropboxId:          'uid'
-}
+//User.mappings.dropbox = {
+//  email:              'email',
+//  emailVerified:      'email_verified',
+//  name:               'display_name',
+//  locale:             'country',
+//  dropboxId:          'uid'
+//}
 
 /**
  * Document persistence
