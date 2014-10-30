@@ -9,12 +9,7 @@ var _                = require('lodash')
   , util             = require('util')
   , config           = require(path.join(cwd, 'config.' + env + '.json'))
   , LocalStrategy    = require('passport-local').Strategy
-  //, BearerStrategy   = require('passport-http-bearer').Strategy
-  , FacebookStrategy = require('passport-facebook').Strategy
-  , GitHubStrategy   = require('passport-github').Strategy
-  , GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy
   , TwitterStrategy  = require('passport-twitter').Strategy
-  , DropboxStrategy  = require('passport-dropbox-oauth2').Strategy
   , base64url        = require('base64url')
   , User             = require('../models/User')
   ;
@@ -171,6 +166,22 @@ module.exports = function (passport) {
         locale:         'locale',
       }
     },
+
+    instagram: {
+      name:             'instagram',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://api.instagram.com/oauth/authorize/',
+      tokenURL:         'https://api.instagram.com/oauth/access_token',
+      profileURL:       'https://api.instagram.com/v1/users/self',
+      mapping: {
+        id:                'id',
+        name:              'fullname',
+        preferredUsername: 'username',
+        picture:           'profile_picture',
+        website:           'website',
+      }
+    },
+
   };
 
   // This is a list of user configured providers with credentials and metadata
@@ -265,7 +276,7 @@ module.exports = function (passport) {
 
   configuredProviders.forEach(function (provider) {
     // eventually we can drop this `if` wrapper
-    if (['dropbox', 'github', 'facebook', 'google'].indexOf(provider.name) !== -1) {
+    if (['dropbox', 'github', 'facebook', 'google', 'instagram'].indexOf(provider.name) !== -1) {
       var name       = provider.name
         , superclass = PassportStrategies[provider.protocol]
         , callback   = PassportCallbacks[provider.protocol]
