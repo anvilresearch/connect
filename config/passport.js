@@ -219,6 +219,21 @@ module.exports = function (passport) {
       }
     },
 
+    twitch: {
+      name:             'twitch',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://api.twitch.tv/kraken/oauth2/authorize',
+      tokenURL:         'https://api.twitch.tv/kraken/oauth2/token',
+      profileURL:       'https://api.twitch.tv/kraken/user',
+      authMethod:       'OAuth',
+      useAuthorizationHeaderforGET: true,
+      mapping: {
+        id:       '_id',
+        name:     'name',
+        profile:  '_links.self',
+      }
+    },
+
     wordpress: {
       name:             'wordpress',
       protocol:         'OAuth 2.0',
@@ -345,6 +360,7 @@ module.exports = function (passport) {
           'instagram',
           'foursquare',
           'soundcloud',
+          'twitch',
           'wordpress'
     ].indexOf(provider.name) !== -1) {
       var name       = provider.name
@@ -360,6 +376,10 @@ module.exports = function (passport) {
 
         if (options.useAuthorizationHeaderforGET) {
           this._oauth2.useAuthorizationHeaderforGET(true);
+        }
+
+        if (options.authMethod) {
+          this._oauth2.setAuthMethod(options.authMethod)
         }
 
         if (options.accessTokenName) {

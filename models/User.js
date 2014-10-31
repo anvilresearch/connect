@@ -70,6 +70,8 @@ var User = Modinha.define('users', {
   foursquareAccessToken:  { type: 'string' },
   soundcloudId:           { type: 'number', unique: true },
   soundcloudAccessToken:  { type: 'string' },
+  twitchId:               { type: 'number', unique: true },
+  twitchAccessToken:      { type: 'string' },
   wordpressId:            { type: 'number', unique: true },
   wordpressAccessToken:   { type: 'string' },
 
