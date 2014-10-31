@@ -174,11 +174,28 @@ module.exports = function (passport) {
       tokenURL:         'https://api.instagram.com/oauth/access_token',
       profileURL:       'https://api.instagram.com/v1/users/self',
       mapping: {
-        id:                'id',
-        name:              'fullname',
-        preferredUsername: 'username',
-        picture:           'profile_picture',
-        website:           'website',
+        id:                'data.id',
+        name:              'data.fullname',
+        preferredUsername: 'data.username',
+        picture:           'data.profile_picture',
+        website:           'data.website',
+      }
+    },
+
+    foursquare: {
+      name:             'foursquare',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://foursquare.com/oauth2/authenticate',
+      tokenURL:         'https://foursquare.com/oauth2/access_token',
+      profileURL:       'https://api.foursquare.com/v2/users/self',
+      apiVersion:       '20140308',
+      accessTokenName:  'oauth_token',
+      mapping: {
+        id:             'response.user.id',
+        givenName:      'response.user.firstName',
+        familyName:     'response.user.lastName',
+        gender:         'response.user.gender',
+        email:          'response.user.contact.email',
       }
     },
 
@@ -243,6 +260,12 @@ module.exports = function (passport) {
   function OAuth2Profile (provider) {
     return function (accessToken, done) {
       var profileURL = provider.profileURL;
+
+      // Required by Foursquare
+      if (this._apiVersion) {
+        profileURL += '?v=' + this._apiVersion;
+      }
+
       this._oauth2.get(profileURL, accessToken, function (err, body, res) {
         if (err) {
           return done(new InternalOAuthError('failed to fetch profile', err));
@@ -276,7 +299,14 @@ module.exports = function (passport) {
 
   configuredProviders.forEach(function (provider) {
     // eventually we can drop this `if` wrapper
-    if (['dropbox', 'github', 'facebook', 'google', 'instagram'].indexOf(provider.name) !== -1) {
+    if ([
+          'dropbox',
+          'github',
+          'facebook',
+          'google',
+          'instagram',
+          'foursquare'
+    ].indexOf(provider.name) !== -1) {
       var name       = provider.name
         , superclass = PassportStrategies[provider.protocol]
         , callback   = PassportCallbacks[provider.protocol]
@@ -291,6 +321,12 @@ module.exports = function (passport) {
         if (options.useAuthorizationHeaderforGET) {
           this._oauth2.useAuthorizationHeaderforGET(true);
         }
+
+        if (options.accessTokenName) {
+          this._oauth2.setAccessTokenName(options.accessTokenName);
+        }
+
+        this._apiVersion = options.apiVersion;
       };
 
       // Inherit from base strategy

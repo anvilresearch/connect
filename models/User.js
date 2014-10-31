@@ -54,16 +54,20 @@ var User = Modinha.define('users', {
                         },
 
   // Third Party Credentials
-  facebookId:           { type: 'string', unique: true },
-  facebookAccessToken:  { type: 'string' },
-  googleId:             { type: 'string', unique: true },
-  googleAccessToken:    { type: 'string' },
-  githubId:             { type: 'number', unique: true },
-  githubAccessToken:    { type: 'string' },
-  twitterId:            { type: 'number', unique: true },
-  twitterAccessToken:   { type: 'string' },
-  dropboxId:            { type: 'number', unique: true },
-  dropboxAccessToken:   { type: 'string' },
+  facebookId:             { type: 'string', unique: true },
+  facebookAccessToken:    { type: 'string' },
+  googleId:               { type: 'string', unique: true },
+  googleAccessToken:      { type: 'string' },
+  githubId:               { type: 'number', unique: true },
+  githubAccessToken:      { type: 'string' },
+  twitterId:              { type: 'number', unique: true },
+  twitterAccessToken:     { type: 'string' },
+  dropboxId:              { type: 'number', unique: true },
+  dropboxAccessToken:     { type: 'string' },
+  instagramId:            { type: 'string', unique: true },
+  instagramAccessToken:   { type: 'string' },
+  foursquareId:           { type: 'string', unique: true },
+  foursquareAccessToken:  { type: 'string' },
 
 
 });
