@@ -92,6 +92,22 @@ module.exports = function (passport) {
 
   var providerMetadata = {
 
+    angellist: {
+      name:             'angellist',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://angel.co/api/oauth/authorize',
+      tokenURL:         'https://angel.co/api/oauth/token',
+      profileURL:       'https://api.angel.co/1/me',
+      mapping: {
+        id: 'id',
+        name: 'name',
+        picture: 'image',
+        profile: 'angellist_url',
+        email: 'email',
+        website: 'online_bio_url',
+      }
+    },
+
     dropbox: {
       name:             'dropbox',
       protocol:         'OAuth 2.0',
@@ -353,15 +369,16 @@ module.exports = function (passport) {
   configuredProviders.forEach(function (provider) {
     // eventually we can drop this `if` wrapper
     if ([
-          'dropbox',
-          'github',
-          'facebook',
-          'google',
-          'instagram',
-          'foursquare',
-          'soundcloud',
-          'twitch',
-          'wordpress'
+      'angellist',
+      'dropbox',
+      'github',
+      'facebook',
+      'google',
+      'instagram',
+      'foursquare',
+      'soundcloud',
+      'twitch',
+      'wordpress'
     ].indexOf(provider.name) !== -1) {
       var name       = provider.name
         , superclass = PassportStrategies[provider.protocol]
