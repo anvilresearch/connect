@@ -108,6 +108,19 @@ module.exports = function (passport) {
       }
     },
 
+
+    buffer: {
+      name:             'buffer',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://bufferapp.com/oauth2/authorize',
+      tokenURL:         'https://api.bufferapp.com/1/oauth2/token.json',
+      profileURL:       'https://api.bufferapp.com/1/user.json',
+      mapping: {
+        id: 'id',
+        name: 'name',
+      }
+    },
+
     dropbox: {
       name:             'dropbox',
       protocol:         'OAuth 2.0',
@@ -370,6 +383,7 @@ module.exports = function (passport) {
     // eventually we can drop this `if` wrapper
     if ([
       'angellist',
+      'buffer',
       'dropbox',
       'github',
       'facebook',

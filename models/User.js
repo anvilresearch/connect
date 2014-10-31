@@ -55,8 +55,10 @@ var User = Modinha.define('users', {
 
   // Third Party Credentials
 
-  angellistId:                { type: 'number', unique: true },
-  angellistAccessToken:       { type: 'string' },
+  angellistId:            { type: 'number', unique: true },
+  angellistAccessToken:   { type: 'string' },
+  bufferId:               { type: 'string', unique: true },
+  bufferAccessToken:      { type: 'string' },
   facebookId:             { type: 'string', unique: true },
   facebookAccessToken:    { type: 'string' },
   googleId:               { type: 'string', unique: true },
