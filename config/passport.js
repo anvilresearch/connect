@@ -228,6 +228,19 @@ module.exports = function (passport) {
       }
     },
 
+
+    mailchimp: {
+      name:             'mailchimp',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://login.mailchimp.com/oauth2/authorize',
+      tokenURL:         'https://login.mailchimp.com/oauth2/token',
+      profileURL:       'https://login.mailchimp.com/oauth2/metadata',
+      useAuthorizationHeaderforGET: true,
+      mapping: {
+
+      }
+    },
+
     soundcloud: {
       name:             'soundcloud',
       protocol:         'OAuth 2.0',
@@ -390,6 +403,7 @@ module.exports = function (passport) {
       'google',
       'instagram',
       'foursquare',
+      'mailchimp',
       'soundcloud',
       'twitch',
       'wordpress'
