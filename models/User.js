@@ -68,6 +68,12 @@ var User = Modinha.define('users', {
   instagramAccessToken:   { type: 'string' },
   foursquareId:           { type: 'string', unique: true },
   foursquareAccessToken:  { type: 'string' },
+  soundcloudId:           { type: 'number', unique: true },
+  soundcloudAccessToken:  { type: 'string' },
+  wordpressId:            { type: 'number', unique: true },
+  wordpressAccessToken:   { type: 'string' },
+
+
 
 
 });

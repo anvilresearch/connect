@@ -128,6 +128,23 @@ module.exports = function (passport) {
       }
     },
 
+    foursquare: {
+      name:             'foursquare',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://foursquare.com/oauth2/authenticate',
+      tokenURL:         'https://foursquare.com/oauth2/access_token',
+      profileURL:       'https://api.foursquare.com/v2/users/self',
+      apiVersion:       '20140308',
+      accessTokenName:  'oauth_token',
+      mapping: {
+        id:             'response.user.id',
+        givenName:      'response.user.firstName',
+        familyName:     'response.user.lastName',
+        gender:         'response.user.gender',
+        email:          'response.user.contact.email',
+      }
+    },
+
     github: {
       name:             'github',
       protocol:         'OAuth 2.0',
@@ -182,23 +199,43 @@ module.exports = function (passport) {
       }
     },
 
-    foursquare: {
-      name:             'foursquare',
+    soundcloud: {
+      name:             'soundcloud',
       protocol:         'OAuth 2.0',
-      authorizationURL: 'https://foursquare.com/oauth2/authenticate',
-      tokenURL:         'https://foursquare.com/oauth2/access_token',
-      profileURL:       'https://api.foursquare.com/v2/users/self',
-      apiVersion:       '20140308',
+      authorizationURL: 'https://soundcloud.com/connect',
+      tokenURL:         'https://api.soundcloud.com/oauth2/token',
+      profileURL:       'https://api.soundcloud.com/me.json',
       accessTokenName:  'oauth_token',
       mapping: {
-        id:             'response.user.id',
-        givenName:      'response.user.firstName',
-        familyName:     'response.user.lastName',
-        gender:         'response.user.gender',
-        email:          'response.user.contact.email',
+        id:                 'id',
+        emailVerified:      'primary_email_confirmed',
+        name:               'full_name',
+        givenName:          'first_name',
+        familyName:         'last_name',
+        preferredUsername:  'username',
+        profile:            'permalink_url',
+        picture:            'avatar_url',
+        //website:            'website'
       }
     },
 
+    wordpress: {
+      name:             'wordpress',
+      protocol:         'OAuth 2.0',
+      authorizationURL: 'https://public-api.wordpress.com/oauth2/authorize',
+      tokenURL:         'https://public-api.wordpress.com/oauth2/token',
+      profileURL:       'https://public-api.wordpress.com/rest/v1/me',
+      useAuthorizationHeaderforGET: true,
+      mapping: {
+        id:                 'ID',
+        email:              'email',
+        emailVerified:      'email_verified',
+        name:               'display_name',
+        preferredUsername:  'username',
+        picture:            'avatar_URL',
+        profile:            'profile_URL',
+      }
+    },
   };
 
   // This is a list of user configured providers with credentials and metadata
@@ -277,6 +314,7 @@ module.exports = function (passport) {
             , profile = { provider: provider.name }
             ;
 
+          console.log('PROFILE', json)
           map(provider.mapping, json, profile)
           done(null, profile);
         } catch (e) {
@@ -305,7 +343,9 @@ module.exports = function (passport) {
           'facebook',
           'google',
           'instagram',
-          'foursquare'
+          'foursquare',
+          'soundcloud',
+          'wordpress'
     ].indexOf(provider.name) !== -1) {
       var name       = provider.name
         , superclass = PassportStrategies[provider.protocol]
