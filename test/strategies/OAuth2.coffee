@@ -67,7 +67,7 @@ describe 'OAuth2 Strategy', ->
   describe 'base64credentials', ->
 
     before ->
-      credentials = strategy.base64credentials(config)
+      credentials = strategy.base64credentials()
 
     it 'should include the client_id', ->
       new Buffer(credentials, 'base64')
@@ -92,7 +92,7 @@ describe 'OAuth2 Strategy', ->
         strategy.redirect = sinon.spy()
         options =
           state: 'r4nd0m'
-        strategy.authorizationRequest(options, provider, config)
+        strategy.authorizationRequest(options)
 
       it 'should redirect', ->
         url = provider.endpoints.authorize.url
@@ -134,11 +134,11 @@ describe 'OAuth2 Strategy', ->
                 .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
                 .matchHeader(
                   'Authorization',
-                  'Basic ' + strategy.base64credentials(config)
+                  'Basic ' + strategy.base64credentials()
                 )
                 .post('/token', FormUrlencoded.encode params)
                 .reply(201, { access_token: 'token' })
-        strategy.authorizationCodeGrant params.code, provider, config, (error, response) ->
+        strategy.authorizationCodeGrant params.code, (error, response) ->
           err = error
           res = response
           done()
@@ -162,7 +162,7 @@ describe 'OAuth2 Strategy', ->
                 .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
                 .get('/userinfo')
                 .reply(200, { _id: 'uuid', name: 'Jane Doe' })
-        strategy.userInfo 'token', provider, config, (error, response) ->
+        strategy.userInfo 'token', (error, response) ->
           err = error
           res = response
           done()
