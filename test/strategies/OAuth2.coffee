@@ -17,8 +17,8 @@ chai.should()
 
 
 # Code under test
+Strategy = require('passport-strategy')
 OAuth2Strategy = require '../../lib/strategies/OAuth2'
-
 
 
 
@@ -51,10 +51,20 @@ describe 'OAuth2 Strategy', ->
     client_secret:  'secret'
 
 
+  strategy = new OAuth2Strategy provider, config
+
+
+  describe 'object', ->
+
+    it 'should be an instance of Strategy', ->
+      expect(strategy).to.be.instanceof Strategy
+
+
+
   describe 'base64credentials', ->
 
     before ->
-      credentials = OAuth2Strategy.base64credentials(config)
+      credentials = strategy.base64credentials(config)
 
     it 'should include the client_id', ->
       new Buffer(credentials, 'base64')
@@ -85,11 +95,11 @@ describe 'OAuth2 Strategy', ->
                 .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
                 .matchHeader(
                   'Authorization',
-                  'Basic ' + OAuth2Strategy.base64credentials(config)
+                  'Basic ' + strategy.base64credentials(config)
                 )
                 .post('/token', FormUrlencoded.encode params)
                 .reply(201, { access_token: 'token' })
-        OAuth2Strategy.authorizationCodeGrant params.code, provider, config, (error, response) ->
+        strategy.authorizationCodeGrant params.code, provider, config, (error, response) ->
           err = error
           res = response
           done()
@@ -113,7 +123,7 @@ describe 'OAuth2 Strategy', ->
                 .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
                 .get('/userinfo')
                 .reply(200, { _id: 'uuid', name: 'Jane Doe' })
-        OAuth2Strategy.userInfo 'token', provider, config, (error, response) ->
+        strategy.userInfo 'token', provider, config, (error, response) ->
           err = error
           res = response
           done()
