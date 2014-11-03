@@ -33,6 +33,8 @@ describe 'OAuth2 Strategy', ->
     protocol:     'OAuth 2.0'
     url:          'https://domain.tld'
     redirect_uri: 'https://local.tld/callback'
+    scope:        ['a', 'b']
+    scope_separator: ' '
     endpoints:
       authorize:
         url:      'https://domain.tld/authorize'
@@ -49,6 +51,7 @@ describe 'OAuth2 Strategy', ->
   config =
     client_id:      'id',
     client_secret:  'secret'
+    scope:          ['c']
 
 
   strategy = new OAuth2Strategy provider, config
@@ -77,6 +80,42 @@ describe 'OAuth2 Strategy', ->
     it 'should include the separator', ->
       new Buffer(credentials, 'base64')
         .toString().should.contain ':'
+
+
+
+
+  describe 'authorizationRequest', ->
+
+    describe 'with valid configuration', ->
+
+      beforeEach ->
+        strategy.redirect = sinon.spy()
+        options =
+          state: 'r4nd0m'
+        strategy.authorizationRequest(options, provider, config)
+
+      it 'should redirect', ->
+        url = provider.endpoints.authorize.url
+        strategy.redirect.should.have.been.calledWith sinon.match(url)
+
+      it 'should include response_type', ->
+        strategy.redirect.should.have.been.calledWith sinon.match(
+          'response_type=code'
+        )
+
+      it 'should include client_id', ->
+        strategy.redirect.should.have.been.calledWith sinon.match(
+          'client_id=' + config.client_id
+        )
+      it 'should include redirect_uri', ->
+        strategy.redirect.should.have.been.calledWith sinon.match(
+          'redirect_uri=' + encodeURIComponent(provider.redirect_uri)
+        )
+
+      it 'should include scope', ->
+        strategy.redirect.should.have.been.calledWith sinon.match(
+          'scope=a%2Cb%2Cc'
+        )
 
 
 
