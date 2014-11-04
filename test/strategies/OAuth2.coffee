@@ -53,15 +53,33 @@ describe 'OAuth2 Strategy', ->
     client_secret:  'secret'
     scope:          ['c']
 
+  verify = (req, res, profile) ->
 
-  strategy = new OAuth2Strategy provider, config
+  strategy = new OAuth2Strategy provider, config, verify
 
 
-  describe 'object', ->
+  describe 'instance', ->
 
-    it 'should be an instance of Strategy', ->
+    it 'should inherit from Strategy', ->
       expect(strategy).to.be.instanceof Strategy
 
+
+  describe 'constructor', ->
+
+    it 'should set provider', ->
+      strategy.provider.should.equal provider
+
+    it 'should set endpoints', ->
+      strategy.endpoints.should.equal provider.endpoints
+
+    it 'should set client', ->
+      strategy.client.should.equal config
+
+    it 'should set name', ->
+      strategy.name.should.equal provider.id
+
+    it 'should set verify', ->
+      strategy.verify.should.equal verify
 
 
   describe 'base64credentials', ->
