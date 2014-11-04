@@ -47,6 +47,8 @@ describe 'OAuth2 Strategy', ->
         url:      'https://domain.tld/userinfo'
         method:   'GET'
         auth:     'bearer_token'
+    mapping:
+      name: 'name'
 
   config =
     client_id:      'id',
