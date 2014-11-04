@@ -82,6 +82,32 @@ describe 'OAuth2 Strategy', ->
       strategy.verify.should.equal verify
 
 
+
+  describe 'authenticate', ->
+
+    describe 'with new authorization request', ->
+
+      req = query: {}
+      options = {}
+
+      before ->
+        sinon.stub(strategy, 'authorizationRequest')
+        strategy.authenticate { query: {} }
+
+      after ->
+        strategy.authorizationRequest.restore()
+
+      it 'should initialize the authorization flow', ->
+        strategy.authorizationRequest.should.have.been.calledWith options
+
+
+    describe 'with authorization error response', ->
+
+    describe 'with authorization code response', ->
+
+
+
+
   describe 'base64credentials', ->
 
     before ->
