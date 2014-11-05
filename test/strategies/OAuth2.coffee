@@ -89,18 +89,18 @@ describe 'OAuth2 Strategy', ->
 
     describe 'with new authorization request', ->
 
-      req = query: {}
-      options = {}
+      req = query: { query: {} }
+      options = state: 'st4t3'
 
       before ->
         sinon.stub(strategy, 'authorizationRequest')
-        strategy.authenticate { query: {} }
+        strategy.authenticate req, options
 
       after ->
         strategy.authorizationRequest.restore()
 
       it 'should initialize the authorization flow', ->
-        strategy.authorizationRequest.should.have.been.calledWith options
+        strategy.authorizationRequest.should.have.been.calledWith req, options
 
 
     describe 'with authorization error response', ->
@@ -134,11 +134,12 @@ describe 'OAuth2 Strategy', ->
 
     describe 'with valid configuration', ->
 
+      req = query: { query: {} }
+      options = state: 'st4t3'
+
       beforeEach ->
         strategy.redirect = sinon.spy()
-        options =
-          state: 'r4nd0m'
-        strategy.authorizationRequest(options)
+        strategy.authorizationRequest(req, options)
 
       it 'should redirect', ->
         url = provider.endpoints.authorize.url
@@ -163,6 +164,10 @@ describe 'OAuth2 Strategy', ->
           'scope=a%2Cb%2Cc'
         )
 
+      it 'should include state', ->
+        strategy.redirect.should.have.been.calledWith sinon.match(
+          'state=' + options.state
+        )
 
 
 
