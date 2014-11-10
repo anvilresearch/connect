@@ -69,6 +69,7 @@
     "passport-local": "~1.0.0",
     "passport-oauth": "^1.0.0",
     "passport-twitter": "~1.0.2",
+    "qs": "^2.3.2",
     "redis": "~0.10.1",
     "uri-js": "~1.4.2",
     "yargs": "~1.2.2"

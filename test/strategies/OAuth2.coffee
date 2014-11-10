@@ -171,37 +171,6 @@ describe 'OAuth2 Strategy', ->
 
 
 
-  describe 'authorizationCodeGrant', ->
-
-    describe 'with valid request', ->
-
-      before (done) ->
-        params =
-          grant_type: 'authorization_code'
-          code: 'r4nd0m'
-          redirect_uri: provider.redirect_uri
-
-        scope = nock(provider.url)
-                .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
-                .matchHeader(
-                  'Authorization',
-                  'Basic ' + strategy.base64credentials()
-                )
-                .post('/token', FormUrlencoded.encode params)
-                .reply(201, { access_token: 'token' })
-        strategy.authorizationCodeGrant params.code, (error, response) ->
-          err = error
-          res = response
-          done()
-
-      it 'should provide a null error', ->
-        expect(err).to.be.null
-
-      it 'should provide the token response', ->
-        res.access_token.should.equal 'token'
-
-
-
 
   describe 'userInfo', ->
 

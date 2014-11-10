@@ -32,13 +32,13 @@ providers = require '../../../lib/providers'
 describe 'OAuth2Strategy authorizationCodeGrant', ->
 
 
-  {req,provider,client,strategy,headers} = {}
+  {err,res,req,provider,client,strategy,headers} = {}
 
 
   describe 'with defaults and valid parameters', ->
 
     before (done) ->
-      provider = _.extend {}, providers.oauth2test
+      provider = _.clone providers.oauth2test, true
       client   = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
@@ -74,7 +74,7 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
   describe 'with custom method', ->
 
     before (done) ->
-      provider = _.extend {}, providers.oauth2test
+      provider = _.clone providers.oauth2test, true
       provider.endpoints.token.method = 'PATCH'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
@@ -84,7 +84,8 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
         .patch('/token')
         .reply(200, { access_token: 'h3x' })
 
-      req = strategy.authorizationCodeGrant 'r4nd0m', done
+      req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
+        done()
 
     it 'should use the correct HTTP method', ->
       req.method.should.equal 'PATCH'
@@ -95,14 +96,14 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
   describe 'with "client_secret_basic" auth', ->
 
     before (done) ->
-      provider = _.extend {}, providers.oauth2test
+      provider = _.clone providers.oauth2test, true
       provider.endpoints.token.auth = 'client_secret_basic'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .patch('/token')
+        .post('/token')
         .reply(200, { access_token: 'h3x' })
 
       req = strategy.authorizationCodeGrant 'r4nd0m', done
@@ -123,14 +124,14 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
   describe 'with "client_secret_post" auth', ->
 
     before (done) ->
-      provider = _.extend {}, providers.oauth2test
+      provider = _.clone providers.oauth2test, true
       provider.endpoints.token.auth = 'client_secret_post'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .patch('/token')
+        .post('/token')
         .reply(200, { access_token: 'h3x' })
 
       req = strategy.authorizationCodeGrant 'r4nd0m', done
@@ -145,22 +146,85 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
 
 
   describe 'with error response', ->
-    it 'should provide an error'
-    it 'should not provide a token response'
+
+    before (done) ->
+      provider = _.clone providers.oauth2test, true
+      client = client_id: 'uuid', client_secret: 'h4sh'
+      verifier = () ->
+      strategy = new OAuth2Strategy provider, client, verifier
+
+      scope = nock(provider.url)
+        .post('/token')
+        .reply(400, { error: 'oops' })
+
+      req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
+        err = error
+        res = response
+        done()
+
+    it 'should provide an error', ->
+      expect(err).to.be.an.object
+
+    it 'should not provide a token response', ->
+      expect(res).to.be.undefined
 
 
 
 
   describe 'with "x-www-form-urlencoded" response', ->
-    it 'should not provide an error'
-    it 'should provide the token response'
+
+    before (done) ->
+      provider = _.clone providers.oauth2test, true
+      provider.endpoints.token.parser = 'x-www-form-urlencoded'
+      client = client_id: 'uuid', client_secret: 'h4sh'
+      verifier = () ->
+      strategy = new OAuth2Strategy provider, client, verifier
+
+      scope = nock(provider.url)
+        .post('/token')
+        .reply(200, 'access_token=t0k3n&expires=3600', {
+          'content-type': 'application/x-www-form-urlencoded'
+        })
+
+      req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
+        err = error
+        res = response
+        done()
+
+    it 'should not provide an error', ->
+      expect(err).to.be.null
+
+    it 'should provide the token response', ->
+      res.access_token.should.equal 't0k3n'
+      res.expires.should.equal '3600'
 
 
 
 
   describe 'with "JSON" response', ->
-    it 'should not provide an error'
-    it 'should provide the token response'
+
+    before (done) ->
+      provider = _.clone providers.oauth2test, true
+      client = client_id: 'uuid', client_secret: 'h4sh'
+      verifier = () ->
+      strategy = new OAuth2Strategy provider, client, verifier
+
+      scope = nock(provider.url)
+        .post('/token')
+        .reply(200, { access_token: 'h3x' }, {
+          'content-type': 'application/json'
+        })
+
+      req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
+        err = error
+        res = response
+        done()
+
+    it 'should not provide an error', ->
+      expect(err).to.be.null
+
+    it 'should provide the token response', ->
+      res.access_token.should.equal 'h3x'
 
 
 
