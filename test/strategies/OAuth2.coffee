@@ -34,7 +34,7 @@ describe 'OAuth2 Strategy', ->
     url:          'https://domain.tld'
     redirect_uri: 'https://local.tld/callback'
     scope:        ['a', 'b']
-    scope_separator: ' '
+    separator: ' '
     endpoints:
       authorize:
         url:      'https://domain.tld/authorize'
@@ -161,7 +161,7 @@ describe 'OAuth2 Strategy', ->
 
       it 'should include scope', ->
         strategy.redirect.should.have.been.calledWith sinon.match(
-          'scope=a%2Cb%2Cc'
+          'scope=a%20b%20c'
         )
 
       it 'should include state', ->
