@@ -103,9 +103,73 @@ describe 'OAuth2 Strategy', ->
         strategy.authorizationRequest.should.have.been.calledWith req, options
 
 
+    describe 'with access denied response', ->
+
+      req = query: { error: 'access_denied', error_description: 'nope' }
+      options = state: 'st4t3'
+
+      before ->
+        strategy.fail = sinon.spy()
+        strategy.authenticate req, options
+
+      it 'should fail to authenticate', ->
+        strategy.fail.should.have.been.calledWith 'Access denied', 403
+
     describe 'with authorization error response', ->
 
-    describe 'with authorization code response', ->
+      req = query: { error: 'invalid', error_description: 'Invalid' }
+      options = state: 'st4t3'
+
+      before ->
+        strategy.error = sinon.spy()
+        strategy.authenticate req, options
+
+      it 'should fail to authenticate', ->
+        strategy.error.should.have.been.calledWith sinon.match({
+          name: 'ProviderAuthError'
+        })
+
+
+    describe 'with authorization code grant error response', ->
+
+      req = query: { code: 'c0d3' }
+      options = state: 'st4t3'
+      error = {}
+
+      before ->
+        sinon.stub(strategy, 'authorizationCodeGrant').callsArgWith(1, error)
+        strategy.error = sinon.spy()
+        strategy.authenticate req, options
+
+      after ->
+        strategy.authorizationCodeGrant.restore()
+
+      it 'should fail to authenticate', ->
+        strategy.error.should.have.been.calledWith error
+
+
+    describe 'with userinfo error response', ->
+
+      req = query: { code: 'c0d3' }
+      options = state: 'st4t3'
+      res = access_token: 't0k3n'
+      error = {}
+
+      before ->
+        sinon.stub(strategy, 'authorizationCodeGrant').callsArgWith(1, null, res)
+        sinon.stub(strategy, 'userInfo').callsArgWith(1, {})
+        strategy.error = sinon.spy()
+        strategy.authenticate req, options
+
+      it 'should fail to authenticate', ->
+        strategy.error.should.have.been.calledWith error
+
+
+    describe 'with verification error', ->
+
+    describe 'with verify providing a null user', ->
+
+    describe 'with successful authorization', ->
 
 
 
