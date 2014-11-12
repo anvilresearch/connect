@@ -172,24 +172,3 @@ describe 'OAuth2 Strategy', ->
 
 
 
-  describe 'userInfo', ->
-
-    describe 'with bearer token', ->
-
-      before (done) ->
-        scope = nock(provider.url)
-                .matchHeader('Authorization', 'Bearer token')
-                .matchHeader('User-Agent', 'Anvil Connect/0.1.26')
-                .get('/userinfo')
-                .reply(200, { _id: 'uuid', name: 'Jane Doe' })
-        strategy.userInfo 'token', (error, response) ->
-          err = error
-          res = response
-          done()
-
-
-      it 'should provide a null error', ->
-        expect(err).to.be.null
-
-      it 'should provide the user info', ->
-        res.name.should.equal 'Jane Doe'
