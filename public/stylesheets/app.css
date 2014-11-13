@@ -211,6 +211,18 @@ a {
   transition: .3s background;
 }
 
+.provider.angellist {
+  background: #e9eaec;
+}
+
+.provider.buffer {
+  background: #f4faff;
+}
+
+.provider.dropbox {
+  background: #2895f1;
+}
+
 .provider.google {
   background: #dd4b39;
 }
@@ -225,6 +237,22 @@ a {
 
 .provider.facebook:hover {
   background: #2c4372;
+}
+
+.provider.foursquare {
+  background: #0732a2;
+}
+
+.provider.mailchimp {
+  background: #2c9ab7;
+}
+
+.provider.reddit {
+  background: #cee3f8;
+}
+
+.provider.twitch {
+  background: #6441a5;
 }
 
 .provider.twitter {
@@ -257,6 +285,10 @@ a {
 
 .provider.instagram:hover {
   background: #24557b;
+}
+
+.provider.soundcloud {
+  background: #f50;
 }
 
 .provider.wordpress {
