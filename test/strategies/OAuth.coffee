@@ -22,10 +22,10 @@ provider      = require('../../lib/providers').oauthtest
 
 
 
+
 describe 'OAuth Strategy', ->
 
-
-  {err, res, credentials} = {}
+  {err,req} = {}
 
   config =
     client_id:      'id',
@@ -62,3 +62,27 @@ describe 'OAuth Strategy', ->
 
 
 
+  describe 'authorizationHeader', ->
+
+    before ->
+      req = set: sinon.spy()
+      params = a: 'b', c: 'd', e: 'f/g h>i'
+      strategy.authorizationHeader req, 'Authorization', 'OAuth', params
+
+    it 'should set the Authorization header on a request', ->
+      req.set.should.have.been.calledWith 'Authorization'
+
+    it 'should set the Authorization scheme', ->
+      req.set.should.have.been.calledWith(
+        'Authorization', sinon.match 'OAuth '
+      )
+
+    it 'should set the provided parameters', ->
+      req.set.should.have.been.calledWith(
+        'Authorization', sinon.match 'a="b", c="d"'
+      )
+
+    it 'should URI encode parameter values', ->
+      req.set.should.have.been.calledWith(
+        'Authorization', sinon.match 'e="f%2Fg%20h%3Ei"'
+      )
