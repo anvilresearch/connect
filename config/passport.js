@@ -110,13 +110,11 @@ module.exports = function (passport) {
     });
   }
 
-  Object.keys(config.providers).forEach(function (name) {
-    var prov = providers[name]
-      , conf = config.providers[name]
-      ;
+  Object.keys(providers).forEach(function (name) {
+    var prov = providers.name;
 
     if (prov && prov.protocol === 'OAuth 2.0') {
-      passport.use(new OAuth2Strategy(prov, conf, verifier));
+      passport.use(new OAuth2Strategy(prov.name, prov, verifier));
     }
   });
 
