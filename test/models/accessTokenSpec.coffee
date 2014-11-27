@@ -27,6 +27,7 @@ server      = require path.join(cwd, 'server')
 Modinha     = require 'modinha'
 AccessToken = require path.join(cwd, 'models/AccessToken')
 AccessJWT   = AccessToken.AccessJWT
+{nowSeconds} = require '../../lib/time-utils'
 
 
 
@@ -244,6 +245,7 @@ describe 'AccessToken', ->
         expect(err).to.be.null
 
       it 'should provide an "issue" projection of the token', ->
+        console.log('@@tok=:' + res.access_token + ':')
         res.access_token.length.should.equal 568
 
       it 'should expire in the default duration', ->
@@ -410,7 +412,7 @@ describe 'AccessToken', ->
 
       it 'should calculate exp', ->
         decoded.payload.exp.should.equal(
-          decoded.payload.iat + (token.ei * 1000)
+          decoded.payload.iat + token.ei
         )
 
 
@@ -473,7 +475,7 @@ describe 'AccessToken', ->
           iss: server.settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
-          exp: Date.now() - 10000
+          exp: nowSeconds(-1)
           scope: 'openid'
         })).encode(server.settings.privateKey)
         options =
@@ -583,7 +585,7 @@ describe 'AccessToken', ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
           iss:      server.settings.issuer
           ei:       -10000
-          created:  Date.now()
+          created:  nowSeconds()
         })
         token = 'r4nd0m'
         options =
@@ -614,7 +616,7 @@ describe 'AccessToken', ->
           iss:      server.settings.issuer
           ei:       10000
           scope:    'openid'
-          created:  Date.now()
+          created:  nowSeconds()
         })
         token = 'r4nd0m'
         options =
@@ -649,7 +651,7 @@ describe 'AccessToken', ->
           cid:      'uuid2'
           ei:       10000
           scope:    'openid'
-          created:  Date.now()
+          created:  nowSeconds()
 
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, instance)
         token = 'r4nd0m'
@@ -683,7 +685,7 @@ describe 'AccessToken', ->
         claims.iat.should.equal instance.created
 
       it 'should provide "exp" claim', ->
-        claims.exp.should.equal instance.created + (instance.ei * 1000)
+        claims.exp.should.equal instance.created + instance.ei
 
       it 'should provide "scope" claim', ->
         claims.scope.should.equal instance.scope

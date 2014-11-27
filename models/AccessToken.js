@@ -8,9 +8,10 @@ var async    = require('async')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')
   , random   = Modinha.defaults.random
-  , InvalidTokenError = require('../errors/InvalidTokenError')
-  , UnauthorizedError = require('../errors/UnauthorizedError')
+  , InvalidTokenError      = require('../errors/InvalidTokenError')
+  , UnauthorizedError      = require('../errors/UnauthorizedError')
   , InsufficientScopeError = require('../errors/InsufficientScopeError')
+  , nowSeconds             = require('../lib/time-utils').nowSeconds
   ;
 
 
@@ -344,7 +345,7 @@ AccessToken.verify = function (token, options, callback) {
     }
 
     // expired token
-    if (Date.now() > claims.exp) {
+    if (nowSeconds() > claims.exp) {
       return callback(new UnauthorizedError({
         realm:              'user',
         error:              'invalid_token',
@@ -396,7 +397,7 @@ var AccessJWT = JWT.define({
   registeredClaims: {
     jti:    { format: 'String',  required: true, from: 'at' },
     iss:    { format: 'URI',     required: true },
-    iat:    { format: 'IntDate', required: true, default: Date.now },
+    iat:    { format: 'IntDate', required: true, default: nowSeconds },
     exp:    { format: 'IntDate', required: true, default: expires },
     sub:    { format: 'String',  required: true, from: 'uid' },
     aud:    { format: 'String',  required: true, from: 'cid' },
@@ -406,14 +407,14 @@ var AccessJWT = JWT.define({
 });
 
 function expires () {
-  return Date.now() + (3600 * 1000);
+  return nowSeconds(3600);
 }
 
 AccessToken.AccessJWT = AccessJWT;
 
 AccessToken.prototype.toJWT = function (secret) {
   var jwt = new AccessJWT(this);
-  jwt.payload.exp = Date.now() + (this.ei * 1000);
+  jwt.payload.exp = nowSeconds(this.ei);
   return jwt.encode(secret);
 }
 
