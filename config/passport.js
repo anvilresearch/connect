@@ -116,13 +116,17 @@ module.exports = function (passport) {
     });
   }
 
-  Object.keys(providers).forEach(function (name) {
-    var prov = providers.name;
+if (config.providers) {
+  Object.keys(config.providers).forEach(function (name) {
+    var prov = providers[name]
+      , conf = config.providers[name]
+      ;
 
     if (prov && prov.protocol === 'OAuth 2.0') {
-      passport.use(new OAuth2Strategy(prov.name, prov, verifier));
+      passport.use(new OAuth2Strategy(prov, conf, verifier));
     }
-  });
+    });
+}
 
 
 };
