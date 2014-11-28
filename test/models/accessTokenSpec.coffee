@@ -245,8 +245,15 @@ describe 'AccessToken', ->
         expect(err).to.be.null
 
       it 'should provide an "issue" projection of the token', ->
-        console.log('@@tok=:' + res.access_token + ':')
-        res.access_token.length.should.equal 568
+        res.access_token.length.should.be.above 100
+        options =
+          key: server.settings.publicKey
+        decoded = AccessJWT.decode(res.access_token, options.key)
+        decoded.payload.should.have.property('iss', server.settings.issuer)
+        decoded.payload.should.have.property('sub', 'uuid1')
+        decoded.payload.should.have.property 'iat'
+        decoded.payload.should.have.property 'exp'
+        decoded.payload.should.have.property 'scope'
 
       it 'should expire in the default duration', ->
         res.expires_in.should.equal AccessToken.schema.ei.default
@@ -649,7 +656,7 @@ describe 'AccessToken', ->
           iss:      server.settings.issuer
           uid:      'uuid1'
           cid:      'uuid2'
-          ei:       10000
+          ei:       10
           scope:    'openid'
           created:  nowSeconds()
 

@@ -314,7 +314,7 @@ AccessToken.verify = function (token, options, callback) {
             sub:    instance.uid,
             aud:    instance.cid,
             iat:    instance.created,
-            exp:    instance.created + (instance.ei * 1000),
+            exp:    instance.created + instance.ei,
             scope:  instance.scope
           });
         });
