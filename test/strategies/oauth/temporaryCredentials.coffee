@@ -82,7 +82,7 @@ describe 'OAuthStrategy temporaryCredentials', ->
 
     it 'should set the oauth_signature', ->
       headers.authorization.should.contain(
-        'oauth_signature="' + client.oauth_consumer_secret + '"'
+        'oauth_signature="' + encodeURIComponent(client.oauth_consumer_secret + '&') + '"'
     )
 
     it 'should set the accept header', ->

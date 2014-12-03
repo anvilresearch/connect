@@ -228,7 +228,7 @@ describe 'OAuth Strategy', ->
     describe 'with PLAINTEXT method', ->
 
       it 'should return the key', ->
-        OAuthStrategy.sign('PLAINTEXT', '', 'SECRET').should.equal 'SECRET'
+        OAuthStrategy.sign('PLAINTEXT', '', 'SECRET').should.equal 'SECRET&'
 
 
     describe 'with RSA-SHA1', ->
@@ -237,6 +237,9 @@ describe 'OAuth Strategy', ->
 
     describe 'with unknown method', ->
 
+
+
+    describe 'authenticate', ->
 
 
 

@@ -44,7 +44,10 @@ describe 'OAuthStrategy tokenCredentials', ->
                 })
 
       strategy = new OAuthStrategy provider, client, verifier
-      req = strategy.tokenCredentials 'a', 'b', (error, response) ->
+      authorization =
+        oauth_verifier: ''
+        oauth_token: ''
+      req = strategy.tokenCredentials authorization, 's3cr3t', (error, response) ->
         err = error
         res = response
         done()
@@ -77,7 +80,7 @@ describe 'OAuthStrategy tokenCredentials', ->
 
     it 'should set the oauth_signature', ->
       headers.authorization.should.contain(
-        'oauth_signature="' + client.oauth_consumer_secret + '"'
+        'oauth_signature="' + encodeURIComponent(client.oauth_consumer_secret + '&') + '"'
     )
 
     it 'should set the accept header', ->
