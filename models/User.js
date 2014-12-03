@@ -136,19 +136,6 @@ User.mappings.userinfo = {
 
 
 /**
- * Third Party User Profile Mappings
- */
-
-User.mappings.twitter = {
-  name:               'name',
-  preferredUsername:  'screen_name',
-  profile:            'url',
-  picture:            'profile_image_url',
-  twitterId:          'id'
-};
-
-
-/**
  * Document persistence
  */
 

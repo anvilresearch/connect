@@ -9,8 +9,8 @@ var _                = require('lodash')
   , util             = require('util')
   , config           = require(path.join(cwd, 'config.' + env + '.json'))
   , LocalStrategy    = require('passport-local').Strategy
+  , OAuthStrategy    = require('../lib/strategies/OAuth')
   , OAuth2Strategy   = require('../lib/strategies/OAuth2')
-  , TwitterStrategy  = require('passport-twitter').Strategy
   , base64url        = require('base64url')
   , User             = require('../models/User')
   ;
@@ -52,50 +52,6 @@ module.exports = function (passport) {
    * OAuth Strategies
    */
 
-  var providers = config.providers;
-
-  if (providers) {
-
-    /**
-     * Cut the verbosity of the config files
-     */
-
-    Object.keys(providers).forEach(function (name) {
-      var callbackUrl = config.issuer + '/connect/' + name + '/callback';
-      providers[name].callbackURL = callbackUrl;
-      providers[name].passReqToCallback = true;
-    });
-
-
-    /**
-     * Twitter
-     */
-
-    if (typeof providers.twitter === 'object') {
-      passport.use(new TwitterStrategy(
-        providers.twitter,
-        function (request, token, secret, profile, done) {
-          User.connect({
-            provider: 'twitter',
-            user:      request.user,
-            token:     token,
-            profile:   profile._json
-          }, function (err, user) {
-            if (err) { return done(err); }
-            done(null, user);
-          });
-        }
-      ));
-    }
-
-  }
-
-
-
-  /**
-   * OAuth 2.0 Strategies
-   */
-
   var providers = require('../lib/providers')
 
   function verifier (request, response, profile, done) {
@@ -117,6 +73,10 @@ module.exports = function (passport) {
 
     if (prov && prov.protocol === 'OAuth 2.0') {
       passport.use(new OAuth2Strategy(prov, conf, verifier));
+    }
+
+    if (prov && prov.protocol === 'OAuth 1.0') {
+      passport.use(new OAuthStrategy(prov, conf, verifier));
     }
   });
 
