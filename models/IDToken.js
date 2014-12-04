@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var JWT = require('anvil-connect-jwt');
+var JWT            = require('anvil-connect-jwt')
+  , nowSeconds     = require('../lib/time-utils').nowSeconds
 
 
 /**
@@ -11,13 +12,13 @@ var JWT = require('anvil-connect-jwt');
 
 function expires (duration) {
   var fromNow = {
-    day:   (1000 * 60 * 60 * 24),
-    week:  (1000 * 60 * 60 * 24 * 7),
-    month: (1000 * 60 * 60 * 24 * 30)
+    day:   (60 * 60 * 24),
+    week:  (60 * 60 * 24 * 7),
+    month: (60 * 60 * 24 * 30)
   };
 
   return function () {
-    return Date.now() + fromNow[duration];
+    return nowSeconds(fromNow[duration]);
   };
 }
 
@@ -52,7 +53,7 @@ var IDToken = JWT.define({
     sub:      { format: 'StringOrURI', required: true },
     aud:      { format: 'StringOrURI', required: true },
     exp:      { format: 'IntDate',     required: true, default: expires('day')  },
-    iat:      { format: 'IntDate',     required: true, default: Date.now },
+    iat:      { format: 'IntDate',     required: true, default: nowSeconds },
     nonce:    { format: 'String' },
     acr:      { format: 'String' },
     at_hash:  { format: 'String' }

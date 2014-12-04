@@ -600,7 +600,7 @@ module.exports = function (server) {
 
 
   // JWKs
-  server.set('jwks', [jwk(publicKey)]);
+  server.set('jwks', {keys: [jwk(publicKey)]});
 
 
   /**
