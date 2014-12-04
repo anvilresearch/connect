@@ -58,7 +58,7 @@ module.exports = function (passport) {
     User.connect({
       provider: profile.provider,
       user:     request.user,
-      token:    response.access_token,
+      token:    response.access_token || response.oauth_token,
       profile:  profile
     }, function (err, user) {
       if (err) { return done(err); }
