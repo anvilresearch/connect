@@ -33,7 +33,10 @@
     "fakeredis": "~0.2.0",
     "sinon": "~1.9.0",
     "sinon-chai": "~2.5.0",
-    "supertest": "^0.14.0"
+    "supertest": "^0.14.0",
+    "mocha": "^2.0.1",
+    "coffee-script": "^1.8.0",
+    "nock": "^0.51.0"
   },
   "dependencies": {
     "anvil-connect-jwt": "^0.1.2",
@@ -68,9 +71,11 @@
     "passport-http-bearer": "~1.0.1",
     "passport-local": "~1.0.0",
     "passport-oauth": "^1.0.0",
+    "passport-strategy": "~1.0.0",
     "passport-twitter": "~1.0.2",
     "qs": "^2.3.2",
     "redis": "~0.10.1",
+    "superagent": "~0.21.0",
     "uri-js": "~1.4.2",
     "yargs": "~1.2.2"
   }

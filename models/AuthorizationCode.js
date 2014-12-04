@@ -6,6 +6,7 @@ var client             = require('../config/redis')
   , Modinha            = require('modinha')
   , Document           = require('modinha-redis')
   , AuthorizationError = require('../errors/AuthorizationError')
+  , nowSeconds         = require('../lib/time-utils').nowSeconds
   ;
 
 
@@ -66,7 +67,9 @@ var AuthorizationCode = Modinha.define('authorizationcodes', {
  */
 
 function expires () {
-  return Date.now() + (600 * 1000);
+  var	secs = nowSeconds(600);
+
+  return secs;
 }
 
 

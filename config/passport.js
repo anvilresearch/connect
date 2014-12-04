@@ -39,9 +39,15 @@ module.exports = function (passport) {
    */
 
   passport.use(new LocalStrategy(
-    { usernameField: 'email' },
-    function (email, password, done) {
+    { usernameField: 'email',  passReqToCallback: 'true' },
+    function (req, email, password, done) {
       User.authenticate(email, password, function (err, user, info) {
+        if (user) {
+          // throw password value away so isn't included in URLs/logged
+          delete req.connectParams.password;
+          delete req.connectParams.email;
+        }
+
         done(err, user, info);
       });
     }
@@ -66,19 +72,21 @@ module.exports = function (passport) {
     });
   }
 
-  Object.keys(config.providers).forEach(function (name) {
-    var prov = providers[name]
-      , conf = config.providers[name]
-      ;
+  if (config.providers) {
+    Object.keys(config.providers).forEach(function (name) {
+      var prov = providers[name]
+        , conf = config.providers[name]
+        ;
 
-    if (prov && prov.protocol === 'OAuth 2.0') {
-      passport.use(new OAuth2Strategy(prov, conf, verifier));
-    }
+      if (prov && prov.protocol === 'OAuth 2.0') {
+        passport.use(new OAuth2Strategy(prov, conf, verifier));
+      }
 
-    if (prov && prov.protocol === 'OAuth 1.0') {
-      passport.use(new OAuthStrategy(prov, conf, verifier));
-    }
-  });
+      if (prov && prov.protocol === 'OAuth 1.0') {
+        passport.use(new OAuthStrategy(prov, conf, verifier));
+      }
+    });
+  }
 
 
 };

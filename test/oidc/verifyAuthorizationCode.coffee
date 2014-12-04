@@ -16,6 +16,7 @@ chai.should()
 AuthorizationCode = require '../../models/AuthorizationCode'
 {verifyAuthorizationCode} = require '../../lib/oidc'
 
+{nowSeconds} = require '../../lib/time-utils'
 
 
 
@@ -101,7 +102,7 @@ describe 'Verify Authorization Code', ->
 
     before (done) ->
       sinon.stub(AuthorizationCode, 'getByCode').callsArgWith(1, null, {
-        expires_at: Date.now() - 1000
+        expires_at: nowSeconds(-1)
       })
 
       req =
@@ -138,7 +139,7 @@ describe 'Verify Authorization Code', ->
 
     before (done) ->
       sinon.stub(AuthorizationCode, 'getByCode').callsArgWith(1, null, {
-        expires_at: Date.now() + 1000
+        expires_at: nowSeconds(1)
         redirect_uri: 'https://wrong.url/cb'
       })
 
@@ -176,7 +177,7 @@ describe 'Verify Authorization Code', ->
 
     before (done) ->
       sinon.stub(AuthorizationCode, 'getByCode').callsArgWith(1, null, {
-        expires_at: Date.now() + 1000
+        expires_at: nowSeconds(1)
         redirect_uri: 'https://some.client.com/cb'
         client_id: 'id'
       })
@@ -217,7 +218,7 @@ describe 'Verify Authorization Code', ->
 
     before (done) ->
       sinon.stub(AuthorizationCode, 'getByCode').callsArgWith(1, null, {
-        expires_at: Date.now() + 1000
+        expires_at: nowSeconds(1)
         redirect_uri: 'https://some.client.com/cb'
         client_id: 'id'
       })

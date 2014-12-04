@@ -100,8 +100,19 @@ describe 'User', ->
     it 'should have website', ->
       User.schema.website.type.should.equal 'string'
 
+    it 'should have email', ->
+      User.schema.email.type.should.equal 'string'
+
+    # Currently email is not required
+    it 'should not require email', ->
+      validation = (new User email: undefined).validate()
+      validation.valid.should.be.true
+
+    ###
+    # If email is required
     it 'should require email', ->
       validation.errors.email.attribute.should.equal 'required'
+    ###
 
     it 'should require email to be valid', ->
       validation = (new User email: 'not-valid').validate()

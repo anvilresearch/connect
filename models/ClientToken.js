@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var JWT = require('anvil-connect-jwt');
+var JWT            = require('anvil-connect-jwt')
+  , nowSeconds     = require('../lib/time-utils').nowSeconds
 
 
 /**
@@ -35,7 +36,7 @@ var ClientToken = JWT.define({
     sub:   { format: 'StringOrURI', required: true },
     aud:   { format: 'StringOrURI', required: true },
     //exp:   { format: 'IntDate',     required: true, default: expires('day')  },
-    iat:   { format: 'IntDate',     required: true, default: Date.now },
+    iat:   { format: 'IntDate',     required: true, default: nowSeconds },
     scope: { format: 'String',      required: true, default: 'client' }
   }
 
