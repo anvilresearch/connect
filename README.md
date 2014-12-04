@@ -86,6 +86,7 @@ We aim to make it effortless.
 Any compliant OpenID Connect client should be compatible. For example:
 
 * Express with [Passport](http://passportjs.org/)'s [OpenID Connect strategy](https://github.com/jaredhanson/passport-openidconnect)
+* Java with [MITREid Connect](https://github.com/mitreid-connect/simple-web-app)
 
 If all else fails, you can use the [HTTP API](https://github.com/christiansmith/anvil-connect/wiki/Documentation#http-api) from any language, framework or platform. Please let us know if you write or test a client library. We'll list it here.
 
