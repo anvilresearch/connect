@@ -14,6 +14,10 @@ The most commonly used nv commands are:
 
   nv revoke <email> <role>      Revoke a role from a user
 
+  nv permit <role> <scope>      Permit a scope for a role
+
+  nv forbid <role> <scope>      Forbid a scope for a role
+
   nv copy <filepath>            Copy file to clipboard as Base64.
                                 This value is used to represent
                                 public/private keys in environment
