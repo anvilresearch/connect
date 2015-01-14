@@ -654,10 +654,10 @@ describe 'User', ->
         family_name: 'Smith'
       })
 
-    it 'should include a mapping in the options', ->
-      User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
-        mapping: 'google'
-      })
+    #it 'should include a mapping in the options', ->
+    #  User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
+    #    mapping: 'google'
+    #  })
 
     it 'should disable the password requirement', ->
       User.insert.should.have.been.calledWith sinon.match.object, sinon.match({

@@ -341,7 +341,7 @@ User.connect = function (options, callback) {
       // create a new user
       if (!user) {
         User.insert(profile, {
-          mapping:  provider,
+          //mapping:  provider,
           password: false
         }, function (err, user) {
           if (err) { return callback(err); }
