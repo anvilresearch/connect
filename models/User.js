@@ -71,6 +71,8 @@ var User = Modinha.define('users', {
   googleAccessToken:      { type: 'string' },
   instagramId:            { type: 'string', unique: true },
   instagramAccessToken:   { type: 'string' },
+  linkedinId:             { type: 'string', unique: true },
+  linkedinAccessToken:    { type: 'string' },
   mailchimpId:            { type: 'string', unique: true },
   mailchimpAccessToken:   { type: 'string' },
   soundcloudId:           { type: 'number', unique: true },
