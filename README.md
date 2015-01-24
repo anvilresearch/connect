@@ -11,7 +11,7 @@
 ### Why run your own OpenID Connect Povider?
 
 * Protect your apps and APIs with a shared identity and authorization service *that you control*
-* Provide your users with a seamless authentication experience across several apps, as well as social signin via other providers like Google+
+* Provide your users with a seamless authentication experience across several apps, as well as social signin via other [providers](https://github.com/christiansmith/anvil-connect/tree/master/lib/providers) like Google+, Facebook, Twitter, GitHub, and many more.
 * Authorize third party access to your APIs on a user's behalf
 * Be the bedrock of an ecosystem as an identity provider for other developers
 
