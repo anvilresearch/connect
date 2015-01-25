@@ -3,6 +3,7 @@
  */
 
 var client                = require('../config/redis')
+  , providers             = require('../lib/providers')
   , bcrypt                = require('bcrypt')
   , CheckPassword         = require('mellt').CheckPassword
   , Modinha               = require('modinha')
@@ -85,7 +86,27 @@ var User = Modinha.define('users', {
   wordpressAccessToken:   { type: 'string' },
 
 
+  /**
+   * Each provider object in user.providers should include
+   *  - Provider user/account id
+   *  - Name of provider
+   *  - Protocol of provider
+   *  - Complete authorization response from provider
+   *  - Complete userInfo response from the provider
+   *  - Last login time
+   *  - Last login provider
+   */
 
+  providers: {
+    type: 'object',
+    default: {},
+    set: function (data) {
+      var providers = this.providers = this.providers || {};
+      Object.keys(data.providers || {}).forEach(function (key) {
+        providers[key] = data.providers[key];
+      });
+    }
+  }
 
 });
 
@@ -283,23 +304,28 @@ User.authenticate = function (email, password, callback) {
 
 
 /**
- * Get by provider profile (Passport callback profile)
+ * Lookup
+ *
+ * Takes a request object and third party userinfo
+ * object and provides either an authenticated user
+ * or attempts to lookup the user based on a provider
+ * param in the request and a provider id in the
+ * userinfo.
  */
 
-User.getByProviderProfile = function (provider, profile, options, callback) {
-  var index = User.collection + ':' + provider + 'Id';
+User.lookup = function (req, info, callback) {
+  if (req.user) { return callback(null, req.user); }
 
-  if (typeof callback !== 'function') {
-    callback = options;
-    options = {}
-  }
+  var provider = req.params.provider
+    , index = User.collection + ':' + provider + 'Id'
+    ;
 
-  User.__client.hget(index, profile.id, function (err, id) {
+  User.__client.hget(index, info.id, function (err, id) {
     if (err) { return callback(err); }
 
-    User.get(id, options, function (err, instance) {
+    User.get(id, function (err, user) {
       if (err) { return callback(err); }
-      callback(null, instance);
+      callback(null, user);
     });
   });
 };
@@ -309,59 +335,42 @@ User.getByProviderProfile = function (provider, profile, options, callback) {
  * Connect
  */
 
-User.connect = function (options, callback) {
-  var provider  = options.provider
-    , provKey   = provider + 'Id'
-    , provToken = provider + 'AccessToken'
-    , user      = options.user
-    , token     = options.token
-    , secret    = options.secret
-    , profile   = options.profile
-    , update    = {}
-    ;
+User.connect = function (req, auth, info, callback) {
+  var provider = providers[req.params.provider];
+  // what if there's no provider param?
 
-  // prepare the update object
-  update[provKey] = profile.id;
-  update[provToken] = token;
+  User.lookup(req, info, function (err, user) {
+    if (err) { return callback(err); }
 
-  profile[provKey] = profile.id;
-  profile[provToken] = token;
+    // initialize user data
+    var data = { providers: {} };
+    data.providers[provider.id] = {
+      provider: provider.id,
+      protocol: provider.protocol,
+      auth:     auth,
+      info:     info,
+    };
 
-  // connect to authenticated user
-  if (user) {
-    User.patch(user._id, update, function (err, user) {
-      if (err) { return callback(err); }
-      callback(null, user);
-    })
-  }
+    if (user) {
+      User.patch(user._id, data, function (err, user) {
+        if (err) { return callback(err); }
+        callback(null, user);
+      })
+    }
 
-  // connect to unauthenticated user
-  else {
+    else {
+      // map info into data
+      Modinha.map(provider.mapping, info, data)
 
-    User.getByProviderProfile(provider, profile, function (err, user) {
+      User.insert(data, {
+        password: false,
+      }, function (err, user) {
+        if (err) { return callback(err); }
+        callback(null, user);
+      });
+    }
 
-      // create a new user
-      if (!user) {
-        User.insert(profile, {
-          //mapping:  provider,
-          password: false
-        }, function (err, user) {
-          if (err) { return callback(err); }
-          callback(null, user);
-        });
-      }
-
-      // update an existing user
-      else {
-        User.patch(user._id, update, function (err, user) {
-          if (err) { return callback(err); }
-          callback(null, user);
-        });
-      }
-
-    });
-
-  }
+  });
 };
 
 

@@ -60,13 +60,8 @@ module.exports = function (passport) {
 
   var providers = require('../lib/providers')
 
-  function verifier (request, response, profile, done) {
-    User.connect({
-      provider: profile.provider,
-      user:     request.user,
-      token:    response.access_token || response.oauth_token,
-      profile:  profile
-    }, function (err, user) {
+  function verifier (req, auth, userInfo, done) {
+    User.connect(req, auth, userInfo, function (err, user) {
       if (err) { return done(err); }
       done(null, user);
     });

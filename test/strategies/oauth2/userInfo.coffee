@@ -234,9 +234,6 @@ describe 'OAuth2Strategy userInfo', ->
     it 'should provide a the provider name', ->
       res.provider.should.equal provider.id
 
-    it 'should map provider values to user schema', ->
-      res.name.should.equal 'Yoda'
-
 
 
 
