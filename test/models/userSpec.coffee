@@ -156,12 +156,6 @@ describe 'User', ->
       User.schema.hash.private.should.equal true
 
 
-    # THIRD PARTY CREDENTIALS
-
-    it 'should have googleId', ->
-      User.schema.googleId.type.should.equal 'string'
-
-
     # TIMESTAMPS
 
     it 'should have "created" timestamp', ->
@@ -581,6 +575,7 @@ describe 'User', ->
 
     it 'should update the provider id', ->
       User.patch.should.have.been.calledWith user._id, {
+        lastProvider: 'google',
         providers: {
           google: {
             provider: 'google',
@@ -627,6 +622,7 @@ describe 'User', ->
 
     it 'should update the provider id', ->
       User.patch.should.have.been.calledWith user._id, {
+        lastProvider: 'google',
         providers: {
           google: {
             provider: 'google',

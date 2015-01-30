@@ -54,37 +54,6 @@ var User = Modinha.define('users', {
                           set:     hashPassword
                         },
 
-  // Third Party Credentials
-
-  angellistId:            { type: 'number', unique: true },
-  angellistAccessToken:   { type: 'string' },
-  bufferId:               { type: 'string', unique: true },
-  bufferAccessToken:      { type: 'string' },
-  dropboxId:              { type: 'number', unique: true },
-  dropboxAccessToken:     { type: 'string' },
-  facebookId:             { type: 'string', unique: true },
-  facebookAccessToken:    { type: 'string' },
-  foursquareId:           { type: 'string', unique: true },
-  foursquareAccessToken:  { type: 'string' },
-  githubId:               { type: 'number', unique: true },
-  githubAccessToken:      { type: 'string' },
-  googleId:               { type: 'string', unique: true },
-  googleAccessToken:      { type: 'string' },
-  instagramId:            { type: 'string', unique: true },
-  instagramAccessToken:   { type: 'string' },
-  linkedinId:             { type: 'string', unique: true },
-  linkedinAccessToken:    { type: 'string' },
-  mailchimpId:            { type: 'string', unique: true },
-  mailchimpAccessToken:   { type: 'string' },
-  soundcloudId:           { type: 'number', unique: true },
-  soundcloudAccessToken:  { type: 'string' },
-  twitchId:               { type: 'number', unique: true },
-  twitchAccessToken:      { type: 'string' },
-  twitterId:              { type: 'number', unique: true },
-  twitterAccessToken:     { type: 'string' },
-  wordpressId:            { type: 'number', unique: true },
-  wordpressAccessToken:   { type: 'string' },
-
 
   /**
    * Each provider object in user.providers should include
@@ -106,6 +75,11 @@ var User = Modinha.define('users', {
         providers[key] = data.providers[key];
       });
     }
+  },
+
+  // supports indexing user.providers.PROVIDER.info.id
+  lastProvider: {
+    type: 'string'
   }
 
 });
@@ -332,6 +306,32 @@ User.lookup = function (req, info, callback) {
 
 
 /**
+ * Index provider user id
+ *
+ * This index matches a provider's user id to an
+ * Anvil Connect `user._id` for later lookup by
+ * that provider identifier.
+ *
+ * This is a tricky index to implement, because we
+ * don't know the full path ahead of time, so we'll
+ * need to first resolve it.
+ *
+ * Support for this requirement was added to modinha-redis
+ * for this specific index. The nested array that
+ * defines `field` gets evaluated first. That value at
+ * that path is then used as a property name to access
+ * the id.
+ */
+
+User.defineIndex({
+  type:   'hash',
+  key:    [User.collection + ':$', 'lastProvider'],
+  field:  ['$', ['providers.$.info.id', 'lastProvider']],
+  value:  '_id'
+});
+
+
+/**
  * Connect
  */
 
@@ -339,11 +339,17 @@ User.connect = function (req, auth, info, callback) {
   var provider = providers[req.params.provider];
   // what if there's no provider param?
 
+  // Try to find an existing user.
   User.lookup(req, info, function (err, user) {
     if (err) { return callback(err); }
 
-    // initialize user data
-    var data = { providers: {} };
+    // Initialize the user data.
+    var data = {
+      providers: {},
+      lastProvider: provider.id
+    };
+
+    // Set the provider object
     data.providers[provider.id] = {
       provider: provider.id,
       protocol: provider.protocol,
@@ -351,6 +357,9 @@ User.connect = function (req, auth, info, callback) {
       info:     info,
     };
 
+    // Update an existing user with the authorization response
+    // and raw userInfo from this provider. This will NOT update
+    // existing OIDC standard claims values.
     if (user) {
       User.patch(user._id, data, function (err, user) {
         if (err) { return callback(err); }
@@ -358,9 +367,11 @@ User.connect = function (req, auth, info, callback) {
       })
     }
 
+    // Create a new user based on this provider's response. This
+    // WILL map from the provider's raw userInfo properties into the
+    // user's OIDC standard claims.
     else {
-      // map info into data
-      Modinha.map(provider.mapping, info, data)
+      Modinha.map(provider.mapping, info, data);
 
       User.insert(data, {
         password: false,
