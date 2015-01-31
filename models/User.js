@@ -291,7 +291,7 @@ User.lookup = function (req, info, callback) {
   if (req.user) { return callback(null, req.user); }
 
   var provider = req.params.provider
-    , index = User.collection + ':' + provider + 'Id'
+    , index = User.collection + ':' + provider
     ;
 
   User.__client.hget(index, info.id, function (err, id) {
