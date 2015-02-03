@@ -156,12 +156,6 @@ describe 'User', ->
       User.schema.hash.private.should.equal true
 
 
-    # THIRD PARTY CREDENTIALS
-
-    it 'should have googleId', ->
-      User.schema.googleId.type.should.equal 'string'
-
-
     # TIMESTAMPS
 
     it 'should have "created" timestamp', ->
@@ -513,28 +507,38 @@ describe 'User', ->
 
 
 
-  describe 'get by provider profile', ->
+  describe 'lookup with authenticated user', ->
+
+    {authenticated} = {}
 
     before (done) ->
-      provider = 'anvil'
-      profile =
-        id: '1234'
-      sinon.stub(rclient, 'hget').callsArgWith(2, null, 'r4nd0m')
-      sinon.stub(User, 'get').callsArgWith(2, null, new User _id: 'r4nd0m')
-      User.getByProviderProfile provider, profile, (error, instance) ->
+      authenticated = new User _id: 'r4nd0m'
+      req = user: authenticated
+      info = id: '1234'
+      User.lookup req, info, (error, instance) ->
         err = error
         user = instance
         done()
 
-    after ->
-      rclient.hget.restore()
-      User.get.restore()
-
     it 'should provide a null error', ->
       expect(err).to.be.null
 
-    it 'should provide a user', ->
-      user.should.be.instanceof User
+    it 'should provide the authenticated user', ->
+      user.should.equal authenticated
+
+
+
+  describe 'lookup with unauthenticated known user', ->
+
+    it 'should provide a null error'
+    it 'should provide the user'
+
+
+
+  describe 'lookup with unknown user', ->
+
+    it 'should provide a null error'
+    it 'should provide a null user'
 
 
 
@@ -544,17 +548,18 @@ describe 'User', ->
     before (done) ->
       user = new User()
 
-      options =
-        provider: 'google'
+      req =
+        params:
+          provider: 'google'
         user: user
-        token: 'r4nd0m'
-        secret: 's3cr3t'
-        profile:
-          id: 'g00gl3'
+      auth =
+        access_token: 'b34r3r'
+      info =
+        id: 'g00gl3'
 
       sinon.stub(User, 'patch').callsArgWith(2, null, user)
 
-      User.connect options, (error, instance) ->
+      User.connect req, auth, info, (error, instance) ->
         err = error
         user = instance
         done()
@@ -570,8 +575,15 @@ describe 'User', ->
 
     it 'should update the provider id', ->
       User.patch.should.have.been.calledWith user._id, {
-        'googleId': 'g00gl3'
-        'googleAccessToken': 'r4nd0m'
+        lastProvider: 'google',
+        providers: {
+          google: {
+            provider: 'google',
+            protocol: 'OAuth 2.0',
+            auth: { access_token: 'b34r3r' },
+            info: { id: 'g00gl3' }
+          }
+        }
       }
 
 
@@ -582,23 +594,24 @@ describe 'User', ->
     before (done) ->
       user = new User()
 
-      options =
-        provider: 'google'
-        token: 'r4nd0m'
-        secret: 's3cr3t'
-        profile:
-          id: 'g00gl3_2'
+      req =
+        params:
+          provider: 'google'
+      auth =
+        access_token: 'b34r3r'
+      info =
+        id: 'g00gl3_2'
 
-      sinon.stub(User, 'getByProviderProfile').callsArgWith(2, null, user)
+      sinon.stub(User, 'lookup').callsArgWith(2, null, user)
       sinon.stub(User, 'patch').callsArgWith(2, null, user)
 
-      User.connect options, (error, instance) ->
+      User.connect req, auth, info, (error, instance) ->
         err = error
         user = instance
         done()
 
     after ->
-      User.getByProviderProfile.restore()
+      User.lookup.restore()
       User.patch.restore()
 
     it 'should provide a null error', ->
@@ -609,8 +622,15 @@ describe 'User', ->
 
     it 'should update the provider id', ->
       User.patch.should.have.been.calledWith user._id, {
-        'googleId': 'g00gl3_2',
-        'googleAccessToken': 'r4nd0m'
+        lastProvider: 'google',
+        providers: {
+          google: {
+            provider: 'google',
+            protocol: 'OAuth 2.0',
+            auth: { access_token: 'b34r3r' },
+            info: { id: 'g00gl3_2' }
+          }
+        }
       }
 
 
@@ -621,25 +641,26 @@ describe 'User', ->
     before (done) ->
       user = new User()
 
-      options =
-        provider: 'google'
-        token: 'r4nd0m'
-        secret: 's3cr3t'
-        profile:
-          id: 'g00gl3_3'
-          given_name: 'John'
-          family_name: 'Smith'
+      req =
+        params:
+          provider: 'google'
+      auth =
+        access_token: 'b34r3r'
+      info =
+        id: 'g00gl3_3'
+        given_name: 'John'
+        family_name: 'Smith'
 
-      sinon.stub(User, 'getByProviderProfile').callsArgWith(2, null, null)
+      sinon.stub(User, 'lookup').callsArgWith(2, null, null)
       sinon.stub(User, 'insert').callsArgWith(2, null, user)
 
-      User.connect options, (error, instance) ->
+      User.connect req, auth, info, (error, instance) ->
         err = error
         user = instance
         done()
 
     after ->
-      User.getByProviderProfile.restore()
+      User.lookup.restore()
       User.insert.restore()
 
     it 'should provide a null error', ->
@@ -650,8 +671,17 @@ describe 'User', ->
 
     it 'should insert the user profile', ->
       User.insert.should.have.been.calledWith sinon.match({
-        given_name: 'John'
-        family_name: 'Smith'
+        givenName: 'John'
+        familyName: 'Smith'
+        providers:
+          google:
+            provider: 'google'
+            protocol: 'OAuth 2.0'
+            auth: { access_token: 'b34r3r' }
+            info:
+              id: 'g00gl3_3'
+              given_name: 'John'
+              family_name: 'Smith'
       })
 
     #it 'should include a mapping in the options', ->

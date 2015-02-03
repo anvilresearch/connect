@@ -49,7 +49,7 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
       scope    = nock(provider.url)
                    .get('/user')
-                   .reply(200, { name: 'Dude' })
+                   .reply(200, { uid: 1234, name: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
 
     it 'should use the specified endpoint', ->
@@ -77,7 +77,7 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
       scope    = nock(provider.url)
                    .patch('/user')
-                   .reply(200, { fullname: 'Dude' })
+                   .reply(200, { uid: '1234', fullname: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
 
     it 'should use the specified HTTP method', ->
@@ -221,7 +221,7 @@ describe 'OAuth2Strategy userInfo', ->
 
       scope = nock(provider.url)
         .get('/user?entr0py=t0k3n')
-        .reply(200, { fullname: 'Yoda' })
+        .reply(200, { uid: 1234, fullname: 'Yoda' })
 
       req = strategy.userInfo 't0k3n', (error, response) ->
         err = error
@@ -231,11 +231,11 @@ describe 'OAuth2Strategy userInfo', ->
     it 'should not provide an error', ->
       expect(err).to.be.null
 
-    it 'should provide a the provider name', ->
+    it 'should provide the provider name', ->
       res.provider.should.equal provider.id
 
-    it 'should map provider values to user schema', ->
-      res.name.should.equal 'Yoda'
+    it 'should normalize the provider user id', ->
+      res.id.should.equal '1234'
 
 
 

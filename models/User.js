@@ -3,6 +3,7 @@
  */
 
 var client                = require('../config/redis')
+  , providers             = require('../lib/providers')
   , bcrypt                = require('bcrypt')
   , CheckPassword         = require('mellt').CheckPassword
   , Modinha               = require('modinha')
@@ -53,39 +54,33 @@ var User = Modinha.define('users', {
                           set:     hashPassword
                         },
 
-  // Third Party Credentials
 
-  angellistId:            { type: 'number', unique: true },
-  angellistAccessToken:   { type: 'string' },
-  bufferId:               { type: 'string', unique: true },
-  bufferAccessToken:      { type: 'string' },
-  dropboxId:              { type: 'number', unique: true },
-  dropboxAccessToken:     { type: 'string' },
-  facebookId:             { type: 'string', unique: true },
-  facebookAccessToken:    { type: 'string' },
-  foursquareId:           { type: 'string', unique: true },
-  foursquareAccessToken:  { type: 'string' },
-  githubId:               { type: 'number', unique: true },
-  githubAccessToken:      { type: 'string' },
-  googleId:               { type: 'string', unique: true },
-  googleAccessToken:      { type: 'string' },
-  instagramId:            { type: 'string', unique: true },
-  instagramAccessToken:   { type: 'string' },
-  linkedinId:             { type: 'string', unique: true },
-  linkedinAccessToken:    { type: 'string' },
-  mailchimpId:            { type: 'string', unique: true },
-  mailchimpAccessToken:   { type: 'string' },
-  soundcloudId:           { type: 'number', unique: true },
-  soundcloudAccessToken:  { type: 'string' },
-  twitchId:               { type: 'number', unique: true },
-  twitchAccessToken:      { type: 'string' },
-  twitterId:              { type: 'number', unique: true },
-  twitterAccessToken:     { type: 'string' },
-  wordpressId:            { type: 'number', unique: true },
-  wordpressAccessToken:   { type: 'string' },
+  /**
+   * Each provider object in user.providers should include
+   *  - Provider user/account id
+   *  - Name of provider
+   *  - Protocol of provider
+   *  - Complete authorization response from provider
+   *  - Complete userInfo response from the provider
+   *  - Last login time
+   *  - Last login provider
+   */
 
+  providers: {
+    type: 'object',
+    default: {},
+    set: function (data) {
+      var providers = this.providers = this.providers || {};
+      Object.keys(data.providers || {}).forEach(function (key) {
+        providers[key] = data.providers[key];
+      });
+    }
+  },
 
-
+  // supports indexing user.providers.PROVIDER.info.id
+  lastProvider: {
+    type: 'string'
+  }
 
 });
 
@@ -283,85 +278,110 @@ User.authenticate = function (email, password, callback) {
 
 
 /**
- * Get by provider profile (Passport callback profile)
+ * Lookup
+ *
+ * Takes a request object and third party userinfo
+ * object and provides either an authenticated user
+ * or attempts to lookup the user based on a provider
+ * param in the request and a provider id in the
+ * userinfo.
  */
 
-User.getByProviderProfile = function (provider, profile, options, callback) {
-  var index = User.collection + ':' + provider + 'Id';
+User.lookup = function (req, info, callback) {
+  if (req.user) { return callback(null, req.user); }
 
-  if (typeof callback !== 'function') {
-    callback = options;
-    options = {}
-  }
+  var provider = req.params.provider
+    , index = User.collection + ':' + provider
+    ;
 
-  User.__client.hget(index, profile.id, function (err, id) {
+  User.__client.hget(index, info.id, function (err, id) {
     if (err) { return callback(err); }
 
-    User.get(id, options, function (err, instance) {
+    User.get(id, function (err, user) {
       if (err) { return callback(err); }
-      callback(null, instance);
+      callback(null, user);
     });
   });
 };
 
 
 /**
+ * Index provider user id
+ *
+ * This index matches a provider's user id to an
+ * Anvil Connect `user._id` for later lookup by
+ * that provider identifier.
+ *
+ * This is a tricky index to implement, because we
+ * don't know the full path ahead of time, so we'll
+ * need to first resolve it.
+ *
+ * Support for this requirement was added to modinha-redis
+ * for this specific index. The nested array that
+ * defines `field` gets evaluated first. That value at
+ * that path is then used as a property name to access
+ * the id.
+ */
+
+User.defineIndex({
+  type:   'hash',
+  key:    [User.collection + ':$', 'lastProvider'],
+  field:  ['$', ['providers.$.info.id', 'lastProvider']],
+  value:  '_id'
+});
+
+
+/**
  * Connect
  */
 
-User.connect = function (options, callback) {
-  var provider  = options.provider
-    , provKey   = provider + 'Id'
-    , provToken = provider + 'AccessToken'
-    , user      = options.user
-    , token     = options.token
-    , secret    = options.secret
-    , profile   = options.profile
-    , update    = {}
-    ;
+User.connect = function (req, auth, info, callback) {
+  var provider = providers[req.params.provider];
+  // what if there's no provider param?
 
-  // prepare the update object
-  update[provKey] = profile.id;
-  update[provToken] = token;
+  // Try to find an existing user.
+  User.lookup(req, info, function (err, user) {
+    if (err) { return callback(err); }
 
-  profile[provKey] = profile.id;
-  profile[provToken] = token;
+    // Initialize the user data.
+    var data = {
+      providers: {},
+      lastProvider: provider.id
+    };
 
-  // connect to authenticated user
-  if (user) {
-    User.patch(user._id, update, function (err, user) {
-      if (err) { return callback(err); }
-      callback(null, user);
-    })
-  }
+    // Set the provider object
+    data.providers[provider.id] = {
+      provider: provider.id,
+      protocol: provider.protocol,
+      auth:     auth,
+      info:     info,
+    };
 
-  // connect to unauthenticated user
-  else {
+    // Update an existing user with the authorization response
+    // and raw userInfo from this provider. This will NOT update
+    // existing OIDC standard claims values.
+    if (user) {
+      User.patch(user._id, data, function (err, user) {
+        if (err) { return callback(err); }
+        callback(null, user);
+      })
+    }
 
-    User.getByProviderProfile(provider, profile, function (err, user) {
+    // Create a new user based on this provider's response. This
+    // WILL map from the provider's raw userInfo properties into the
+    // user's OIDC standard claims.
+    else {
+      Modinha.map(provider.mapping, info, data);
 
-      // create a new user
-      if (!user) {
-        User.insert(profile, {
-          //mapping:  provider,
-          password: false
-        }, function (err, user) {
-          if (err) { return callback(err); }
-          callback(null, user);
-        });
-      }
+      User.insert(data, {
+        password: false,
+      }, function (err, user) {
+        if (err) { return callback(err); }
+        callback(null, user);
+      });
+    }
 
-      // update an existing user
-      else {
-        User.patch(user._id, update, function (err, user) {
-          if (err) { return callback(err); }
-          callback(null, user);
-        });
-      }
-
-    });
-
-  }
+  });
 };
 
 
