@@ -13,6 +13,7 @@ chai.should()
 
 server            = require '../../server'
 AccessToken       = require '../../models/AccessToken'
+ClientToken       = require '../../models/ClientToken'
 IDToken           = require '../../models/IDToken'
 AuthorizationCode = require '../../models/AuthorizationCode'
 token             = require('../../lib/oidc').token(server)
@@ -121,4 +122,56 @@ describe 'Token response', ->
       res.json.should.have.been.calledWith sinon.match({ state: 'st4t3' })
 
 
+
+  describe 'client credentials grant', ->
+
+    before (done) ->
+      sinon.spy(ClientToken, 'issue')
+
+      req =
+        body:
+          grant_type: 'client_credentials'
+        client:
+          _id: 'uuid3'
+          client_scope: 'register other'
+      res =
+        set: sinon.spy()
+        json: sinon.spy()
+      next = sinon.spy (error) ->
+        err = error
+        done()
+
+      token req, res, next
+      done()
+
+    after ->
+      ClientToken.issue.restore()
+
+    it 'should issue a client token with client_id as sub', ->
+      ClientToken.issue.should.have.been.calledWith sinon.match({
+        sub: 'uuid3'
+      })
+
+    it 'should issue a client token with client_id as aud', ->
+      ClientToken.issue.should.have.been.calledWith sinon.match({
+        aud: 'uuid3'
+      })
+
+    it 'should issue a client token with configured client scope', ->
+      ClientToken.issue.should.have.been.calledWith sinon.match({
+        scope: 'register other'
+      })
+
+    it 'should respond with access_token', ->
+      res.json.should.have.been.calledWith sinon.match({
+        access_token: sinon.match('eyJhbGciOiJSUzI1NiJ9.')
+      })
+
+    it 'should respond with token_type', ->
+      res.json.should.have.been.calledWith sinon.match({
+        token_type: 'Bearer'
+      })
+
+    #it 'should respond with expires_in', ->
+    #  res.json.should.have.been.calledWith sinon.match({ expires_in: 3600 })
 

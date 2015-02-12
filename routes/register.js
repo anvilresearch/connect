@@ -31,9 +31,7 @@ module.exports = function (server) {
       required: false
     }),
 
-    // rename this for clarity and remove
-    // access token verification. Instead,
-    // rely on the verifyAccessToken fn.
+    // relies on verifyAccessToken upstream.
     oidc.verifyClientRegistration(server),
 
 
