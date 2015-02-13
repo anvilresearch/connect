@@ -8,9 +8,8 @@ var _                = require('lodash')
   , path             = require('path')
   , util             = require('util')
   , config           = require(path.join(cwd, 'config.' + env + '.json'))
+  , providers        = require('../lib/providers')
   , LocalStrategy    = require('passport-local').Strategy
-  , OAuthStrategy    = require('../lib/strategies/OAuth')
-  , OAuth2Strategy   = require('../lib/strategies/OAuth2')
   , base64url        = require('base64url')
   , User             = require('../models/User')
   ;
@@ -58,28 +57,16 @@ module.exports = function (passport) {
    * OAuth Strategies
    */
 
-  var providers = require('../lib/providers')
-
-  function verifier (req, auth, userInfo, done) {
-    User.connect(req, auth, userInfo, function (err, user) {
-      if (err) { return done(err); }
-      done(null, user);
-    });
-  }
-
   if (config.providers) {
     Object.keys(config.providers).forEach(function (name) {
-      var prov = providers[name]
-        , conf = config.providers[name]
+      var provider = providers[name]
+        , client   = config.providers[name]
+        , protocol = (provider && provider.protocol)
+                  || (client   && client.protocol)
+        , strategy = require('../lib/strategies/' + protocol)
         ;
 
-      if (prov && prov.protocol === 'OAuth 2.0') {
-        passport.use(new OAuth2Strategy(prov, conf, verifier));
-      }
-
-      if (prov && prov.protocol === 'OAuth 1.0') {
-        passport.use(new OAuthStrategy(prov, conf, verifier));
-      }
+      passport.use(strategy.initialize(provider, client));
     });
   }
 

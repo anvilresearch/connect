@@ -579,7 +579,7 @@ describe 'User', ->
         providers: {
           google: {
             provider: 'google',
-            protocol: 'OAuth 2.0',
+            protocol: 'OAuth2',
             auth: { access_token: 'b34r3r' },
             info: { id: 'g00gl3' }
           }
@@ -626,7 +626,7 @@ describe 'User', ->
         providers: {
           google: {
             provider: 'google',
-            protocol: 'OAuth 2.0',
+            protocol: 'OAuth2',
             auth: { access_token: 'b34r3r' },
             info: { id: 'g00gl3_2' }
           }
@@ -676,7 +676,7 @@ describe 'User', ->
         providers:
           google:
             provider: 'google'
-            protocol: 'OAuth 2.0'
+            protocol: 'OAuth2'
             auth: { access_token: 'b34r3r' }
             info:
               id: 'g00gl3_3'
