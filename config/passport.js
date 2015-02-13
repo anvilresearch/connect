@@ -34,7 +34,7 @@ module.exports = function (passport) {
 
 
   /**
-   * Local Strategy
+   * Password Strategy
    */
 
   passport.use(new LocalStrategy(
@@ -54,7 +54,7 @@ module.exports = function (passport) {
 
 
   /**
-   * OAuth Strategies
+   * Third-party Strategies
    */
 
   if (config.providers) {
