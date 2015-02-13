@@ -134,6 +134,7 @@ describe 'Token response', ->
         client:
           _id: 'uuid3'
           client_scope: 'register other'
+          default_max_age: 3600
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -172,6 +173,8 @@ describe 'Token response', ->
         token_type: 'Bearer'
       })
 
-    #it 'should respond with expires_in', ->
-    #  res.json.should.have.been.calledWith sinon.match({ expires_in: 3600 })
+    it 'should respond with expires_in', ->
+      res.json.should.have.been.calledWith sinon.match({
+        expires_in: 3600
+      })
 

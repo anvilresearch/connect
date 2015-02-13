@@ -70,8 +70,8 @@ describe 'Client Token', ->
 
     it 'should require "aud" Audience array or string'
 
-    #it 'should require "exp" Expiration time', ->
-    #  ClientToken.registeredClaims.exp.required.should.be.true
+    it 'should have "exp" Expiration time', ->
+      ClientToken.registeredClaims.exp.format.should.equal 'IntDate'
 
     #it 'should default "exp" to 24 hours', ->
     #  payload =

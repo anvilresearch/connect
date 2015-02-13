@@ -35,7 +35,7 @@ var ClientToken = JWT.define({
     iss:   { format: 'StringOrURI', required: true },
     sub:   { format: 'StringOrURI', required: true },
     aud:   { format: 'StringOrURI', required: true },
-    //exp:   { format: 'IntDate',     required: true, default: expires('day')  },
+    exp:   { format: 'IntDate' },
     iat:   { format: 'IntDate',     required: true, default: nowSeconds },
     scope: { format: 'String',      required: true, default: 'client' }
   }
