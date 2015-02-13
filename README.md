@@ -1,5 +1,7 @@
 # Anvil Connect
 
+[![Join the chat at https://gitter.im/christiansmith/anvil-connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christiansmith/anvil-connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Anvil Connect** aims to be a scalable, full-featured, ready-to-run
 [**OpenID Connect**](http://openid.net/connect/) + [**OAuth 2.0**](http://tools.ietf.org/html/rfc6749) **Provider**.
 
