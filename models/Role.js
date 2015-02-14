@@ -30,6 +30,7 @@ Role.__client = client;
  */
 
 Role.intersects('users');
+Role.intersects('clients');
 Role.intersects('scopes');
 
 

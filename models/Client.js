@@ -611,6 +611,13 @@ Client.__client = client;
 
 
 /**
+ * User intersections
+ */
+
+Client.intersects('roles');
+
+
+/**
  * Mappings
  */
 

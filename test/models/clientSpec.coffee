@@ -20,6 +20,7 @@ chai.should()
 # Code under test
 Modinha   = require 'modinha'
 Client    = require path.join(cwd, 'models/Client')
+Role      = require path.join(cwd, 'models/Role')
 base64url = require('base64url')
 
 
@@ -45,20 +46,20 @@ describe 'Client', ->
   before ->
 
     # Mock data
-    #data = []
+    data = []
 
-    #for i in [0..9]
-    #  data.push
-    #    name:     "#{Faker.Name.firstName()} #{Faker.Name.lastName()}"
-    #    email:    Faker.Internet.email()
-    #    hash:     'private'
-    #    password: 'secret1337'
+    for i in [0..9]
+      data.push
+        name:     "#{Faker.Name.firstName()} #{Faker.Name.lastName()}"
+        email:    Faker.Internet.email()
+        hash:     'private'
+        password: 'secret1337'
 
-    #clients = Client.initialize(data, { private: true })
-    #jsonClients = clients.map (d) ->
-    #  Client.serialize(d)
-    #ids = clients.map (d) ->
-    #  d._id
+    clients = Client.initialize(data, { private: true })
+    jsonClients = clients.map (d) ->
+      Client.serialize(d)
+    ids = clients.map (d) ->
+      d._id
 
 
   describe 'schema', ->
@@ -851,6 +852,64 @@ describe 'Client', ->
 
 
     describe 'with "none"', ->
+
+
+
+
+  describe 'add roles', ->
+
+    before (done) ->
+      client = clients[0]
+      role = new Role
+
+      sinon.spy multi, 'zadd'
+      Client.addRoles client, role, done
+
+    after ->
+      multi.zadd.restore()
+
+    it 'should index the role by the client', ->
+      multi.zadd.should.have.been.calledWith "clients:#{client._id}:roles", role.created, role._id
+
+    it 'should index the client by the role', ->
+      multi.zadd.should.have.been.calledWith "roles:#{role._id}:clients", client.created, client._id
+
+
+
+  describe 'remove roles', ->
+
+    before (done) ->
+      client = clients[1]
+      role = new Role
+
+      sinon.spy multi, 'zrem'
+      Client.removeRoles client, role, done
+
+    after ->
+      multi.zrem.restore()
+
+    it 'should deindex the role by the client', ->
+      multi.zrem.should.have.been.calledWith "clients:#{client._id}:roles", role._id
+
+    it 'should deindex the client by the role', ->
+      multi.zrem.should.have.been.calledWith "roles:#{role._id}:clients", client._id
+
+
+
+  describe 'list by roles', ->
+
+    before (done) ->
+      role = new Role name: 'authority'
+      sinon.spy Client, 'list'
+      Client.listByRoles role.name, done
+
+    after ->
+      Client.list.restore()
+
+    it 'should look in the clients index', ->
+      Client.list.should.have.been.calledWith(
+        sinon.match({ index: "roles:#{role.name}:clients" })
+      )
 
 
 
