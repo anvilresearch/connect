@@ -576,6 +576,17 @@ var Client = Modinha.define('clients', {
   },
 
   /**
+   * default_client_scope
+   *    Property used to specify default scope for client access tokens issued
+   *    by the /token endpoint during "client_credentials" grant.
+   *    (Two-legged OAuth)
+   */
+
+  default_client_scope: {
+    type: 'string'
+  },
+
+  /**
    * user_id
    *    The UUID of the user who registered the client.
    */

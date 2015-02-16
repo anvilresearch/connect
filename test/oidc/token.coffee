@@ -133,8 +133,8 @@ describe 'Token response', ->
           grant_type: 'client_credentials'
         client:
           _id: 'uuid3'
-          client_scope: 'register other'
           default_max_age: 3600
+        scope: 'register other'
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -158,7 +158,7 @@ describe 'Token response', ->
         aud: 'uuid3'
       })
 
-    it 'should issue a client token with configured client scope', ->
+    it 'should issue a client token with authorized client scope', ->
       ClientToken.issue.should.have.been.calledWith sinon.match({
         scope: 'register other'
       })
