@@ -55,7 +55,7 @@ module.exports = function (server) {
         }
       })(req, res, next);
     },
-    oidc.determineScope,
+    oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize(server)
   ];

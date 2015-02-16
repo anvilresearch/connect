@@ -14,7 +14,7 @@ chai.should()
 server = require '../../server'
 User  = require '../../models/User'
 Scope = require '../../models/Scope'
-{determineScope} = require '../../lib/oidc'
+{determineUserScope} = require '../../lib/oidc'
 
 
 
@@ -42,7 +42,7 @@ describe 'Determine Scope', ->
         err = error
         done()
 
-      determineScope req, res, next
+      determineUserScope req, res, next
 
     after ->
       Scope.get.restore()
@@ -93,7 +93,7 @@ describe 'Determine Scope', ->
         err = error
         done()
 
-      determineScope req, res, next
+      determineUserScope req, res, next
 
     after ->
       Scope.get.restore()
