@@ -611,10 +611,39 @@ Client.__client = client;
 
 
 /**
- * User intersections
+ * Client intersections
  */
 
 Client.intersects('roles');
+
+
+/**
+ * Authorized scope
+ */
+
+Client.prototype.authorizedScope = function (callback) {
+  var client   = Client.__client;
+
+  client.zrange('clients:' + this._id + ':roles', 0, -1, function (err, roles) {
+    if (err) { return callback(err); }
+
+    if (!roles || roles.length === 0) {
+      return callback(null, defaults);
+    }
+
+    var multi = client.multi();
+
+    roles.forEach(function (role) {
+      multi.zrange('roles:' + role + ':scopes', 0, -1);
+    });
+
+    multi.exec(function (err, results) {
+      if (err) { return callback(err); }
+      callback(null, results);
+    });
+
+  });
+};
 
 
 /**
