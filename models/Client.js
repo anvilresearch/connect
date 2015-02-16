@@ -628,7 +628,7 @@ Client.prototype.authorizedScope = function (callback) {
     if (err) { return callback(err); }
 
     if (!roles || roles.length === 0) {
-      return callback(null, defaults);
+      return callback(null, []);
     }
 
     var multi = client.multi();
