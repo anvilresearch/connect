@@ -11,105 +11,52 @@ chai.should()
 
 
 
-server = require '../../server'
-User  = require '../../models/User'
-Scope = require '../../models/Scope'
+server  = require '../../server'
+User    = require '../../models/User'
+Scope   = require '../../models/Scope'
 {determineUserScope} = require '../../lib/oidc'
 
 
 
 
-describe 'Determine Scope', ->
-
+describe 'Determine User Scope', ->
 
   {req,res,next,err} = {}
-  {scopes} = {}
+  {scope,scopes} = {}
 
+  before (done) ->
+    scope  = 'openid profile developer'
+    scopes = [
+      new Scope name: 'openid'
+      new Scope name: 'profile'
+      new Scope name: 'developer'
+    ]
+    sinon.stub(Scope, 'determine').callsArgWith(2, null, scope, scopes)
 
-  describe 'with unknown scope', ->
+    req =
+      connectParams: { scope: 'a b c' }
+      user: new User
+    res = {}
+    next = sinon.spy (error) ->
+      err = error
+      done()
 
-    before (done) ->
-      scopes = [new Scope({ name: 'openid' }), null, null]
-      userScope = ['openid', 'profile', 'developer']
-      sinon.stub(Scope, 'get').callsArgWith(1, null, scopes)
-      sinon.stub(User.prototype, 'authorizedScope').callsArgWith(0, null, userScope)
+    determineUserScope req, res, next
 
-      req =
-        connectParams: { scope: 'foo bar' }
-        user: new User
-      res = {}
-      next = sinon.spy (error) ->
-        err = error
-        done()
+  after ->
+    Scope.determine.restore()
 
-      determineUserScope req, res, next
+  it 'should set scope on the request', ->
+    req.scope.should.equal scope
 
-    after ->
-      Scope.get.restore()
-      User.prototype.authorizedScope.restore()
+  it 'should set scopes on the request', ->
+    req.scopes.should.equal scopes
 
-    it 'should provide known scope', ->
-      req.scopes.should.contain scopes[0]
+  it 'should not provide an error', ->
+    expect(err).to.be.undefined
 
-    it 'should ignore unknown scope', ->
-      req.scopes.should.not.contain null
-
-    it 'should not provide an error', ->
-      expect(err).to.be.undefined
-
-    it 'should continue', ->
-      next.should.have.been.called
-
-
-
-
-  describe 'with scope unregistered for the client', ->
-
-    it 'should provide an AuthorizationError'
-    it 'should provide an error'
-    it 'should provide an error description'
-    it 'should provide a status code'
-
-
-
-
-  describe 'with scope unauthorized for the user', ->
-
-    before (done) ->
-      scopes = [
-        new Scope({ name: 'openid' }),
-        new Scope({ name: 'realm' }),
-        null
-      ]
-      userScope = ['openid', 'profile', 'developer']
-      sinon.stub(Scope, 'get').callsArgWith(1, null, scopes)
-      sinon.stub(User.prototype, 'authorizedScope').callsArgWith(0, null, userScope)
-
-      req =
-        connectParams: { scope: 'openid realm' }
-        user: new User
-      res = {}
-      next = sinon.spy (error) ->
-        err = error
-        done()
-
-      determineUserScope req, res, next
-
-    after ->
-      Scope.get.restore()
-      User.prototype.authorizedScope.restore()
-
-    it 'should provide authorized scope', ->
-      req.scopes.should.contain scopes[0]
-
-    it 'should ignore unauthorized scope', ->
-      req.scopes.should.not.contain scopes[1]
-
-    it 'should not provide an error', ->
-      expect(err).to.be.undefined
-
-    it 'should continue', ->
-      next.should.have.been.called
+  it 'should continue', ->
+    next.should.have.been.called
 
 
 
