@@ -572,7 +572,8 @@ var Client = Modinha.define('clients', {
    */
 
   trusted: {
-    type: 'string'
+    type: 'string',
+    secondary: true
   },
 
   /**
