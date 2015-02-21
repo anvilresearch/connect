@@ -11,10 +11,6 @@
       ]
     }
   },
-  "keypair": {
-    "private": "./path/to/keys/private.pem",
-    "public": "./path/to/keys/public.pem"
-  },
   "redis": {
     "url": "redis://HOST:PORT",
     "auth": "PASSWORD"
