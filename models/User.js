@@ -3,7 +3,7 @@
  */
 
 var client                = require('../config/redis')
-  , providers             = require('../lib/providers')
+  , providers             = require('../providers')
   , bcrypt                = require('bcrypt')
   , CheckPassword         = require('mellt').CheckPassword
   , Modinha               = require('modinha')
