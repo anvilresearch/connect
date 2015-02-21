@@ -14,7 +14,7 @@ chai.should()
 
 server              = require '../../server'
 AccessToken         = require '../../models/AccessToken'
-{verifyAccessToken} = require '../../lib/oidc'
+{verifyAccessToken} = require '../../oidc'
 
 
 

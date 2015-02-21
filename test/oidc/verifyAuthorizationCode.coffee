@@ -14,7 +14,7 @@ chai.should()
 
 
 AuthorizationCode = require '../../models/AuthorizationCode'
-{verifyAuthorizationCode} = require '../../lib/oidc'
+{verifyAuthorizationCode} = require '../../oidc'
 
 {nowSeconds} = require '../../lib/time-utils'
 

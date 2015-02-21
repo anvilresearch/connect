@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var Client = require('../../models/Client');
+var Client = require('../models/Client');
 
 
 /**

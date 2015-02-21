@@ -8,7 +8,7 @@ chai.should()
 
 
 
-{requireSignin} = require '../../lib/oidc'
+{requireSignin} = require '../../oidc'
 
 
 

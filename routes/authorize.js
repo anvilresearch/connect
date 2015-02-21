@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var oidc = require('../lib/oidc');
+var oidc = require('../oidc');
 
 
 /**

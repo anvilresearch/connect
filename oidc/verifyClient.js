@@ -2,8 +2,8 @@
  * Module dependencies
  */
 
-var Client = require('../../models/Client')
-  , AuthorizationError = require('../../errors/AuthorizationError')
+var Client = require('../models/Client')
+  , AuthorizationError = require('../errors/AuthorizationError')
   ;
 
 /**

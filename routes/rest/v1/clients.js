@@ -4,7 +4,7 @@
 
 var Client        = require('../../../models/Client')
   , NotFoundError = require('../../../errors/NotFoundError')
-  , oidc          = require('../../../lib/oidc')
+  , oidc          = require('../../../oidc')
   ;
 
 /**

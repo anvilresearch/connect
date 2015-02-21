@@ -4,11 +4,11 @@
 
 var crypto            = require('crypto')
   , async             = require('async')
-  , IDToken           = require('../../models/IDToken')
-  , AccessToken       = require('../../models/AccessToken')
-  , AuthorizationCode = require('../../models/AuthorizationCode')
+  , IDToken           = require('../models/IDToken')
+  , AccessToken       = require('../models/AccessToken')
+  , AuthorizationCode = require('../models/AuthorizationCode')
   , FormUrlencoded    = require('form-urlencoded')
-  , nowSeconds        = require('../time-utils').nowSeconds
+  , nowSeconds        = require('../lib/time-utils').nowSeconds
   ;
 
 

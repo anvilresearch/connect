@@ -4,7 +4,7 @@ chai.should()
 
 
 
-{validateAuthorizationParams} = require '../../lib/oidc'
+{validateAuthorizationParams} = require '../../oidc'
 
 
 

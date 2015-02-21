@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var UnauthorizedError = require('../../errors/UnauthorizedError');
+var UnauthorizedError = require('../errors/UnauthorizedError');
 
 
 /**

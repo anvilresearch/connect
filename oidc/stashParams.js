@@ -3,7 +3,7 @@
  */
 
 var crypto = require('crypto')
-  , client = require('../../config/redis')
+  , client = require('../config/redis')
   ;
 
 /**

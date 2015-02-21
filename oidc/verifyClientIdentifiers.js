@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var AuthorizationError = require('../../errors/AuthorizationError');
+var AuthorizationError = require('../errors/AuthorizationError');
 
 
 /**

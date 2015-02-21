@@ -2,9 +2,9 @@
  * Module dependencies
  */
 
-var AuthorizationCode  = require('../../models/AuthorizationCode')
-  , AuthorizationError = require('../../errors/AuthorizationError')
-  , nowSeconds         = require('../time-utils').nowSeconds
+var AuthorizationCode  = require('../models/AuthorizationCode')
+  , AuthorizationError = require('../errors/AuthorizationError')
+  , nowSeconds         = require('../lib/time-utils').nowSeconds
   ;
 
 

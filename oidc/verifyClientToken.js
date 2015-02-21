@@ -2,8 +2,8 @@
  * Module dependencies
  */
 
-var ClientToken       = require('../../models/ClientToken')
-  , UnauthorizedError = require('../../errors/UnauthorizedError')
+var ClientToken       = require('../models/ClientToken')
+  , UnauthorizedError = require('../errors/UnauthorizedError')
   ;
 
 

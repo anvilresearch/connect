@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var oidc            = require('../lib/oidc')
+var oidc            = require('../oidc')
   , Client          = require('../models/Client')
   , ClientToken     = require('../models/ClientToken')
   , ValidationError = require('../errors/ValidationError')

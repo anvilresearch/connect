@@ -8,7 +8,7 @@ chai.should()
 
 
 
-{getBearerToken} = require '../../lib/oidc'
+{getBearerToken} = require '../../oidc'
 
 
 

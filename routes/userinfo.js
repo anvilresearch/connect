@@ -1,4 +1,4 @@
-var oidc = require('../lib/oidc')
+var oidc = require('../oidc')
   , User = require('../models/User')
   ;
 

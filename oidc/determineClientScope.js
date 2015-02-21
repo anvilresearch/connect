@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var Scope = require('../../models/Scope');
+var Scope = require('../models/Scope');
 
 
 /**

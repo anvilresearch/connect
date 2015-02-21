@@ -12,7 +12,7 @@ chai.should()
 
 
 
-{promptToAuthorize} = require '../../lib/oidc'
+{promptToAuthorize} = require '../../oidc'
 
 
 

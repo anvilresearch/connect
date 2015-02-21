@@ -4,7 +4,7 @@
 
 var Scope         = require('../../../models/Scope')
   , NotFoundError = require('../../../errors/NotFoundError')
-  , oidc          = require('../../../lib/oidc')
+  , oidc          = require('../../../oidc')
   ;
 
 /**

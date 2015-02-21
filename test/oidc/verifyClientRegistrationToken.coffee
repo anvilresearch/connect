@@ -14,7 +14,7 @@ chai.should()
 
 server          = require '../../server'
 AccessToken     = require '../../models/AccessToken'
-verifyClientReg = require('../../lib/oidc').verifyClientRegistration
+verifyClientReg = require('../../oidc').verifyClientRegistration
   settings:
     client_registration:        'token'
     registration_scope:         'realm developer'

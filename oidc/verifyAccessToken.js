@@ -2,8 +2,8 @@
  * Module dependencies
  */
 
-var AccessToken       = require('../../models/AccessToken')
-  , UnauthorizedError = require('../../errors/UnauthorizedError')
+var AccessToken       = require('../models/AccessToken')
+  , UnauthorizedError = require('../errors/UnauthorizedError')
   ;
 
 

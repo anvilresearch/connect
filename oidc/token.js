@@ -7,10 +7,10 @@ var fs          = require('fs')
   , env         = process.env.NODE_ENV || 'development'
   , path        = require('path')
   , config      = require(path.join(cwd, 'config.' + env + '.json'))
-  , AccessToken = require('../../models/AccessToken')
-  , ClientToken = require('../../models/ClientToken')
-  , IDToken     = require('../../models/IDToken')
-  , nowSeconds  = require('../time-utils').nowSeconds
+  , AccessToken = require('../models/AccessToken')
+  , ClientToken = require('../models/ClientToken')
+  , IDToken     = require('../models/IDToken')
+  , nowSeconds  = require('../lib/time-utils').nowSeconds
   ;
 
 

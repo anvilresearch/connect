@@ -5,7 +5,7 @@
 var User          = require('../../../models/User')
   , Role          = require('../../../models/Role')
   , NotFoundError = require('../../../errors/NotFoundError')
-  , oidc          = require('../../../lib/oidc')
+  , oidc          = require('../../../oidc')
   ;
 
 /**

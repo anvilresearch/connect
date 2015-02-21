@@ -15,7 +15,7 @@ chai.should()
 server          = require '../../server'
 AccessToken     = require '../../models/AccessToken'
 AccessJWT       = AccessToken.AccessJWT
-verifyClientReg = require('../../lib/oidc').verifyClientRegistration
+verifyClientReg = require('../../oidc').verifyClientRegistration
   settings:
     client_registration:        'dynamic'
     trusted_registration_scope: 'realm'

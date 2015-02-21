@@ -16,7 +16,7 @@ AccessToken       = require '../../models/AccessToken'
 ClientToken       = require '../../models/ClientToken'
 IDToken           = require '../../models/IDToken'
 AuthorizationCode = require '../../models/AuthorizationCode'
-token             = require('../../lib/oidc').token(server)
+token             = require('../../oidc').token(server)
 
 
 

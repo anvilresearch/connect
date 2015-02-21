@@ -3,7 +3,7 @@
  */
 
 var crypto = require('crypto')
-  , AuthorizationError = require('../../errors/AuthorizationError')
+  , AuthorizationError = require('../errors/AuthorizationError')
   ;
 
 

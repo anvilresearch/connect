@@ -13,7 +13,7 @@ chai.should()
 
 
 Client = require '../../models/Client'
-{verifyClient} = require '../../lib/oidc'
+{verifyClient} = require '../../oidc'
 
 
 

@@ -14,7 +14,7 @@ chai.should()
 server  = require '../../server'
 Client  = require '../../models/Client'
 Scope   = require '../../models/Scope'
-{determineClientScope} = require '../../lib/oidc'
+{determineClientScope} = require '../../oidc'
 
 
 

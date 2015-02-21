@@ -14,7 +14,7 @@ chai.should()
 server = require '../../server'
 AccessToken = require '../../models/AccessToken'
 AuthorizationCode  = require '../../models/AuthorizationCode'
-authorize = require('../../lib/oidc').authorize(server)
+authorize = require('../../oidc').authorize(server)
 
 
 
