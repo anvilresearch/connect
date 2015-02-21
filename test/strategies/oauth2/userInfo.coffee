@@ -18,7 +18,7 @@ chai.should()
 
 
 # Code under test
-OAuth2Strategy = require '../../../lib/strategies/OAuth2'
+OAuth2Strategy = require '../../../protocols/OAuth2'
 providers = require '../../../providers'
 
 

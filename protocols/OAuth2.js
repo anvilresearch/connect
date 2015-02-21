@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var pkg                = require('../../package.json')
+var pkg                = require('../package.json')
   , agent              = 'Anvil Connect/' + pkg.version
   , qs                 = require('qs')
   , URL                = require('url')
@@ -10,9 +10,9 @@ var pkg                = require('../../package.json')
   , Strategy           = require('passport-strategy')
   , request            = require('superagent')
   , map                = require('Modinha').map
-  , User               = require('../../models/User')
-  , ProviderError      = require('../../errors/ProviderError')
-  , AuthorizationError = require('../../errors/ProviderAuthError')
+  , User               = require('../models/User')
+  , ProviderError      = require('../errors/ProviderError')
+  , AuthorizationError = require('../errors/ProviderAuthError')
   ;
 
 

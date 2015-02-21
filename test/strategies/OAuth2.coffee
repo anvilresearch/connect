@@ -18,7 +18,7 @@ chai.should()
 
 # Code under test
 Strategy = require('passport-strategy')
-OAuth2Strategy = require '../../lib/strategies/OAuth2'
+OAuth2Strategy = require '../../protocols/OAuth2'
 
 
 

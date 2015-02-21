@@ -63,7 +63,7 @@ module.exports = function (passport) {
         , client   = config.providers[name]
         , protocol = (provider && provider.protocol)
                   || (client   && client.protocol)
-        , strategy = require('../lib/strategies/' + protocol)
+        , strategy = require('../protocols/' + protocol)
         ;
 
       passport.use(strategy.initialize(provider, client));

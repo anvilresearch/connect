@@ -2,17 +2,17 @@
  * Module dependencies
  */
 
-var pkg      = require('../../package.json')
+var pkg      = require('../package.json')
   , qs       = require('qs')
   , URL      = require('url')
   , util     = require('util')
   , crypto   = require('crypto')
   , request  = require('superagent')
-  , map      = require('../../node_modules/modinha/lib/initialize').map
-  , User     = require('../../models/User')
+  , map      = require('modinha').map
+  , User     = require('../models/User')
   , Strategy = require('passport-strategy')
   , agent    = 'Anvil Connect/v' + pkg.version
-  , nowSeconds    = require('../../lib/time-utils').nowSeconds
+  , nowSeconds    = require('../lib/time-utils').nowSeconds
   ;
 
 
