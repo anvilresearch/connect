@@ -3,10 +3,31 @@
  */
 
 var passport       = require('passport')
-  , OpenIDStrategy = require('passport-openid')
+  , Strategy 	   = require('passport-openid').Strategy
+  , util               = require('util')
   , User           = require('../../models/User')
   ;
 
+/**
+ * OpenIDStrategy
+ *
+ * Provider is an object defining the details of the authentication API.
+ * Client is an object containing provider registration info and options.
+ * Verify is the Passport callback to invoke after authenticating
+ */
+
+function OpenIDStrategy (provider, verify) {
+  this.provider   = provider;
+  this.name       = provider.id;
+  if (! provider.returnURL) {
+      provider.returnURL = provider.callbackURL;
+  }
+  Strategy.call(this, provider, verify);
+  this.client     = provider;
+  this.verify     = verify;
+}
+
+util.inherits(OpenIDStrategy, Strategy);
 
 /**
  * Verifier
@@ -16,8 +37,8 @@ function verifier (req, identifier, userInfo, done) {
   // Raw OpenID Provider response should be stored
   // for consistency with other protocols.
   var auth = {
-    // identifier?
-    // req.query?
+    id: request.query['openid.identity'],
+    req_query:  req.query
   };
 
   userInfo.id         = request.query['openid.identity'];
@@ -36,14 +57,10 @@ OpenIDStrategy.verifier = verifier;
 
 
 /**
- * Initialize
+ * Initialize - note provider === configuration
  */
 
 function initialize (provider, configuration) {
-  // provider may be null with this strategy?
-  // possibly merge with configuration if it's
-  // an object?
-
   configuration.profile           = true;
   configuration.passReqToCallback = true;
 

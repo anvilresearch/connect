@@ -8,7 +8,7 @@ var _                = require('lodash')
   , path             = require('path')
   , util             = require('util')
   , config           = require(path.join(cwd, 'config.' + env + '.json'))
-  , providers        = require('../providers')
+  , providers        = require('../lib/providers')
   , LocalStrategy    = require('passport-local').Strategy
   , base64url        = require('base64url')
   , User             = require('../models/User')
@@ -59,14 +59,14 @@ module.exports = function (passport) {
 
   if (config.providers) {
     Object.keys(config.providers).forEach(function (name) {
-      var provider = providers[name]
-        , client   = config.providers[name]
-        , protocol = (provider && provider.protocol)
-                  || (client   && client.protocol)
-        , strategy = require('../protocols/' + protocol)
+      var providerConf   = config.providers[name]
+        , provider = ( providers[name] ? providers[name] : providerConf )
+        , protocol = provider.protocol
+        , strategy = require('../lib/protocol/' + protocol)
         ;
 
-      passport.use(strategy.initialize(provider, client));
+      provider.id = name;
+      passport.use(strategy.initialize(provider, providerConf));
     });
   }
 
