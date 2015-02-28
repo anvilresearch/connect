@@ -11,6 +11,12 @@ var cwd    = process.cwd()
 module.exports = {
 
   /**
+   * Password
+   */
+
+  'password':   require('./password')(config),
+
+  /**
    * OAuth 1.0 Providers
    */
 
