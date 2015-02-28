@@ -2,15 +2,15 @@
  * Passport Configuration
  */
 
-var _                = require('lodash')
-  , cwd              = process.cwd()
-  , env              = process.env.NODE_ENV || 'development'
-  , path             = require('path')
-  , util             = require('util')
-  , config           = require(path.join(cwd, 'config.' + env + '.json'))
-  , providers        = require('../providers')
-  , base64url        = require('base64url')
-  , User             = require('../models/User')
+var _         = require('lodash')
+  , cwd       = process.cwd()
+  , env       = process.env.NODE_ENV || 'development'
+  , path      = require('path')
+  , util      = require('util')
+  , config    = require(path.join(cwd, 'config.' + env + '.json'))
+  , providers = require('../providers')
+  , base64url = require('base64url')
+  , User      = require('../models/User')
   ;
 
 

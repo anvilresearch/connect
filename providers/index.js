@@ -16,6 +16,7 @@ module.exports = {
 
   'password':   require('./password')(config),
 
+
   /**
    * OAuth 1.0 Providers
    */
