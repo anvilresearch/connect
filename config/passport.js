@@ -9,7 +9,6 @@ var _                = require('lodash')
   , util             = require('util')
   , config           = require(path.join(cwd, 'config.' + env + '.json'))
   , providers        = require('../providers')
-  , LocalStrategy    = require('passport-local').Strategy
   , base64url        = require('base64url')
   , User             = require('../models/User')
   ;
