@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var client                = require('../config/redis')
+var client                = require('../boot/redis')
   , providers             = require('../providers')
   , bcrypt                = require('bcrypt')
   , CheckPassword         = require('mellt').CheckPassword

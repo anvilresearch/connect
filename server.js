@@ -12,8 +12,8 @@ var express  = require('express')
  * Configuration
  */
 
-require('./config/server')(server);
-require('./config/passport')(passport);
+require('./boot/server')(server);
+require('./boot/passport')(passport);
 
 
 /**

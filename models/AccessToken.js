@@ -3,7 +3,7 @@
  */
 
 var async    = require('async')
-  , client   = require('../config/redis')
+  , client   = require('../boot/redis')
   , JWT      = require('anvil-connect-jwt')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')

@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var client = require('../config/redis')
+var client = require('../boot/redis')
   , MissingStateError = require('../errors/MissingStateError')
 //  , ExpiredAuthorizationError = require('../../errors/ExpiredAuthorizationError')
   ;
