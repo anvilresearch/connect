@@ -1,5 +1,4 @@
-keys
+config
 hooks
 node_modules
-config.*.json
 *.swp

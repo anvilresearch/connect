@@ -1,7 +1,7 @@
 var cwd    = process.cwd()
   , env    = process.env.NODE_ENV || 'development'
   , path   = require('path')
-  , config = require(path.join(cwd, 'config.' + env + '.json'))
+  , config = require(path.join(cwd, 'config', env + '.json'))
   ;
 
 /**

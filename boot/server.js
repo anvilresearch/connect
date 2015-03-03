@@ -7,7 +7,7 @@ var cwd          = process.cwd()
   , fs           = require('fs')
   , path         = require('path')
   , pkg          = require(path.join(__dirname, '..', 'package.json'))
-  , config       = require(path.join(cwd, 'config.' + env + '.json'))
+  , config       = require(path.join(cwd, 'config', env + '.json'))
   , client       = require('./redis')(config.redis)
   , logger       = require('./logger')(config.logger)
   , express      = require('express')
@@ -564,8 +564,8 @@ module.exports = function (server) {
    */
 
   var privateKey, publicKey
-    , defaultPublicKeyFile  = path.join(cwd, 'keys', 'public.pem')
-    , defaultPrivateKeyFile = path.join(cwd, 'keys', 'private.pem')
+    , defaultPublicKeyFile  = path.join(cwd, 'config/keys', 'public.pem')
+    , defaultPrivateKeyFile = path.join(cwd, 'config/keys', 'private.pem')
     ;
 
   // first, look for environment variables.
