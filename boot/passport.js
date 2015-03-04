@@ -38,14 +38,14 @@ module.exports = function (passport) {
 
   if (config.providers) {
     Object.keys(config.providers).forEach(function (name) {
-      var provider = providers[name]
-        , client   = config.providers[name]
-        , protocol = (provider && provider.protocol)
-                  || (client   && client.protocol)
+      var providerConf   = config.providers[name]
+        , provider = ( providers[name] ? providers[name] : providerConf )
+        , protocol = provider.protocol
         , strategy = require('../protocols/' + protocol)
         ;
 
-      passport.use(strategy.initialize(provider, client));
+      provider.id = name;
+      passport.use(strategy.initialize(provider, providerConf));
     });
   }
 
