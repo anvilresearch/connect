@@ -3,13 +3,12 @@
  */
 
 var cwd          = process.cwd()
-  , env          = process.env.NODE_ENV || 'development'
   , fs           = require('fs')
   , path         = require('path')
   , pkg          = require(path.join(__dirname, '..', 'package.json'))
-  , config       = require(path.join(cwd, 'config', env + '.json'))
-  , client       = require('./redis')(config.redis)
-  , logger       = require('./logger')(config.logger)
+  , settings     = require('./settings')
+  , client       = require('./redis')(settings.redis)
+  , logger       = require('./logger')(settings.logger)
   , express      = require('express')
   , passport     = require('passport')
   , cookieParser = require('cookie-parser')
@@ -46,7 +45,7 @@ module.exports = function (server) {
    * Server Port
    */
 
-  server.set('port', process.env.PORT || config.port || 3000);
+  server.set('port', process.env.PORT || settings.port || 3000);
 
   /**
    * Views configuration
@@ -442,8 +441,8 @@ module.exports = function (server) {
    * Load config file settings and override defaults
    */
 
-  Object.keys(config).forEach(function (key) {
-    server.set(key, config[key]);
+  Object.keys(settings).forEach(function (key) {
+    server.set(key, settings[key]);
   });
 
 

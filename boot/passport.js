@@ -2,14 +2,8 @@
  * Passport Configuration
  */
 
-var _         = require('lodash')
-  , cwd       = process.cwd()
-  , env       = process.env.NODE_ENV || 'development'
-  , path      = require('path')
-  , util      = require('util')
-  , config    = require(path.join(cwd, 'config', env + '.json'))
+var settings  = require('./settings')
   , providers = require('../providers')
-  , base64url = require('base64url')
   , User      = require('../models/User')
   ;
 
@@ -36,9 +30,9 @@ module.exports = function (passport) {
    * Strategies
    */
 
-  if (config.providers) {
-    Object.keys(config.providers).forEach(function (name) {
-      var providerConf   = config.providers[name]
+  if (settings.providers) {
+    Object.keys(settings.providers).forEach(function (name) {
+      var providerConf   = settings.providers[name]
         , provider = ( providers[name] ? providers[name] : providerConf )
         , protocol = provider.protocol
         , strategy = require('../protocols/' + protocol)

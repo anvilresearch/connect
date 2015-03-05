@@ -2,11 +2,7 @@
  * Module dependencies
  */
 
-var fs          = require('fs')
-  , cwd         = process.cwd()
-  , env         = process.env.NODE_ENV || 'development'
-  , path        = require('path')
-  , config      = require(path.join(cwd, 'config', env + '.json'))
+var settings    = require('../boot/settings')
   , AccessToken = require('../models/AccessToken')
   , ClientToken = require('../models/ClientToken')
   , IDToken     = require('../models/IDToken')
@@ -43,7 +39,7 @@ module.exports = function (server) {
 
       if (ac) {
         idToken = new IDToken({
-          iss: config.issuer,
+          iss: settings.issuer,
           sub: ac.user_id,
           aud: ac.client_id,
           exp: nowSeconds(token.ei)
@@ -52,7 +48,7 @@ module.exports = function (server) {
 
       else {
         idToken = new IDToken({
-          iss: config.issuer,
+          iss: settings.issuer,
           sub: token.cid,
           aud: token.uid,
           exp: nowSeconds(token.ei)
@@ -90,7 +86,7 @@ module.exports = function (server) {
     // CLIENT CREDENTIALS GRANT (OAuth 2.0)
     else if (params.grant_type === 'client_credentials') {
       ClientToken.issue({
-        iss:   config.issuer,
+        iss:   settings.issuer,
         sub:   req.client._id,
         aud:   req.client._id,
         exp:   req.client.default_max_age,
