@@ -705,4 +705,11 @@ module.exports = function (server) {
     return config;
   }, {});
 
+
+  /**
+   * Models
+   */
+
+  server.models = require('../models');
+
 };
