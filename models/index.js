@@ -11,7 +11,7 @@ var fs   = require('fs')
  * Read models directory
  */
 
-var files = fs.readdirSync(path.join('.', 'models'));
+var files = fs.readdirSync(__dirname);
 
 
 /**
@@ -21,7 +21,7 @@ var files = fs.readdirSync(path.join('.', 'models'));
 files.forEach(function (file) {
   if (path.extname(file) === '.js' && file !== 'index.js') {
     var model = path.basename(file, '.js');
-    module.exports[model] = require(path.join('..', 'models', model));
+    module.exports[model] = require(path.join(__dirname, '..', 'models', model));
   }
 });
 

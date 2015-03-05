@@ -4,6 +4,7 @@
 
 var settings  = require('./settings')
   , providers = require('../providers')
+  , protocols = require('../protocols')
   , User      = require('../models/User')
   ;
 
@@ -32,14 +33,11 @@ module.exports = function (passport) {
 
   if (settings.providers) {
     Object.keys(settings.providers).forEach(function (name) {
-      var providerConf   = settings.providers[name]
+      var providerConf = settings.providers[name]
         , provider = ( providers[name] ? providers[name] : providerConf )
-        , protocol = provider.protocol
-        , strategy = require('../protocols/' + protocol)
         ;
 
-      provider.id = name;
-      passport.use(strategy.initialize(provider, providerConf));
+      passport.use(protocols.initialize(name, provider, providerConf));
     });
   }
 
