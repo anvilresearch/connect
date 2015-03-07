@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var path = require('path');
+var cwd = process.cwd()
+  , path = require('path');
 
 
 /**
@@ -21,7 +22,7 @@ function initialize (name, provider, config) {
 
   // try to load a custom provider from the deployment repository
   try {
-    strategy = require(path.join(cwd, 'providers', protocol));
+    strategy = require(path.join(cwd, 'protocols', protocol));
   } catch (e) {
     if (!strategy) {
       throw new Error("Can't find custom protocol: " + protocol);
