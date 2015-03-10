@@ -1,7 +1,7 @@
 {
   "name": "anvil-connect",
   "description": "OpenID Connect Provider",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "author": {
     "name": "Christian Smith",
     "email": "smith@anvil.io",
