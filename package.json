@@ -64,6 +64,7 @@
     "modinha-redis": "0.0.15",
     "passport": "~0.2.0",
     "passport-local": "~1.0.0",
+    "passport-openid": "^0.3.1",
     "passport-strategy": "~1.0.0",
     "qs": "^2.3.2",
     "redis": "~0.10.1",
