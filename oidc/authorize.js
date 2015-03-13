@@ -43,7 +43,7 @@ module.exports = function (server) {
 
         function includeAccessToken (callback) {
           if (responseTypes.indexOf('token') !== -1) {
-            AccessToken.issue(req, server, function (err, response) {
+            AccessToken.issue(req, function (err, response) {
               if (err) { return callback(err); }
               callback(null, response);
             });

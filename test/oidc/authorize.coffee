@@ -153,7 +153,7 @@ describe 'Authorize', ->
         code: '1234'
       })
       response = AccessToken.initialize().project('issue')
-      sinon.stub(AccessToken, 'issue').callsArgWith(2, null, response)
+      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
         client:
@@ -265,7 +265,7 @@ describe 'Authorize', ->
 
     before (done) ->
       response = AccessToken.initialize().project('issue')
-      sinon.stub(AccessToken, 'issue').callsArgWith(2, null, response)
+      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
         client:
@@ -321,7 +321,7 @@ describe 'Authorize', ->
         code: '1234'
       })
       response = AccessToken.initialize().project('issue')
-      sinon.stub(AccessToken, 'issue').callsArgWith(2, null, response)
+      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
         client:
@@ -378,7 +378,7 @@ describe 'Authorize', ->
 
     before (done) ->
       response = AccessToken.initialize().project('issue')
-      sinon.stub(AccessToken, 'issue').callsArgWith(2, null, response)
+      sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
         client:

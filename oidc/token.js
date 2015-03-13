@@ -71,7 +71,7 @@ module.exports = function (server) {
 
     // AUTHORIZATION CODE GRANT
     if (params.grant_type === 'authorization_code') {
-      AccessToken.exchange(req, server, tokenResponse);
+      AccessToken.exchange(req, tokenResponse);
     }
 
     // REFRESH GRANT
@@ -80,7 +80,7 @@ module.exports = function (server) {
         , clientId = req.client._id
         ;
 
-      AccessToken.refresh(refreshToken, clientId, server, tokenResponse);
+      AccessToken.refresh(refreshToken, clientId, tokenResponse);
     }
 
     // CLIENT CREDENTIALS GRANT (OAuth 2.0)

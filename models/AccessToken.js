@@ -160,7 +160,7 @@ AccessToken.mappings.exchange = {
 // insert method to merge options for
 // initialization so we can use the
 // mapping directly with insert.
-AccessToken.exchange = function (request, server, callback) {
+AccessToken.exchange = function (request, callback) {
   var token = AccessToken.initialize(request.code, { mapping: 'exchange' });
   token.iss = settings.issuer;
   token.rt = random(10)();
@@ -175,7 +175,7 @@ AccessToken.exchange = function (request, server, callback) {
  * Issue access token
  */
 
-AccessToken.issue = function (request, server, callback) {
+AccessToken.issue = function (request, callback) {
   if (!request.user || !request.client) {
     return callback(new Error('invalid_request'));
   }
@@ -206,7 +206,7 @@ AccessToken.issue = function (request, server, callback) {
  * Refresh access token
  */
 
-AccessToken.refresh = function (refreshToken, clientId, server, callback) {
+AccessToken.refresh = function (refreshToken, clientId, callback) {
   AccessToken.getByRt(refreshToken, function (err, at) {
     if (err) {
       return callback(err);
