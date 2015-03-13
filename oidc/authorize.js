@@ -4,6 +4,7 @@
 
 var crypto            = require('crypto')
   , async             = require('async')
+  , settings          = require('../boot/settings')
   , IDToken           = require('../models/IDToken')
   , AccessToken       = require('../models/AccessToken')
   , AuthorizationCode = require('../models/AuthorizationCode')
@@ -89,7 +90,7 @@ module.exports = function (server) {
             }
 
             var idToken = new IDToken({
-              iss:      server.settings.issuer,
+              iss:      settings.issuer,
               sub:      req.user._id,
               aud:      req.client._id,
               exp:      nowSeconds(response.expires_in),
@@ -97,7 +98,7 @@ module.exports = function (server) {
               at_hash:  atHash
             });
 
-            response.id_token = idToken.encode(server.settings.privateKey);
+            response.id_token = idToken.encode(settings.privateKey);
           }
 
           callback(null, response);

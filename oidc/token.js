@@ -15,8 +15,8 @@ var settings    = require('../boot/settings')
  */
 
 module.exports = function (server) {
-  var privateKey = server.settings.privateKey
-    , publicKey  = server.settings.publicKey
+  var privateKey = settings.privateKey
+    , publicKey  = settings.publicKey
     ;
 
   return function token (req, res, next) {
@@ -34,7 +34,7 @@ module.exports = function (server) {
         ;
 
       if (req.client.access_token_type !== 'random') {
-        response.access_token = token.toJWT(server.settings.privateKey);
+        response.access_token = token.toJWT(settings.privateKey);
       }
 
       if (ac) {

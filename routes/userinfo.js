@@ -1,7 +1,16 @@
-var oidc = require('../oidc')
-  , User = require('../models/User')
+/**
+ * Module dependencies
+ */
+
+var oidc     = require('../oidc')
+  , settings = require('../boot/settings')
+  , User     = require('../models/User')
   ;
 
+
+/**
+ * Exports
+ */
 
 module.exports = function (server) {
 
@@ -13,8 +22,8 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    server.settings.issuer,
-      key:    server.settings.publicKey,
+      iss:    settings.issuer,
+      key:    settings.publicKey,
       scope: 'profile'
     }),
     function (req, res, next) {

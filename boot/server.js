@@ -53,7 +53,7 @@ module.exports = function (server) {
    * Request Parsing
    */
 
-  server.use(cookieParser(server.settings.cookie_secret));
+  server.use(cookieParser(settings.cookie_secret));
   server.use(bodyParser());
 
 
@@ -63,7 +63,7 @@ module.exports = function (server) {
 
   server.use(session({
     store: sessionStore,
-    secret: server.settings.session_secret
+    secret: settings.session_secret
   }));
 
 
@@ -146,7 +146,7 @@ module.exports = function (server) {
    */
 
   server.OpenIDConfiguration = parameters.reduce(function (config, param) {
-    var value = server.settings[param];
+    var value = settings[param];
     if (value) { config[param] = value; }
     return config;
   }, {});

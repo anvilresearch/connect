@@ -21,6 +21,7 @@ chai.should()
 Modinha   = require 'modinha'
 Client    = require path.join(cwd, 'models/Client')
 Role      = require path.join(cwd, 'models/Role')
+settings  = require path.join(cwd, 'boot/settings')
 base64url = require('base64url')
 
 
@@ -247,7 +248,7 @@ describe 'Client', ->
 
   describe 'configuration', ->
 
-    {client,configuration,server,token} = {}
+    {client,configuration,token} = {}
 
     before ->
       client = new Client
@@ -258,14 +259,13 @@ describe 'Client', ->
         redirect_uris:              [Faker.Internet.domainName()]
 
       token = Faker.Helpers.randomNumber(10)
-      server = { settings: { issuer: 'https://anvil.io' } }
-      configuration = client.configuration server, token
+      configuration = client.configuration settings, token
 
     it 'should return a "registration" mapping of a client', ->
       configuration.client_id.should.equal client._id
 
     it 'should include "registration client uri"', ->
-      uri = server.settings.issuer + '/register/' + client._id
+      uri = settings.issuer + '/register/' + client._id
       configuration.registration_client_uri.should.equal uri
 
     it 'should include "registration access token" if provided', ->

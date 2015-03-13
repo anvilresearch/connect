@@ -13,12 +13,10 @@ chai.should()
 
 
 server          = require '../../server'
+settings        = require '../../boot/settings'
 AccessToken     = require '../../models/AccessToken'
 AccessJWT       = AccessToken.AccessJWT
-verifyClientReg = require('../../oidc').verifyClientRegistration
-  settings:
-    client_registration:        'dynamic'
-    trusted_registration_scope: 'realm'
+verifyClientReg = require('../../oidc').verifyClientRegistration server
 
 
 
@@ -27,6 +25,19 @@ describe 'Verify Dynamic Client Registration', ->
 
 
   {req,res,next,err} = {}
+  {client_registration,trusted_registration_scope} = {}
+
+
+  before ->
+    client_registration = settings.client_registration
+    trusted_registration_scope = settings.trusted_registration_scope
+    settings.client_registration = 'dynamic'
+    settings.trusted_registration_scope = 'realm'
+
+
+  after ->
+    settings.client_registration = client_registration
+    settings.trusted_registration_scope = trusted_registration_scope
 
 
   describe 'without bearer token', ->

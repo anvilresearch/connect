@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc')
+var settings = require('../boot/settings')
+  , oidc     = require('../oidc')
   , passport = require('passport')
   ;
 
@@ -24,7 +25,7 @@ module.exports = function (server) {
     oidc.stashParams,
     function (req, res, next) {
       var provider = req.params.provider
-        , config = server.settings.providers[provider]
+        , config = settings.providers[provider]
         ;
 
       // Authorize
@@ -52,7 +53,7 @@ module.exports = function (server) {
     oidc.verifyClient,
 
     function (req, res, next) {
-      if (server.settings.providers[req.params.provider]) {
+      if (settings.providers[req.params.provider]) {
         passport.authenticate(req.params.provider, function (err, user, info) {
           if (err) { return next(err); }
           if (!user) {

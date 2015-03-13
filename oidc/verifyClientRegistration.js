@@ -2,7 +2,9 @@
  * Module dependencies
  */
 
-var UnauthorizedError = require('../errors/UnauthorizedError');
+var settings          = require('../boot/settings')
+  , UnauthorizedError = require('../errors/UnauthorizedError')
+  ;
 
 
 /**
@@ -27,10 +29,10 @@ module.exports = function (server) {
     var registration    = req.body
       , token           = req.bearer
       , claims          = req.claims
-      , clientRegType   = server.settings.client_registration
+      , clientRegType   = settings.client_registration
       , required        = (registration.trusted || clientRegType !== 'dynamic')
-      , trustedRegScope = server.settings.trusted_registration_scope
-      , regScope        = server.settings.registration_scope
+      , trustedRegScope = settings.trusted_registration_scope
+      , regScope        = settings.registration_scope
       ;
 
 

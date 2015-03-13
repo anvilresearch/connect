@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var ClientToken       = require('../models/ClientToken')
+var settings          = require('../boot/settings')
+  , ClientToken       = require('../models/ClientToken')
   , UnauthorizedError = require('../errors/UnauthorizedError')
   ;
 
@@ -29,7 +30,7 @@ module.exports = function (server) {
     // header found
     else {
       var jwt   = header.replace('Bearer ', '')
-        , token = ClientToken.decode(jwt, server.settings.publicKey)
+        , token = ClientToken.decode(jwt, settings.publicKey)
         ;
 
       // failed to decode

@@ -2,7 +2,9 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc');
+var oidc     = require('../oidc')
+  , settings = require('../boot/settings')
+  ;
 
 
 /**
@@ -16,8 +18,8 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss: server.settings.issuer,
-      key: server.settings.publicKey
+      iss: settings.issuer,
+      key: settings.publicKey
     }),
     function (req, res, next) {
 

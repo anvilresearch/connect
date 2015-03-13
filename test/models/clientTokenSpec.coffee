@@ -21,6 +21,7 @@ ClientToken = require path.join cwd, 'models/ClientToken'
 JWT = require 'anvil-connect-jwt'
 base64url = require 'base64url'
 server = require path.join cwd, 'server'
+settings = require path.join cwd, 'boot/settings'
 
 
 
@@ -113,7 +114,7 @@ describe 'Client Token', ->
   describe 'issue', ->
 
     {err,jwt} = {}
-    privateKey = server.settings.privateKey
+    privateKey = settings.privateKey
 
     describe 'with valid claims', ->
 

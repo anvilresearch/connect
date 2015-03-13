@@ -2,7 +2,9 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc');
+var settings = require('../boot/settings')
+  , oidc = require('../oidc')
+  ;
 
 
 /**
@@ -13,7 +15,7 @@ module.exports = function (server) {
 
   server.get('/jwks',
     function (req, res, next) {
-      res.json(server.settings.jwks);
+      res.json(settings.jwks);
     }
   );
 

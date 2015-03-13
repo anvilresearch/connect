@@ -3,6 +3,7 @@
  */
 
 var oidc           = require('../oidc')
+  , settings       = require('../boot/settings')
   , passport       = require('passport')
   , FormUrlencoded = require('form-urlencoded')
   , User           = require('../models/User')
@@ -27,7 +28,7 @@ module.exports = function (server) {
       res.render('signup', {
         params:    FormUrlencoded.encode(req.query),
         request:   req.query,
-        providers: server.settings.providers
+        providers: settings.providers
       });
     });
 
@@ -48,7 +49,7 @@ module.exports = function (server) {
           res.render('signup', {
             params:    FormUrlencoded.encode(req.body),
             request:   req.body,
-            providers: server.settings.providers,
+            providers: settings.providers,
             error:     err.message
           });
         } else {

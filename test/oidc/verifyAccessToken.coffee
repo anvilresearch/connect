@@ -13,6 +13,7 @@ chai.should()
 
 
 server              = require '../../server'
+settings            = require '../../boot/settings'
 AccessToken         = require '../../models/AccessToken'
 {verifyAccessToken} = require '../../oidc'
 
@@ -33,8 +34,8 @@ describe 'Verify Access Token', ->
       next = sinon.spy()
 
       options =
-        iss:    server.settings.issuer
-        key:    server.settings.publicKey
+        iss:    settings.issuer
+        key:    settings.publicKey
         scope: 'profile'
 
       verifyAccessToken(options) req, res, (error) ->
@@ -67,8 +68,8 @@ describe 'Verify Access Token', ->
       next = sinon.spy()
 
       options =
-        iss:    server.settings.issuer
-        key:    server.settings.publicKey
+        iss:    settings.issuer
+        key:    settings.publicKey
         scope: 'profile'
 
       verifyAccessToken(options) req, res, (error) ->
@@ -98,7 +99,7 @@ describe 'Verify Access Token', ->
     before (done) ->
       token =
         at:       'r4nd0m'
-        iss:       server.settings.issuer
+        iss:       settings.issuer
         uid:      'uuid1'
         cid:      'uuid2'
         scope:    'openid profile'
@@ -114,8 +115,8 @@ describe 'Verify Access Token', ->
         done()
 
       options =
-        iss:      server.settings.issuer
-        key:      server.settings.publicKey
+        iss:      settings.issuer
+        key:      settings.publicKey
         scope:   'profile'
         required: false
 
@@ -138,7 +139,7 @@ describe 'Verify Access Token', ->
     before (done) ->
       token =
         at:       'r4nd0m'
-        iss:      server.settings.issuer
+        iss:      settings.issuer
         uid:      'uuid1'
         cid:      'uuid2'
         scope:    'openid profile'
@@ -154,8 +155,8 @@ describe 'Verify Access Token', ->
         done()
 
       options =
-        iss:    server.settings.issuer
-        key:    server.settings.publicKey
+        iss:    settings.issuer
+        key:    settings.publicKey
         scope: 'profile'
 
       verifyAccessToken(options) req, res, next

@@ -24,6 +24,7 @@ chai.should()
 
 # Code under test
 server      = require path.join(cwd, 'server')
+settings    = require path.join(cwd, 'boot/settings')
 Modinha     = require 'modinha'
 AccessToken = require path.join(cwd, 'models/AccessToken')
 AccessJWT   = AccessToken.AccessJWT
@@ -225,7 +226,7 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
-          iss: server.settings.issuer
+          iss: settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid profile'
@@ -247,9 +248,9 @@ describe 'AccessToken', ->
       it 'should provide an "issue" projection of the token', ->
         res.access_token.length.should.be.above 100
         options =
-          key: server.settings.publicKey
+          key: settings.publicKey
         decoded = AccessJWT.decode(res.access_token, options.key)
-        decoded.payload.should.have.property('iss', server.settings.issuer)
+        decoded.payload.should.have.property('iss', settings.issuer)
         decoded.payload.should.have.property('sub', 'uuid1')
         decoded.payload.should.have.property 'iat'
         decoded.payload.should.have.property 'exp'
@@ -263,7 +264,7 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
-          iss: server.settings.issuer
+          iss: settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid profile'
@@ -290,7 +291,7 @@ describe 'AccessToken', ->
 
       before (done) ->
         instance = new AccessToken
-          iss: server.settings.issuer
+          iss: settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid profile'
@@ -400,12 +401,12 @@ describe 'AccessToken', ->
 
       before ->
         token = new AccessToken
-          iss:     server.settings.issuer
+          iss:     settings.issuer
           uid:    'uid'
           cid:    'cid'
           scope:  'openid'
-        issued = token.toJWT(server.settings.privateKey)
-        decoded = AccessToken.AccessJWT.decode(issued, server.settings.publicKey)
+        issued = token.toJWT(settings.privateKey)
+        decoded = AccessToken.AccessJWT.decode(issued, settings.publicKey)
 
 
       it 'should issue a signed JWT', ->
@@ -415,7 +416,7 @@ describe 'AccessToken', ->
         decoded.payload.jti.should.equal token.at
 
       it 'should set iss to the issuer', ->
-        decoded.payload.iss.should.equal server.settings.issuer
+        decoded.payload.iss.should.equal settings.issuer
 
       it 'should calculate exp', ->
         decoded.payload.exp.should.equal(
@@ -433,7 +434,7 @@ describe 'AccessToken', ->
       before (done) ->
         token = 'bad.jwt'
         options =
-          key: server.settings.publicKey
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -455,10 +456,10 @@ describe 'AccessToken', ->
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid'
-        })).encode(server.settings.privateKey)
+        })).encode(settings.privateKey)
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -479,15 +480,15 @@ describe 'AccessToken', ->
       before (done) ->
         token = (new AccessJWT({
           at: 'r4nd0m',
-          iss: server.settings.issuer
+          iss: settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
           exp: nowSeconds(-1)
           scope: 'openid'
-        })).encode(server.settings.privateKey)
+        })).encode(settings.privateKey)
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -508,14 +509,14 @@ describe 'AccessToken', ->
       before (done) ->
         token = (new AccessJWT({
           at: 'r4nd0m',
-          iss: server.settings.issuer
+          iss: settings.issuer
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid'
-        })).encode(server.settings.privateKey)
+        })).encode(settings.privateKey)
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
           scope: 'other'
         AccessToken.verify token, options, (error, data) ->
           err    = error
@@ -538,8 +539,8 @@ describe 'AccessToken', ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, null)
         token = 'r4nd0m'
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -566,8 +567,8 @@ describe 'AccessToken', ->
         })
         token = 'r4nd0m'
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -590,14 +591,14 @@ describe 'AccessToken', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
-          iss:      server.settings.issuer
+          iss:      settings.issuer
           ei:       -10000
           created:  nowSeconds()
         })
         token = 'r4nd0m'
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -620,15 +621,15 @@ describe 'AccessToken', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, {
-          iss:      server.settings.issuer
+          iss:      settings.issuer
           ei:       10000
           scope:    'openid'
           created:  nowSeconds()
         })
         token = 'r4nd0m'
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
           scope: 'other'
         AccessToken.verify token, options, (error, data) ->
           err    = error
@@ -653,7 +654,7 @@ describe 'AccessToken', ->
       before (done) ->
         instance =
           at:       'r4nd0m'
-          iss:      server.settings.issuer
+          iss:      settings.issuer
           uid:      'uuid1'
           cid:      'uuid2'
           ei:       10
@@ -663,8 +664,8 @@ describe 'AccessToken', ->
         sinon.stub(AccessToken, 'get').callsArgWith(1, null, instance)
         token = 'r4nd0m'
         options =
-          iss: server.settings.issuer
-          key: server.settings.publicKey
+          iss: settings.issuer
+          key: settings.publicKey
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data

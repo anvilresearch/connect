@@ -680,9 +680,9 @@ Client.mappings.registration = {
  * Client Configuration
  */
 
-Client.prototype.configuration = function (server, token) {
+Client.prototype.configuration = function (settings, token) {
   var configuration = this.project('registration')
-    , registrationClientUri = server.settings.issuer + '/register/' + this._id
+    , registrationClientUri = settings.issuer + '/register/' + this._id
     ;
 
   configuration.registration_client_uri = registrationClientUri;

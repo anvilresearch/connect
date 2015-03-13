@@ -3,6 +3,7 @@
  */
 
 var oidc            = require('../oidc')
+  , settings        = require('../boot/settings')
   , Client          = require('../models/Client')
   , ClientToken     = require('../models/ClientToken')
   , ValidationError = require('../errors/ValidationError')
@@ -26,8 +27,8 @@ module.exports = function (server) {
     // We'll check downstream for the
     // presence and scope of the token.
     oidc.verifyAccessToken({
-      iss: server.settings.issuer,
-      key: server.settings.publicKey,
+      iss: settings.issuer,
+      key: settings.publicKey,
       required: false
     }),
 
@@ -55,11 +56,11 @@ module.exports = function (server) {
 
         ClientToken.issue({
 
-          iss: server.settings.issuer,
+          iss: settings.issuer,
           sub: client._id,
           aud: client._id
 
-        }, server.settings.privateKey, function (err, token) {
+        }, settings.privateKey, function (err, token) {
           if (err) { return next(err); }
 
           res.set({
@@ -67,7 +68,7 @@ module.exports = function (server) {
             'Pragma': 'no-cache'
           });
 
-          res.json(201, client.configuration(server, token));
+          res.json(201, client.configuration(settings, token));
         });
       });
     });
@@ -84,7 +85,7 @@ module.exports = function (server) {
       Client.get(req.token.payload.sub, function (err, client) {
         if (err) { return next(err); }
         if (!client) { return next(new NotFoundError()); }
-        res.json(client.configuration(server));
+        res.json(client.configuration(settings));
       });
     });
 
@@ -102,7 +103,7 @@ module.exports = function (server) {
         Client.patch(req.token.payload.sub, req.body, function (err, client) {
           if (err) { return next(err); }
           if (!client) { return next(new NotFoundError()); }
-          res.json(client.configuration(server));
+          res.json(client.configuration(settings));
         });
       }
 

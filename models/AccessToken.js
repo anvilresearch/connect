@@ -4,6 +4,7 @@
 
 var async    = require('async')
   , client   = require('../boot/redis')
+  , settings = require('../boot/settings')
   , JWT      = require('anvil-connect-jwt')
   , Modinha  = require('modinha')
   , Document = require('modinha-redis')
@@ -161,7 +162,7 @@ AccessToken.mappings.exchange = {
 // mapping directly with insert.
 AccessToken.exchange = function (request, server, callback) {
   var token = AccessToken.initialize(request.code, { mapping: 'exchange' });
-  token.iss = server.settings.issuer;
+  token.iss = settings.issuer;
   token.rt = random(10)();
   this.insert(token, function (err, token) {
     if (err) { return callback(err); }
@@ -180,7 +181,7 @@ AccessToken.issue = function (request, server, callback) {
   }
 
   this.insert({
-    iss: server.settings.issuer,
+    iss: settings.issuer,
     uid: request.user._id,
     cid: request.client._id,
     ei:  (request.connectParams && parseInt(request.connectParams.max_age))
@@ -193,7 +194,7 @@ AccessToken.issue = function (request, server, callback) {
     // Unless the client is set to issue a random token,
     // transform it to a signed JWT.
     if (request.client.access_token_type !== 'random') {
-      response.access_token = token.toJWT(server.settings.privateKey);
+      response.access_token = token.toJWT(settings.privateKey);
     }
 
     callback(null, response);
@@ -220,7 +221,7 @@ AccessToken.refresh = function (refreshToken, clientId, server, callback) {
     }
 
     AccessToken.insert({
-      iss: server.settings.issuer,
+      iss: settings.issuer,
       uid: at.uid,
       cid: at.cid,
       ei:  at.ei,

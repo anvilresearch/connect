@@ -6,6 +6,7 @@
 var Role          = require('../../../models/Role')
   , Scope          = require('../../../models/Scope')
   , NotFoundError = require('../../../errors/NotFoundError')
+  , settings      = require('../../../boot/settings')
   , oidc          = require('../../../oidc')
   ;
 
@@ -23,8 +24,8 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    server.settings.issuer,
-      key:    server.settings.publicKey,
+      iss:    settings.issuer,
+      key:    settings.publicKey,
       scope: 'realm'
     })
   ];
