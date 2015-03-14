@@ -14,7 +14,7 @@ module.exports = function (config) {
       auth    = config && config.auth;
 
       options = {
-        no_ready_check: true 
+        no_ready_check: true
       }
 
       client = redis.createClient(port, host, options);
