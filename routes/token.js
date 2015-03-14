@@ -17,7 +17,7 @@ module.exports = function (server) {
     oidc.authenticateClient,
     oidc.verifyAuthorizationCode,
     oidc.determineClientScope,
-    oidc.token(server)
+    oidc.token
   );
 
 };

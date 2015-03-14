@@ -33,7 +33,7 @@ module.exports = function (server) {
     }),
 
     // relies on verifyAccessToken upstream.
-    oidc.verifyClientRegistration(server),
+    oidc.verifyClientRegistration,
 
 
     function (req, res, next) {
@@ -79,7 +79,7 @@ module.exports = function (server) {
    */
 
   server.get('/register/:clientId',
-    oidc.verifyClientToken(server),
+    oidc.verifyClientToken,
     oidc.verifyClientIdentifiers,
     function (req, res, next) {
       Client.get(req.token.payload.sub, function (err, client) {
@@ -91,8 +91,8 @@ module.exports = function (server) {
 
 
   server.patch('/register/:clientId',
-    oidc.verifyClientToken(server), // should do this or...
-    // oidc.verifyClientRegistration(server)
+    oidc.verifyClientToken, // should do this or...
+    // oidc.verifyClientRegistration
     // with dynamic client registration it should probably stay as is?
     // except what if they pass "trusted"? do we need to add checks for that
     // to `verifyClientToken`?

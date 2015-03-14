@@ -14,7 +14,7 @@ chai.should()
 
 server = require '../../server'
 ClientToken = require '../../models/ClientToken'
-verifyClientToken = require('../../oidc').verifyClientToken(server)
+verifyClientToken = require('../../oidc').verifyClientToken
 
 
 

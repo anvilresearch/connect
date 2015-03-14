@@ -17,7 +17,7 @@ module.exports = function (server) {
     oidc.requireSignin,
     oidc.determineUserScope,
     oidc.promptToAuthorize,
-    oidc.authorize(server)
+    oidc.authorize
   ];
 
   if (oidc.beforeAuthorize) {

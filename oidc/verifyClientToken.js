@@ -12,45 +12,49 @@ var settings          = require('../boot/settings')
  * Client Bearer Token Authentication Middleware
  */
 
-module.exports = function (server) {
 
-  return function verifyClientToken (req, res, next) {
-    var header = req.headers['authorization'];
+function verifyClientToken (req, res, next) {
+  var header = req.headers['authorization'];
 
-    // missing header
-    if (!header) {
-      return next(new UnauthorizedError({
+  // missing header
+  if (!header) {
+    return next(new UnauthorizedError({
+      realm:              'client',
+      error:              'unauthorized_client',
+      error_description:  'Missing authorization header',
+      statusCode:         403
+    }));
+  }
+
+  // header found
+  else {
+    var jwt   = header.replace('Bearer ', '')
+      , token = ClientToken.decode(jwt, settings.publicKey)
+      ;
+
+    // failed to decode
+    if (!token || token instanceof Error) {
+      next(new UnauthorizedError({
         realm:              'client',
         error:              'unauthorized_client',
-        error_description:  'Missing authorization header',
+        error_description:  'Invalid access token',
         statusCode:         403
       }));
+
     }
 
-    // header found
+    // decoded successfully
     else {
-      var jwt   = header.replace('Bearer ', '')
-        , token = ClientToken.decode(jwt, settings.publicKey)
-        ;
-
-      // failed to decode
-      if (!token || token instanceof Error) {
-        next(new UnauthorizedError({
-          realm:              'client',
-          error:              'unauthorized_client',
-          error_description:  'Invalid access token',
-          statusCode:         403
-        }));
-
-      }
-
-      // decoded successfully
-      else {
-        // validate token
-        req.token = token
-        next()
-      }
+      // validate token
+      req.token = token
+      next()
     }
-  };
+  }
 };
 
+
+/**
+ * Exports
+ */
+
+module.exports = verifyClientToken;
