@@ -66,7 +66,7 @@
     "passport-openid": "^0.3.1",
     "passport-strategy": "~1.0.0",
     "qs": "^2.3.2",
-    "redis": "~0.10.1",
+    "redis": "~0.11.0",
     "superagent": "~0.21.0",
     "uri-js": "~1.4.2",
     "yargs": "~1.2.2"
