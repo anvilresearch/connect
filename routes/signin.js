@@ -2,10 +2,10 @@
  * Module dependencies
  */
 
-var oidc           = require('../oidc')
-  , settings       = require('../boot/settings')
-  , passport       = require('passport')
-  , FormUrlencoded = require('form-urlencoded')
+var oidc     = require('../oidc')
+  , settings = require('../boot/settings')
+  , passport = require('passport')
+  , qs       = require('qs')
   ;
 
 
@@ -25,7 +25,7 @@ module.exports = function (server) {
     oidc.verifyClient,
     function (req, res, next) {
       res.render('signin', {
-        params:    FormUrlencoded.encode(req.query),
+        params:    qs.stringify(req.query),
         request:   req.query,
         providers: settings.providers
       });
@@ -44,7 +44,7 @@ module.exports = function (server) {
       passport.authenticate('local', function (err, user, info) {
         if (!user) {
           res.render('signin', {
-            params:    FormUrlencoded.encode(req.body),
+            params:    qs.stringify(req.body),
             request:   req.body,
             providers: settings.providers,
             error:     info.message

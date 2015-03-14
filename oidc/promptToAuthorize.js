@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var FormUrlencoded = require('form-urlencoded');
+var qs = require('qs');
 
 
 /**
@@ -32,7 +32,7 @@ function promptToAuthorize (req, res, next) {
 
     // redirect to the authorize endpoint
     else {
-      res.redirect('/authorize?' + FormUrlencoded.encode(params));
+      res.redirect('/authorize?' + qs.stringify(params));
     }
 
   }

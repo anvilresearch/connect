@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var FormUrlencoded = require('form-urlencoded');
+var qs = require('qs');
 
 
 /**
@@ -16,7 +16,7 @@ function error (err, req, res, next) {
     var params = req.connectParams
       , responseMode = '?' || '#'
       , error = { error: err.error, error_description: err.error_description }
-      , uri = err.redirect_uri + responseMode + FormUrlencoded.encode(error)
+      , uri = err.redirect_uri + responseMode + qs.stringify(error)
       ;
 
     res.redirect(uri);

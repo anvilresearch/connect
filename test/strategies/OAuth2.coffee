@@ -4,7 +4,6 @@ chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
 expect    = chai.expect
-FormUrlencoded = require('form-urlencoded')
 
 
 

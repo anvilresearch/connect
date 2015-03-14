@@ -4,11 +4,11 @@
 
 var crypto            = require('crypto')
   , async             = require('async')
+  , qs                = require('qs')
   , settings          = require('../boot/settings')
   , IDToken           = require('../models/IDToken')
   , AccessToken       = require('../models/AccessToken')
   , AuthorizationCode = require('../models/AuthorizationCode')
-  , FormUrlencoded    = require('form-urlencoded')
   , nowSeconds        = require('../lib/time-utils').nowSeconds
   ;
 
@@ -111,7 +111,7 @@ function authorize (req, res, next) {
         }
 
         res.redirect(
-          params.redirect_uri + responseMode + FormUrlencoded.encode(response)
+          params.redirect_uri + responseMode + qs.stringify(response)
         );
     });
   }

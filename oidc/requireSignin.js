@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var FormUrlencoded = require('form-urlencoded');
+var qs = require('qs');
 
 
 /**
@@ -11,7 +11,7 @@ var FormUrlencoded = require('form-urlencoded');
 
 function requireSignin (req, res, next) {
   if (!req.isAuthenticated() || req.connectParams.prompt === 'login') {
-    res.redirect('/signin?' + FormUrlencoded.encode(req.connectParams));
+    res.redirect('/signin?' + qs.stringify(req.connectParams));
   } else {
     next();
   }
