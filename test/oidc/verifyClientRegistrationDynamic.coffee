@@ -15,7 +15,6 @@ chai.should()
 server          = require '../../server'
 settings        = require '../../boot/settings'
 AccessToken     = require '../../models/AccessToken'
-AccessJWT       = AccessToken.AccessJWT
 verifyClientReg = require('../../oidc').verifyClientRegistration
 
 

@@ -23,12 +23,12 @@ chai.should()
 
 
 # Code under test
-server      = require path.join(cwd, 'server')
-settings    = require path.join(cwd, 'boot/settings')
-Modinha     = require 'modinha'
-AccessToken = require path.join(cwd, 'models/AccessToken')
-AccessJWT   = AccessToken.AccessJWT
-{nowSeconds} = require '../../lib/time-utils'
+server         = require path.join(cwd, 'server')
+settings       = require path.join(cwd, 'boot/settings')
+Modinha        = require 'modinha'
+AccessToken    = require path.join(cwd, 'models/AccessToken')
+AccessTokenJWT = require path.join(cwd, 'models/AccessTokenJWT')
+{nowSeconds}   = require '../../lib/time-utils'
 
 
 
@@ -249,7 +249,7 @@ describe 'AccessToken', ->
         res.access_token.length.should.be.above 100
         options =
           key: settings.publicKey
-        decoded = AccessJWT.decode(res.access_token, options.key)
+        decoded = AccessTokenJWT.decode(res.access_token, options.key)
         decoded.payload.should.have.property('iss', settings.issuer)
         decoded.payload.should.have.property('sub', 'uuid1')
         decoded.payload.should.have.property 'iat'
@@ -406,7 +406,7 @@ describe 'AccessToken', ->
           cid:    'cid'
           scope:  'openid'
         issued = token.toJWT(settings.privateKey)
-        decoded = AccessToken.AccessJWT.decode(issued, settings.publicKey)
+        decoded = AccessTokenJWT.decode(issued, settings.publicKey)
 
 
       it 'should issue a signed JWT', ->
@@ -450,7 +450,7 @@ describe 'AccessToken', ->
     describe 'with decodable JWT and mismatching issuer', ->
 
       before (done) ->
-        token = (new AccessJWT({
+        token = (new AccessTokenJWT({
           at: 'r4nd0m',
           iss: 'MISMATCHING'
           uid: 'uuid1'
@@ -478,7 +478,7 @@ describe 'AccessToken', ->
     describe 'with decodable JWT that has expired', ->
 
       before (done) ->
-        token = (new AccessJWT({
+        token = (new AccessTokenJWT({
           at: 'r4nd0m',
           iss: settings.issuer
           uid: 'uuid1'
@@ -507,7 +507,7 @@ describe 'AccessToken', ->
     describe 'with decodable JWT that has insufficient scope', ->
 
       before (done) ->
-        token = (new AccessJWT({
+        token = (new AccessTokenJWT({
           at: 'r4nd0m',
           iss: settings.issuer
           uid: 'uuid1'

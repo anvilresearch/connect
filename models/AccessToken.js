@@ -2,13 +2,14 @@
  * Module dependencies
  */
 
-var async    = require('async')
-  , client   = require('../boot/redis')
-  , settings = require('../boot/settings')
-  , JWT      = require('anvil-connect-jwt')
-  , Modinha  = require('modinha')
-  , Document = require('modinha-redis')
-  , random   = Modinha.defaults.random
+var async                  = require('async')
+  , client                 = require('../boot/redis')
+  , settings               = require('../boot/settings')
+  , JWT                    = require('anvil-connect-jwt')
+  , Modinha                = require('modinha')
+  , Document               = require('modinha-redis')
+  , random                 = Modinha.defaults.random
+  , AccessTokenJWT         = require('../models/AccessTokenJWT')
   , InvalidTokenError      = require('../errors/InvalidTokenError')
   , UnauthorizedError      = require('../errors/UnauthorizedError')
   , InsufficientScopeError = require('../errors/InsufficientScopeError')
@@ -272,7 +273,7 @@ AccessToken.verify = function (token, options, callback) {
     jwt: function (done) {
       // the token is a JWT
       if (token.indexOf('.') !== -1) {
-        var decoded = AccessJWT.decode(token, options.key);
+        var decoded = AccessTokenJWT.decode(token, options.key);
         if (!decoded || decoded instanceof Error) {
           done(new UnauthorizedError({
             realm: 'user',
@@ -370,55 +371,15 @@ AccessToken.verify = function (token, options, callback) {
 };
 
 
-
 /**
- * JWT AccessToken
+ * Convert an AccessToken instance into a JWT
  */
 
-var AccessJWT = JWT.define({
-
-  // default header
-  header: {
-    alg: 'RS256'
-  },
-
-  headers: [
-    'alg'
-  ],
-
-  // modify header schema
-  registeredHeaders: {
-    alg: { format: 'StringOrURI', required: true, enum: ['RS256'] }
-  },
-
-  // permitted claims
-  claims: ['jti', 'iss', 'sub', 'aud', 'exp', 'iat', 'scope'],
-
-  // modify payload schema
-  registeredClaims: {
-    jti:    { format: 'String',  required: true, from: 'at' },
-    iss:    { format: 'URI',     required: true },
-    iat:    { format: 'IntDate', required: true, default: nowSeconds },
-    exp:    { format: 'IntDate', required: true, default: expires },
-    sub:    { format: 'String',  required: true, from: 'uid' },
-    aud:    { format: 'String',  required: true, from: 'cid' },
-    scope:  { format: 'String',  required: true },
-  }
-
-});
-
-function expires () {
-  return nowSeconds(3600);
-}
-
-AccessToken.AccessJWT = AccessJWT;
-
 AccessToken.prototype.toJWT = function (secret) {
-  var jwt = new AccessJWT(this);
+  var jwt = new AccessTokenJWT(this);
   jwt.payload.exp = nowSeconds(this.ei);
   return jwt.encode(secret);
 }
-
 
 
 /**
