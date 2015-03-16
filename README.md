@@ -51,7 +51,7 @@
 * npm
 * Redis
 
-### Setup
+#### Setup
 
 ```bash
 # Install the CLI
@@ -82,7 +82,7 @@ $ nv serve
 
 You should now have an OpenID Connect Provider running in development mode. 
 
-### Documentation
+#### Documentation
 
 The docs are in need of attention. Please submit a issues if you encounter any difficulties. 
 
