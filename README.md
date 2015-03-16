@@ -33,14 +33,6 @@
 
 ***
 
-### Status
-
-- Deprecates OAuth2Server project started in mid 2013
-- Used in production since July 2014
-- Active development as of March 2015
-
-***
-
 ### Get Started
 
 #### Requirements
