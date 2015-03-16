@@ -101,24 +101,24 @@ The docs are in need of attention. Please submit a issues if you encounter any d
 
 ### Roadmap
 
-* [] Invite-based registration
-* [] Email Verification/Multi-factor authentication
-* [] Improved CLI, REST API
-* [] Shared sessions (Single Sign-On)
-* [] More middleware hooks for programmatically customizing auth flows
-* [] Attribute-based Access Control
-* [] Built-in support for more requested OAuth providers and protocols (LDAP, SAML, etc)
-* [] Client libraries for a variety of languages, frameworks and platforms
-* [] Groups
-* [] Brokering API access and marshaling third-party tokens 
-* [] Containerized deployment support
-* [] Improved logging
-* [] Embedded, horizontally scalable datastore (eliminate Redis dependency)
-* [] Multi-tenancy
-* [] Web and mobile administration
-* [] Complete, tested OIDC interoperability
-* [] Tutorials, examples, blog posts, website, and API documentation
-* [] ...
+* [ ] Invite-based registration
+* [ ] Email Verification/Multi-factor authentication
+* [ ] Improved CLI, REST API
+* [ ] Shared sessions (Single Sign-On)
+* [ ] More middleware hooks for programmatically customizing auth flows
+* [ ] Attribute-based Access Control
+* [ ] Built-in support for more requested OAuth providers and protocols (LDAP, SAML, etc)
+* [ ] Client libraries for a variety of languages, frameworks and platforms
+* [ ] Groups
+* [ ] Brokering API access and marshaling third-party tokens 
+* [ ] Containerized deployment support
+* [ ] Improved logging
+* [ ] Embedded, horizontally scalable datastore (eliminate Redis dependency)
+* [ ] Multi-tenancy
+* [ ] Web and mobile administration
+* [ ] Complete, tested OIDC interoperability
+* [ ] Tutorials, examples, blog posts, website, and API documentation
+* [ ] ...
 
 ***
 
