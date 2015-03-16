@@ -1,15 +1,8 @@
 # Anvil Connect
 
-
 ### We're building a modern authorization server to <br>authenticate your users and protect your APIs.
 
 [![Join the chat at https://gitter.im/christiansmith/anvil-connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christiansmith/anvil-connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-#### Flexible User Authentication
-
-- Use local passwords, OAuth 1.0, OAuth 2.0, OpenID, and more
-- Works out of the box with Google, Facebook, Twitter, GitHub, and a [growing list of other providers](https://github.com/christiansmith/anvil-connect/tree/master/lib/providers)
-- Custom schemes using virtually any existing Passport.js strategy or your own code
 
 #### Simplified Security
 
@@ -18,6 +11,12 @@
 - Be a federated identity provider with OpenID Connect
 - Enable third-party developers using two- and three-legged OAuth 2.0
 - Manage access with RBAC
+
+#### Flexible User Authentication
+
+- Use local passwords, OAuth 1.0, OAuth 2.0, OpenID, and more
+- Works out of the box with Google, Facebook, Twitter, GitHub, and a [growing list of providers](https://github.com/christiansmith/anvil-connect/tree/master/lib/providers)
+- Custom schemes using virtually any existing Passport.js strategy or your own code
 
 #### Make it yours
 
@@ -129,8 +128,7 @@ There are many ways to get help and contribute.
 * Weekly Google Hangouts
 * Pair Programming
 * Support and consulting available
-
-Contact smith@anvil.io.
+* Contact smith@anvil.io.
 
 <a href="https://www.google.com/calendar/selfsched?sstoken=UUx1dWZaTzBaY2lCfGRlZmF1bHR8MGViMzcyZDg0OTUyOGZkOTNjM2M2ZDMxMmYwMWM0Yjg" title="Pair program with me!">
   <img  src="http://pairprogramwith.me/badge.png"
