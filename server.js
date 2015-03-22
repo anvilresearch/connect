@@ -31,6 +31,7 @@ require('./routes/signout')(server);
 require('./routes/connect')(server);
 require('./routes/verify')(server);
 require('./routes/jwks')(server);
+require('./routes/session')(server);
 
 
 /**
