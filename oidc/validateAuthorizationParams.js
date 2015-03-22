@@ -15,6 +15,8 @@ var responseTypes = [
   'code',                 // authorization code flow
   'code token',           // hybrid flow
   'code id_token',        // hybrid flow
+  'id_token',             // implicit flow
+  'token id_token',       // implicit flow
   'id_token token',       // implicit flow
   'code id_token token'   // hybrid flow
 ];

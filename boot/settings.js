@@ -71,10 +71,12 @@ settings.providers = {};
 
 settings.response_types_supported = [
   'code',
+  'code token',
+  'code id_token',
+  'id_token',
+  'token id_token',
   'id_token token',
-  // TODO
-  // 'id_token'
-  // 'token id_token'
+  'code id_token token'
 ];
 
 /**
