@@ -10,9 +10,31 @@ var qs = require('qs');
  */
 
 function requireSignin (req, res, next) {
-  if (!req.isAuthenticated() || req.connectParams.prompt === 'login') {
+  var params        = req.connectParams
+    , prompt        = params.prompt
+    , responseTypes = params.response_type.split(' ')
+    , responseMode  = params.response_mode
+                   || (responseTypes.indexOf('code') !== -1)
+                        ? '?'
+                        : '#'
+                        ;
+
+
+  // redirect with error if unauthenticated
+  // and prompt is "none"
+  if (!req.isAuthenticated() && prompt === 'none') {
+    res.redirect(req.connectParams.redirect_uri + responseMode + qs.stringify({
+      error: 'login_required'
+    }));
+  }
+
+  // prompt to sign in
+  else if (!req.isAuthenticated() || prompt === 'login') {
     res.redirect('/signin?' + qs.stringify(req.connectParams));
-  } else {
+  }
+
+  // do not prompt to sign in
+  else {
     next();
   }
 }
