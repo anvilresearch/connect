@@ -522,7 +522,7 @@ settings.scopes_supported = ['openid', 'profile'];
  *   post back the login status of the End-User at the OP.
  */
 
-settings.check_session_iframe = undefined;
+settings.check_session_iframe = issuer + '/session';
 
 /**
  * end_session_endpoint
