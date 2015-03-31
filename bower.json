@@ -1,0 +1,20 @@
+{
+  "name": "anvil-connect",
+  "version": "0.1.28",
+  "homepage": "https://github.com/christiansmith/anvil-connect",
+  "authors": [
+    "Christian Smith <smith@anvil.io>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bcryptjs": "~2.1.0"
+  }
+}
