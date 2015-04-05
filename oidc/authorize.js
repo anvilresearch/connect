@@ -111,11 +111,15 @@ function authorize (req, res, next) {
           response.state = params.state;
         }
 
+        // set the op browser state
+        var opbs = crypto.randomBytes(256).toString('hex');
+        req.session.opbs = opbs;
+
         // if responseTypes includes id_token or token
         // calculate session_state and add to response
         if (responseTypes.indexOf('id_token') !== -1
          || responseTypes.indexOf('token') !== -1) {
-          var session= sessionState(req.client, req.client.client_uri, 'authenticated');
+          var session = sessionState(req.client, req.client.client_uri, opbs);
           response.session_state = session;
         }
 
