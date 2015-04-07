@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var bcrypt = require('bcrypt');
+var crypto = require('crypto');
 
 
 /**
@@ -10,10 +10,12 @@ var bcrypt = require('bcrypt');
  */
 
 function sessionState (client, origin, state) {
-  var salt  = bcrypt.genSaltSync(10);
+  var salt = crypto.randomBytes(16).toString('hex');
   var value = [client._id, client.client_uri, state, salt].join(' ');
-  var hash  = bcrypt.hashSync(value, salt);
-  return [hash, salt].join(' ');
+  var sha256 = crypto.createHash('sha256');
+  sha256.update(value);
+  var hash = sha256.digest('hex');
+  return [hash, salt].join('.')
 }
 
 

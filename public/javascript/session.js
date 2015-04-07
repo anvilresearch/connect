@@ -1,11 +1,4 @@
 /**
- * bcrypt
- */
-
-var bcrypt = dcodeIO.bcrypt;
-
-
-/**
  * Browser state
  */
 
@@ -33,8 +26,8 @@ function receiveMessage (e) {
   // Validate message syntax
   var parts         = e.data.split(' ');
   var client_id     = parts[0];
-  var session_state = parts[1];
-  var salt          = parts[2];
+  var sessionState  = parts[1];
+  var salt          = sessionState.split('.')[1];
 
   if (parts.length !== 3) {
     e.source.postMessage('error', origin);
@@ -44,11 +37,12 @@ function receiveMessage (e) {
   var opbs = getOPBrowserState();
 
   // Locally calculated session state value for comparison
-  var value = [client_id, origin, opbs, salt].join(' ')
+  var value = [client_id, origin, opbs, salt].join(' ');
+  var localState = [CryptoJS.SHA256(value), salt].join('.');
 
   // Compare session state and reply to RP
   e.source.postMessage(
-    (bcrypt.compareSync(value, session_state)) ? 'unchanged' : 'changed' , origin
+    (localState === sessionState) ? 'unchanged' : 'changed' , origin
   );
 };
 

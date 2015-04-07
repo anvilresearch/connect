@@ -112,8 +112,7 @@ function authorize (req, res, next) {
         }
 
         // set the op browser state
-        var opbs = crypto.randomBytes(256).toString('hex');
-        req.session.opbs = opbs;
+        var opbs = req.session.opbs = req.session.opbs || crypto.randomBytes(256).toString('hex');
 
         // if responseTypes includes id_token or token
         // calculate session_state and add to response
