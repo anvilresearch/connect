@@ -5,6 +5,7 @@
 var settings = require('../boot/settings')
   , oidc     = require('../oidc')
   , passport = require('passport')
+  , qs       = require('qs')
   ;
 
 
@@ -56,9 +57,19 @@ module.exports = function (server) {
       if (settings.providers[req.params.provider]) {
         passport.authenticate(req.params.provider, function (err, user, info) {
           if (err) { return next(err); }
-          if (!user) {
 
-          } else {
+          // render the signin screen with an error
+          if (!user) {
+            res.render('signin', {
+              params:    qs.stringify(req.connectParams),
+              request:   req.body,
+              providers: info.providers,
+              error:     info.message
+            });
+          }
+
+          // login the user
+          else {
             req.login(user, function (err) {
               next(err);
             });

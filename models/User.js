@@ -375,9 +375,32 @@ User.connect = function (req, auth, info, callback) {
 
       User.insert(data, {
         password: false,
-      }, function (err, user) {
-        if (err) { return callback(err); }
-        callback(null, user);
+      }, function (error, user) {
+
+        // Handle unique email error
+        if (error && error.message === 'email must be unique') {
+
+          // Lookup the existing user
+          User.getByEmail(data.email, function (err, user) {
+            if (err || !user) { return callback(err); }
+
+            return callback(null, false, {
+              message: error.message,
+              providers: user.providers
+            });
+
+          });
+        }
+
+        // Handle other error
+        else if (error) {
+          return callback(error);
+        }
+
+        // User registered successfully
+        else {
+          callback(null, user, { message: 'Registered successfully' });
+        }
       });
     }
 

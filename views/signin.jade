@@ -16,7 +16,13 @@ html(lang="en")
 
       form.panel(method='POST', action='/signin')
         // adding a class of error to this paragraph will add error styling
-        p= error
+        if error == 'email must be unique'
+          p
+            | A user with the same email address has
+            | already registered using a different provider.
+            | Try one of these:
+        else
+          p= error
         input(type='hidden', name='response_type', value=request.response_type)
         input(type='hidden', name='client_id', value=request.client_id)
         input(type='hidden', name='redirect_uri', value=request.redirect_uri)

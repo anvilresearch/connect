@@ -42,10 +42,7 @@ util.inherits(OAuth2Strategy, Strategy);
  */
 
 function verifier (req, auth, userInfo, done) {
-  User.connect(req, auth, userInfo, function (err, user) {
-    if (err) { return done(err); }
-    done(null, user);
-  });
+  User.connect(req, auth, userInfo, done);
 };
 
 OAuth2Strategy.verifier = verifier;

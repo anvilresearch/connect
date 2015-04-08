@@ -39,7 +39,7 @@ describe 'User', ->
 
 
   {data,user,users,role,roles,jsonUsers} = {}
-  {err,validation,instance,instances,update,deleted,original,ids,info} = {}
+  {err,validation,instance,instances,update,deleted,original,ids,info,userInfo} = {}
 
 
   before ->
@@ -632,6 +632,59 @@ describe 'User', ->
           }
         }
       }
+
+
+
+
+  describe 'connect with new user and existing email', ->
+
+    before (done) ->
+      user = new User()
+
+      req =
+        params:
+          provider: 'google'
+      auth =
+        access_token: 'b34r3r'
+      userInfo =
+        id: 'g00gl3_3'
+        email: 'john@smith.com'
+        given_name: 'John'
+        family_name: 'Smith'
+      user =
+        _id: 'uuid'
+        email: 'john@smith.com'
+        providers:
+          github: {}
+
+      uniqueError = new Error 'email must be unique'
+
+      sinon.stub(User, 'lookup').callsArgWith(2, null, null)
+      sinon.stub(User, 'insert').callsArgWith(2, uniqueError)
+      sinon.stub(User, 'getByEmail').callsArgWith(1, null, user)
+
+      User.connect req, auth, userInfo, (error, _instance, information) ->
+        err = error
+        instance = _instance
+        info = information
+        done()
+
+    after ->
+      User.lookup.restore()
+      User.insert.restore()
+      User.getByEmail.restore()
+
+    it 'should not provide an error', ->
+      expect(err).to.be.null
+
+    it 'should not provide a user', ->
+      expect(instance).to.be.false
+
+    it 'should provide a message', ->
+      info.message.should.equal 'email must be unique'
+
+    it 'should provide providers', ->
+      info.providers.should.equal user.providers
 
 
 
