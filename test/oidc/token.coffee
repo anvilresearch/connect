@@ -94,10 +94,10 @@ describe 'Token response', ->
         body:
           grant_type: 'authorization_code'
           state: 'st4t3'
-          nonce: 'noncf7'
         code:
           user_id: 'uuid1'
           client_id: 'uuid2'
+          nonce: 'noncf7'
         client:
           access_token_type: 'random'
       res =

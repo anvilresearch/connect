@@ -43,9 +43,9 @@ function token (req, res, next) {
         aud: ac.client_id,
         exp: nowSeconds(token.ei)
       });
-      
+
       if(ac.nonce) {
-        idToken.payload.nonce = params.nonce;
+        idToken.payload.nonce = ac.nonce;
       }
     }
 

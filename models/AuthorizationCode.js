@@ -57,6 +57,10 @@ var AuthorizationCode = Modinha.define('authorizationcodes', {
   used: {
     type:     'boolean',
     default:  false
+  },
+
+  nonce: {
+    type:     'string'
   }
 
 });
