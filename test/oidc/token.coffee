@@ -28,7 +28,7 @@ describe 'Token response', ->
 
 
 
-  describe 'authorization code grant', ->
+  describe 'authorization code grant with no nonce', ->
 
     {at} = {}
 
@@ -75,8 +75,45 @@ describe 'Token response', ->
     it 'should respond with state', ->
       res.json.should.have.been.calledWith sinon.match({ state: 'st4t3' })
 
+    it 'should not have nonce', ->
+      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, server.settings.publicKey)
+      expect(jwt.payload.nonce).to.be.undefined
 
 
+  describe 'authorization code grant with optional nonce', ->
+
+    {at} = {}
+
+    before (done) ->
+      at = AccessToken.initialize()
+      sinon.stub(AccessToken, 'exchange').callsArgWith(1, null, at)
+
+      req =
+        body:
+          grant_type: 'authorization_code'
+          state: 'st4t3'
+        code:
+          user_id: 'uuid1'
+          client_id: 'uuid2'
+          nonce: 'noncf7'
+        client:
+          access_token_type: 'random'
+      res =
+        set: sinon.spy()
+        json: sinon.spy()
+      next = sinon.spy (error) ->
+        err = error
+        done()
+
+      token req, res, next
+      done()
+
+    after ->
+      AccessToken.exchange.restore()
+
+    it 'should have nonce', ->
+      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, server.settings.publicKey)
+      jwt.payload.nonce.should.equal 'noncf7'
 
   describe 'refresh grant', ->
 
@@ -177,4 +214,3 @@ describe 'Token response', ->
       res.json.should.have.been.calledWith sinon.match({
         expires_in: 3600
       })
-
