@@ -4,7 +4,7 @@
 
 var client = require('../boot/redis')
   , MissingStateError = require('../errors/MissingStateError')
-//  , ExpiredAuthorizationError = require('../../errors/ExpiredAuthorizationError')
+  , ExpiredAuthorizationRequestError = require('../errors/ExpiredAuthorizationRequestError')
   ;
 
 
