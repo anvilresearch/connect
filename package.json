@@ -20,7 +20,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --compilers coffee:coffee-script/register -R spec --watch"
+    "test": "mocha --compilers coffee:coffee-script/register -R dot --watch"
   },
   "bin": {
     "nv": "./bin/nv"
