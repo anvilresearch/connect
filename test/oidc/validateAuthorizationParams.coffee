@@ -108,7 +108,7 @@ describe 'Validate Authorization Parameters', ->
 
 
 
-    describe 'with unsupported response_type', ->
+    describe 'with unsupported response_mode', ->
 
       before (done) ->
         params =

@@ -8,6 +8,7 @@ module.exports = function (server) {
   function signout (req, res) {
     var redirectUri = req.query.redirect_uri;
 
+    delete req.session.opbs;
     req.logout();
 
     res.set({

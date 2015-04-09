@@ -32,7 +32,8 @@ describe 'Require Signin', ->
   describe 'with authenticated user and no prompt', ->
 
     beforeEach (done) ->
-      requireSignin req({}, true), res, (error) ->
+      params = response_type: 'id_token token'
+      requireSignin req(params, true), res, (error) ->
         err = error
         done()
 
@@ -47,10 +48,11 @@ describe 'Require Signin', ->
   describe 'with unauthenticated user', ->
 
     beforeEach ->
-      requireSignin req({}, false), res
+      params = response_type: 'id_token token'
+      requireSignin req(params, false), res
 
     it 'should redirect to signin', ->
-      res.redirect.should.have.been.calledWith '/signin?'
+      res.redirect.should.have.been.calledWith sinon.match '/signin?'
 
 
 
@@ -58,12 +60,37 @@ describe 'Require Signin', ->
   describe 'with authenticated user and "login" prompt', ->
 
     beforeEach ->
-      params = { prompt: 'login' }
+      params = prompt: 'login', response_type: 'id_token token'
       requireSignin req(params, true), res
 
     it 'should redirect to signin', ->
-      res.redirect.should.have.been.calledWith '/signin?prompt=login'
+      res.redirect.should.have.been.calledWith sinon.match '/signin?prompt=login'
 
 
 
 
+  describe 'with unauthenticated user and "none" prompt', ->
+
+    beforeEach ->
+      params = prompt: 'none', response_type: 'id_token token'
+      requireSignin req(params, false), res
+
+    it 'should redirect to the redirect_uri with an error', ->
+      res.redirect.should.have.been.calledWith sinon.match "#error=login_required"
+
+
+
+
+  describe 'with authenticated user and "none" prompt', ->
+
+    beforeEach (done) ->
+      params = prompt: 'none', response_type: 'id_token token'
+      requireSignin req(params, true), res, (error) ->
+        err = error
+        done()
+
+    it 'should not redirect', ->
+      res.redirect.should.not.have.been.called
+
+    it 'should not provide an error', ->
+      expect(err).to.be.undefined

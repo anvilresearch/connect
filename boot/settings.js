@@ -71,10 +71,12 @@ settings.providers = {};
 
 settings.response_types_supported = [
   'code',
+  'code token',
+  'code id_token',
+  'id_token',
+  'token id_token',
   'id_token token',
-  // TODO
-  // 'id_token'
-  // 'token id_token'
+  'code id_token token'
 ];
 
 /**
@@ -520,7 +522,7 @@ settings.scopes_supported = ['openid', 'profile'];
  *   post back the login status of the End-User at the OP.
  */
 
-settings.check_session_iframe = undefined;
+settings.check_session_iframe = issuer + '/session';
 
 /**
  * end_session_endpoint

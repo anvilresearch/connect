@@ -33,6 +33,7 @@ describe 'Authorize', ->
       })
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -82,6 +83,7 @@ describe 'Authorize', ->
       })
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -118,6 +120,7 @@ describe 'Authorize', ->
       })
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
           default_max_age: 2000
@@ -156,6 +159,7 @@ describe 'Authorize', ->
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -214,6 +218,7 @@ describe 'Authorize', ->
       })
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -268,6 +273,7 @@ describe 'Authorize', ->
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -324,6 +330,7 @@ describe 'Authorize', ->
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
@@ -381,6 +388,7 @@ describe 'Authorize', ->
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
 
       req =
+        session: {}
         client:
           _id: 'uuid1'
         user:
