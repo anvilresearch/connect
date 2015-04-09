@@ -12,25 +12,27 @@ function getOPBrowserState () {
  * Handle RP Message
  */
 
-function receiveMessage (e) {
+function receiveMessage (event) {
 
-  // Validate message origin
-  var origin = e.origin;
-  var parser = document.createElement('a');
+  // Parse message origin
+  var origin  = event.origin;
+  var parser  = document.createElement('a');
   parser.href = document.referrer;
-  messenger = parser.protocol + '//' + parser.host;
+  messenger   = parser.protocol + '//' + parser.host;
+
+  // Ignore the message if origin doesn't match
   if (origin !== messenger) {
-    return; // Ignore the message
+    return;
   }
 
-  // Validate message syntax
-  var parts         = e.data.split(' ');
-  var client_id     = parts[0];
-  var sessionState  = parts[1];
+  // Parse the message
+  var client_id     = event.data.split(' ')[0];
+  var sessionState  = event.data.split(' ')[1];
   var salt          = sessionState.split('.')[1];
 
-  if (parts.length !== 3) {
-    e.source.postMessage('error', origin);
+  // Validate message syntax
+  if (!client_id || !sessionState || !salt) {
+    event.source.postMessage('error', origin);
   }
 
   // Get the OP browser state
@@ -41,7 +43,7 @@ function receiveMessage (e) {
   var localState = [CryptoJS.SHA256(value), salt].join('.');
 
   // Compare session state and reply to RP
-  e.source.postMessage(
+  event.source.postMessage(
     (localState === sessionState) ? 'unchanged' : 'changed' , origin
   );
 };

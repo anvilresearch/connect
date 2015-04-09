@@ -111,7 +111,9 @@ function authorize (req, res, next) {
           response.state = params.state;
         }
 
-        // set the op browser state
+        // Set the op browser state. If the user is already authenticated,
+        // we should skip updating this value in order to avoid triggering
+        // needless reauthentication on other clients.
         var opbs = req.session.opbs = req.session.opbs || crypto.randomBytes(256).toString('hex');
 
         // if responseTypes includes id_token or token
