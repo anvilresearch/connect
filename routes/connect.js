@@ -5,6 +5,7 @@
 var settings = require('../boot/settings')
   , oidc     = require('../oidc')
   , passport = require('passport')
+  , crypto   = require('crypto')
   , qs       = require('qs')
   ;
 
@@ -71,6 +72,7 @@ module.exports = function (server) {
           // login the user
           else {
             req.login(user, function (err) {
+              req.session.opbs = crypto.randomBytes(256).toString('hex');
               next(err);
             });
           }

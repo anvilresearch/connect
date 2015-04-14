@@ -1,4 +1,11 @@
 /**
+ * Module dependencies
+ */
+
+var client = require('../boot/redis');
+
+
+/**
  * Session endpoint
  */
 
@@ -123,6 +130,10 @@ module.exports = function (server) {
    *
    */
 
+  /**
+   * Session endpoint
+   */
+
   server.get('/session', function (req, res, next) {
     // Set cookie to be used as browser state. This
     // cookie MUST NOT be httpOnly because we need
@@ -137,5 +148,49 @@ module.exports = function (server) {
 
     res.render('session');
   });
+
+
+
+  /**
+   * Check session
+   */
+
+  function checkSession(req, res) {
+    client.get('sess:' + req.sessionID, function (err, data) {
+      try {
+        var opbs = JSON.parse(data).opbs;
+        res.write("event: update\n");
+        res.write("data: " + opbs + "\n\n");
+      } catch (e) {}
+
+      setTimeout(function () {
+        checkSession(req, res);
+      }, 3000);
+    })
+  }
+
+
+  /**
+   * SSE endpoint
+   * (push updates to client)
+   */
+
+  server.get('/session/events', function (req, res) {
+    req.socket.setTimeout(Infinity);
+
+    // Headers
+    res.writeHead(200, {
+      "Content-Type":"text/event-stream",
+      "Cache-Control":"no-cache",
+      "Connection":"keep-alive"
+    });
+
+    // Set retry interval
+    res.write("retry: 2000\n");
+
+    // Periodically update the client
+    checkSession(req, res);
+  });
+
 
 };

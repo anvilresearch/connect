@@ -2,7 +2,9 @@
  * Module dependencies
  */
 
-var qs = require('qs');
+var qs = require('qs')
+  , sessionState = require('./sessionState')
+  ;
 
 
 /**
@@ -24,7 +26,8 @@ function requireSignin (req, res, next) {
   // and prompt is "none"
   if (!req.isAuthenticated() && prompt === 'none') {
     res.redirect(req.connectParams.redirect_uri + responseMode + qs.stringify({
-      error: 'login_required'
+      error: 'login_required',
+      session_state: sessionState(req.client, req.client.client_uri, req.session.opbs)
     }));
   }
 

@@ -1,3 +1,13 @@
+/**
+ * Module dependencies
+ */
+
+var crypto = require('crypto');
+
+
+/**
+ * Export
+ */
 
 module.exports = function (server) {
 
@@ -8,7 +18,7 @@ module.exports = function (server) {
   function signout (req, res) {
     var redirectUri = req.query.redirect_uri;
 
-    delete req.session.opbs;
+    req.session.opbs = crypto.randomBytes(256).toString('hex');
     req.logout();
 
     res.set({
