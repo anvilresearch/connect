@@ -7,6 +7,7 @@
 #### Simplified Security
 
 - Share user accounts between multiple apps and services
+- Single Sign-On (shared sessions)
 - Issue signed JSON Web Tokens to protect your APIs
 - Be a federated identity provider with OpenID Connect
 - Enable third-party developers using two- and three-legged OAuth 2.0
@@ -94,7 +95,7 @@ The docs are in need of attention. Please submit a issues if you encounter any d
 * [ ] Invite-based registration
 * [ ] Email Verification/Multi-factor authentication
 * [ ] Improved CLI, REST API
-* [ ] Shared sessions (Single Sign-On)
+* [x] Shared sessions (Single Sign-On)
 * [ ] More middleware hooks for programmatically customizing auth flows
 * [ ] Attribute-based Access Control
 * [ ] Built-in support for more requested OAuth providers and protocols (LDAP, SAML, etc)
