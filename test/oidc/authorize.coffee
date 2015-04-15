@@ -72,6 +72,8 @@ describe 'Authorize', ->
     it 'should provide state', ->
       res.redirect.should.have.been.calledWith sinon.match 'state=r4nd0m'
 
+    it 'should not provide session_state', ->
+      res.redirect.should.not.have.been.calledWith sinon.match('session_state=')
 
 
 
@@ -207,6 +209,9 @@ describe 'Authorize', ->
     it 'should provide state', ->
       res.redirect.should.have.been.calledWith sinon.match req.connectParams.state
 
+    it 'should provide session_state', ->
+      res.redirect.should.have.been.calledWith sinon.match('session_state=')
+
 
 
 
@@ -263,6 +268,8 @@ describe 'Authorize', ->
     it 'should provide state', ->
       res.redirect.should.have.been.calledWith sinon.match 'state=r4nd0m'
 
+    it 'should provide session_state', ->
+      res.redirect.should.have.been.calledWith sinon.match('session_state=')
 
 
 
@@ -317,6 +324,8 @@ describe 'Authorize', ->
     it 'should provide state', ->
       res.redirect.should.have.been.calledWith sinon.match req.connectParams.state
 
+    it 'should provide session_state', ->
+      res.redirect.should.have.been.calledWith sinon.match('session_state=')
 
 
 
@@ -378,6 +387,8 @@ describe 'Authorize', ->
     it 'should provide state', ->
       res.redirect.should.have.been.calledWith sinon.match req.connectParams.state
 
+    it 'should provide session_state', ->
+      res.redirect.should.have.been.calledWith sinon.match('session_state=')
 
 
 
