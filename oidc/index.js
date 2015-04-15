@@ -14,6 +14,7 @@ var cwd = process.cwd()
 var oidc = {
   authenticateClient:           require('./authenticateClient'),
   authorize:                    require('./authorize'),
+  checkSession:                 require('./checkSession'),
   determineUserScope:           require('./determineUserScope'),
   determineClientScope:         require('./determineClientScope'),
   error:                        require('./error'),

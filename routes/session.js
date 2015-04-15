@@ -3,7 +3,6 @@
  */
 
 var oidc = require('../oidc');
-var client = require('../boot/redis');
 
 
 /**
@@ -17,28 +16,6 @@ module.exports = function (server) {
    */
 
   server.get('/session', oidc.session);
-
-
-  /**
-   * Check session
-   */
-
-  function checkSession(req, res) {
-    var initialOpbs = req.session.opbs;
-    client.get('sess:' + req.sessionID, function (err, data) {
-      try {
-        var opbs = JSON.parse(data).opbs;
-        if (opbs !== initialOpbs) {
-          res.write("event: update\n");
-          res.write("data: " + opbs + "\n\n");
-        }
-      } catch (e) {}
-
-      setTimeout(function () {
-        checkSession(req, res);
-      }, 3000);
-    })
-  }
 
 
   /**
@@ -60,7 +37,7 @@ module.exports = function (server) {
     res.write("retry: 2000\n");
 
     // Periodically update the client
-    checkSession(req, res);
+    oidc.checkSession(req, res);
   });
 
 
