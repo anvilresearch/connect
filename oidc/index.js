@@ -22,6 +22,7 @@ var oidc = {
   promptToAuthorize:            require('./promptToAuthorize'),
   requireSignin:                require('./requireSignin'),
   selectConnectParams:          require('./selectConnectParams'),
+  session:                      require('./session'),
   sessionState:                 require('./sessionState'),
   stashParams:                  require('./stashParams'),
   token:                        require('./token'),
