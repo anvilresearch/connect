@@ -45,6 +45,8 @@ describe 'Token response', ->
           client_id: 'uuid2'
         client:
           access_token_type: 'random'
+        session:
+          opbs: 'h4sh'
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -79,6 +81,11 @@ describe 'Token response', ->
       jwt = IDToken.decode(res.json.firstCall.args[0].id_token, server.settings.publicKey)
       expect(jwt.payload.nonce).to.be.undefined
 
+    it 'should respond with session_state', ->
+      res.json.should.have.been.calledWith sinon.match({
+        session_state: sinon.match.string
+      })
+
 
   describe 'authorization code grant with optional nonce', ->
 
@@ -98,6 +105,8 @@ describe 'Token response', ->
           nonce: 'noncf7'
         client:
           access_token_type: 'random'
+        session:
+          opbs: 'h4sh'
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -115,6 +124,9 @@ describe 'Token response', ->
       jwt = IDToken.decode(res.json.firstCall.args[0].id_token, server.settings.publicKey)
       jwt.payload.nonce.should.equal 'noncf7'
 
+
+
+
   describe 'refresh grant', ->
 
     {at} = {}
@@ -130,6 +142,8 @@ describe 'Token response', ->
         client:
           _id: 'uuid2'
           access_token_type: 'random'
+        session:
+          opbs: 'h4sh'
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -157,6 +171,11 @@ describe 'Token response', ->
 
     it 'should respond with state', ->
       res.json.should.have.been.calledWith sinon.match({ state: 'st4t3' })
+
+    it 'should respond with session_state', ->
+      res.json.should.have.been.calledWith sinon.match({
+        session_state: sinon.match.string
+      })
 
 
 

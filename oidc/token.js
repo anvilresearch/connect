@@ -2,11 +2,12 @@
  * Module dependencies
  */
 
-var settings    = require('../boot/settings')
-  , AccessToken = require('../models/AccessToken')
-  , ClientToken = require('../models/ClientToken')
-  , IDToken     = require('../models/IDToken')
-  , nowSeconds  = require('../lib/time-utils').nowSeconds
+var settings     = require('../boot/settings')
+  , AccessToken  = require('../models/AccessToken')
+  , ClientToken  = require('../models/ClientToken')
+  , IDToken      = require('../models/IDToken')
+  , nowSeconds   = require('../lib/time-utils').nowSeconds
+  , sessionState = require('../oidc/sessionState')
   ;
 
 
@@ -20,6 +21,7 @@ var privateKey = settings.privateKey
 
 function token (req, res, next) {
   var params = req.body
+    , client = req.client
     , ac     = req.code
     ;
 
@@ -58,7 +60,9 @@ function token (req, res, next) {
       });
     }
 
+    var opbs = req.session.opbs;
     response.id_token = idToken.encode(privateKey);
+    response.session_state = sessionState(client, client.client_uri, opbs);
 
     if (params.state) {
       response.state = params.state;
