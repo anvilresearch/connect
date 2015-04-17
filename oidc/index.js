@@ -24,6 +24,7 @@ var oidc = {
   requireSignin:                require('./requireSignin'),
   selectConnectParams:          require('./selectConnectParams'),
   session:                      require('./session'),
+  sessionEvents:                require('./sessionEvents'),
   sessionState:                 require('./sessionState'),
   stashParams:                  require('./stashParams'),
   token:                        require('./token'),
