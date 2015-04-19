@@ -5,6 +5,7 @@
 var oidc     = require('../oidc')
   , settings = require('../boot/settings')
   , passport = require('passport')
+  , crypto   = require('crypto')
   , qs       = require('qs')
   ;
 
@@ -51,6 +52,7 @@ module.exports = function (server) {
           });
         } else {
           req.login(user, function (err) {
+            req.session.opbs = crypto.randomBytes(256).toString('hex');
             next(err);
           });
         }
