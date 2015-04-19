@@ -29,7 +29,7 @@
 
 - Language and platform agnostic
 - Implements widely accepted, well-understood protocols
-- Growing number of client libraries available 
+- Growing number of client libraries available
 - MIT license
 
 ***
@@ -71,11 +71,11 @@ $ nv assign <email> authority
 $ nv serve
 ```
 
-You should now have an OpenID Connect Provider running in development mode. 
+You should now have an OpenID Connect Provider running in development mode.
 
 #### Documentation
 
-The docs are in need of attention. Please submit a issues if you encounter any difficulties. 
+The docs are in need of attention. Please submit a issues if you encounter any difficulties.
 
 * [Documentation](https://github.com/christiansmith/anvil-connect/wiki/Documentation)
 * [References](https://github.com/christiansmith/anvil-connect/wiki/References)
@@ -101,7 +101,7 @@ The docs are in need of attention. Please submit a issues if you encounter any d
 * [ ] Built-in support for more requested OAuth providers and protocols (LDAP, SAML, etc)
 * [ ] Client libraries for a variety of languages, frameworks and platforms
 * [ ] Groups
-* [ ] Brokering API access and marshaling third-party tokens 
+* [ ] Brokering API access and marshaling third-party tokens
 * [ ] Containerized deployment support
 * [ ] Improved logging
 * [ ] Embedded, horizontally scalable datastore (eliminate Redis dependency)
@@ -118,7 +118,7 @@ The docs are in need of attention. Please submit a issues if you encounter any d
 There are many ways to get help and contribute.
 
 * Chat on [Gitter](https://gitter.im/christiansmith/anvil-connect)
-* Weekly Google Hangouts
+* Join weekly [Google Hangouts](https://www.google.com/calendar/embed?src=anvil.io_3leor1jds8ne3rj0lauh8hboes%40group.calendar.google.com&ctz=America/Los_Angeles) every Thursday
 * Pair Programming
 * Support and consulting available
 * Contact smith@anvil.io.
