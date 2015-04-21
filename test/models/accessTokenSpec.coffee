@@ -6,7 +6,7 @@ path        = require 'path'
 # Test dependencies
 cwd       = process.cwd()
 path      = require 'path'
-Faker     = require 'Faker'
+faker     = require 'faker'
 chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
@@ -53,8 +53,8 @@ describe 'AccessToken', ->
 
   #  for i in [0..9]
   #    data.push
-  #      name:     "#{Faker.Name.firstName()} #{Faker.Name.lastName()}"
-  #      email:    Faker.Internet.email()
+  #      name:     "#{faker.Name.firstName()} #{faker.Name.lastName()}"
+  #      email:    faker.Internet.email()
   #      hash:     'private'
   #      password: 'secret1337'
 
