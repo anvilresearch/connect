@@ -1,7 +1,7 @@
 # Test dependencies
 cwd       = process.cwd()
 path      = require 'path'
-Faker     = require 'Faker'
+faker     = require 'faker'
 chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'

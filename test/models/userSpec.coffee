@@ -1,7 +1,7 @@
 # Test dependencies
 cwd       = process.cwd()
 path      = require 'path'
-Faker     = require 'Faker'
+faker     = require 'faker'
 chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
@@ -49,8 +49,8 @@ describe 'User', ->
 
     for i in [0..9]
       data.push
-        name:     "#{Faker.Name.firstName()} #{Faker.Name.lastName()}"
-        email:    Faker.Internet.email()
+        name:     "#{faker.name.firstName()} #{faker.name.lastName()}"
+        email:    faker.internet.email()
         hash:     'private'
         password: 'secret1337'
 
@@ -334,7 +334,7 @@ describe 'User', ->
   describe 'password verification', ->
 
     before ->
-      src  = email: Faker.Internet.email(), password: 'secret1337'
+      src  = email: faker.internet.email(), password: 'secret1337'
       user = new User src, { private: true }
 
 
@@ -746,6 +746,3 @@ describe 'User', ->
       User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
         password: false
       })
-
-
-
