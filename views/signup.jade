@@ -26,9 +26,10 @@ html(lang="en")
         hr.textsep.signupwith
         ul.providers
           each provider in Object.keys(providers)
-            li
-              a(href='/connect/' + provider + '?' + params)
-                i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
+            if provider !== 'password'
+              li
+                a(href='/connect/' + provider + '?' + params)
+                  i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
         hr.textsep.or
         input(type='text', name='firstname', placeholder='First Name')
         input(type='text', name='lastname', placeholder='Last Name')

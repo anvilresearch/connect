@@ -33,9 +33,10 @@ html(lang="en")
         hr.textsep.signinwith
         ul.providers
           each provider in Object.keys(providers)
-            li
-              a(href='/connect/' + provider + '?' + params)
-                i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
+            if provider !== 'password'
+              li
+                a(href='/connect/' + provider + '?' + params)
+                  i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
         hr.textsep.or
         input(type='text', name='email', placeholder='Email')
         input(type='password', name='password', placeholder='Password')
@@ -45,8 +46,3 @@ html(lang="en")
           | Don't have an account?
           a(href='/signup?' + params)
             | Get Registered in Seconds
-
-
-
-
-
