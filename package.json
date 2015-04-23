@@ -1,6 +1,6 @@
 {
   "name": "anvil-connect",
-  "description": "OpenID Connect Provider",
+  "description": "A modern authorization server built to authenticate your users and protect your APIs",
   "version": "0.1.36",
   "author": {
     "name": "Christian Smith",
@@ -18,6 +18,36 @@
     "type": "git",
     "url": "https://github.com/christiansmith/anvil-connect.git"
   },
+  "keywords": [
+    "Auth",
+    "Authentication",
+    "Authorization",
+    "Access Control",
+    "SSO",
+    "Single Sign-On",
+    "Identity",
+    "Signin",
+    "Sign-in",
+    "OAuth",
+    "OAuth 1.0",
+    "OAuth 2.0",
+    "OpenID",
+    "OpenID Connect",
+    "OIDC",
+    "API",
+    "API Key",
+    "JWT",
+    "JWS",
+    "Token",
+    "Social",
+    "User",
+    "Federated",
+    "Google",
+    "Facebook",
+    "Twitter",
+    "GitHub",
+    "Password"
+  ],
   "scripts": {
     "start": "node server.js",
     "test": "mocha --compilers coffee:coffee-script/register -R dot --watch"
