@@ -1,7 +1,7 @@
 # Test dependencies
 cwd       = process.cwd()
 path      = require 'path'
-Faker     = require 'Faker'
+faker     = require 'faker'
 chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
@@ -51,8 +51,8 @@ describe 'Client', ->
 
     for i in [0..9]
       data.push
-        name:     "#{Faker.Name.firstName()} #{Faker.Name.lastName()}"
-        email:    Faker.Internet.email()
+        name:     "#{faker.name.firstName()} #{faker.name.lastName()}"
+        email:    faker.internet.email()
         hash:     'private'
         password: 'secret1337'
 
@@ -252,13 +252,13 @@ describe 'Client', ->
 
     before ->
       client = new Client
-        client_name:  Faker.Company.companyName()
-        logo_uri:                    Faker.Image.imageUrl()
-        contacts:                   [Faker.Internet.email()]
+        client_name:  faker.company.companyName()
+        logo_uri:                    faker.image.imageUrl()
+        contacts:                   [faker.internet.email()]
         token_endpoint_auth_method: 'client_secret_basic'
-        redirect_uris:              [Faker.Internet.domainName()]
+        redirect_uris:              [faker.internet.domainName()]
 
-      token = Faker.Helpers.randomNumber(10)
+      token = faker.helpers.randomNumber(10)
       configuration = client.configuration settings, token
 
     it 'should return a "registration" mapping of a client', ->
@@ -910,7 +910,3 @@ describe 'Client', ->
       Client.list.should.have.been.calledWith(
         sinon.match({ index: "roles:#{role.name}:clients" })
       )
-
-
-
-
