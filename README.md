@@ -16,7 +16,7 @@
 #### Flexible User Authentication
 
 - Use local passwords, OAuth 1.0, OAuth 2.0, OpenID, and more
-- Works out of the box with Google, Facebook, Twitter, GitHub, and a [growing list of providers](https://github.com/christiansmith/anvil-connect/tree/master/lib/providers)
+- Works out of the box with Google, Facebook, Twitter, GitHub, and a [growing list of providers](https://github.com/christiansmith/anvil-connect/tree/master/providers)
 - Custom schemes using virtually any existing Passport.js strategy or your own code
 
 #### Make it yours
