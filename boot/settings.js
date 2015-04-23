@@ -530,7 +530,7 @@ settings.check_session_iframe = issuer + '/session';
  *   that the End-User be logged out at the OP.
  */
 
-settings.end_session_endpoint = undefined;
+settings.end_session_endpoint = issuer + '/signout';
 
 
 /**
