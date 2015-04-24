@@ -12,7 +12,8 @@ chai.should()
 
 
 settings = require '../../boot/settings'
-IDToken           = require '../../models/IDToken'
+Client = require '../../models/Client'
+IDToken = require '../../models/IDToken'
 {signout} = require('../../oidc')
 
 
@@ -43,12 +44,8 @@ describe 'Signout', ->
 
       describe 'and client get error', ->
 
-        it 'should provide an error'
-
-
-      describe 'and unknown client', ->
-
-        before ->
+        before (done) ->
+          sinon.stub(Client, 'get').callsArgWith(1, new Error())
           opbs = 'b3f0r3'
           req =
             query:
@@ -61,14 +58,45 @@ describe 'Signout', ->
             set: sinon.spy()
             send: sinon.spy()
             redirect: sinon.spy()
-          next = sinon.spy()
+          next = sinon.spy (error) ->
+            err = error
+            done()
+
+          signout(req, res, next)
+
+        after ->
+          Client.get.restore()
+
+        it 'should provide an error', ->
+          next.should.have.been.calledWith new Error()
+
+
+      describe 'and unknown client', ->
+
+        before (done) ->
+          opbs = 'b3f0r3'
+          req =
+            query:
+              post_logout_redirect_uri: 'http://example.com'
+              id_token_hint: validIDToken
+            session:
+              opbs: opbs
+            logout: sinon.spy()
+          res =
+            set: sinon.spy()
+            send: sinon.spy()
+            redirect: sinon.spy()
+          next = sinon.spy (error) ->
+            err = error
+            done()
+
           signout(req, res, next)
 
         it 'should not update OP browser state', ->
           req.session.opbs.should.equal opbs
 
-        #it 'should provide an error', ->
-        #  next.should.have.been.called
+        it 'should provide an error', ->
+          next.should.have.been.called
 
         it 'should not redirect', ->
           res.redirect.should.not.have.been.called
@@ -155,12 +183,6 @@ describe 'Signout', ->
       })
 
     it 'should respond with Pragma header', ->
-      console.log()
-      console.log()
-      console.log(res.set.firstCall)
-      console.log()
-      console.log()
-
       res.set.should.have.been.calledWith sinon.match({
         'Pragma': 'no-cache'
       })
