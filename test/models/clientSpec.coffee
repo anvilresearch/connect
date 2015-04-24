@@ -229,7 +229,7 @@ describe 'Client', ->
       Client.schema.request_uris.type.should.equal 'array'
 
     it 'should have post logout redirect uris', ->
-      Client.schema.post_logout_redirect_uris.type.should.equal 'string'
+      Client.schema.post_logout_redirect_uris.type.should.equal 'array'
 
     it 'should have trusted', ->
       Client.schema.trusted.type.should.equal 'string'

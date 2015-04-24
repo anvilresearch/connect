@@ -26,6 +26,7 @@ var oidc = {
   session:                      require('./session'),
   sessionEvents:                require('./sessionEvents'),
   sessionState:                 require('./sessionState'),
+  signout:                      require('./signout'),
   stashParams:                  require('./stashParams'),
   token:                        require('./token'),
   unstashParams:                require('./unstashParams'),

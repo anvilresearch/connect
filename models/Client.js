@@ -545,7 +545,12 @@ var Client = Modinha.define('clients', {
    */
 
   post_logout_redirect_uris: {
-    type: 'string'
+    type:     'array',
+    format:   'url',
+    message:  'invalid_post_logout_redirect_uri',
+    messages: {
+      format: 'Must contain valid URIs'
+    }
   },
 
 
