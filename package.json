@@ -70,7 +70,7 @@
     "nock": "~0.51.0",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
-    "supertest": "^0.15.0"
+    "supertest": "~0.15.0"
   },
   "dependencies": {
     "anvil-connect-jwt": "~0.1.2",
