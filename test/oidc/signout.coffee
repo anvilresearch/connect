@@ -14,6 +14,7 @@ chai.should()
 settings = require '../../boot/settings'
 Client = require '../../models/Client'
 IDToken = require '../../models/IDToken'
+InvalidTokenError = require '../../errors/InvalidTokenError'
 {signout} = require('../../oidc')
 
 
@@ -105,23 +106,93 @@ describe 'Signout', ->
           res.send.should.not.have.been.called
 
 
-      describe 'with unknown uri', ->
+      describe 'and unknown uri', ->
 
-        it 'should logout'
-        it 'should update OP browser state'
-        it 'should respond 204'
+        before ->
+          client = new Client
+            post_logout_redirect_uris: []
+          sinon.stub(Client, 'get').callsArgWith(1, null, client)
+          opbs = 'b3f0r3'
+          req =
+            query:
+              post_logout_redirect_uri: 'http://wrong.com'
+              id_token_hint: validIDToken
+            session:
+              opbs: opbs
+            logout: sinon.spy()
+          res =
+            set: sinon.spy()
+            send: sinon.spy()
+            redirect: sinon.spy()
+          next = sinon.spy()
+          signout(req, res, next)
+
+        after ->
+          Client.get.restore()
+
+        it 'should logout', ->
+          req.logout.should.have.been.called
+
+        it 'should update OP browser state', ->
+          req.session.opbs.should.not.equal opbs
+
+        it 'should respond 204', ->
+          res.send.should.have.been.calledWith 204
 
 
-      describe 'with valid client', ->
+      describe 'and valid uri', ->
 
-        it 'should logout'
-        it 'should update OP browser state'
-        it 'should redirect'
+        before ->
+          client = new Client
+            post_logout_redirect_uris: ['http://example.com']
+          sinon.stub(Client, 'get').callsArgWith(1, null, client)
+          opbs = 'b3f0r3'
+          req =
+            query:
+              post_logout_redirect_uri: 'http://example.com'
+              id_token_hint: validIDToken
+            session:
+              opbs: opbs
+            logout: sinon.spy()
+          res =
+            set: sinon.spy()
+            send: sinon.spy()
+            redirect: sinon.spy()
+          next = sinon.spy()
+          signout(req, res, next)
+
+        after ->
+          Client.get.restore()
+
+        it 'should logout', ->
+          req.logout.should.have.been.called
+
+        it 'should update OP browser state', ->
+          req.session.opbs.should.not.equal opbs
+
+        it 'should not respond 204', ->
+          res.send.should.not.have.been.calledWith 204
+
+        it 'should redirect', ->
+          res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri
 
 
     describe 'with invalid token', ->
 
-      it 'should provide an InvalidTokenError'
+      invalidIDToken = 'WRONG'
+
+
+      before ->
+        req =
+          query:
+            post_logout_redirect_uri: 'http://example.com'
+            id_token_hint: invalidIDToken
+        res = {}
+        next = sinon.spy()
+        signout(req, res, next)
+
+      it 'should provide an InvalidTokenError', ->
+        next.should.have.been.calledWith sinon.match.instanceOf InvalidTokenError
 
 
 
