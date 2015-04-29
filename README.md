@@ -2,7 +2,7 @@
 
 ### We're building a modern authorization server to <br>authenticate your users and protect your APIs.
 
-[![Join the chat at https://gitter.im/christiansmith/anvil-connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christiansmith/anvil-connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/anvilresearch/connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/anvilresearch/connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 #### Simplified Security
 
@@ -117,16 +117,12 @@ The docs are in need of attention. Please submit a issues if you encounter any d
 
 There are many ways to get help and contribute.
 
-* Chat on [Gitter](https://gitter.im/christiansmith/anvil-connect)
+* Chat on [Gitter](https://gitter.im/anvilresearch/connect)
 * Join weekly [Google Hangouts](https://www.google.com/calendar/embed?src=anvil.io_3leor1jds8ne3rj0lauh8hboes%40group.calendar.google.com&ctz=America/Los_Angeles) every Thursday
 * Pair Programming
 * Support and consulting available
 * Contact smith@anvil.io.
 
-<a href="https://www.google.com/calendar/selfsched?sstoken=UUx1dWZaTzBaY2lCfGRlZmF1bHR8MGViMzcyZDg0OTUyOGZkOTNjM2M2ZDMxMmYwMWM0Yjg" title="Pair program with me!">
-  <img  src="http://pairprogramwith.me/badge.png"
-        alt="Pair program with me!" />
-</a>
 
 ***
 
