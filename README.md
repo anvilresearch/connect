@@ -132,5 +132,5 @@ There are many ways to get help and contribute.
 
 ## MIT License
 
-Copyright (c) 2014 Christian Smith http://anvil.io
+Copyright (c) 2015 Anvil Research, Inc. http://anvil.io
 
