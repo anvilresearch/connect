@@ -339,7 +339,7 @@ function temporaryCredentials (done) {
   req.set('User-Agent', agent);
 
   // Execute request
-  return req.end(function (res) {
+  return req.end(function (err, res) {
     var response = qs.parse(res.text);
 
     if (res.statusCode !== 200) {
@@ -417,7 +417,7 @@ function tokenCredentials (authorization, secret, done) {
   req.set('User-Agent', agent);
 
   // Execute request
-  return req.end(function (res) {
+  return req.end(function (err, res) {
     var response = qs.parse(res.text)
 
     if (res.statusCode !== 200) {
@@ -487,7 +487,7 @@ function userInfo (credentials, done) {
   req.set('Content-Type', ctype);
   req.set('User-Agent',   agent);
 
-  return req.end(function (res) {
+  return req.end(function (err, res) {
     // error
     if (res.statusCode !== 200) {
       return done(

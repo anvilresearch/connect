@@ -214,7 +214,7 @@ function authorizationCodeGrant (code, done) {
   req.set('user-agent', agent)
 
   // Execute the request
-  return req.end(function (res) {
+  return req.end(function (err, res) {
     var response = (parser === 'x-www-form-urlencoded')
       ? qs.parse(res.text)
       : res.body
@@ -273,7 +273,7 @@ function userInfo (token, done) {
   req.set('user-agent', agent);
 
   // Execute the request
-  return req.end(function (res) {
+  return req.end(function (err, res) {
 
     // Handle unsuccessful response
     if (res.statusCode !== 200) {

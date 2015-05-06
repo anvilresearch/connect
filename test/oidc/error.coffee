@@ -70,10 +70,12 @@ describe 'Error Response', ->
         req = {}
 
         res =
+          status: sinon.spy()
           json: sinon.spy()
           set: sinon.spy (headers) -> res.headers = headers
           render: sinon.spy()
           redirect: sinon.spy()
+        res.status.json = sinon.spy()
 
         next = sinon.spy()
 

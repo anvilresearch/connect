@@ -158,7 +158,7 @@ describe 'OAuth2Strategy userInfo', ->
       req = strategy.userInfo token, -> done()
 
     it 'should set a custom parameter', ->
-      req.qs.oauth_token.should.equal token
+      req.qsRaw.should.contain 'oauth_token=r4nd0m'
 
 
 

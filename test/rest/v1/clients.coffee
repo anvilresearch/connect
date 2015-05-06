@@ -6,6 +6,11 @@ supertest = require 'supertest'
 expect = chai.expect
 
 
+# Allow all requests to localhost
+nock = require 'nock'
+nock.enableNetConnect('127.0.0.1')
+
+
 
 # Assertions
 chai.use sinonChai

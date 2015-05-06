@@ -80,7 +80,7 @@ module.exports = function (server) {
    * DELETE /v1/users/:userId/roles/:roleId
    */
 
-  server.del('/v1/users/:userId/roles/:roleId',
+  server.delete('/v1/users/:userId/roles/:roleId',
     authorize,
     function (req, res, next) {
       User.get(req.params.userId, function (err, instance) {
@@ -89,7 +89,7 @@ module.exports = function (server) {
 
         instance.removeRoles(req.params.roleId, function (err, result) {
           if (err) { return next(err); }
-          res.send(204);
+          res.sendStatus(204);
         });
       });
     });

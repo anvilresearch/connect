@@ -81,7 +81,7 @@ module.exports = function (server) {
    * DELETE /v1/roles/:roleId/scopes/:scopeId
    */
 
-  server.del('/v1/roles/:roleId/scopes/:scopeId',
+  server.delete('/v1/roles/:roleId/scopes/:scopeId',
     authorize,
     function (req, res, next) {
       Role.get(req.params.roleId, function (err, instance) {
@@ -90,7 +90,7 @@ module.exports = function (server) {
 
         instance.removeScopes(req.params.scopeId, function (err, result) {
           if (err) { return next(err); }
-          res.send(204);
+          res.sendStatus(204);
         });
       });
     });

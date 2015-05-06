@@ -54,7 +54,8 @@ module.exports = function (server) {
    */
 
   server.use(cookieParser(settings.cookie_secret));
-  server.use(bodyParser());
+  server.use(bodyParser.urlencoded({ extended: false }))
+  server.use(bodyParser.json())
 
 
   /**
@@ -63,6 +64,8 @@ module.exports = function (server) {
 
   server.use(session({
     store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
     secret: settings.session_secret
   }));
 

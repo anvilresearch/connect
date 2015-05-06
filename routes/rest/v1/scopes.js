@@ -63,7 +63,7 @@ module.exports = function (server) {
   server.post('/v1/scopes', authorize, function (req, res, next) {
     Scope.insert(req.body, function (err, instance) {
       if (err) { return next(err); }
-      res.json(201, instance);
+      res.status(201).json(instance);
     });
   });
 
@@ -85,11 +85,11 @@ module.exports = function (server) {
    * DELETE /v1/scopes/:id
    */
 
-  server.del('/v1/scopes/:id', authorize, function (req, res, next) {
+  server.delete('/v1/scopes/:id', authorize, function (req, res, next) {
     Scope.delete(req.params.id, function (err, result) {
       if (err) { return next(err); }
       if (!result) { return next(new NotFoundError()); }
-      res.send(204);
+      res.sendStatus(204);
     });
   });
 
