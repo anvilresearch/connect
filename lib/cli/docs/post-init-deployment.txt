@@ -4,6 +4,7 @@ Your Anvil Connect deployment repository is initialized. Next steps:
 1. Install npm dependencies if you plan to run the server locally.
 
       $ npm install
+      $ bower install
 
 2. Adjust your configuration files as needed, then be sure to initialize
    your development and production databases.
