@@ -92,7 +92,8 @@ AccessToken.__client = client;
 
 
 /**
- * Indices
+ * Index the token to manage a list
+ * of authorized clients for a user.
  */
 
 AccessToken.defineIndex({
@@ -108,12 +109,12 @@ AccessToken.defineIndex({
  * instead of issuing a new one.
  */
 
-//AccessToken.defineIndex({
-//  type: 'hash',
-//  key: 'user:client:token',
-//  field: ['$:$', 'uid', 'cid'],
-//  value: 'at'
-//});
+AccessToken.defineIndex({
+  type: 'hash',
+  key: 'user:client:token',
+  field: ['$:$', 'uid', 'cid'],
+  value: 'at'
+});
 
 
 //AccessToken.existing = function (userId, clientId, callback) {
@@ -244,9 +245,9 @@ AccessToken.refresh = function (refreshToken, clientId, callback) {
  * Revoke access token
  */
 
-AccessToken.revoke = function (accountId, appId, callback) {
-  var key = 'account:app:token'
-    , field = accountId + ':' + appId
+AccessToken.revoke = function (userId, clientId, callback) {
+  var key = 'user:client:token'
+    , field = userId + ':' + clientId
     ;
 
   this.__client.hget(key, field, function (err, id) {

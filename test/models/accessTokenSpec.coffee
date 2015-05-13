@@ -426,6 +426,34 @@ describe 'AccessToken', ->
 
 
 
+  describe 'revoke', ->
+
+    {deleted} = {}
+
+    beforeEach (done) ->
+      token = new AccessToken
+        uid: 'uuid-1'
+        cid: 'uuid-2'
+      sinon.stub(client, 'hget').callsArgWith 2, null, 'fakeId'
+      sinon.stub(AccessToken, 'delete').callsArgWith 1, null, true
+      AccessToken.revoke token.uid, token.cid, (error, result) ->
+        err = error
+        deleted = result
+        done()
+
+    afterEach ->
+      client.hget.restore()
+      AccessToken.delete.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide confirmation', ->
+      deleted.should.be.true
+
+
+
+
   describe 'verify', ->
 
     {claims} = {}
