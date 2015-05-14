@@ -420,6 +420,14 @@ OpenID Metadata Default Values can be overridden by defining them in the configu
 * Desktop
 * CLI
 
+### Clients that play well with connect
+
+##### Wordpress
+* [Wordpress-OpenID-Connect-Login](https://github.com/jumbojett/Wordpress-OpenID-Connect-Login)
+
+##### Drupal
+* [OpenID Connect](https://www.drupal.org/project/openid_connect)
+
 ### Protecting APIs
 
 #### Obtaining Tokens
