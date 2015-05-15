@@ -32,6 +32,8 @@ require('./routes/connect')(server);
 require('./routes/verify')(server);
 require('./routes/jwks')(server);
 require('./routes/session')(server);
+require('./routes/authorizations')(server);
+require('./routes/applications')(server);
 
 
 /**
