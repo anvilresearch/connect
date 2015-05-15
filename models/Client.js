@@ -578,6 +578,8 @@ var Client = Modinha.define('clients', {
 
   trusted: {
     type: 'string',
+    default: 'false',
+    enum: ['true', 'false'],
     secondary: true
   },
 
