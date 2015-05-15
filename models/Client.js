@@ -613,10 +613,17 @@ var Client = Modinha.define('clients', {
   origins: {
     type:   'array',
     format: 'url'
+  },
+
+  /**
+   * scopes
+   *    List of scopes required to access this client
+   */
+
+  scopes: {
+    type:   'array',
+    default: []
   }
-
-
-  // scopes: ????
 
 });
 

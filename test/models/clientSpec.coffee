@@ -250,6 +250,12 @@ describe 'Client', ->
     it 'should verify origins uri format', ->
       Client.schema.origins.format.should.equal 'url'
 
+    it 'should have scopes', ->
+      Client.schema.scopes.type.should.equal 'array'
+
+    it 'should have a default scopes value', ->
+      Client.schema.scopes.default.should.eql []
+
 
 
 
