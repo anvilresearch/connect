@@ -54,7 +54,6 @@ module.exports = function (server) {
       ;
 
     AccessToken.revoke(uid, cid, function (err, confirm) {
-      console.log(err, confirm)
       if (err) { return next(err); }
       res.status(204).send()
     });
