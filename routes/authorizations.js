@@ -20,26 +20,9 @@ module.exports = function (server) {
    */
 
   server.get('/authorizations', authenticate, function (req, res, next) {
-    var key = 'users:' + req.user._id + ':clients';
-
-    AccessToken.__client.zrevrange(key, 0, -1, function (err, ids) {
+    Client.listAuthorizedByUser(req.user._id, function (err, clients) {
       if (err) { return next(err); }
-
-      Client.get(ids, {
-        select: [
-          '_id',
-          'client_name',
-          'client_uri',
-          'logo_uri',
-          'trusted'
-        ]
-      }, function (err, clients) {
-        if (err) { return next(err); }
-        // this should handle application/JSON or text/HTML
-        // in the case of html content type, render a view listing
-        // the authorized clients, with links to revoke access
-        res.json(clients);
-      });
+      res.json(clients);
     });
   });
 

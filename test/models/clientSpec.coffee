@@ -923,3 +923,24 @@ describe 'Client', ->
       Client.list.should.have.been.calledWith(
         sinon.match({ index: "roles:#{role.name}:clients" })
       )
+
+
+
+
+  describe 'list authorized by user', ->
+
+    before (done) ->
+      sinon.spy Client, 'list'
+      Client.listAuthorizedByUser 'uuid', (error, results) ->
+        err = error
+        instances = results
+        done()
+
+    after ->
+      Client.list.restore()
+
+    it 'should look in the authorized clients index', ->
+      Client.list.should.have.been.calledWith(
+        sinon.match({ index: "users:uuid:clients" })
+      )
+

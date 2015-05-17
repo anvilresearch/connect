@@ -673,6 +673,34 @@ Client.prototype.authorizedScope = function (callback) {
 
 
 /**
+ * Authorized by user
+ */
+
+Client.listAuthorizedByUser = function (userId, options, callback) {
+  var index  = 'users:' + userId + ':clients';
+
+  if (!callback) {
+    callback = options;
+    options = {};
+  }
+
+  options.index = 'users:' + userId + ':clients';
+  options.select = [
+    '_id',
+    'client_name',
+    'client_uri',
+    'logo_uri',
+    'trusted'
+  ];
+
+  Client.list(options, function (err, clients) {
+    if (err) { return callback(err); }
+    callback(null, clients);
+  });
+};
+
+
+/**
  * Mappings
  */
 
