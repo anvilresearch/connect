@@ -2,8 +2,8 @@
  * Module dependencies
  */
 
-var Client = require('../models/Client')
-  , authenticate = require('../oidc').authenticateUser
+var authenticate     = require('../oidc').authenticateUser
+  , userApplications = require('../models/UserApplications')
   ;
 
 
@@ -18,33 +18,9 @@ module.exports = function (server) {
    */
 
   server.get('/applications', authenticate, function (req, res, next) {
-    Client.listByTrusted('true', {
-      select: [
-        '_id',
-        'client_name',
-        'client_uri',
-        'logo_uri',
-        'trusted',
-        'scopes'
-      ]
-    }, function (err, clients) {
+    userApplications(req.user, function (err, apps) {
       if (err) { return next(err); }
-
-      req.user.authorizedScope(function (err, authorizedScopes) {
-        if (err) { return next(err); }
-
-        var authorizedClients = clients.filter(function (client) {
-          if (!client.scopes) {
-            return true;
-          } else {
-            return client.scopes && client.scopes.some(function (scope) {
-              return (authorizedScopes.indexOf(scope) !== -1)
-            });
-          }
-        });
-
-        res.json(authorizedClients);
-      })
+      res.json(apps);
     });
   });
 
