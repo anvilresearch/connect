@@ -57,7 +57,7 @@ function userApplications (user, callback) {
     // Filter out clients if the user has none of the scopes
     // defined by the client.
     var clients = results.trusted.filter(function (client) {
-      if (!client.scopes) {
+      if (!client.scopes || client.scopes.length === 0) {
         return true;
       } else {
         return client.scopes.some(function (scope) {
