@@ -2,7 +2,8 @@
  * Module dependencies
  */
 
-var UnauthorizedError = require('../errors/UnauthorizedError');
+var User = require('../models/User')
+  , UnauthorizedError = require('../errors/UnauthorizedError');
 
 
 /**
@@ -10,11 +11,37 @@ var UnauthorizedError = require('../errors/UnauthorizedError');
  */
 
 function authenticateUser (req, res, next) {
-  if (!req.isAuthenticated()) {
+
+  // Check for verified access token
+  if (req.claims && req.claims.sub) {
+    User.get(req.claims.sub, function (err, user) {
+      if (err) {
+        return next(err);
+      }
+
+      if (!user) {
+        return next(new UnauthorizedError({
+          realm: 'user',
+          error: 'unknown_user',
+          error_description: 'Unknown user',
+          statusCode: 401
+        }));
+      }
+
+      req.user = user;
+      next();
+    })
+  }
+
+  // User is not authenticated.
+  else if (!req.isAuthenticated()) {
     next(new UnauthorizedError({
       statusCode: 401
     }));
-  } else {
+  }
+
+  // User is authenticated.
+  else {
     next();
   }
 }
