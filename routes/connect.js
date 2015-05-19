@@ -96,5 +96,20 @@ module.exports = function (server) {
 
   server.get('/connect/:provider/callback', handler);
 
+
+  /**
+   * Revoke Third Party Authorization
+   */
+
+  server.all('/connect/:provider/revoke',
+    oidc.parseAuthorizationHeader,
+    oidc.getBearerToken,
+    oidc.verifyAccessToken({
+      iss: settings.issuer,
+      key: settings.publicKey,
+    }),
+    oidc.revoke
+  );
+
 };
 

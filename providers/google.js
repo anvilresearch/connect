@@ -26,6 +26,13 @@ module.exports = function (config) {
           header:     'Authorization',
           scheme:     'Bearer'
         }
+      },
+      revoke: {
+        url:          'https://accounts.google.com/o/oauth2/revoke',
+        method:       'GET',
+        auth: {
+          param:      'token'
+        }
       }
     },
     mapping: {

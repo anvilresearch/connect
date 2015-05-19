@@ -13,7 +13,7 @@ var cwd = process.cwd()
 
 var oidc = {
   authenticateClient:           require('./authenticateClient'),
-  authenticateUser:           require('./authenticateUser'),
+  authenticateUser:             require('./authenticateUser'),
   authorize:                    require('./authorize'),
   checkSession:                 require('./checkSession'),
   determineUserScope:           require('./determineUserScope'),
@@ -23,6 +23,7 @@ var oidc = {
   parseAuthorizationHeader:     require('./parseAuthorizationHeader'),
   promptToAuthorize:            require('./promptToAuthorize'),
   requireSignin:                require('./requireSignin'),
+  revoke:                       require('./revoke'),
   selectConnectParams:          require('./selectConnectParams'),
   session:                      require('./session'),
   sessionEvents:                require('./sessionEvents'),
