@@ -2,11 +2,17 @@
 title: Get Started
 ---
 
+## Requirements
+
+Anvil Connect is built with the latest versions of [Node.js](https://nodejs.org/) (0.12.x) and [Redis](http://redis.io/) (3.0.x). You'll need these installed on your system before you can run the server.
+
+
+
 ## Install the CLI
 
-Anvil Connect is built with the latest versions of [Node.js](https://nodejs.org/) (0.12.x) and [Redis](http://redis.io/) (3.0.x). You'll need these installed on your system before you can run the server. Then you can get started by installing the CLI using npm.
+Install Anvil Connect globally with npm to install the CLI.
 
-```
+```bash
 $ npm install -g anvil-connect
 ```
 
@@ -16,14 +22,14 @@ $ npm install -g anvil-connect
 
 Once you have installed the CLI, make a new directory and initialize your project.
 
-```
+```bash
 $ mkdir path/to/project && cd $_
 $ nv init
 ```
 
 This will generate a file tree that looks something like this:
 
-```
+```bash
 ├── .bowerrc
 ├── .git
 ├── .gitignore
@@ -111,6 +117,19 @@ Now you can register your apps and start authenticating users. This can be done 
 $ nv add client '{ "client_name": "YOUR APP NAME", "client_uri": "http://localhost:9000", "redirect_uris": ["http://localhost:9000/callback"], "post_logout_redirect_uris": ["http://localhost:9000"], "trusted": "true" }'
 ```
 
-### IMPORTANT!
+The registration response includes credentials you'll need to configure your client.
 
-Remember to keep your `client_secret` a secret. Never share client credentials between apps. Always register a new client for each app.
+```json
+{
+  "_id": "",
+  "client_secret": ""
+  // ...
+}
+```
+
+For a list of software and client libraries known to work with Anvil Connect, see the section titled [Integrate](/docs/connect/integrate/).
+
+<div class="alert alert-warning">
+  <p><strong>IMPORTANT!</strong></p>
+  <p>Remember to keep your <code>client_secret</code> a secret. Never share client credentials between apps. Always register a new client for each app.</p>
+</div>
