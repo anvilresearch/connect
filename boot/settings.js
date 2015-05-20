@@ -329,8 +329,7 @@ settings.claims_supported = [
  *   provided in this documentation.
  */
 
-settings.service_documentation =
-           'https://github.com/christiansmith/anvil-connect/wiki';
+settings.service_documentation = 'http://anvil.io/docs/connect/';
 
 /**
  * claims_locales_supported
