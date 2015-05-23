@@ -77,7 +77,7 @@
   },
   "dependencies": {
     "anvil-connect-jwt": "~0.1.2",
-    "async": "^0.9.0",
+    "async": "^1.0.0",
     "base64url": "^1.0.4",
     "bcrypt": "~0.8.3",
     "body-parser": "^1.12.3",
@@ -102,7 +102,7 @@
     "passport-local": "~1.0.0",
     "passport-openid": "~0.3.1",
     "passport-strategy": "~1.0.0",
-    "qs": "^2.4.1",
+    "qs": "^3.0.0",
     "redis": "^0.12.1",
     "superagent": "^1.2.0",
     "uri-js": "~1.4.2",
