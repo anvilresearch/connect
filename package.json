@@ -70,10 +70,10 @@
     "faker": "~2.1.2",
     "fakeredis": "~0.3.1",
     "mocha": "~2.2.4",
-    "nock": "^1.9.0",
+    "nock": "^2.2.0",
     "sinon": "~1.14.1",
     "sinon-chai": "~2.7.0",
-    "supertest": "^0.15.0"
+    "supertest": "^1.0.1"
   },
   "dependencies": {
     "anvil-connect-jwt": "~0.1.2",
