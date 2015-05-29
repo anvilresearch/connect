@@ -2,14 +2,22 @@
 
 FROM    ubuntu:14.04
 
-RUN sudo add-apt-repository ppa:chris-lea/node.js
-RUN sudo apt-get update
-RUN sudo apt-get install nodejs
-RUN sudo apt-get install npm
+RUN     sudo apt-get update
 
-ADD . /anvil
-RUN cd /anvil; npm install
+RUN     sudo apt-get install -y curl build-essential python
+RUN     curl -sL https://deb.nodesource.com/setup | sudo bash -
+RUN     sudo apt-get install -y nodejs
 
-EXPOSE 8080
+COPY    package.json /tmp/package.json
+RUN     cd /tmp && npm install
 
-CMD ["NODE_ENV=production", "node", "/anvil/server.js"]
+COPY    . /opt/anvil
+WORKDIR /opt/anvil
+
+RUN     rm -rf ./node_modules && cp -a /tmp/node_modules ./
+
+RUN     npm install
+
+EXPOSE  3000
+
+CMD     ["node", "server.js"]
