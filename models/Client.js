@@ -128,7 +128,8 @@ var Client = Modinha.define('clients', {
     default: 'web',
     enum: [
       'web',
-      'native'
+      'native',
+      'service'
     ]
   },
 
