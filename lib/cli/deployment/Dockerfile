@@ -5,7 +5,7 @@ FROM    ubuntu:14.04
 RUN     sudo apt-get update
 
 RUN     sudo apt-get install -y curl build-essential python
-RUN     curl -sL https://deb.nodesource.com/setup | sudo bash -
+RUN     curl -sL https://deb.nodesource.com/setup_dev | sudo bash -
 RUN     sudo apt-get install -y nodejs
 
 COPY    package.json /tmp/package.json
