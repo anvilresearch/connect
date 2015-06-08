@@ -1,0 +1,11 @@
+web0:
+  image: "[YOUR IMAGE URL HERE]"
+  command: node server.js
+  environment:
+    - SERVICE_NAME=web0
+    - NODE_ENV=production
+  volumes:
+    - [CONFIG_DIR_PATH_ON_HOST]:/opt/anvil/config:ro
+    - [TEMP_DIR_PATH_ON_HOST]:/opt/anvil/tmp/
+  ports:
+    - "5200:3000"
