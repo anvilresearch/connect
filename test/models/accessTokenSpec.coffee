@@ -480,7 +480,7 @@ describe 'AccessToken', ->
       before (done) ->
         token = (new AccessTokenJWT({
           at: 'r4nd0m',
-          iss: 'MISMATCHING'
+          iss: 'https://MISMATCHING'
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid'
