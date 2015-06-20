@@ -7,7 +7,7 @@ module.exports = function (config) {
   if (config = config || {}) {
     try {
 
-      url     = URL.parse(config && config.url || 'redis://localhost:6379');
+      url     = URL.parse(config && config.url || process.env.REDIS_PORT || 'redis://localhost:6379');
       port    = url.port;
       host    = url.hostname;
       db      = config.db;
