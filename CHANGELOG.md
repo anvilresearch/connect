@@ -1,3 +1,12 @@
+<a name"0.1.40"></a>
+### 0.1.40 (2015-06-20)
+
+
+#### Features
+
+* **redis:** check REDIS_PORT environment variable ([4e4ba747](https://github.com/anvil-research/connect/commit/4e4ba747))
+
+
 <a name"0.1.39"></a>
 ### 0.1.39 (2015-06-09)
 
