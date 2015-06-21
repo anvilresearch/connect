@@ -20,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/anvil-research/connect.git"
+    "url": "https://github.com/anvilresearch/connect.git"
   },
   "keywords": [
     "Auth",
