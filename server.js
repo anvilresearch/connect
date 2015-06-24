@@ -20,6 +20,7 @@ require('./boot/passport')(passport);
  * Routes
  */
 
+require('./routes/status')(server);
 require('./routes/discover')(server);
 require('./routes/register')(server);
 require('./routes/authorize')(server);
