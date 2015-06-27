@@ -6,7 +6,7 @@ var cwd      = process.cwd()
   , env      = process.env.NODE_ENV || 'development'
   , fs       = require('fs')
   , path     = require('path')
-  , jwk      = require('../lib/jwk')
+  , keys     = require(path.join(__dirname, 'keys'))
   , pkg      = require(path.join(__dirname, '..', 'package.json'))
   , config   = require(path.join(cwd, 'config', env + '.json'))
   , settings = {}
@@ -421,6 +421,15 @@ Object.keys(config).forEach(function (key) {
 
 
 /**
+ * Key pair and JWK set
+ */
+
+Object.keys(keys).forEach(function (key) {
+  settings[key] = keys[key];
+});
+
+
+/**
  * Required Configuration Values
  */
 
@@ -530,53 +539,6 @@ settings.check_session_iframe = issuer + '/session';
  */
 
 settings.end_session_endpoint = issuer + '/signout';
-
-
-/**
- * Load Key Pair
- */
-
-var privateKey, publicKey
-  , defaultPublicKeyFile  = path.join(cwd, 'config/keys', 'public.pem')
-  , defaultPrivateKeyFile = path.join(cwd, 'config/keys', 'private.pem')
-  ;
-
-// first, look for environment variables.
-// in production, the files should not be present
-if (process.env.ANVIL_CONNECT_PRIVATE_KEY) {
-  privateKey = new Buffer(process.env.ANVIL_CONNECT_PRIVATE_KEY, 'base64').toString('ascii');
-}
-
-if (process.env.ANVIL_CONNECT_PUBLIC_KEY) {
-  publicKey  = new Buffer(process.env.ANVIL_CONNECT_PUBLIC_KEY, 'base64').toString('ascii');
-}
-
-// next, try to read the key files
-// if they are available locally, they should override
-// any found environment variables
-try {
-  privateKey = fs.readFileSync(defaultPrivateKeyFile).toString('ascii');
-  publicKey  = fs.readFileSync(defaultPublicKeyFile).toString('ascii');
-} catch (err) {}
-
-// ensure the key pair has been loaded
-if (!privateKey || !publicKey) {
-  console.log('Cannot load keypair');
-  process.exit(1);
-}
-
-// assign the values discovered
-else {
-  settings.privateKey = privateKey;
-  settings.publicKey =  publicKey;
-}
-
-
-// JWKs
-settings.jwks = {keys: [jwk(publicKey)]};
-
-
-
 
 
 /**
