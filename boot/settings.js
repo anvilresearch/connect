@@ -8,11 +8,21 @@ var cwd      = process.cwd()
   , path     = require('path')
   , keys     = require(path.join(__dirname, 'keys'))
   , pkg      = require(path.join(__dirname, '..', 'package.json'))
-  , config   = require(path.join(cwd, 'config', env + '.json'))
+  , config   = path.join(cwd, 'config', env + '.json')
   , settings = {}
   ;
 
 
+/**
+ * Load config
+ */
+
+try {
+  config = require(config);
+} catch (e) {
+  console.log('Cannot load ' + env + ' configuration');
+  process.exit(1)
+}
 
 /**
  * Anvil Connect Version
