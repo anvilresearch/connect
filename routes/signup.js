@@ -7,6 +7,7 @@ var oidc     = require('../oidc')
   , passport = require('passport')
   , qs       = require('qs')
   , User     = require('../models/User')
+  , PasswordsDisabledError = require('../errors/PasswordsDisabledError')
   ;
 
 
@@ -20,7 +21,7 @@ module.exports = function (server) {
    * Signup page
    */
 
-  server.get('/signup',
+  var getSignupHandler = [
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
@@ -30,14 +31,15 @@ module.exports = function (server) {
         request:   req.query,
         providers: settings.providers
       });
-    });
+    }
+  ];
 
 
   /**
    * Password signup handler
    */
 
-  var handler = [
+  var postSignupHandler = [
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
@@ -73,10 +75,28 @@ module.exports = function (server) {
 
 
   if (oidc.beforeAuthorize) {
-    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize);
+    postSignupHandler.splice(postSignupHandler.length - 1, 0, oidc.beforeAuthorize);
   }
 
-  server.post('/signup', handler);
+
+  /**
+   * Passwords Disabled Handler
+   */
+
+  function passwordsDisabledHandler (req, res, next) {
+    next(new PasswordsDisabledError());
+  }
+
+
+  // Only register the password signup handlers
+  // if the password protocol is enabled.
+  if (settings.providers.password === true) {
+    server.get('/signup', getSignupHandler);
+    server.post('/signup', postSignupHandler);
+  } else {
+    server.get('/signup', passwordsDisabledHandler);
+    server.post('/signup', passwordsDisabledHandler);
+  }
 
 };
 

@@ -7,6 +7,7 @@ var oidc     = require('../oidc')
   , passport = require('passport')
   , crypto   = require('crypto')
   , qs       = require('qs')
+  , PasswordsDisabledError = require('../errors/PasswordsDisabledError')
   ;
 
 
@@ -67,7 +68,16 @@ module.exports = function (server) {
     handler.splice(handler.length - 1, 0, oidc.beforeAuthorize)
   }
 
-  server.post('/signin', handler);
+
+  // Only register the password signin post handler
+  // if the password protocol is enabled.
+  if (settings.providers.password === true) {
+    server.post('/signin', handler);
+  } else {
+    server.post('/signin', function (req, res, next) {
+      next(new PasswordsDisabledError());
+    });
+  }
 
 };
 
