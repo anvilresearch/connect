@@ -30,7 +30,7 @@ function error (err, req, res, next) {
       'Pragma': 'no-cache'
     });
 
-    res.json(400, {
+    res.status(400).json({
       error:              err.error || err.message,
       error_description:  err.error_description,
       error_uri:          err.error_uri
@@ -51,13 +51,13 @@ function error (err, req, res, next) {
         'error_description="' + err.error_description + '"',
     });
 
-    res.send(401, 'Unauthorized');
+    res.status(401).send('Unauthorized');
   }
 
 
   // 403 Forbidden
   else if (err.statusCode === 403) {
-    res.send(403, 'Forbidden');
+    res.status(403).send('Forbidden');
   }
 
 
@@ -67,7 +67,7 @@ function error (err, req, res, next) {
       , message = (err.statusCode && err.message) || 'Internal Server Error'
       ;
 
-    res.send(statusCode, message);
+    res.status(statusCode).send(message);
   }
 
 }
