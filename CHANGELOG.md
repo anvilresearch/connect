@@ -1,3 +1,19 @@
+<a name"0.1.41"></a>
+### 0.1.41 (2015-06-29)
+
+
+#### Bug Fixes
+
+* **signin:** disable password signup and signin routes when password provider is not enabled ([2c819082](https://github.com/anvilresearch/connect/commit/2c819082))
+
+
+#### Features
+
+* **migrate:** remove default clients ([fab5a13b](https://github.com/anvilresearch/connect/commit/fab5a13b))
+* **routes:** add status endpoint ([58eb5e87](https://github.com/anvilresearch/connect/commit/58eb5e87))
+* **settings:** print readable message when configuration file is malformed ([4a399ee2](https://github.com/anvilresearch/connect/commit/4a399ee2))
+
+
 <a name"0.1.40"></a>
 ### 0.1.40 (2015-06-20)
 
