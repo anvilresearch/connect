@@ -20,7 +20,7 @@ chai.should()
 describe 'Error Response', ->
 
 
-  {err,req,res,next} = {}
+  {err,req,res,next,json,send} = {}
 
 
   describe 'with 302 status code', ->
@@ -69,9 +69,12 @@ describe 'Error Response', ->
 
         req = {}
 
+        json = sinon.spy()
+        status = sinon.stub().returns { json: json }
+
+
         res =
-          status: sinon.spy()
-          json: sinon.spy()
+          status: status
           set: sinon.spy (headers) -> res.headers = headers
           render: sinon.spy()
           redirect: sinon.spy()
@@ -82,10 +85,10 @@ describe 'Error Response', ->
         error err, req, res, next
 
     it 'should respond 400', ->
-      res.json.should.have.been.calledWith 400
+      res.status.should.have.been.calledWith 400
 
     it 'should respond with JSON', ->
-      res.json.should.have.been.called
+      json.should.have.been.called
 
     it 'should set the Cache-Control header', ->
       res.headers['Cache-Control'].should.equal 'no-store'
@@ -94,14 +97,12 @@ describe 'Error Response', ->
       res.headers['Pragma'].should.equal 'no-cache'
 
     it 'should provide an error', ->
-      res.json.should.have.been.calledWith(
-        sinon.match.number,
+      json.should.have.been.calledWith(
         sinon.match({ error: 'error_code' })
       )
 
     it 'should provide an error description', ->
-      res.json.should.have.been.calledWith(
-        sinon.match.number,
+      json.should.have.been.calledWith(
         sinon.match({ error_description: 'description' })
       )
 
@@ -119,8 +120,11 @@ describe 'Error Response', ->
 
         req = {}
 
+        send = sinon.spy()
+        status = sinon.stub().returns { send: send }
+
         res =
-          send: sinon.spy()
+          status: status
           set: sinon.spy (headers) -> res.headers = headers
           render: sinon.spy()
           redirect: sinon.spy()
@@ -130,10 +134,10 @@ describe 'Error Response', ->
         error err, req, res, next
 
     it 'should respond 401', ->
-      res.send.should.have.been.calledWith 401
+      res.status.should.have.been.calledWith 401
 
     it 'should respond "Unauthorized"', ->
-      res.send.should.have.been.calledWith sinon.match.number, 'Unauthorized'
+      send.should.have.been.calledWith 'Unauthorized'
 
     it 'should challenge to authenticate', ->
       res.headers['WWW-Authenticate'].should.be.defined
@@ -159,8 +163,11 @@ describe 'Error Response', ->
 
         req = {}
 
+        send = sinon.spy()
+        status = sinon.stub().returns { send: send }
+
         res =
-          send: sinon.spy()
+          status: status
           set: sinon.spy (headers) -> res.headers = headers
           render: sinon.spy()
           redirect: sinon.spy()
@@ -170,10 +177,10 @@ describe 'Error Response', ->
         error err, req, res, next
 
     it 'should respond 403', ->
-      res.send.should.have.been.calledWith 403
+      res.status.should.have.been.calledWith 403
 
     it 'should respond "Forbidden"', ->
-      res.send.should.have.been.calledWith sinon.match.number, 'Forbidden'
+      send.should.have.been.calledWith 'Forbidden'
 
 
 
@@ -185,17 +192,20 @@ describe 'Error Response', ->
           message:    'I am a teapot'
           statusCode: 418
 
+        send = sinon.spy()
+        status = sinon.stub().returns { send: send }
+
         req = {}
-        res = send: sinon.spy()
+        res = { status: status }
         next = sinon.spy()
         error err, req, res, next
 
 
     it 'should respond with error status code', ->
-      res.send.should.have.been.calledWith 418
+      res.status.should.have.been.calledWith 418
 
     it 'should respond with error message', ->
-      res.send.should.have.been.calledWith sinon.match.number, 'I am a teapot'
+      send.should.have.been.calledWith 'I am a teapot'
 
 
 
@@ -203,16 +213,17 @@ describe 'Error Response', ->
   describe 'with no error status code', ->
 
     before ->
+        send = sinon.spy()
+        status = sinon.stub().returns { send: send }
+
         err = {}
         req = {}
-        res = send: sinon.spy()
+        res = { status: status }
         next = sinon.spy()
         error err, req, res, next
 
     it 'should respond 500', ->
-      res.send.should.have.been.calledWith 500
+      res.status.should.have.been.calledWith 500
 
     it 'should respond with error message', ->
-      res.send.should.have.been.calledWith(
-        sinon.match.number, 'Internal Server Error'
-      )
+      send.should.have.been.calledWith 'Internal Server Error'
