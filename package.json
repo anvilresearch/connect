@@ -50,7 +50,9 @@
     "Facebook",
     "Twitter",
     "GitHub",
-    "Password"
+    "Password",
+    "Active Directory",
+    "AD"
   ],
   "scripts": {
     "start": "node server.js",
@@ -100,6 +102,7 @@
     "passport-local": "~1.0.0",
     "passport-openid": "~0.3.1",
     "passport-strategy": "~1.0.0",
+    "passport-adauth": "^0.1.2",
     "qs": "^3.0.0",
     "redis": "^0.12.1",
     "superagent": "^1.2.0",
