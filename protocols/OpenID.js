@@ -37,15 +37,15 @@ function verifier (req, identifier, userInfo, done) {
   // Raw OpenID Provider response should be stored
   // for consistency with other protocols.
   var auth = {
-    id: request.query['openid.identity'],
+    id: req.query['openid.identity'],
     req_query:  req.query
   };
 
-  userInfo.id         = request.query['openid.identity'];
-  userInfo.name       = request.query['openid.ext2.value.fullname'];
-  userInfo.givenName  = request.query['openid.ext2.value.firstname'];
-  userInfo.familyName = request.query['openid.ext2.value.lastname'];
-  userInfo.email      = request.query['openid.ext2.value.email'];
+  userInfo.id         = req.query['openid.identity'];
+  userInfo.name       = req.query['openid.ext2.value.fullname'];
+  userInfo.givenName  = req.query['openid.ext2.value.firstname'];
+  userInfo.familyName = req.query['openid.ext2.value.lastname'];
+  userInfo.email      = req.query['openid.ext2.value.email'];
 
   User.connect(req, auth, userInfo, function (err, user) {
     if (err) { return done(err); }
