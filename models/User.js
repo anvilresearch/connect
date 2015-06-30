@@ -290,7 +290,7 @@ User.authenticate = function (email, password, callback) {
 User.lookup = function (req, info, callback) {
   if (req.user) { return callback(null, req.user); }
 
-  var provider = req.params.provider
+  var provider = req.params.provider || req.body.provider
     , index = User.collection + ':' + provider
     ;
 
@@ -336,7 +336,7 @@ User.defineIndex({
  */
 
 User.connect = function (req, auth, info, callback) {
-  var provider = providers[req.params.provider];
+  var provider = providers[req.params.provider || req.body.provider];
   // what if there's no provider param?
 
   // Try to find an existing user.

@@ -23,21 +23,11 @@ html(lang="en")
         input(type='hidden', name='scope', value=request.scope)
         input(type='hidden', name='state', value=request.state)
         input(type='hidden', name='nonce', value=request.nonce)
-        hr.textsep.signupwith
-        ul.providers
-          each provider in Object.keys(providers)
-            if provider !== 'password'
-              li
-                a(href='/connect/' + provider + '?' + params)
-                  i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
-        hr.textsep.or
+        hr.textsep.signup
         input(type='text', name='givenName', placeholder='First Name')
         input(type='text', name='familyName', placeholder='Last Name')
         input(type='text', name='email', placeholder='Email')
         input(type='password', name='password', placeholder='Password')
-        button.callout.full(type='submit', value='Sign up')
-          | Sign up
-
-        p
-          | Already have an account?
+        input.callout.full(type='submit', value='Sign up')
+        p Already have an account?&nbsp;
           a(href='/signin?' + params) Sign in here
