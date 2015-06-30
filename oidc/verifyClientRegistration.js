@@ -89,7 +89,7 @@ function hasScope (claims, scope) {
 
   // check if the token has any of the prescribed scope values
   return cscope.some(function (s) {
-    return (scope.indexOf(s) !== -1) ? true : false;
+    return (scope && scope.indexOf(s) !== -1) ? true : false;
   });
 }
 
