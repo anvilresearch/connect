@@ -56,8 +56,8 @@ module.exports = function (server) {
    */
 
   server.use(cookieParser(settings.cookie_secret));
-  server.use(bodyParser.urlencoded({ extended: false }))
-  server.use(bodyParser.json())
+  server.use(bodyParser.urlencoded({ extended: false }));
+  server.use(bodyParser.json());
 
 
   /**
