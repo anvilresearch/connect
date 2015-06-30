@@ -30,7 +30,7 @@ module.exports = function (server) {
       User.get(req.claims.sub, function (err, user) {
         if (err)   { return next(err); }
         if (!user) { return next(new NotFoundError()); }
-        res.json(200, user.project('userinfo'));
+        res.status(200).json(user.project('userinfo'));
       });
     });
 
