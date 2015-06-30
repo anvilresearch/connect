@@ -678,8 +678,6 @@ Client.prototype.authorizedScope = function (callback) {
  */
 
 Client.listAuthorizedByUser = function (userId, options, callback) {
-  var index  = 'users:' + userId + ':clients';
-
   if (!callback) {
     callback = options;
     options = {};
