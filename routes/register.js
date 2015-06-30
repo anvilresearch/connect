@@ -68,7 +68,7 @@ module.exports = function (server) {
             'Pragma': 'no-cache'
           });
 
-          res.json(201, client.configuration(settings, token));
+          res.status(201).json(client.configuration(settings, token));
         });
       });
     });
