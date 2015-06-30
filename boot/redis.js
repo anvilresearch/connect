@@ -2,7 +2,7 @@ var URL   = require('url')
   , redis = require('redis');
 
 module.exports = function (config) {
-  var client, url, port, host, db, pass;
+  var client, url, port, host, db, auth, options;
 
   if (config = config || {}) {
     try {
@@ -15,7 +15,7 @@ module.exports = function (config) {
 
       options = {
         no_ready_check: true
-      }
+      };
 
       client = redis.createClient(port, host, options);
 
