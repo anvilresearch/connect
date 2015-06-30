@@ -7,6 +7,7 @@ var settings = require('../boot/settings')
   , passport = require('passport')
   , crypto   = require('crypto')
   , qs       = require('qs')
+  , NotFoundError = require('../errors/NotFoundError')
   ;
 
 

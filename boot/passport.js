@@ -32,12 +32,13 @@ module.exports = function (passport) {
    */
 
   if (settings.providers) {
-    Object.keys(settings.providers).forEach(function (name) {
-      var providerConf = settings.providers[name]
-        , provider = ( providers[name] ? providers[name] : providerConf )
+    Object.keys(settings.providers).forEach(function (id) {
+      var providerConf = settings.providers[id]
+        , provider = ( providers[id] ? providers[id] : providerConf )
         ;
-
-      passport.use(protocols.initialize(name, provider, providerConf));
+      var strategy = protocols.initialize(id, provider, providerConf);
+      strategy.name = id;
+      passport.use(strategy);
     });
   }
 

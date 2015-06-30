@@ -4,25 +4,24 @@ html(lang="en")
     title
       | Sign in to Anvil Connect
 
-    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='/stylesheets/providers.css')
     link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300')
   body
-
-    .anvilform
+    .anvilform.blur-transition
       img.logomark(src='/images/anvil.svg')
       h1.logotype Anvil
         span.thin Connect
 
-      form.panel(method='POST', action='/signin')
+      form.panel(method='POST')
         // adding a class of error to this paragraph will add error styling
         if error == 'email must be unique'
-          p
+          p.error
             | A user with the same email address has
             | already registered using a different provider.
             | Try one of these:
-        else
-          p= error
+        else if error
+          p.error= error
         input(type='hidden', name='response_type', value=request.response_type)
         input(type='hidden', name='client_id', value=request.client_id)
         input(type='hidden', name='redirect_uri', value=request.redirect_uri)
@@ -31,18 +30,105 @@ html(lang="en")
         input(type='hidden', name='state', value=request.state)
         input(type='hidden', name='nonce', value=request.nonce)
         hr.textsep.signinwith
-        ul.providers
-          each provider in Object.keys(providers)
-            if provider !== 'password'
-              li
-                a(href='/connect/' + provider + '?' + params)
-                  i(class='provider fa-2x fa fa-' + provider + ' ' + provider)
-        hr.textsep.or
-        input(type='text', name='email', placeholder='Email')
-        input(type='password', name='password', placeholder='Password')
-        button.callout.full(type='submit', value='Sign in')
-          | Sign in
-        p
-          | Don't have an account?
-          a(href='/signup?' + params)
-            |  Register in Seconds
+        - var formBasedProviders = [];
+        - var formFieldData = {};
+        - var providerNames = {};
+        - var externalProviders = [];
+        - var providerIDs = Object.keys(providers);
+        if providerIDs.length
+          ul.providers
+            each provider in providerIDs
+              - providerNames[provider] = providerInfo[provider].name;
+              if !providerInfo[provider].fields
+                - externalProviders.push(provider);
+                li
+                  a(href='/connect/' + provider + '?' + params, title=providerInfo[provider].name, class='provider protocol-' + providerInfo[provider].protocol + ' '+ provider)
+              else
+                - formBasedProviders.push(provider);
+                - formFieldData[provider] = providerInfo[provider].fields;
+        if formBasedProviders.length > 0
+          - var selectedProvider = (request && request.provider) || formBasedProviders[0];
+          if externalProviders.length
+            hr.textsep.or
+          .form-provider-name= providerInfo[selectedProvider].name
+          if formBasedProviders.length > 1
+            ul.providers.form-providers
+              each provider in formBasedProviders
+                li
+                  a(href='javascript:void(0)', title=providerInfo[provider].name, data-provider=provider, class='provider protocol-' + providerInfo[provider].protocol + ' ' + provider + (provider === selectedProvider ? ' selected-provider' : ''))
+          input(type='hidden', name='provider', value=selectedProvider)
+          if formError
+            p.error= formError
+          .form-fields
+            each field in providerInfo[selectedProvider].fields
+              input(type=field.type, name=field.name, placeholder=field.placeholder || (field.name.charAt(0).toUpperCase() + field.name.substring(1)))
+          //-input(type='text', name='email', placeholder='Email')
+          //-input(type='password', name='password', placeholder='Password')
+          input.callout.full(type='submit', value='Sign in')
+          if ~providerIDs.indexOf('password')
+            p.register-message
+              | Don't have an account?
+              a(href='/signup?' + params)
+                |  Register in Seconds
+    .screen(hidden)
+      .loader
+        svg.circular
+          circle.path(cx=28, cy=28, r=20, fill='none', stroke-width=5, stroke-miterlimit=10)
+    if formBasedProviders.length > 1
+      script.
+        (function() {
+          var formFieldData = !{JSON.stringify(formFieldData)};
+          var providerIDs = !{JSON.stringify(providerNames)};
+          var providerTag = document.querySelector('input[name="provider"]');
+          var formProviderNametag = document.querySelector('.form-provider-name');
+          var formFieldContainer = document.querySelector('.form-fields');
+          var formProviderLinks = document.querySelectorAll('.form-providers a');
+          var registerMessage = document.querySelector('.register-message');
+          var screenElem = document.querySelector('.screen');
+          var form = document.querySelector('form');
+          var formWrapper = document.querySelector('.anvilform');
+          
+          form.addEventListener('submit', function() {
+            formWrapper.classList.add('blur');
+            screenElem.removeAttribute('hidden');
+          });
+          
+          function changeProvider() {
+            formFieldContainer.innerHTML = '';
+            formFieldContainer.appendChild(this.providerFields.cloneNode(true));
+            for (var i = 0; i < formProviderLinks.length; i++) {
+              if (formProviderLinks[i].provider !== this.provider) {
+                formProviderLinks[i].classList.remove('selected-provider');
+              }
+            }
+            formProviderNametag.textContent = providerIDs[this.provider];
+            providerTag.value = this.provider;
+            if (registerMessage) {
+              registerMessage.style.display = this.provider === 'password' ? '' : 'none';
+            }
+            this.classList.add('selected-provider');
+          }
+          
+          var fragment, fields, input;
+          for (var i = 0; i < formProviderLinks.length; i++) {
+            // We could use dataset, but unfortunately there is the dreaded IE10
+            formProviderLinks[i].provider = formProviderLinks[i].getAttribute('data-provider');
+            fragment = document.createDocumentFragment();
+            fields = formFieldData[formProviderLinks[i].provider];
+            for (var j = 0; j < fields.length; j++) {
+              input = document.createElement('input');
+              input.name = fields[j].name
+              if (fields[j].type) {
+                input.type = fields[j].type;
+              }
+              if (fields[j].placeholder) {
+                input.placeholder = fields[j].placeholder;
+              } else {
+                input.placeholder = fields[j].name.charAt(0).toUpperCase() + fields[j].name.substring(1);
+              }
+              fragment.appendChild(input);
+            }
+            formProviderLinks[i].providerFields = fragment;
+            formProviderLinks[i].addEventListener('click', changeProvider);
+          }
+        })();

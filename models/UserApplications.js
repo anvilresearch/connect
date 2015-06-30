@@ -31,7 +31,7 @@ function userApplications (user, callback) {
       }, function (err, clients) {
         if (err) { return done(err); }
         done(null, clients);
-      })
+      });
     },
 
     // Get the authorized scope for the user
