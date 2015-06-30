@@ -48,7 +48,7 @@ function signout (req, res, next) {
             'Pragma': 'no-cache'
           });
 
-          res.send(204);
+          res.sendStatus(204);
         }
 
         // logout and redirect
@@ -83,7 +83,7 @@ function signout (req, res, next) {
       'Pragma': 'no-cache'
     });
 
-    res.send(204);
+    res.sendStatus(204);
   }
 }
 
