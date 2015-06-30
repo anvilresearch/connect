@@ -122,7 +122,7 @@ describe 'Signout', ->
             logout: sinon.spy()
           res =
             set: sinon.spy()
-            send: sinon.spy()
+            sendStatus: sinon.spy()
             redirect: sinon.spy()
           next = sinon.spy()
           signout(req, res, next)
@@ -137,7 +137,7 @@ describe 'Signout', ->
           req.session.opbs.should.not.equal opbs
 
         it 'should respond 204', ->
-          res.send.should.have.been.calledWith 204
+          res.sendStatus.should.have.been.calledWith 204
 
 
       describe 'and valid uri', ->
@@ -235,7 +235,7 @@ describe 'Signout', ->
         logout: sinon.spy()
       res =
         set: sinon.spy()
-        send: sinon.spy()
+        sendStatus: sinon.spy()
       next = sinon.spy()
       signout(req, res, next)
 
@@ -246,7 +246,7 @@ describe 'Signout', ->
       req.session.opbs.should.not.equal opbs
 
     it 'should respond 204', ->
-      res.send.should.have.been.calledWith 204
+      res.sendStatus.should.have.been.calledWith 204
 
     it 'should respond with Cache-Control header', ->
       res.set.should.have.been.calledWith sinon.match({

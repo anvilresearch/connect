@@ -91,15 +91,5 @@ module.exports = function (server) {
 
   server.post('/signin', handler);
 
-  // Only register the password signin post handler
-  // if the password protocol is enabled.
-  // if (settings.providers.password === true) {
-  //  server.post('/signin', handler);
-  // } else {
-  //  server.post('/signin', function (req, res, next) {
-  //  next(new PasswordsDisabledError());
-  // });
-  // }
-
 };
 

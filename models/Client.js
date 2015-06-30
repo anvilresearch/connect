@@ -678,8 +678,6 @@ Client.prototype.authorizedScope = function (callback) {
  */
 
 Client.listAuthorizedByUser = function (userId, options, callback) {
-  var index  = 'users:' + userId + ':clients';
-
   if (!callback) {
     callback = options;
     options = {};
@@ -731,7 +729,7 @@ Client.prototype.configuration = function (settings, token) {
   configuration.registration_client_uri = registrationClientUri;
 
   if (token) {
-    configuration.registration_access_token = token
+    configuration.registration_access_token = token;
   }
 
   return configuration;
@@ -909,7 +907,7 @@ var authenticators = {
     }
 
     Client.get(clientId, function (err, client) {
-      if (err) { return next(err); }
+      if (err) { return callback(err); }
 
       // Unknown client
       if (!client) {

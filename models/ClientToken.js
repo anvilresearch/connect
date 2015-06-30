@@ -4,6 +4,7 @@
 
 var JWT            = require('anvil-connect-jwt')
   , nowSeconds     = require('../lib/time-utils').nowSeconds
+  ;
 
 
 /**
@@ -53,7 +54,7 @@ ClientToken.issue = function (claims, privateKey, callback) {
     var jwt = token.encode(privateKey);
     return callback(null, jwt);
   } catch (err) {
-    callback(err)
+    callback(err);
     //callback(new Error('Unable to issue client access token'));
   }
 };

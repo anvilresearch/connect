@@ -79,17 +79,17 @@ function verifyClientRegistration (req, res, next) {
 
 
 function hasScope (claims, scope) {
-  var cscope = claims && claims.scope
+  var cscope = claims && claims.scope;
 
   // false if there's no scope
   if (!cscope) { return false; }
 
   // split the values if they're strings
-  if (typeof cscope === 'string') { cscope = cscope.split(' ') }
+  if (typeof cscope === 'string') { cscope = cscope.split(' '); }
 
   // check if the token has any of the prescribed scope values
   return cscope.some(function (s) {
-    return (scope.indexOf(s) !== -1) ? true : false;
+    return (scope && scope.indexOf(s) !== -1) ? true : false;
   });
 }
 

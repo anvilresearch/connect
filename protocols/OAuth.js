@@ -164,7 +164,6 @@ function signatureBaseStringURI (uri) {
     , protocol = url.protocol
     , hostname = url.hostname
     , pathname = url.pathname
-    , search   = url.search
     , port     = ''
     , result   = ''
     ;

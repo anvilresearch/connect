@@ -48,7 +48,7 @@ function userApplications (user, callback) {
       Client.__client.zrevrange(index, 0, -1, function (err, ids) {
         if (err) { return done(err); }
         done(null, ids);
-      })
+      });
     },
 
   }, function (err, results) {
