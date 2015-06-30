@@ -36,7 +36,7 @@ module.exports = function (server) {
         passport.authenticate(provider, {
           scope: config.scope,
           state: req.authorizationId
-        })(req, res);
+        })(req, res, next);
       }
 
       // NOT FOUND

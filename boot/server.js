@@ -9,6 +9,7 @@ var cwd          = process.cwd()
   , logger       = require('./logger')(settings.logger)
   , express      = require('express')
   , passport     = require('passport')
+  , cons         = require('consolidate')
   , cookieParser = require('cookie-parser')
   , bodyParser   = require('body-parser')
   , session      = require('express-session')
@@ -35,9 +36,10 @@ module.exports = function (server) {
    * Views configuration
    */
 
-  server.engine('.jade',      require('jade').__express);
+  var engine = settings.view_engine || 'jade';
+  server.engine(engine,       cons[engine]);
   server.set('views',         path.join(cwd, 'views'));
-  server.set('view engine',  'jade');
+  server.set('view engine',  engine);
 
 
   /**
