@@ -18,7 +18,7 @@ function verifyAuthorizationCode (req, res, next) {
   if (params.grant_type === 'authorization_code') {
 
     AuthorizationCode.getByCode(params.code, function (err, ac) {
-      if (err) { return callback(err); }
+      if (err) { return next(err); }
 
       // Can't find authorization code
       if (!ac) {
