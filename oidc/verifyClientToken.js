@@ -46,8 +46,8 @@ function verifyClientToken (req, res, next) {
     // decoded successfully
     else {
       // validate token
-      req.token = token
-      next()
+      req.token = token;
+      next();
     }
   }
 };

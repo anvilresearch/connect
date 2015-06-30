@@ -81,6 +81,6 @@ module.exports = server;
  */
 
 if (!module.parent) {
-  server.start()
+  server.start();
 }
 

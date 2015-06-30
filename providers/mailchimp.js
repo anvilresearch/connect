@@ -35,5 +35,5 @@ module.exports = function (config) {
 };
 
 function localhost(issuer) {
-  return issuer.replace('localhost', '127.0.0.1')
+  return issuer.replace('localhost', '127.0.0.1');
 }
