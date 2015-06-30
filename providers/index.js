@@ -3,6 +3,7 @@
  */
 
 var fs = require('fs')
+  , _ = require('lodash')
   , cwd = process.cwd()
   , path = require('path')
   , settings = require('../boot/settings')
@@ -10,6 +11,18 @@ var fs = require('fs')
   , customDirectory = path.join(cwd, 'providers')
   ;
 
+function loadProvider(dir, name, template) {
+   return require(
+    template ?
+      path.join(dir, 'templates', name)
+    :
+      path.join(dir, name)
+  );
+}
+
+// Hold on to whatever templates are found in order to avoid unecessary filesystem
+// accesses
+var templateCache = {};
 
 /**
  * Load providers
@@ -17,14 +30,56 @@ var fs = require('fs')
 function loadProviders (dir, files) {
   files.forEach(function (file) {
     if (path.extname(file) === '.js' && file !== 'index.js') {
-      var provider = path.basename(file, '.js');
+      var providerName = path.basename(file, '.js');
 
       try {
-        module.exports[provider] = require(
-          path.join(dir, provider)
-        )(settings);
+        // Grab the provider from the given directory
+        var provider = loadProvider(dir, providerName)(settings);
+        
+        // Check if the provider extends any templates
+        if (Array.isArray(provider.templates) && provider.templates.length) {
+          var templates = [], templateName;
+          // Iterate through the provider's templates, load them, and store them
+          // in memory in case we run into them again later
+          for (var i = 0; i < provider.templates.length; i++) {
+            templateName = provider.templates[i];
+            if (!templateCache[templateName]) {
+              try {
+                templateCache[templateName] = loadProvider(
+                  customDirectory, templateName, true
+                );
+              } catch (err) {
+                templateCache[templateName] = loadProvider(
+                  defaultDirectory, templateName, true
+                );
+              }
+            }
+            // If the provider has any specific configuration to pass to the template,
+            // send it along with the settings to the function call
+            if (provider.templateConfig && provider.templateConfig[templateName]) {
+              templates.push(templateCache[templateName](
+                settings, provider.templateConfig[templateName]
+              ));
+            } else {
+              templates.push(templateCache[templateName](settings));
+            }
+          }
+          // Go bottom-up through the list of generated template instances and
+          // build up the base provider, then extend the base provider with the
+          // top-most provider. Effectively, the result is a provider with the
+          // proper order of inheritance for the templates it extends.
+          var base = templates[templates.length - 1];
+          for (var i = templates.length - 2; i >= 0; i--) {
+            _.extend(base, templates[i]);
+          }
+          _.extend(base, provider);
+          
+          module.exports[providerName] = base;
+        } else {
+          module.exports[providerName] = provider;
+        }        
       } catch (e) {
-        throw new Error("Can't load " + provider + " provider.");
+        throw new Error("Can't load " + providerName + " provider.");
       }
     }
   });
