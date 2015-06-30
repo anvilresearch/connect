@@ -7,6 +7,7 @@ var oidc            = require('../oidc')
   , Client          = require('../models/Client')
   , ClientToken     = require('../models/ClientToken')
   , ValidationError = require('../errors/ValidationError')
+  , NotFoundError   = require('../errors/NotFoundError')
   ;
 
 
