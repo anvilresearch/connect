@@ -5,6 +5,7 @@
 var oidc     = require('../oidc')
   , settings = require('../boot/settings')
   , User     = require('../models/User')
+  , NotFoundError = require('../errors/NotFoundError')
   ;
 
 
