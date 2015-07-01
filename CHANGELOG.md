@@ -1,3 +1,36 @@
+<a name"0.1.42"></a>
+### 0.1.42 (2015-06-30)
+
+
+#### Bug Fixes
+
+* **authorizations:** Use correct function to send only status code ([3a27f8fb](https://github.com/anvilresearch/connect/commit/3a27f8fb))
+* **boot:** Define variables that are used but not defined ([9553367d](https://github.com/anvilresearch/connect/commit/9553367d))
+* **client:**
+  * Remove unused variable ([f89e8bd2](https://github.com/anvilresearch/connect/commit/f89e8bd2))
+  * Fix callback function name ([756a1b5a](https://github.com/anvilresearch/connect/commit/756a1b5a))
+* **oidc:**
+  * Don't dereference indexOf if scope is falsy ([7b65497b](https://github.com/anvilresearch/connect/commit/7b65497b))
+  * Fix callback function name ([69ac4623](https://github.com/anvilresearch/connect/commit/69ac4623))
+* **openid:** Correct use of undefined variable ([269d5243](https://github.com/anvilresearch/connect/commit/269d5243))
+* **register:** Fix missing NotFoundError require ([51e2796e](https://github.com/anvilresearch/connect/commit/51e2796e))
+* **routes:**
+  * Update to match express v4 API ([e4aa50a4](https://github.com/anvilresearch/connect/commit/e4aa50a4))
+  * Update to match express v4 API ([3ecdfe7f](https://github.com/anvilresearch/connect/commit/3ecdfe7f))
+  * Pass `next` to `passport.authenticate` ([29caf252](https://github.com/anvilresearch/connect/commit/29caf252))
+* **signout:** Update deprecated express API call ([40ee238c](https://github.com/anvilresearch/connect/commit/40ee238c))
+* **time-utils:** Fix variable double-definition ([38867105](https://github.com/anvilresearch/connect/commit/38867105))
+* **userapplications:** Add missing semicolon ([abd38c5c](https://github.com/anvilresearch/connect/commit/abd38c5c))
+* **userinfo:** Add missing NotFoundError require ([612f4e31](https://github.com/anvilresearch/connect/commit/612f4e31))
+
+
+#### Features
+
+* **fields:** Generate sign in form for providers with defined fields ([2769b1fe](https://github.com/anvilresearch/connect/commit/2769b1fe))
+* **providers:** Add Active Directory support ([a25cae79](https://github.com/anvilresearch/connect/commit/a25cae79))
+* **views:** use consolidate.js for configurable view engine ([e955ad2c](https://github.com/anvilresearch/connect/commit/e955ad2c))
+
+
 <a name"0.1.41"></a>
 ### 0.1.41 (2015-06-29)
 
