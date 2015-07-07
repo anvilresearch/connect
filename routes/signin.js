@@ -52,7 +52,7 @@ module.exports = function (server) {
     oidc.verifyClient,
     function (req, res, next) {
       if (!settings.providers[req.body.provider]) {
-        next(new InvalidRequestError());
+        next(new InvalidRequestError("Invalid provider"));
       } else {
         passport.authenticate(req.body.provider, function (err, user, info) {
           if (err) {
