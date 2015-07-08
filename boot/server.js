@@ -64,12 +64,25 @@ module.exports = function (server) {
    * Express Session
    */
 
-  server.use(session({
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    secret: settings.session_secret
-  }));
+  if (process.env.NODE_ENV === 'production') {
+    server.use(session({
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      secret: settings.session_secret,
+      proxy: true,
+      cookie: {
+        secure: true
+      }
+    }));
+  } else {
+    server.use(session({
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      secret: settings.session_secret
+    }));
+  }
 
 
   /**
