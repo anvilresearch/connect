@@ -271,7 +271,7 @@ describe 'Client', ->
         token_endpoint_auth_method: 'client_secret_basic'
         redirect_uris:              [faker.internet.domainName()]
 
-      token = faker.helpers.randomNumber(10)
+      token = faker.random.number(10)
       configuration = client.configuration settings, token
 
     it 'should return a "registration" mapping of a client', ->
