@@ -1,11 +1,33 @@
-web0:
-  image: "[YOUR IMAGE URL HERE]"
-  command: node server.js
-  environment:
-    - SERVICE_NAME=web0
-    - NODE_ENV=production
+connect:
+  build: connect
+  links:
+    - redis
   volumes:
-    - [CONFIG_DIR_PATH_ON_HOST]:/opt/anvil/config:ro
-    - [TEMP_DIR_PATH_ON_HOST]:/opt/anvil/tmp/
+    - ./connect/config:/opt/connect/config:ro
+    - ./connect/views:/opt/connect/views:ro
   ports:
-    - "5200:3000"
+    - "3000:3000"
+  restart: always
+
+nginx:
+  #build: nginx
+  image: anvilresearch/nginx
+  links:
+    - connect
+  volumes:
+    - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    - ./nginx/certs:/etc/nginx/certs:ro
+    - ./connect/public:/var/www/html:ro
+    - ./nginx/logs:/var/log/nginx
+  ports:
+    - "443:443"
+  restart: always
+
+redis:
+  #build: redis
+  image: anvilresearch/redis
+  volumes:
+    - ./data:/data
+  ports:
+    - "6379:6379"
+  restart: always
