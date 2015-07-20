@@ -11,9 +11,6 @@ var qs = require('qs');
 
 function error (err, req, res, next) {
   
-  console.error(' !! ERROR !! ', err, err && err.status, err && err.error, err && err.message);
-  console.log(err.stack);
-
   // 302 Redirect
   if (err.statusCode === 302 && err.redirect_uri) {
     var params = req.connectParams
