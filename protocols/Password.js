@@ -5,6 +5,7 @@
 var util          = require('util')
   , LocalStrategy = require('passport-local').Strategy
   , User          = require('../models/User')
+  , mailer        = require('../boot/mailer')
   ;
 
 
@@ -32,6 +33,9 @@ LocalStrategy.verifier = verifier;
  */
 
 function initialize (provider, configuration) {
+  if (configuration.verifyEmail && !mailer) {
+    throw new Error("verifyEmail is true but no mailer defined");
+  }
   return new LocalStrategy(provider, verifier);
 }
 

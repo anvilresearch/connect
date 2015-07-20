@@ -39,6 +39,12 @@ var User = Modinha.define('users', {
                           format:   'email'
                         },
   emailVerified:        { type: 'boolean', default: false },
+  dateEmailVerified:    { type: 'number' },
+  emailVerifyToken:     {
+                          type: 'string',
+                          default: Modinha.defaults.random(16),
+                          unique: true
+                        },
   gender:               { type: 'string' },
   birthdate:            { type: 'string' },
   zoneinfo:             { type: 'string' },

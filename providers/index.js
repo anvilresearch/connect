@@ -35,7 +35,7 @@ function loadProviders (dir, files) {
       try {
         // Grab the provider from the given directory
         var provider = loadProvider(dir, providerName)(settings);
-        
+
         // Check if the provider extends any templates
         if (Array.isArray(provider.templates) && provider.templates.length) {
           var templates = [], templateName;
@@ -73,11 +73,19 @@ function loadProviders (dir, files) {
             _.extend(base, templates[i]);
           }
           _.extend(base, provider);
-          
-          module.exports[providerName] = base;
-        } else {
-          module.exports[providerName] = provider;
-        }        
+
+          provider = base;
+        }
+
+        provider.emailVerification = _.extend(
+          { enable: settings.mailer ? true: false, require: true },
+          settings.emailVerification || {},
+          (settings.providers[providerName]
+            && settings.providers[providerName].emailVerification) || {}
+        );
+
+        module.exports[providerName] = provider;
+
       } catch (e) {
         throw new Error("Can't load " + providerName + " provider.");
       }
