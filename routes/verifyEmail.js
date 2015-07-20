@@ -30,7 +30,7 @@ module.exports = function (server) {
         User.patch(user._id, {
           
           dateEmailVerified: Date.now(),
-          email_verified: true
+          emailVerified: true
           
         }, {
 
