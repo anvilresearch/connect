@@ -18,6 +18,7 @@ var oidc = {
   checkSession:                 require('./checkSession'),
   determineUserScope:           require('./determineUserScope'),
   determineClientScope:         require('./determineClientScope'),
+  determineProvider:            require('./determineProvider'),
   error:                        require('./error'),
   getBearerToken:               require('./getBearerToken'),
   parseAuthorizationHeader:     require('./parseAuthorizationHeader'),
