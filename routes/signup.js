@@ -74,30 +74,8 @@ module.exports = function (server) {
     if (!passwordProvider.emailVerification.enable) {
       next();
     } else {
-
-      var locals = {
-        email: req.user.email,
-        name: {
-          first: req.user.givenName,
-          last: req.user.familyName
-        },
-        verifyURL: url.resolve(settings.issuer, 'email/verify?token=' + req.user.emailVerifyToken)
-      };
-
-      mailer.sendMail('verifyEmail', locals, {
-
-        from: mailer.from,
-        to: locals.email,
-        subject: 'Verify your e-mail address'
-
-      }, function(err, responseStatus) {
-
-        if (err) {
-          return next(err);
-        } else {
-          next();
-        }
-
+      req.user.sendVerificationEmail(function (err, responseStatus) {
+        next(err);
       });
     }
   }
