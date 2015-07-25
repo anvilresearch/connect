@@ -5,6 +5,7 @@ faker     = require 'faker'
 chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
+qs        = require 'qs'
 expect    = chai.expect
 
 
@@ -18,10 +19,10 @@ chai.should()
 
 
 # Code under test
-Modinha = require 'modinha'
-User = require path.join(cwd, 'models/User')
-#Client     = require path.join(cwd, 'models/Client')
-Role    = require path.join(cwd, 'models/Role')
+Modinha  = require 'modinha'
+User     = require path.join(cwd, 'models/User')
+mailer   = require path.join(cwd, 'boot/mailer')
+Role     = require path.join(cwd, 'models/Role')
 
 
 
@@ -39,7 +40,8 @@ describe 'User', ->
 
 
   {data,user,users,role,roles,jsonUsers} = {}
-  {err,validation,instance,instances,update,deleted,original,ids,info,userInfo} = {}
+  {err,validation,instance,instances,update,deleted,original,ids} = {}
+  {stat,info,options,userInfo} = {}
 
 
   before ->
@@ -746,3 +748,115 @@ describe 'User', ->
       User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
         password: false
       })
+
+
+  describe 'send verification email', ->
+
+    defaultFrom = mailer.from
+
+    before (done) ->
+      user = new User
+        email: 'user@example.com'
+        givenName: 'Jane'
+        familyName: 'Doe'
+        emailVerifyToken: '1234567890abcdef'
+
+      options =
+        token: 'invalid token'
+        redirect_uri: 'https://app.example.com/oidc_callback'
+        client_id: 'a0b1c2d3e4f5a6b7c8d9e0f'
+
+      mailer.from = 'no-reply@example.com'
+
+      sinon.stub(mailer, 'sendMail').callsArgWith(3, null, {})
+
+      user.sendVerificationEmail options, (error, responseStatus) ->
+        err = error
+        stat = responseStatus
+        done()
+
+    after ->
+      mailer.from = defaultFrom
+      mailer.sendMail.restore()
+
+    it 'should use verifyEmail template', ->
+      mailer.sendMail.should.have.been.calledWith 'verifyEmail'
+
+    it 'should provide user email to template', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          email: user.email
+        })
+      )
+
+    it 'should provide user name to template', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          name: {
+            first: user.givenName,
+            last: user.familyName
+          }
+        })
+      )
+
+    it 'should use \'email/verify\' as pathname in verification URL', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          verifyURL: sinon.match('email/verify')
+        })
+      )
+
+    it 'should include verification token in verification URL', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          verifyURL: sinon.match("token=#{user.emailVerifyToken}")
+        })
+      )
+
+    it 'should include optionally passed redirect_uri in verification URL', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          verifyURL: sinon.match(
+            "redirect_uri=#{qs.stringify(options.redirect_uri)}"
+          )
+        })
+      )
+
+    it 'should include optionally passed client_id in verification URL', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match({
+          verifyURL: sinon.match("client_id=#{options.client_id}")
+        })
+      )
+
+    it 'should send email to user\'s email address', ->
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match.object,
+        sinon.match({
+          to: user.email
+        })
+      )
+
+    it 'should send email with valid subject', ->\
+      mailer.sendMail.should.have.been.calledWith(
+        sinon.match.string,
+        sinon.match.object,
+        sinon.match({
+          subject: sinon.match.string
+        })
+      )
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a response status', ->
+      stat.should.eql {}
+
+

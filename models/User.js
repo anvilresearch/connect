@@ -3,8 +3,12 @@
  */
 
 var client                = require('../boot/redis')
+  , mailer                = require('../boot/mailer')
+  , settings              = require('../boot/settings')
   , providers             = require('../providers')
   , bcrypt                = require('bcrypt')
+  , qs                    = require('qs')
+  , url                   = require('url')
   , CheckPassword         = require('mellt').CheckPassword
   , Modinha               = require('modinha')
   , Document              = require('modinha-redis')
@@ -412,6 +416,46 @@ User.connect = function (req, auth, info, callback) {
 
   });
 };
+
+User.prototype.sendVerificationEmail = function (options, callback) {
+
+  if (!callback) {
+    callback = options;
+    options = {};
+  }
+
+  options.token = this.emailVerifyToken;
+
+  var verifyURL = url.parse(settings.issuer);
+
+  verifyURL.pathname = 'email/verify';
+  verifyURL.query = options;
+
+  var locals = {
+    email: this.email,
+    name: {
+      first: this.givenName,
+      last: this.familyName
+    },
+    verifyURL: url.format(verifyURL)
+  };
+
+  mailer.sendMail('verifyEmail', locals, {
+
+    to: this.email,
+    subject: 'Verify your e-mail address'
+
+  }, function(err, responseStatus) {
+
+    if (err) {
+      return callback(err, responseStatus);
+    } else {
+      callback(null, responseStatus);
+    }
+
+  });
+
+}
 
 
 /**
