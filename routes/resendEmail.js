@@ -58,6 +58,12 @@ module.exports = function (server) {
 
       User.getByEmail(req.query.email, function(err, user) {
         if (err) { return next(err); }
+        
+        // We don't notify the end-user if the e-mail was not found in the
+        // database or if the account found was already verified because
+        // we don't want to allow a malicious user to use this endpoint to
+        // scrape connect for registered accounts by e-mail (even though
+        // those accounts would have to have unverified e-mail addresses)
 
         if (user && !user.emailVerified) {
           user.sendVerificationEmail(emailParams, function () {});
