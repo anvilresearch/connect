@@ -759,7 +759,6 @@ describe 'User', ->
         email: 'user@example.com'
         givenName: 'Jane'
         familyName: 'Doe'
-        emailVerifyToken: '1234567890abcdef'
 
       options =
         token: 'invalid token'
@@ -769,6 +768,12 @@ describe 'User', ->
       mailer.from = 'no-reply@example.com'
 
       sinon.stub(mailer, 'sendMail').callsArgWith(3, null, {})
+      sinon.stub User, 'patch', (objID, data, opt, cb) ->
+        if !cb
+          cb = opt
+        if data && data.emailVerifyToken
+          user.emailVerifyToken = data.emailVerifyToken
+        cb null, user
 
       user.sendVerificationEmail options, (error, responseStatus) ->
         err = error
@@ -778,9 +783,15 @@ describe 'User', ->
     after ->
       mailer.from = defaultFrom
       mailer.sendMail.restore()
+      User.patch.restore()
 
     it 'should use verifyEmail template', ->
       mailer.sendMail.should.have.been.calledWith 'verifyEmail'
+
+    it 'should set the user\'s emailVerifyToken', ->
+      User.patch.should.have.been.calledWith sinon.match.defined, sinon.match({
+        emailVerifyToken: sinon.match.string
+      })
 
     it 'should provide user email to template', ->
       mailer.sendMail.should.have.been.calledWith(

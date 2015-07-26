@@ -82,6 +82,7 @@ module.exports = function (config) {
   defaultFrom = config && config.from;
   
   module.exports = {
+    from: defaultFrom,
     render: render,
     transport: transport,
     sendMail: sendMail

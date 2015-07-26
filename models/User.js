@@ -46,7 +46,6 @@ var User = Modinha.define('users', {
   dateEmailVerified:    { type: 'number' },
   emailVerifyToken:     {
                           type: 'string',
-                          default: Modinha.defaults.random(16),
                           unique: true
                         },
   gender:               { type: 'string' },
@@ -409,6 +408,16 @@ User.connect = function (req, auth, info, callback) {
 
         // User registered successfully
         else {
+          if (provider.emailVerification.enable && !user.emailVerified) {
+            var params = {
+              redirect_uri: req.connectParams.redirect_uri,
+              client_id: req.connectParams.client_id,
+              response_type: req.connectParams.response_type,
+              scope: req.connectParams.scope
+            };
+            user.sendVerificationEmail(params, function() {});
+          }
+          req.flash('isNewUser', true);
           callback(null, user, { message: 'Registered successfully' });
         }
       });
@@ -424,34 +433,41 @@ User.prototype.sendVerificationEmail = function (options, callback) {
     options = {};
   }
 
-  options.token = this.emailVerifyToken;
+  User.patch(this._id, {
+    emailVerifyToken: Modinha.defaults.random(16)()
+  }, function (err, user) {
+    if (err) { return callback(err); }
 
-  var verifyURL = url.parse(settings.issuer);
+    options.token = user.emailVerifyToken;
 
-  verifyURL.pathname = 'email/verify';
-  verifyURL.query = options;
+    var verifyURL = url.parse(settings.issuer);
 
-  var locals = {
-    email: this.email,
-    name: {
-      first: this.givenName,
-      last: this.familyName
-    },
-    verifyURL: url.format(verifyURL)
-  };
+    verifyURL.pathname = 'email/verify';
+    verifyURL.query = options;
 
-  mailer.sendMail('verifyEmail', locals, {
+    var locals = {
+      email: user.email,
+      name: {
+        first: user.givenName,
+        last: user.familyName
+      },
+      verifyURL: url.format(verifyURL)
+    };
 
-    to: this.email,
-    subject: 'Verify your e-mail address'
+    mailer.sendMail('verifyEmail', locals, {
 
-  }, function(err, responseStatus) {
+      to: user.email,
+      subject: 'Verify your e-mail address'
 
-    if (err) {
-      return callback(err, responseStatus);
-    } else {
-      callback(null, responseStatus);
-    }
+    }, function(err, responseStatus) {
+
+      if (err) {
+        return callback(err, responseStatus);
+      } else {
+        callback(null, responseStatus);
+      }
+
+    });
 
   });
 

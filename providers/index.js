@@ -78,7 +78,7 @@ function loadProviders (dir, files) {
         }
 
         provider.emailVerification = _.extend(
-          { enable: settings.mailer ? true: false, require: true },
+          { enable: settings.mailer ? true: false, require: false },
           settings.emailVerification || {},
           (settings.providers[providerName]
             && settings.providers[providerName].emailVerification) || {}

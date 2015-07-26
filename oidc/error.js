@@ -10,7 +10,7 @@ var qs = require('qs');
  */
 
 function error (err, req, res, next) {
-  
+
   // 302 Redirect
   if (err.statusCode === 302 && err.redirect_uri) {
     var params = req.connectParams

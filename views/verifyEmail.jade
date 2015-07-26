@@ -17,6 +17,5 @@ html(lang="en")
         else
           div Your e-mail has now been verified!
           if signin
-            div You may now
-              a.button(href=signin.url) continue to sign in
-              | to #{signin.client.name}
+            div You may now continue to sign in to #{signin.client.client_name}.
+              a.button(href=signin.url) Continue to sign in

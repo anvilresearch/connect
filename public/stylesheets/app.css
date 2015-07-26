@@ -2,6 +2,8 @@
 
 body {
   background: #fafafa;
+  color: #212121;
+  color: rgba(0, 0, 0, .87);
 }
 
 body, input {
@@ -221,11 +223,19 @@ a {
   position: relative;
 }
 
+.anvilform .error, .anvilform .message {
+  padding: 10px;
+  position: relative;
+}
+
 .anvilform .error {
   background: #f15a24;
   color: #fff;
-  padding: 10px;
-  position: relative;
+}
+
+.anvilform .message {
+  background: #2e7d32;
+  color: #fff;
 }
 
 .anvilform .panel .providers {
@@ -255,7 +265,7 @@ form input:not([type]) {
   margin-right: 0;
 }
 
-button, input[type="button"],
+.button, button, input[type="button"],
 input[type="submit"] {
   display: block;
   outline: none;
@@ -283,50 +293,50 @@ input[type="submit"] {
   user-select: none;
 }
 
-button:focus, input[type="button"]:focus, input[type="submit"]:focus,
-button:active, input[type="button"]:active, input[type="submit"]:active {
+.button:focus, button:focus, input[type="button"]:focus, input[type="submit"]:focus,
+.button:active, button:active, input[type="button"]:active, input[type="submit"]:active {
   background: #ef6c00;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 0 4px 0 rgba(0, 0, 0, 0.12),
     0 3px 0 -3px rgba(0, 0, 0, 0.2);
   transform: translate(1px, 1px);
 }
 
-button:hover, input[type="button"]:hover,
+.button:hover, button:hover, input[type="button"]:hover,
 input[type="submit"]:hover {
-  background: #aaa;
+  background: #ef6C00;
 }
 
-button.callout, input[type="button"].callout,
+.button.callout, button.callout, input[type="button"].callout,
 input[type="submit"].callout {
   background: #4caf50;
   /*font-weight: 400;*/
   color: #fff;
 }
 
-button.full, input[type="button"].full,
+.button.full, button.full, input[type="button"].full,
 input[type="submit"].full {
   width: 100%;
 }
 
-button.smalltext, input[type="button"].smalltext,
+.button.smalltext, button.smalltext, input[type="button"].smalltext,
 input[type="submit"].smalltext {
   font-size: 12px;
   position: relative;
   top: -7px;
 }
 
-button.callout:hover, input[type="button"].callout:hover,
+.button.callout:hover, button.callout:hover, input[type="button"].callout:hover,
 input[type="submit"].callout:hover,
-button.callout:focus, input[type="button"].callout:focus,
+.button.callout:focus, button.callout:focus, input[type="button"].callout:focus,
 input[type="submit"].callout:focus,
-button.callout:active, input[type="button"].callout:active,
+.button.callout:active, button.callout:active, input[type="button"].callout:active,
 input[type="submit"].callout:active {
   background: #81c784;
 }
 
-button:last-child, input[type="button"]:last-child,
+.button:last-child, button:last-child, input[type="button"]:last-child,
 input[type="submit"]:last-child {
-  margin-right: 0px;
+  /* margin-right: 0px; */
 }
 
 button a {
@@ -404,3 +414,12 @@ button a {
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.center-block {
+  margin: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+

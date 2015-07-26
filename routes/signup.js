@@ -62,7 +62,10 @@ module.exports = function (server) {
           if (!user) {
           } else {
             req.login(user, function (err) {
-              next(err);
+              if (err) { return next(err); }
+
+              req.flash('isNewUser', true);
+              next();
             });
           }
         })(req, res, next);
@@ -70,14 +73,9 @@ module.exports = function (server) {
     });
   }
 
-  function sendVerificationEmail(req, res, next) {
-    if (!passwordProvider.emailVerification.enable) {
-      next();
-    } else {
-      req.user.sendVerificationEmail(function (err, responseStatus) {
-        next(err);
-      });
-    }
+  function usePasswordProvider(req, res, next) {
+    req.provider = passwordProvider;
+    next();
   }
 
   var postSignupHandler = [
@@ -85,7 +83,9 @@ module.exports = function (server) {
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
     createUser,
-    sendVerificationEmail,
+    usePasswordProvider,
+    oidc.sendVerificationEmail,
+    oidc.requireVerifiedEmail(),
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize

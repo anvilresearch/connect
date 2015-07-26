@@ -16,6 +16,7 @@ var cwd          = process.cwd()
   , session      = require('express-session')
   , RedisStore   = require('connect-redis')(session)
   , sessionStore = new RedisStore({ client: client })
+  , connectFlash = require('connect-flash')
   , cors         = require('cors')
   ;
 
@@ -84,6 +85,13 @@ module.exports = function (server) {
       secret: settings.session_secret
     }));
   }
+
+
+  /**
+   * Flash messaging
+   */
+
+  server.use(connectFlash());
 
 
   /**
