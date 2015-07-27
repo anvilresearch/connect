@@ -50,8 +50,9 @@ module.exports = function (server) {
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.determineProvider,
     function (req, res, next) {
-      if (!settings.providers[req.body.provider]) {
+      if (!req.provider) {
         next(new InvalidRequestError("Invalid provider"));
       } else {
         passport.authenticate(req.body.provider, function (err, user, info) {
@@ -80,6 +81,7 @@ module.exports = function (server) {
         })(req, res, next);
       }
     },
+    oidc.requireVerifiedEmail(),
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize

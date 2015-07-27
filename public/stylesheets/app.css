@@ -1,6 +1,13 @@
+@import url(//fonts.googleapis.com/css?family=Roboto:400,500,300,700);
+
 body {
   background: #fafafa;
-  font-family: 'Roboto', sans-serif;
+  color: #212121;
+  color: rgba(0, 0, 0, .87);
+}
+
+body, input {
+  font: normal normal 400 16px Roboto, RobotoDraft, Noto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -16,30 +23,19 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Raleway', sans-serif;
-  text-transform: uppercase;
   font-weight: 300;
 }
 
 a {
   text-decoration: none;
-  color: #00a35f;
+  color: #d14a00;
 }
 
-.logomark {
-  width: 140px;
+.logo {
+  width: 260px;
   background-origin: content-box;
-  margin: 0 auto;
+  margin: 16px auto;
   display: block;
-}
-
-.logotype {
-  font-family: 'Playfair Display', sans-serif;
-  font-weight: 800;
-  font-size: 72px;
-  color: #00d97f;
-  width: 100%;
-  margin: -.2em auto 30px;
 }
 
 .thin {
@@ -227,11 +223,19 @@ a {
   position: relative;
 }
 
+.anvilform .error, .anvilform .message {
+  padding: 10px;
+  position: relative;
+}
+
 .anvilform .error {
   background: #f15a24;
   color: #fff;
-  padding: 10px;
-  position: relative;
+}
+
+.anvilform .message {
+  background: #2e7d32;
+  color: #fff;
 }
 
 .anvilform .panel .providers {
@@ -239,9 +243,9 @@ a {
   list-style-type: none;
 }
 
-.anvilform form input[type="text"], .anvilform form input[type="password"],
-.anvilform form input[type="email"], .anvilform form input[type="tel"],
-.anvilform form input:not([type]) {
+form input[type="text"], form input[type="password"],
+form input[type="email"], form input[type="tel"],
+form input:not([type]) {
   background: #fafafa;
   border: 1px solid #ccc;
   height: 65px;
@@ -261,22 +265,25 @@ a {
   margin-right: 0;
 }
 
-.anvilform button, .anvilform input[type="button"],
-.anvilform input[type="submit"] {
-  height: 65px;
-  margin: 10px 2px 0 0;
-  border: 0px solid #ccc;
-  background: #ccc;
+.button, button, input[type="button"],
+input[type="submit"] {
+  display: block;
+  outline: none;
+  width: 200px;
   cursor: pointer;
-  font-size: 24px;
-  text-transform: uppercase;
-  font-family: 'Raleway', sans-serif;
+  text-align: center;
+  margin: 10px 2px 0 0;
+  padding: 12px 16px;
+  border: none;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
+    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+  background: #e65100;
+  color: #fff;
   text-decoration: none;
-  font-weight: 100;
-  padding: 20px;
-  width: 168px;
-  transition: .3s background;
-  -webkit-user-select: none;
+  font-weight: 500;
+  text-transform: uppercase;
   /* Chrome all / Safari all */
   -moz-user-select: none;
   /* Firefox all */
@@ -286,41 +293,53 @@ a {
   user-select: none;
 }
 
-.anvilform button:hover, .anvilform input[type="button"]:hover,
-.anvilform input[type="submit"]:hover {
-  background: #aaa;
+.button:focus, button:focus, input[type="button"]:focus, input[type="submit"]:focus,
+.button:active, button:active, input[type="button"]:active, input[type="submit"]:active {
+  background: #ef6c00;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 0 4px 0 rgba(0, 0, 0, 0.12),
+    0 3px 0 -3px rgba(0, 0, 0, 0.2);
+  transform: translate(1px, 1px);
 }
 
-.anvilform button.callout, .anvilform input[type="button"].callout,
-.anvilform input[type="submit"].callout {
-  background: #21d782;
-  font-weight: 400;
+.button:hover, button:hover, input[type="button"]:hover,
+input[type="submit"]:hover {
+  background: #ef6C00;
+}
+
+.button.callout, button.callout, input[type="button"].callout,
+input[type="submit"].callout {
+  background: #4caf50;
+  /*font-weight: 400;*/
   color: #fff;
 }
 
-.anvilform button.full, .anvilform input[type="button"].full,
-.anvilform input[type="submit"].full {
+.button.full, button.full, input[type="button"].full,
+input[type="submit"].full {
   width: 100%;
 }
 
-.anvilform button.smalltext, .anvilform input[type="button"].smalltext,
-.anvilform input[type="submit"].smalltext {
+.button.smalltext, button.smalltext, input[type="button"].smalltext,
+input[type="submit"].smalltext {
   font-size: 12px;
   position: relative;
   top: -7px;
 }
 
-.anvilform button.callout:hover, .anvilform input[type="button"].callout:hover,
-.anvilform input[type="submit"].callout:hover {
-  background: #4ddf9b;
+.button.callout:hover, button.callout:hover, input[type="button"].callout:hover,
+input[type="submit"].callout:hover,
+.button.callout:focus, button.callout:focus, input[type="button"].callout:focus,
+input[type="submit"].callout:focus,
+.button.callout:active, button.callout:active, input[type="button"].callout:active,
+input[type="submit"].callout:active {
+  background: #81c784;
 }
 
-.anvilform button:last-child, .anvilform input[type="button"]:last-child,
-.anvilform input[type="submit"]:last-child {
-  margin-right: 0px;
+.button:last-child, button:last-child, input[type="button"]:last-child,
+input[type="submit"]:last-child {
+  /* margin-right: 0px; */
 }
 
-.anvilform button a {
+button a {
   text-decoration: none;
   color: #000;
   font-weight: 100;
@@ -395,3 +414,12 @@ a {
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.center-block {
+  margin: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+

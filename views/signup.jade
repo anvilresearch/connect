@@ -1,8 +1,7 @@
 doctype html
 html(lang="en")
   head
-    title
-      | Sign in to Anvil Connect
+    title Sign up | Anvil Connect
 
     link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/app.css')
@@ -10,11 +9,9 @@ html(lang="en")
   body
 
     .anvilform
-      img.logomark(src='/images/anvil.svg')
-      h1.logotype Anvil
-        span.thin Connect
+      img.logo(src='/images/anvil.svg', alt='Anvil Connect')
 
-      form.panel(method='POST', action='/signup')
+      form.panel(method='POST')
         p= error
         input(type='hidden', name='response_type', value=request.response_type)
         input(type='hidden', name='client_id', value=request.client_id)

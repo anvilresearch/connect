@@ -1,12 +1,21 @@
+/* global __dirname:true, process:true */
+
 /**
  * Module dependencies
  */
 
-var oidc     = require('../oidc')
-  , settings = require('../boot/settings')
-  , passport = require('passport')
-  , qs       = require('qs')
-  , User     = require('../models/User')
+var oidc             = require('../oidc')
+  , settings         = require('../boot/settings')
+  , mailer           = require('../boot/mailer')
+  , passwordProvider = require('../providers').password
+  , passport         = require('passport')
+  , qs               = require('qs')
+  , User             = require('../models/User')
+  , nodemailer       = require('nodemailer')
+  , path             = require('path')
+  , url              = require('url')
+  , templatesDir     = path.resolve(process.cwd(), 'email')
+  , consolidate      = require('consolidate')
   , PasswordsDisabledError = require('../errors/PasswordsDisabledError')
   ;
 
@@ -39,35 +48,44 @@ module.exports = function (server) {
    * Password signup handler
    */
 
+  function createUser(req, res, next) {
+    User.insert(req.body, { private: true }, function (err, user) {
+      if (err) {
+        res.render('signup', {
+          params:    qs.stringify(req.body),
+          request:   req.body,
+          providers: settings.providers,
+          error:     err.message
+        });
+      } else {
+        passport.authenticate('password', function (err, user, info) {
+          if (!user) {
+          } else {
+            req.login(user, function (err) {
+              if (err) { return next(err); }
+
+              req.flash('isNewUser', true);
+              next();
+            });
+          }
+        })(req, res, next);
+      }
+    });
+  }
+
+  function usePasswordProvider(req, res, next) {
+    req.provider = passwordProvider;
+    next();
+  }
+
   var postSignupHandler = [
     oidc.selectConnectParams,
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
-
-
-    function (req, res, next) {
-      User.insert(req.body, { private: true }, function (err, user) {
-        if (err) {
-          res.render('signup', {
-            params:    qs.stringify(req.body),
-            request:   req.body,
-            providers: settings.providers,
-            error:     err.message
-          });
-        } else {
-          passport.authenticate('local', function (err, user, info) {
-            if (!user) {
-            } else {
-              req.login(user, function (err) {
-                next(err);
-              });
-            }
-          })(req, res, next);
-        }
-      });
-    },
-
-
+    createUser,
+    usePasswordProvider,
+    oidc.sendVerificationEmail,
+    oidc.requireVerifiedEmail(),
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize
@@ -90,7 +108,7 @@ module.exports = function (server) {
 
   // Only register the password signup handlers
   // if the password protocol is enabled.
-  if (settings.providers.password === true) {
+  if (settings.providers.password) {
     server.get('/signup', getSignupHandler);
     server.post('/signup', postSignupHandler);
   } else {

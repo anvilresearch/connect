@@ -7,6 +7,7 @@ var cwd          = process.cwd()
   , settings     = require('./settings')
   , client       = require('./redis')(settings.redis)
   , logger       = require('./logger')(settings.logger)
+  , mailer       = require('./mailer')(settings.mailer)
   , express      = require('express')
   , passport     = require('passport')
   , cons         = require('consolidate')
@@ -15,6 +16,7 @@ var cwd          = process.cwd()
   , session      = require('express-session')
   , RedisStore   = require('connect-redis')(session)
   , sessionStore = new RedisStore({ client: client })
+  , connectFlash = require('connect-flash')
   , cors         = require('cors')
   ;
 
@@ -83,6 +85,13 @@ module.exports = function (server) {
       secret: settings.session_secret
     }));
   }
+
+
+  /**
+   * Flash messaging
+   */
+
+  server.use(connectFlash());
 
 
   /**

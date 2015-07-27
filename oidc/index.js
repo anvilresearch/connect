@@ -18,13 +18,16 @@ var oidc = {
   checkSession:                 require('./checkSession'),
   determineUserScope:           require('./determineUserScope'),
   determineClientScope:         require('./determineClientScope'),
+  determineProvider:            require('./determineProvider'),
   error:                        require('./error'),
   getBearerToken:               require('./getBearerToken'),
   parseAuthorizationHeader:     require('./parseAuthorizationHeader'),
   promptToAuthorize:            require('./promptToAuthorize'),
+  requireVerifiedEmail:         require('./requireVerifiedEmail'),
   requireSignin:                require('./requireSignin'),
   revoke:                       require('./revoke'),
   selectConnectParams:          require('./selectConnectParams'),
+  sendVerificationEmail:        require('./sendVerificationEmail'),
   session:                      require('./session'),
   sessionEvents:                require('./sessionEvents'),
   sessionState:                 require('./sessionState'),
@@ -39,6 +42,7 @@ var oidc = {
   verifyClientRegistration:     require('./verifyClientRegistration'),
   verifyClientToken:            require('./verifyClientToken'),
   verifyClientIdentifiers:      require('./verifyClientIdentifiers'),
+  verifyRedirectURI:            require('./verifyRedirectURI'),
   verifyAuthorizationCode:      require('./verifyAuthorizationCode')
 };
 
