@@ -74,10 +74,20 @@ You should now have an OpenID Connect Provider running in development mode.
 
 We are a growing community of contributors of all kinds, join us!
 
-* Chat on [Gitter](https://gitter.im/anvilresearch/connect) or [Slack](http://slackin.anvil.io/)
-* Join weekly [Google Hangouts](https://github.com/anvilresearch/connect/wiki/Weekly-Community-Hangouts-and-Meeting-Notes) every Thursday at 9AM PDT/4PM GMT
-* We often pair programming, ask to join in
-* Support and consulting also available, contact us via [the website](http://anvil.io) or by [email](mailto:contact@anvil.io)
+#### Chat on Gitter or Slack
+
+Come say hello on Gitter or Slack! We love talking shop with Anvil Connect users :)
+
+[![Gitter](https://badges.gitter.im/anvilresearch/connect.svg)](https://gitter.im/anvilresearch/connect) [![Slack](http://slackin.anvil.io/badge.svg)](http://slackin.anvil.io/)
+### Weekly Community Meetings
+
+Every Thursday at 9AM PDT / 12PM EDT / 4PM GMT we get together to map out the future of the project, talk through specs, review code, and help each other ship. You're welcome to [join in](https://github.com/anvilresearch/connect/wiki/Weekly-Community-Hangouts-and-Meeting-Notes).
+
+###Pair Programming
+We often pair on more challening or new code, hop into Gitter or Slack and join us, or request your own session.
+
+###Need more engagement?
+Support and consulting also available, contact us via [the website](http://anvil.io) or by [email](mailto:contact@anvil.io)
 
 ## Documentation
 
