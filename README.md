@@ -1,6 +1,7 @@
 #Anvil Connect
 
-[![Join the chat at https://gitter.im/anvilresearch/connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/anvilresearch/connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Join us in Slack at http://slackin.anvil.io/](http://slackin.anvil.io/badge.svg) ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg) ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
+[![Join the chat at https://gitter.im/anvilresearch/connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/anvilresearch/connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Slack](http://slackin.anvil.io/badge.svg)](http://slackin.anvil.io/)
+ ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg) ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
 
 ##What We're Doing 
 ### We're building a modern authorization server to authenticate your users and protect your APIs.
@@ -74,10 +75,20 @@ You should now have an OpenID Connect Provider running in development mode.
 
 We are a growing community of contributors of all kinds, join us!
 
-* Chat on [Gitter](https://gitter.im/anvilresearch/connect) or [Slack](http://slackin.anvil.io/)
-* Join weekly [Google Hangouts](https://github.com/anvilresearch/connect/wiki/Weekly-Community-Hangouts-and-Meeting-Notes) every Thursday at 9AM PDT/4PM GMT
-* We often pair programming, ask to join in
-* Support and consulting also available, contact us via [the website](http://anvil.io) or by [email](mailto:contact@anvil.io)
+#### Chat on Gitter or Slack
+
+Come say hello on Gitter or Slack! We love talking shop with Anvil Connect users :)
+
+[![Gitter](https://badges.gitter.im/anvilresearch/connect.svg)](https://gitter.im/anvilresearch/connect) [![Slack](http://slackin.anvil.io/badge.svg)](http://slackin.anvil.io/)
+### Weekly Community Meetings
+
+Every Thursday at 9AM PDT / 12PM EDT / 4PM GMT we get together to map out the future of the project, talk through specs, review code, and help each other ship. You're welcome to [join in](https://github.com/anvilresearch/connect/wiki/Weekly-Community-Hangouts-and-Meeting-Notes).
+
+###Pair Programming
+We often pair on more challening or new code, hop into Gitter or Slack and join us, or request your own session.
+
+###Need more engagement?
+Support and consulting also available, contact us via [the website](http://anvil.io) or by [email](mailto:contact@anvil.io)
 
 ## Documentation
 
