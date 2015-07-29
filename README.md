@@ -1,6 +1,7 @@
 #Anvil Connect
 
-[![Join the chat at https://gitter.im/anvilresearch/connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/anvilresearch/connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![Join us in Slack at http://slackin.anvil.io/](http://slackin.anvil.io/badge.svg) ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg) ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
+[![Join the chat at https://gitter.im/anvilresearch/connect](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/anvilresearch/connect?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Slack](http://slackin.anvil.io/badge.svg)](http://slackin.anvil.io/)
+ ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg) ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
 
 ##What We're Doing 
 ### We're building a modern authorization server to authenticate your users and protect your APIs.
