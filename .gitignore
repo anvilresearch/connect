@@ -3,3 +3,5 @@ hooks
 node_modules
 public/vendor
 *.swp
+dump.rdb
+appendonly.aof
