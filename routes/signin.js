@@ -51,6 +51,7 @@ module.exports = function (server) {
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
     oidc.determineProvider,
+    oidc.enforceReferrer('/signin'),
     function (req, res, next) {
       if (!req.provider) {
         next(new InvalidRequestError("Invalid provider"));

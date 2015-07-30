@@ -19,6 +19,7 @@ var oidc = {
   determineUserScope:           require('./determineUserScope'),
   determineClientScope:         require('./determineClientScope'),
   determineProvider:            require('./determineProvider'),
+  enforceReferrer:              require('./enforceReferrer'),
   error:                        require('./error'),
   getBearerToken:               require('./getBearerToken'),
   parseAuthorizationHeader:     require('./parseAuthorizationHeader'),
