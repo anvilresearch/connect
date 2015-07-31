@@ -56,7 +56,8 @@ var IDToken = JWT.define({
     iat:      { format: 'IntDate',     required: true, default: nowSeconds },
     nonce:    { format: 'String' },
     acr:      { format: 'String' },
-    at_hash:  { format: 'String' }
+    at_hash:  { format: 'String' },
+    amr:      { format: 'String*' }
   }
 
 });

@@ -232,7 +232,9 @@ describe 'ID Token', ->
     it 'should optionally include "acr"', ->
       IDToken.registeredClaims.acr.should.be.defined
 
-    it 'should optionally include "amr"'
+    it 'should optionally include "amr"', ->
+      IDToken.registeredClaims.amr.should.be.defined
+
     it 'should optionally include "azp"'
     it 'should optionally include other claims defined by the specification'
 
