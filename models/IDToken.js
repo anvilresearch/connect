@@ -45,7 +45,7 @@ var IDToken = JWT.define({
   },
 
   // permitted claims
-  claims: ['iss', 'sub', 'aud', 'exp', 'iat', 'nonce', 'acr', 'at_hash'],
+  claims: ['iss', 'sub', 'aud', 'exp', 'iat', 'nonce', 'acr', 'at_hash', 'amr'],
 
   // modify payload schema
   registeredClaims: {
