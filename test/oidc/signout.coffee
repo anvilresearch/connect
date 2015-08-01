@@ -119,6 +119,7 @@ describe 'Signout', ->
               id_token_hint: validIDToken
             session:
               opbs: opbs
+              amr: ['pwd']
             logout: sinon.spy()
           res =
             set: sinon.spy()
@@ -135,6 +136,9 @@ describe 'Signout', ->
 
         it 'should update OP browser state', ->
           req.session.opbs.should.not.equal opbs
+
+        it 'should delete amr from session', ->
+          expect(req.session.amr).to.be.undefined
 
         it 'should respond 204', ->
           res.sendStatus.should.have.been.calledWith 204
@@ -153,6 +157,7 @@ describe 'Signout', ->
               id_token_hint: validIDToken
             session:
               opbs: opbs
+              amr: ['otp']
             logout: sinon.spy()
           res =
             set: sinon.spy()
@@ -169,6 +174,9 @@ describe 'Signout', ->
 
         it 'should update OP browser state', ->
           req.session.opbs.should.not.equal opbs
+
+        it 'should delete amr from session', ->
+          expect(req.session.amr).to.be.undefined
 
         it 'should not respond 204', ->
           res.send.should.not.have.been.calledWith 204
@@ -206,6 +214,7 @@ describe 'Signout', ->
           post_logout_redirect_uri: 'https://example.com'
         session:
           opbs: opbs
+          amr: ['sms', 'otp']
         logout: sinon.spy()
       res =
         redirect: sinon.spy()
@@ -217,6 +226,9 @@ describe 'Signout', ->
 
     it 'should update OP browser state', ->
       req.session.opbs.should.not.equal opbs
+
+    it 'should delete amr from session', ->
+      expect(req.session.amr).to.be.undefined
 
     it 'should redirect', ->
       res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri
@@ -232,6 +244,7 @@ describe 'Signout', ->
         query: {}
         session:
           opbs: opbs
+          amr: ['pwd']
         logout: sinon.spy()
       res =
         set: sinon.spy()
@@ -244,6 +257,9 @@ describe 'Signout', ->
 
     it 'should update OP browser state', ->
       req.session.opbs.should.not.equal opbs
+
+    it 'should delete amr from session', ->
+      expect(req.session.amr).to.be.undefined
 
     it 'should respond 204', ->
       res.sendStatus.should.have.been.calledWith 204

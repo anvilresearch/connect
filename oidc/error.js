@@ -10,6 +10,7 @@ var qs = require('qs');
  */
 
 function error (err, req, res, next) {
+  console.log(err, err.stack)
 
   // 302 Redirect
   if (err.statusCode === 302 && err.redirect_uri) {

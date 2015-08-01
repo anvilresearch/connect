@@ -64,6 +64,14 @@ module.exports = function (server) {
             req.login(user, function (err) {
               if (err) { return next(err); }
 
+              req.session.amr = req.session.amr || [];
+              var samr = req.session.amr;
+              var pamr = req.provider.amr;
+
+              if (pamr && samr.indexOf(pamr) === -1) {
+                req.session.amr.push(pamr);
+              }
+
               req.flash('isNewUser', true);
               next();
             });

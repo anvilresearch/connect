@@ -7,6 +7,7 @@ module.exports = function (config) {
     id:                 'password',
     name:               'Email and Password',
     protocol:           'Password',
+    amr:                'pwd',
     fields: [
       { name: 'email', type: 'email' },
       { name: 'password', type: 'password' }
