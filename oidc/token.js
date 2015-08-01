@@ -43,7 +43,8 @@ function token (req, res, next) {
         iss: settings.issuer,
         sub: ac.user_id,
         aud: ac.client_id,
-        exp: nowSeconds(token.ei)
+        exp: nowSeconds(token.ei),
+        amr: req.session.amr
       });
 
       if(ac.nonce) {
@@ -56,7 +57,8 @@ function token (req, res, next) {
         iss: settings.issuer,
         sub: token.cid,
         aud: token.uid,
-        exp: nowSeconds(token.ei)
+        exp: nowSeconds(token.ei),
+        amr: req.session.amr
       });
     }
 

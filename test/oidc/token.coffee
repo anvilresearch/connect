@@ -35,6 +35,7 @@ describe 'Token response', ->
     before (done) ->
       at = AccessToken.initialize()
       sinon.stub(AccessToken, 'exchange').callsArgWith(1, null, at)
+      sinon.spy(IDToken.prototype, 'initializePayload')
 
       req =
         body:
@@ -47,6 +48,7 @@ describe 'Token response', ->
           access_token_type: 'random'
         session:
           opbs: 'h4sh'
+          amr: ['pwd']
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -59,6 +61,7 @@ describe 'Token response', ->
 
     after ->
       AccessToken.exchange.restore()
+      IDToken.prototype.initializePayload.restore()
 
     it 'should respond with access_token', ->
       res.json.should.have.been.calledWith sinon.match({ access_token: at.at })
@@ -85,6 +88,11 @@ describe 'Token response', ->
       res.json.should.have.been.calledWith sinon.match({
         session_state: sinon.match.string
       })
+
+    it 'should include `amr` claim in id_token', ->
+      IDToken.prototype.initializePayload.should.have.been.calledWith(
+        sinon.match amr: req.session.amr
+      )
 
 
   describe 'authorization code grant with optional nonce', ->
@@ -134,6 +142,7 @@ describe 'Token response', ->
     before (done) ->
       at = AccessToken.initialize({cid:'uuid2',uid: 'uuid1'})
       sinon.stub(AccessToken, 'refresh').callsArgWith(2, null, at)
+      sinon.spy(IDToken.prototype, 'initializePayload')
 
       req =
         body:
@@ -144,6 +153,7 @@ describe 'Token response', ->
           access_token_type: 'random'
         session:
           opbs: 'h4sh'
+          amr: ['otp']
       res =
         set: sinon.spy()
         json: sinon.spy()
@@ -153,6 +163,9 @@ describe 'Token response', ->
 
       token req, res, next
       done()
+
+    after ->
+      IDToken.prototype.initializePayload.restore()
 
 
     it 'should respond with access_token', ->
@@ -176,6 +189,11 @@ describe 'Token response', ->
       res.json.should.have.been.calledWith sinon.match({
         session_state: sinon.match.string
       })
+
+    it 'should include `amr` claim in id_token', ->
+      IDToken.prototype.initializePayload.should.have.been.calledWith(
+        sinon.match amr: req.session.amr
+      )
 
 
 
