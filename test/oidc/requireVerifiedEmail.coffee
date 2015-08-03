@@ -59,6 +59,7 @@ describe 'Require verified email', ->
           emailVerification:
             enable: true
             require: true
+        flash: sinon.spy (key) -> [true]
 
       res = { render: sinon.spy() }
       next = sinon.spy()
@@ -98,6 +99,7 @@ describe 'Require verified email', ->
           emailVerification:
             enable: true
             require: true
+        flash: sinon.spy (key) -> [true]
 
       res = { render: sinon.spy() }
       next = sinon.spy()
@@ -163,6 +165,7 @@ describe 'Require verified email', ->
           emailVerification:
             enable: true
             require: false
+        flash: sinon.spy (key) -> [true]
 
       res = { render: sinon.spy() }
       next = sinon.spy()

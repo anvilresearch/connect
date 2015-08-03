@@ -699,6 +699,12 @@ describe 'User', ->
       req =
         params:
           provider: 'google'
+        connectParams:
+          redirect_uri: 'https://app.example.com/callback'
+          client_id: 'uuid'
+          response_type: 'id_token token'
+          scope: 'openid profile'
+        flash: sinon.spy()
       auth =
         access_token: 'b34r3r'
       info =

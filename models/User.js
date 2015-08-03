@@ -426,6 +426,11 @@ User.connect = function (req, auth, info, callback) {
   });
 };
 
+
+/**
+ * Send verification email
+ */
+
 User.prototype.sendVerificationEmail = function (options, callback) {
 
   if (!callback) {
