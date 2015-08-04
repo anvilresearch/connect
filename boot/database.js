@@ -7,8 +7,6 @@ var async       = require('async')
   , rclient     = require('../boot/redis')
   , Role        = require('../models/Role')
   , Scope       = require('../models/Scope')
-  , Client      = require('../models/Client')
-  , ClientToken = require('../models/ClientToken')
   , issuer      = settings.issuer
   ;
 
