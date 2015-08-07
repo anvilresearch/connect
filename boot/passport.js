@@ -2,10 +2,14 @@
  * Passport Configuration
  */
 
-var settings  = require('./settings')
+var http      = require('http')
+  , crypto    = require('crypto')
+  , settings  = require('./settings')
   , providers = require('../providers')
   , protocols = require('../protocols')
   , User      = require('../models/User')
+  , req       = http.IncomingMessage.prototype
+  , logout    = req.logout
   ;
 
 
@@ -25,6 +29,17 @@ module.exports = function (passport) {
       done(err, user);
     });
   });
+
+
+  /**
+   * Wrap logout
+   */
+
+  req.logout = function () {
+    this.session.opbs = crypto.randomBytes(256).toString('hex');
+    delete this.session.amr;
+    logout.call(this);
+  }
 
 
   /**
