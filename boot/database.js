@@ -89,7 +89,7 @@ function assignPermissions (done) {
  * Tag Version
  */
 
-function tag (done) {
+function version (done) {
   rclient.set('version', settings.version, function (err) {
     done(err);
   });
@@ -125,7 +125,7 @@ module.exports = function setup () {
         insertRoles,
         insertScopes,
         assignPermissions,
-        tag
+        version
       ], function (err, results) {
 
       });
