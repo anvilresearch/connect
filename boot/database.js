@@ -147,7 +147,11 @@ module.exports = function setup () {
           assignPermissions,
           version
         ], function (err, results) {
-
+          if (err) {
+            console.log('Unable to set defaults in Redis.');
+            console.log(err.message);
+            process.exit(1);
+          }
         });
       }
     }
