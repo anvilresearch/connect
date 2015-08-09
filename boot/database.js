@@ -90,7 +90,7 @@ function assignPermissions (done) {
  */
 
 function version (done) {
-  rclient.set('version', settings.version, function (err) {
+  rclient.set('anvil:connect:version', settings.version, function (err) {
     done(err);
   });
 }
@@ -104,6 +104,7 @@ module.exports = function setup () {
   var multi = rclient.multi();
 
   multi.get('version');
+  multi.get('anvil:connect:version');
   multi.dbsize();
 
   multi.exec(function (err, results) {
@@ -112,23 +113,37 @@ module.exports = function setup () {
       process.exit(1);
     }
 
-    var version = results[0];
-    var dbsize = results[1];
+    var deprecatedVersion = results[0];
+    var version = results[1] || results[0];
+    var dbsize = results[2];
 
-    if (!version && dbsize > 0) {
-      console.log('Appears to be connected to the wrong database.');
-      process.exit(1);
+    if ((deprecatedVersion && !results[1]) || version !== settings.version) {
+      rclient.set('anvil:connect:version', settings.version, initialize);
+    } else {
+      initialize(null);
     }
 
-    if (!version && dbsize === 0) {
-      async.parallel([
-        insertRoles,
-        insertScopes,
-        assignPermissions,
-        version
-      ], function (err, results) {
+    function initialize(err) {
+      if (err) {
+        console.log(err.message);
+        process.exit(1);
+      }
 
-      });
+      if (!version && dbsize > 0) {
+        console.log('Appears to be connected to the wrong database.');
+        process.exit(1);
+      }
+
+      if (!version && dbsize === 0) {
+        async.parallel([
+          insertRoles,
+          insertScopes,
+          assignPermissions,
+          version
+        ], function (err, results) {
+
+        });
+      }
     }
   });
 }
