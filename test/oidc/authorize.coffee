@@ -12,6 +12,7 @@ chai.should()
 
 
 server = require '../../server'
+IDToken = require '../../models/IDToken'
 AccessToken = require '../../models/AccessToken'
 AuthorizationCode  = require '../../models/AuthorizationCode'
 authorize = require('../../oidc').authorize
@@ -221,9 +222,11 @@ describe 'Authorize', ->
       sinon.stub(AuthorizationCode, 'insert').callsArgWith(1, null, {
         code: '1234'
       })
+      sinon.spy(IDToken.prototype, 'initializePayload')
 
       req =
-        session: {}
+        session:
+          amr: ['sms', 'otp']
         client:
           _id: 'uuid1'
         user:
@@ -242,6 +245,7 @@ describe 'Authorize', ->
 
     after ->
       AuthorizationCode.insert.restore()
+      IDToken.prototype.initializePayload.restore()
 
     it 'should set default max_age if none is provided', ->
       AuthorizationCode.insert.should.have.been.calledWith sinon.match({
@@ -271,6 +275,11 @@ describe 'Authorize', ->
     it 'should provide session_state', ->
       res.redirect.should.have.been.calledWith sinon.match('session_state=')
 
+    it 'should include `amr` claim in id_token', ->
+      IDToken.prototype.initializePayload.should.have.been.calledWith(
+        sinon.match amr: req.session.amr
+      )
+
 
 
   describe 'with consent and "id_token token" response type', ->
@@ -278,9 +287,11 @@ describe 'Authorize', ->
     before (done) ->
       response = AccessToken.initialize().project('issue')
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
+      sinon.spy(IDToken.prototype, 'initializePayload')
 
       req =
-        session: {}
+        session:
+          amr: ['otp']
         client:
           _id: 'uuid1'
         user:
@@ -300,6 +311,7 @@ describe 'Authorize', ->
 
     after ->
       AccessToken.issue.restore()
+      IDToken.prototype.initializePayload.restore()
 
     it 'should redirect to the redirect_uri', ->
       res.redirect.should.have.been.calledWith sinon.match(
@@ -327,6 +339,11 @@ describe 'Authorize', ->
     it 'should provide session_state', ->
       res.redirect.should.have.been.calledWith sinon.match('session_state=')
 
+    it 'should include `amr` claim in id_token', ->
+      IDToken.prototype.initializePayload.should.have.been.calledWith(
+        sinon.match amr: req.session.amr
+      )
+
 
 
   describe 'with consent and "code id_token token" response type', ->
@@ -337,9 +354,11 @@ describe 'Authorize', ->
       })
       response = AccessToken.initialize().project('issue')
       sinon.stub(AccessToken, 'issue').callsArgWith(1, null, response)
+      sinon.spy(IDToken.prototype, 'initializePayload')
 
       req =
-        session: {}
+        session:
+          amr: ['pwd']
         client:
           _id: 'uuid1'
         user:
@@ -360,6 +379,7 @@ describe 'Authorize', ->
     after ->
       AuthorizationCode.insert.restore()
       AccessToken.issue.restore()
+      IDToken.prototype.initializePayload.restore()
 
     it 'should redirect to the redirect_uri', ->
       res.redirect.should.have.been.calledWith sinon.match(
@@ -389,6 +409,11 @@ describe 'Authorize', ->
 
     it 'should provide session_state', ->
       res.redirect.should.have.been.calledWith sinon.match('session_state=')
+
+    it 'should include `amr` claim in id_token', ->
+      IDToken.prototype.initializePayload.should.have.been.calledWith(
+        sinon.match amr: req.session.amr
+      )
 
 
 

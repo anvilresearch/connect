@@ -95,7 +95,8 @@ function authorize (req, res, next) {
             aud:      req.client._id,
             exp:      nowSeconds(response.expires_in),
             nonce:    params.nonce,
-            at_hash:  atHash
+            at_hash:  atHash,
+            amr:      req.session.amr
           });
 
           response.id_token = idToken.encode(settings.privateKey);

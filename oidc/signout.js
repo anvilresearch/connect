@@ -41,6 +41,7 @@ function signout (req, res, next) {
         // logout, but don't redirect.
         else if (client.post_logout_redirect_uris.indexOf(uri) === -1) {
           req.session.opbs = crypto.randomBytes(256).toString('hex');
+          delete req.session.amr;
           req.logout();
 
           res.set({
@@ -54,6 +55,7 @@ function signout (req, res, next) {
         // logout and redirect
         else {
           req.session.opbs = crypto.randomBytes(256).toString('hex');
+          delete req.session.amr;
           req.logout();
           res.redirect(uri);
         }
@@ -69,6 +71,7 @@ function signout (req, res, next) {
   // there's no way to verify the uri
   else if (uri) {
     req.session.opbs = crypto.randomBytes(256).toString('hex');
+    delete req.session.amr;
     req.logout();
     res.redirect(uri);
   }
@@ -76,6 +79,7 @@ function signout (req, res, next) {
   // logout and respond without redirect
   else {
     req.session.opbs = crypto.randomBytes(256).toString('hex');
+    delete req.session.amr;
     req.logout();
 
     res.set({

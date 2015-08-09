@@ -84,6 +84,11 @@ function loadProviders (dir, files) {
             && settings.providers[providerName].emailVerification) || {}
         );
 
+        // override the default amr for the provider
+        if (settings.providers[providerName]) {
+          provider.amr = settings.providers[providerName].amr || provider.amr;
+        }
+
         module.exports[providerName] = provider;
 
       } catch (e) {
