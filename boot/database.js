@@ -117,6 +117,17 @@ module.exports = function setup () {
     var version = results[1] || results[0];
     var dbsize = results[2];
 
+    if (!version && dbsize > 0) {
+      if (process.argv.indexOf('--no-db-check') === -1) {
+        console.log(
+          '\nRedis already contains data, but it doesn\'t seem to be an ' +
+          'Anvil Connect database.\nIf you are SURE it is, start the server ' +
+          'with --no-db-check to skip this check.\n'
+        );
+        process.exit(1);
+      }
+    }
+
     if ((deprecatedVersion && !results[1]) || version !== settings.version) {
       rclient.set('anvil:connect:version', settings.version, initialize);
     } else {
@@ -126,11 +137,6 @@ module.exports = function setup () {
     function initialize(err) {
       if (err) {
         console.log(err.message);
-        process.exit(1);
-      }
-
-      if (!version && dbsize > 0) {
-        console.log('Appears to be connected to the wrong database.');
         process.exit(1);
       }
 
