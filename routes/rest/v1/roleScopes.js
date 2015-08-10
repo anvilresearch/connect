@@ -47,7 +47,7 @@ module.exports = function (server) {
         // then list scopes by account
         Scope.listByRoles(req.params.roleId, function (err, instances) {
           if (err) { return next(err); }
-          res.json(instances);
+          res.json(instances.slice());
         });
       });
     });

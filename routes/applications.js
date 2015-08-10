@@ -30,7 +30,7 @@ module.exports = function (server) {
     function (req, res, next) {
       userApplications(req.user, function (err, apps) {
         if (err) { return next(err); }
-        res.json(apps);
+        res.json(apps.slice());
       });
     });
 
