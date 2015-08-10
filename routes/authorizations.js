@@ -22,7 +22,7 @@ module.exports = function (server) {
   server.get('/authorizations', authenticate, function (req, res, next) {
     Client.listAuthorizedByUser(req.user._id, function (err, clients) {
       if (err) { return next(err); }
-      res.json(clients.slice());
+      res.json(clients);
     });
   });
 

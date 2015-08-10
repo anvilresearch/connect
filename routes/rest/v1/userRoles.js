@@ -46,7 +46,7 @@ module.exports = function (server) {
         // then list roles by account
         Role.listByUsers(req.params.userId, function (err, instances) {
           if (err) { return next(err); }
-          res.json(instances.slice());
+          res.json(instances);
         });
       });
     });

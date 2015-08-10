@@ -38,7 +38,7 @@ module.exports = function (server) {
       // options
     }, function (err, instances) {
       if (err) { return next(err); }
-      res.json(instances.slice());
+      res.json(instances);
     });
   });
 
