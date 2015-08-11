@@ -109,7 +109,7 @@ module.exports = function setup () {
 
   multi.exec(function (err, results) {
     if (err) {
-      console.log(err.message);
+      console.log(Array.isArray(err) ? err[0].message : err.message);
       process.exit(1);
     }
 
