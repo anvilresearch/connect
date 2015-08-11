@@ -5,7 +5,8 @@
 module.exports = function(config, templateConfig) {
   return {
     id: 'ActiveDirectory',
-    protocol: 'ActiveDirectory',
+    serverType: 'AD',
+    protocol: 'LDAP',
     fields: [
       { name: 'username', placeholder: 'User@domain' },
       { name: 'password', type: 'password' }
