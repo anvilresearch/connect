@@ -57,7 +57,8 @@
     "GitHub",
     "Password",
     "Active Directory",
-    "AD"
+    "AD",
+    "LDAP"
   ],
   "scripts": {
     "start": "node server.js",
