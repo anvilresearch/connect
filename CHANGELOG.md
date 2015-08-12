@@ -1,3 +1,79 @@
+<a name="0.1.43"></a>
+## 0.1.43 (2015-08-12)
+
+
+### chore
+
+* chore(cli): remove .modulusignore file from init ([39a896a](https://github.com/anvilresearch/connect/commit/39a896a))
+* chore(gitignore): Ignore Redis data files ([84dcf62](https://github.com/anvilresearch/connect/commit/84dcf62))
+* chore(npm): add LDAP keyword to package ([8075464](https://github.com/anvilresearch/connect/commit/8075464))
+* chore(npm): update anvil-connect-jwt dependency ([932dd19](https://github.com/anvilresearch/connect/commit/932dd19))
+* chore(npm): update dependencies ([770a9c7](https://github.com/anvilresearch/connect/commit/770a9c7))
+* chore(npm): update fs-extra and faker dependencies ([0e3a5fe](https://github.com/anvilresearch/connect/commit/0e3a5fe))
+* chore(npm): update fs-extra and qs dependencies ([3c2100e](https://github.com/anvilresearch/connect/commit/3c2100e))
+* chore(npm): update inquirer dependency ([ae6f634](https://github.com/anvilresearch/connect/commit/ae6f634))
+* chore(npm): update modinha and modinha-redis dependencies ([4cb8035](https://github.com/anvilresearch/connect/commit/4cb8035))
+* chore(npm): Update modinha and modinha-redis dependencies ([dd666bc](https://github.com/anvilresearch/connect/commit/dd666bc))
+* chore(npm): update modinha/modinha-redis dependencies ([b346a33](https://github.com/anvilresearch/connect/commit/b346a33))
+
+### docs
+
+* docs(README): note build in LDAP support ([860dbbe](https://github.com/anvilresearch/connect/commit/860dbbe))
+* docs(resendEmail): Explain logic behind messages ([1f1297e](https://github.com/anvilresearch/connect/commit/1f1297e))
+
+### feat
+
+* feat(boot/database): allow overriding foreign data check ([cef8ae4](https://github.com/anvilresearch/connect/commit/cef8ae4))
+* feat(boot/database): deprecate nv migrate ([3b94c76](https://github.com/anvilresearch/connect/commit/3b94c76))
+* feat(boot/database): Display error if unable to set data in Redis ([a6380fd](https://github.com/anvilresearch/connect/commit/a6380fd))
+* feat(signin & signup): Reject auth requests with mismatching referrer ([466fc01](https://github.com/anvilresearch/connect/commit/466fc01))
+* feat(boot): initialize database on first boot ([904d744](https://github.com/anvilresearch/connect/commit/904d744))
+* feat(cli): nv init generates containerized deployment scheme for Connect, Redis, and nginx ([18eb3d8](https://github.com/anvilresearch/connect/commit/18eb3d8))
+* feat(email): Initial e-mail verification support ([1d66d55](https://github.com/anvilresearch/connect/commit/1d66d55))
+* feat(emailVerify): Initial feature-complete email verification support ([e7e51cc](https://github.com/anvilresearch/connect/commit/e7e51cc))
+* feat(IDToken): add `amr` claim ([4b94a55](https://github.com/anvilresearch/connect/commit/4b94a55))
+* feat(IDToken): add `amr` to permitted claims ([b09638b](https://github.com/anvilresearch/connect/commit/b09638b))
+* feat(init): replace nv init with instructions for new CLI ([99fa55d](https://github.com/anvilresearch/connect/commit/99fa55d))
+* feat(middleware): Load provider object onto req ([0e468fc](https://github.com/anvilresearch/connect/commit/0e468fc))
+* feat(oidc): add `amr` claim to id_token at token endpoint ([8e4dedb](https://github.com/anvilresearch/connect/commit/8e4dedb))
+* feat(oidc): add amr claim to id_token payload for password signin ([9bcdcd0](https://github.com/anvilresearch/connect/commit/9bcdcd0))
+* feat(oidc): config overrides default `amr` value for provider ([5360834](https://github.com/anvilresearch/connect/commit/5360834))
+* feat(package): add Vartan Simonian to contributors ([cc6622f](https://github.com/anvilresearch/connect/commit/cc6622f))
+* feat(protocols): Add LDAP support ([94eedb9](https://github.com/anvilresearch/connect/commit/94eedb9))
+* feat(session): enable secure cookies in production environment ([039a4ec](https://github.com/anvilresearch/connect/commit/039a4ec))
+* feat(user): Add user.sendVerificationEmail method ([091b34b](https://github.com/anvilresearch/connect/commit/091b34b))
+
+### fix
+
+* fix(boot/database): display error when Redis is unreachable ([faa5942](https://github.com/anvilresearch/connect/commit/faa5942))
+* fix(boot): remove unused dependencies ([b52bd3c](https://github.com/anvilresearch/connect/commit/b52bd3c))
+* fix(error): Remove debug logging code ([32d9fe5](https://github.com/anvilresearch/connect/commit/32d9fe5))
+* fix(logout): Revert req.logout refactor ([553f9d5](https://github.com/anvilresearch/connect/commit/553f9d5))
+* fix(npm): move faker to dev dependencies ([9e5d5b6](https://github.com/anvilresearch/connect/commit/9e5d5b6))
+* fix(password): Remove dated configuration property check ([0e0c48c](https://github.com/anvilresearch/connect/commit/0e0c48c))
+* fix(protocols): Respect id mapping set on LDAP provider/config ([50064a9](https://github.com/anvilresearch/connect/commit/50064a9))
+* fix(signin): Add error message for invalid providers ([d3ea3ca](https://github.com/anvilresearch/connect/commit/d3ea3ca))
+* fix(verifyEmail): Use correct property for email verified claim ([c691fa9](https://github.com/anvilresearch/connect/commit/c691fa9))
+* fix(views): Make view titles match content ([2e9d744](https://github.com/anvilresearch/connect/commit/2e9d744))
+
+### refactor
+
+* refactor(boot/database): deprecate "version" key, renaming as "anvil:connect:version" ([a9f571f](https://github.com/anvilresearch/connect/commit/a9f571f))
+* refactor(boot/database): rename "tag" function to "version" ([c30f816](https://github.com/anvilresearch/connect/commit/c30f816))
+* refactor(protocols): Remove AD protocol, AD provider uses LDAP protocol now ([e22e1e5](https://github.com/anvilresearch/connect/commit/e22e1e5))
+* refactor(signup): Use user.sendVerificationEmail ([ac55b90](https://github.com/anvilresearch/connect/commit/ac55b90))
+
+### style
+
+* style(email): Add EOF newline ([33c2ede](https://github.com/anvilresearch/connect/commit/33c2ede))
+
+### test
+
+* test(User): add spies for req.flash ([f58577e](https://github.com/anvilresearch/connect/commit/f58577e))
+
+
+
+
 <a name"0.1.42"></a>
 ### 0.1.42 (2015-06-30)
 
