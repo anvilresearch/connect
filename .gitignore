@@ -5,3 +5,4 @@ public/vendor
 *.swp
 dump.rdb
 appendonly.aof
+npm-debug.log
