@@ -53,5 +53,5 @@ if (!privateKey || !publicKey) {
 
 keys.privateKey = privateKey;
 keys.publicKey  = publicKey;
-keys.jwks       = pem2jwk(publicKey);
+keys.jwks       = { keys: [ pem2jwk(publicKey) ] };
 module.exports  = keys;
