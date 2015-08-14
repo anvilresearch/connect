@@ -5,7 +5,7 @@
 var cwd  = process.cwd();
 var fs   = require('fs');
 var path = require('path');
-var jwks = require(path.join(__dirname, '..', 'lib', 'jwks'));
+var pem2jwk = require('pem-jwk').pem2jwk;
 
 /**
  * Keys
@@ -53,5 +53,5 @@ if (!privateKey || !publicKey) {
 
 keys.privateKey = privateKey;
 keys.publicKey  = publicKey;
-keys.jwks       = jwks(publicKey);
+keys.jwks       = pem2jwk(publicKey);
 module.exports  = keys;
