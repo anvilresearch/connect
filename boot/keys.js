@@ -48,10 +48,30 @@ if (!privateKey || !publicKey) {
 }
 
 /**
+ * Create JWK from public key
+ */
+
+var jwk = pem2jwk(publicKey);
+
+/**
+ * JWK Set
+ */
+
+var jwks = {
+  keys: [{
+    kty:  jwk.kty,
+    use: 'sig',
+    alg: 'RS256',
+    n:    jwk.n,
+    e:    jwk.e,
+  }]
+}
+
+/**
  * Export
  */
 
 keys.privateKey = privateKey;
 keys.publicKey  = publicKey;
-keys.jwks       = { keys: [ pem2jwk(publicKey) ] };
+keys.jwks       = jwks;
 module.exports  = keys;
