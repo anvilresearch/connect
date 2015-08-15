@@ -216,7 +216,8 @@ User.insert = function (data, options, callback) {
     }
 
     // check the password strength
-    if (CheckPassword(data.password) === -1) {
+    var daysToCrack = providers.password.daysToCrack;
+    if (CheckPassword(data.password) <= daysToCrack) {
       return callback(new InsecurePasswordError());
     }
   }
