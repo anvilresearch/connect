@@ -209,7 +209,7 @@ describe 'ID Token', ->
 
       token = new IDToken payload
       token.payload.exp.should.be.a.number
-      new Date(token.payload.exp).getDay().should.not.equal new Date().getDay()
+      new Date(token.payload.exp * 1000).getDay().should.not.equal new Date().getDay()
 
     it 'should require "iat" Issued time', ->
       IDToken.registeredClaims.iat.required.should.be.true
