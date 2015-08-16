@@ -72,6 +72,7 @@ module.exports = function (server) {
                 req.session.amr.push(pamr);
               }
 
+              req.sendVerificationEmail = true;
               req.flash('isNewUser', true);
               next();
             });

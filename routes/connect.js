@@ -86,6 +86,8 @@ module.exports = function (server) {
       }
     },
 
+    oidc.sendVerificationEmail,
+    oidc.requireVerifiedEmail(),
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize
