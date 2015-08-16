@@ -198,22 +198,24 @@ describe 'OneTimeToken', ->
     {err,token} = {}
 
     rawToken =
-      _id: '4f7c3891d95a479c6385720d240916d27e12708500471a50a4b2715a9e7a5576'
+      _id: 'valid'
       exp: Date.now() + 3600
       use: 'test'
       sub: 'nhung_dam'
 
     before (done) ->
-      sinon.stub(rclient, 'get').callsArgWith 1, null, JSON.stringify(rawToken)
-      sinon.stub(rclient, 'del').callsArgWith 1, null
+      sinon.stub(OneTimeToken, 'peek')
+        .callsArgWith 1, null, new OneTimeToken rawToken
+      sinon.stub(OneTimeToken, 'revoke')
+        .callsArgWith 1, null
       OneTimeToken.consume 'valid', (error,result) ->
         err = error
         token = result
         done()
 
     after ->
-      rclient.get.restore()
-      rclient.del.restore()
+      OneTimeToken.peek.restore()
+      OneTimeToken.revoke.restore()
 
     it 'should provide a null error', ->
       expect(err).to.be.null
@@ -226,7 +228,7 @@ describe 'OneTimeToken', ->
       token.sub.should.equal rawToken.sub
 
     it 'should revoke the token', ->
-      rclient.del.should.have.been.called
+      OneTimeToken.revoke.should.have.been.calledWith token._id
 
 
 
