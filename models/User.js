@@ -409,15 +409,7 @@ User.connect = function (req, auth, info, callback) {
 
         // User registered successfully
         else {
-          if (provider.emailVerification.enable && !user.emailVerified) {
-            var params = {
-              redirect_uri: req.connectParams.redirect_uri,
-              client_id: req.connectParams.client_id,
-              response_type: req.connectParams.response_type,
-              scope: req.connectParams.scope
-            };
-            user.sendVerificationEmail(params, function() {});
-          }
+          req.sendVerificationEmail = req.provider.emailVerification.enable;
           req.flash('isNewUser', true);
           callback(null, user, { message: 'Registered successfully' });
         }
@@ -426,58 +418,6 @@ User.connect = function (req, auth, info, callback) {
 
   });
 };
-
-
-/**
- * Send verification email
- */
-
-User.prototype.sendVerificationEmail = function (options, callback) {
-
-  if (!callback) {
-    callback = options;
-    options = {};
-  }
-
-  User.patch(this._id, {
-    emailVerifyToken: Modinha.defaults.random(16)()
-  }, function (err, user) {
-    if (err) { return callback(err); }
-
-    options.token = user.emailVerifyToken;
-
-    var verifyURL = url.parse(settings.issuer);
-
-    verifyURL.pathname = 'email/verify';
-    verifyURL.query = options;
-
-    var locals = {
-      email: user.email,
-      name: {
-        first: user.givenName,
-        last: user.familyName
-      },
-      verifyURL: url.format(verifyURL)
-    };
-
-    mailer.sendMail('verifyEmail', locals, {
-
-      to: user.email,
-      subject: 'Verify your e-mail address'
-
-    }, function(err, responseStatus) {
-
-      if (err) {
-        return callback(err, responseStatus);
-      } else {
-        callback(null, responseStatus);
-      }
-
-    });
-
-  });
-
-}
 
 
 /**

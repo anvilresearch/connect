@@ -22,7 +22,7 @@ module.exports = function (server) {
     function(req, res, next) {
 
       var params = {
-        message: req.query.email ? 
+        message: req.query.email ?
           'If we have this e-mail address on file, then we have sent it a ' +
           'verification request.' : '',
         error: !req.query.email ? 'No e-mail address specified.' : '',
@@ -58,7 +58,7 @@ module.exports = function (server) {
 
       User.getByEmail(req.query.email, function(err, user) {
         if (err) { return next(err); }
-        
+
         // We don't notify the end-user if the e-mail was not found in the
         // database or if the account found was already verified because
         // we don't want to allow a malicious user to use this endpoint to
@@ -66,12 +66,13 @@ module.exports = function (server) {
         // those accounts would have to have unverified e-mail addresses)
 
         if (user && !user.emailVerified) {
-          user.sendVerificationEmail(emailParams, function () {});
+          req.sendVerificationEmail = true;
+          oidc.sendVerificationEmail(req, res, function() {
+            res.render('requireVerifiedEmail', params);
+          });
         }
-
-        res.render('requireVerifiedEmail', params);
       });
     }
-  ]); 
+  ]);
 };
 

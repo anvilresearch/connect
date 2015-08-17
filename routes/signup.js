@@ -72,6 +72,8 @@ module.exports = function (server) {
                 req.session.amr.push(pamr);
               }
 
+              req.sendVerificationEmail =
+                req.provider.emailVerification.enable;
               req.flash('isNewUser', true);
               next();
             });
