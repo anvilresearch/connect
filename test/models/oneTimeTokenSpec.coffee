@@ -39,7 +39,7 @@ describe 'OneTimeToken', ->
 
     beforeEach ->
       options =
-        exp: Date.now() + 3600
+        exp: Math.round(Date.now() / 1000) + 3600
         use: 'test'
         sub: 'dim_sum'
       token = new OneTimeToken options
@@ -56,7 +56,7 @@ describe 'OneTimeToken', ->
         ttl: 3600
         use: options.use
         sub: options.sub
-      exp = Date.now() + 3600
+      exp = Math.round(Date.now() / 1000) + 3600
       token2 = new OneTimeToken options2
       expect(token2.exp).to.be.within(exp - 100, exp + 100)
 
@@ -91,12 +91,12 @@ describe 'OneTimeToken', ->
     beforeEach ->
       rawToken =
         _id: '4f7c3891d95a479c6385720d240916d27e12708500471a50a4b2715a9e7a5576'
-        exp: Date.now() + 3600
+        exp: Math.round(Date.now() / 1000) + 3600
         use: 'test'
         sub: 'spring_roll'
       rawExpiredToken =
         _id: '4f7c3891d95a479c6385720d240916d27e12708500471a50a4b2715a9e7a5576'
-        exp: Date.now() - 3600
+        exp: Math.round(Date.now() / 1000) - 3600
         use: 'test'
         sub: 'pho'
 
@@ -199,7 +199,7 @@ describe 'OneTimeToken', ->
 
     rawToken =
       _id: 'valid'
-      exp: Date.now() + 3600
+      exp: Math.round(Date.now() / 1000) + 3600
       use: 'test'
       sub: 'nhung_dam'
 
@@ -238,7 +238,7 @@ describe 'OneTimeToken', ->
     {err,token} = {}
 
     rawToken =
-      exp: Date.now() + 3600
+      exp: Math.round(Date.now() / 1000) + 3600
       use: 'test'
       sub: 'nem_nuong'
     otToken = new OneTimeToken rawToken
