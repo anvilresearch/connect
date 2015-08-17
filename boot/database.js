@@ -47,7 +47,6 @@ function insertRoles (done) {
       callback(err, instance);
     })
   }, function (err, roles) {
-    console.log('Created default roles.');
     done(err, roles);
   });
 }
@@ -63,7 +62,6 @@ function insertScopes (done) {
       callback(err, instance);
     })
   }, function (err, scopes) {
-    console.log('Created default scopes.');
     done(err, scopes);
   });
 }
@@ -79,7 +77,6 @@ function assignPermissions (done) {
       callback(err, result);
     });
   }, function (err, results) {
-    console.log('Created default permissions.');
     done(err, results);
   })
 }
@@ -89,7 +86,7 @@ function assignPermissions (done) {
  * Tag Version
  */
 
-function version (done) {
+function updateVersion (done) {
   rclient.set('anvil:connect:version', settings.version, function (err) {
     done(err);
   });
@@ -124,36 +121,21 @@ module.exports = function setup () {
           'Anvil Connect database.\nIf you are SURE it is, start the server ' +
           'with --no-db-check to skip this check.\n'
         );
-        process.exit(1);
+        return process.exit(1);
       }
     }
 
-    if ((deprecatedVersion && !results[1]) || version !== settings.version) {
-      rclient.set('anvil:connect:version', settings.version, initialize);
-    } else {
-      initialize(null);
-    }
-
-    function initialize(err) {
+    async.parallel([
+      insertRoles,
+      insertScopes,
+      assignPermissions,
+      updateVersion
+    ], function (err, results) {
       if (err) {
+        console.log('Unable to initialize Redis database.');
         console.log(err.message);
         process.exit(1);
       }
-
-      if (!version && dbsize === 0) {
-        async.parallel([
-          insertRoles,
-          insertScopes,
-          assignPermissions,
-          version
-        ], function (err, results) {
-          if (err) {
-            console.log('Unable to set defaults in Redis.');
-            console.log(err.message);
-            process.exit(1);
-          }
-        });
-      }
-    }
+    });
   });
 }
