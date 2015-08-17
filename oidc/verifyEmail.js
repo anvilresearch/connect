@@ -55,13 +55,8 @@ function verifyEmail (req, res, next) {
         });
       }
 
-      // default params
-      var params = {
-        signin: null
-      };
-
       // check that the redirect uri is valid and safe to use
-      if (req.client) {
+      if (req.client && req.connectParams.redirect_uri) {
         var continueURL = url.parse(settings.issuer);
 
         continueURL.pathname = 'signin';
@@ -72,13 +67,15 @@ function verifyEmail (req, res, next) {
           scope: req.connectParams.scope
         };
 
-        params.signin = {
-          url: url.format(continueURL),
-          client: req.client
-        };
+        res.render('verifyEmail', {
+          signin: {
+            url: url.format(continueURL),
+            client: req.client
+          }
+        });
+      } else {
+        res.render('verifyEmail');
       }
-
-      res.render('verifyEmail', params);
     });
   });
 }

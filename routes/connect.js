@@ -26,6 +26,7 @@ module.exports = function (server) {
     oidc.validateAuthorizationParams,
     oidc.verifyClient,
     oidc.stashParams,
+    oidc.determineProvider,
     function (req, res, next) {
       var provider = req.params.provider
         , config = settings.providers[provider]
@@ -54,6 +55,7 @@ module.exports = function (server) {
   var handler = [
     oidc.unstashParams,
     oidc.verifyClient,
+    oidc.determineProvider,
 
     function (req, res, next) {
       if (settings.providers[req.params.provider]) {

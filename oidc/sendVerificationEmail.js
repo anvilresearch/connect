@@ -9,38 +9,19 @@ var url = require('url')
 
 
 /**
- * Requested
- */
-
-function requested (req) {
-  return req.provider
-      && req.provider.emailVerification.enable
-      && req.sendVerificationEmail
-      ;
-}
-
-
-/**
  * Send verification email middleware
  */
 
 function sendVerificationEmail(req, res, next) {
 
   // skip if we don't need to send the email
-  if (!requested(req)) {
+  if (!req.sendVerificationEmail) {
     next();
   }
 
   // send the email
   else {
     var user = req.user;
-
-    var params = {
-      redirect_uri:  req.connectParams.redirect_uri,
-      client_id:     req.connectParams.client_id,
-      response_type: req.connectParams.response_type,
-      scope:         req.connectParams.scope
-    };
 
     OneTimeToken.issue({
       ttl: 3600 * 24 * 7,
@@ -49,10 +30,22 @@ function sendVerificationEmail(req, res, next) {
     }, function (err, token) {
       if (err) { return next(err); }
 
+      var params = {
+        token: token._id
+      };
+
+      [ 'redirect_uri', 'client_id', 'response_type', 'scope' ]
+        .forEach(function (key) {
+          var value = req.connectParams[key];
+          if (value) {
+            params[key] = value;
+          }
+        });
+
       // build email link
       var verifyURL = url.parse(settings.issuer);
       verifyURL.pathname = 'email/verify';
-      verifyURL.query = { token: token._id };
+      verifyURL.query = params;
 
       // email template data
       var locals = {

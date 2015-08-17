@@ -409,7 +409,7 @@ User.connect = function (req, auth, info, callback) {
 
         // User registered successfully
         else {
-          req.sendVerificationEmail = true;
+          req.sendVerificationEmail = req.provider.emailVerification.enable;
           req.flash('isNewUser', true);
           callback(null, user, { message: 'Registered successfully' });
         }
