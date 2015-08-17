@@ -25,7 +25,7 @@ function OneTimeToken (options) {
   this.sub = options.sub;
 
   if (options.ttl) {
-    this.exp = Date.now() + options.ttl;
+    this.exp = Math.round(Date.now() / 1000) + options.ttl;
   }
 }
 
@@ -53,7 +53,7 @@ OneTimeToken.peek = function (id, callback) {
       return callback(err);
     }
 
-    if (Date.now() > token.exp) {
+    if (Math.round(Date.now() / 1000) > token.exp) {
       return callback(null, null);
     }
 
@@ -113,7 +113,7 @@ OneTimeToken.issue = function (options, callback) {
 
   // only expire if "exp" is set on the token
   if (token.exp) {
-    multi.expireat(token.exp);
+    multi.expireat('onetimetoken:' + token._id, token.exp);
   }
 
   multi.exec(function (err, results) {
