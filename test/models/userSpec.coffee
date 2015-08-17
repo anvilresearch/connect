@@ -705,6 +705,9 @@ describe 'User', ->
           response_type: 'id_token token'
           scope: 'openid profile'
         flash: sinon.spy()
+        provider:
+          emailVerification:
+            enable: false
       auth =
         access_token: 'b34r3r'
       info =

@@ -148,10 +148,10 @@ describe 'Verify Email', ->
       User.patch.restore()
 
     it 'should render a response with null signin', ->
-      res.render.should.have.been
-        .calledWith 'verifyEmail', sinon.match({
-          signin: null
-        })
+      res.render.should.have.been.calledWith 'verifyEmail'
+      res.render.should.not.have.been.calledWith(
+        'verifyEmail', sinon.match.object
+      )
 
 
 

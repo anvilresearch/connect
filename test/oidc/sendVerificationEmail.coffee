@@ -83,7 +83,7 @@ describe 'Send Verification Email', ->
           ttl: 3600 * 24 * 7
           use: 'emailVerification'
         })
-      sinon.spy(mailer, 'sendMail')
+      sinon.stub(mailer, 'sendMail').callsArgWith 3, null, null
 
       sendVerificationEmail req, res, next
 
