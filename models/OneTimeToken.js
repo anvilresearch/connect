@@ -113,7 +113,7 @@ OneTimeToken.issue = function (options, callback) {
 
   // only expire if "exp" is set on the token
   if (token.exp) {
-    multi.expireat(token.exp);
+    multi.expireat('onetimetoken:' + token._id, token.exp);
   }
 
   multi.exec(function (err, results) {
