@@ -35,40 +35,76 @@
 
 #### Requirements
 
-* Node.js
-* npm
-* Redis
+The CLI tools require recent versions [Node.js](https://nodejs.org/) (or
+[io.js](https://iojs.org/en/index.html)) and npm. If you plan to run your
+server with [Docker](https://www.docker.com/), you'll need Docker and Docker
+Compose installed (we provide Dockerfiles and docker-compose.yml). On Mac OS X
+you'll also need [boot2docker](http://boot2docker.io/). If you wish to run the
+server without Docker, you'll need access to a local or remotely accessible
+[Redis](http://redis.io/) instance. Python, C/C++ compiler are needed on your
+system for building native Nodejs packages, and OpenSSL is required to create
+key pairs and certificates. In production, you'll also need a reverse proxy/
+load balancer that handles SSL termination. We recommend [nginx](http://nginx.org/).
 
-#### Setup
+#### Install the CLI tools
 
 ```bash
-# Install the CLI
-$ npm install -g anvil-connect
+$ npm install -g anvil-connect anvil-connect-cli
+```
 
-# Make a place for your deployment repository to live
+
+#### Generate your deployment repository
+
+```bash
+# Make a place for your project to live
 $ mkdir path/to/project
 $ cd path/to/project
 
 # Generate a deployment repository
-$ nv init
-
-# Install dependencies
-$ npm install
-
-# Initialize the local database
-$ nv migrate
-
-# Create the first user account
-$ nv signup
-
-# Assign a role
-$ nv assign <email> authority
-
-# Start the server in development mode
-$ nv serve
+$ nvl init
+? What would you like to name your Connect instance? myauthserver
+? What (sub)domain will you use? connect.example.com
+? Would you like to use Docker? Yes
+? Would you like to run Redis? Yes
+? Would you like to run nginx? Yes
+? Would you like to create a self-signed SSL cert? Yes
+? Country Name (2 letter code) US
+? State or Province Name (full name) South Dakota
+? Locality Name (eg, city) Rapid City
+? Organization Name (eg, company) Anvil Research, Inc.
 ```
 
-You should now have an Anvil Connect instance running in development mode.
+#### Running with Docker
+
+Run docker-compose from the root of your new project.
+
+```bash
+$ docker-compose up -d
+```
+
+#### Running without Docker
+
+The first time, you'll need to install npm and bower dependencies.
+
+```bash
+$ cd connect
+$ npm install && bower install
+```
+
+Then you can start the server in with `node` or `npm`.
+
+```bash
+# development mode
+$ node server.js
+
+# production mode
+$ NODE_ENV=production node server.js
+```
+
+## Documentation
+
+* [Documentation](https://github.com/anvilresearch/connect-docs)
+* [References](https://github.com/anvilresearch/connect/wiki/References)
 
 
 ## Development
@@ -92,12 +128,6 @@ We often pair on more challening or new code, hop into Gitter or Slack and join 
 ### Need more engagement?
 
 Support and consulting also available, contact us via [the website](http://anvil.io) or by [email](mailto:contact@anvil.io)
-
-## Documentation
-
-* [Documentation](https://github.com/anvilresearch/connect-docs)
-* [References](https://github.com/anvilresearch/connect/wiki/References)
-
 
 
 ## Status
