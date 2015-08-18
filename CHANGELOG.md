@@ -1,3 +1,26 @@
+<a name="0.1.47"></a>
+## 0.1.47 (2015-08-18)
+
+
+### chore
+
+* chore(README): update getting started info ([dd77f61](https://github.com/anvilresearch/connect/commit/dd77f61))
+
+* fix(test/idToken): Convert exp to ms before passing to Date constructor ([c65a7bd](https://github.com/anvilresearch/connect/commit/c65a7bd))
+* Merge pull request #178 from anvilresearch/vsimonian-fix-tests ([23e2b66](https://github.com/anvilresearch/connect/commit/23e2b66))
+* Merge pull request #179 from anvilresearch/christiansmith-view-override ([e4a4696](https://github.com/anvilresearch/connect/commit/e4a4696))
+
+### feat
+
+* feat(public): allow static assets to be overridden individually. ([d44b9cf](https://github.com/anvilresearch/connect/commit/d44b9cf))
+* feat(views): allow views to be overridden individually. ([9d13791](https://github.com/anvilresearch/connect/commit/9d13791))
+
+### fix
+
+* fix(test): Stub registration scopes in scoped client registration test ([d6ddd09](https://github.com/anvilresearch/connect/commit/d6ddd09))
+
+
+
 <a name="0.1.46"></a>
 ## 0.1.46 (2015-08-18)
 
