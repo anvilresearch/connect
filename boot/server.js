@@ -40,9 +40,15 @@ module.exports = function (server) {
    */
 
   var engine = settings.view_engine || 'jade';
-  server.engine(engine,       cons[engine]);
-  server.set('views',         path.join(cwd, 'views'));
-  server.set('view engine',  engine);
+  server.engine(engine, cons[engine]);
+  server.set('view engine', engine);
+
+  // First, look for views in the project directory.
+  // If absent, look in the package views directory.
+  server.set('views', [
+    path.join(cwd, 'views'),
+    path.join(__dirname, '..', 'views')
+  ]);
 
 
   /**
