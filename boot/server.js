@@ -125,9 +125,13 @@ module.exports = function (server) {
 
   /**
    * Serve Static Files
+   *
+   * First, look for files in the project `public` directory.
+   * If absent, look in the package `public` directory.
    */
 
   server.use(express.static(path.join(cwd, 'public')));
+  server.use(express.static(path.join(__dirname, '..', 'public')));
 
 
   /**
