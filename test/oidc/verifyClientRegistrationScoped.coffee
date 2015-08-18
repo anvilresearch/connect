@@ -13,13 +13,24 @@ chai.should()
 
 
 server          = require '../../server'
+settings        = require '../../boot/settings'
 AccessToken     = require '../../models/AccessToken'
 verifyClientReg = require('../../oidc').verifyClientRegistration
+trustedRegScope = settings.trusted_registration_scope
+regScope        = settings.registration_scope
 
 
 
 
 describe 'Verify Scoped Client Registration', ->
+
+  before ->
+    settings.trusted_registration_scope = 'realm'
+    settings.registration_scope = 'developer'
+
+  after ->
+    settings.trusted_registration_scope = trustedRegScope
+    settings.registration_scope = 'developer'
 
 
   {req,res,next,err} = {}
