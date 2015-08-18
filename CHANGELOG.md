@@ -1,3 +1,37 @@
+<a name="0.1.46"></a>
+## 0.1.46 (2015-08-18)
+
+
+### feat
+
+* feat(OneTimeToken): Support expiring, single-use tokens ([0bf03f2](https://github.com/anvilresearch/connect/commit/0bf03f2))
+* feat(password): set default daysToCrack property on password provider ([7a20b1e](https://github.com/anvilresearch/connect/commit/7a20b1e))
+
+### fix
+
+* fix(emailVerification): Fix tests, merge changes ([9c90e06](https://github.com/anvilresearch/connect/commit/9c90e06))
+* fix(jwks): add "use" and "alg" properties to signature JWK ([ccd2cb7](https://github.com/anvilresearch/connect/commit/ccd2cb7))
+* fix(OneTimeToken): Add missing key parameter to EXPIREAT call ([34c0e2f](https://github.com/anvilresearch/connect/commit/34c0e2f))
+* fix(OneTimeToken): Use seconds for expiration/TTL ([64ff426](https://github.com/anvilresearch/connect/commit/64ff426))
+
+### refactor
+
+* refactor(emailVerification): Move decision to send email upstream ([da00595](https://github.com/anvilresearch/connect/commit/da00595))
+* refactor(emailVerification): use OneTimeToken for email verification ([982905d](https://github.com/anvilresearch/connect/commit/982905d))
+* refactor(emailVerification): use OneTimeToken for email verification ([6c04fea](https://github.com/anvilresearch/connect/commit/6c04fea))
+
+### test
+
+* test(OneTimeToken): fix OneTimeToken.consume() test ([d9c6106](https://github.com/anvilresearch/connect/commit/d9c6106))
+
+* fix(boot/database): Ensure database always has default entries ([f78ae9b](https://github.com/anvilresearch/connect/commit/f78ae9b))
+* Merge pull request #171 from anvilresearch/vsimonian-expiring-tokens ([c2719c9](https://github.com/anvilresearch/connect/commit/c2719c9))
+* Merge pull request #172 from anvilresearch/vsimonian-boot-db-fix ([0b4faf6](https://github.com/anvilresearch/connect/commit/0b4faf6))
+* Merge pull request #173 from anvilresearch/vsimonian-fix-one-time-token ([aa639dd](https://github.com/anvilresearch/connect/commit/aa639dd))
+* Merge pull request #174 from anvilresearch/christiansmith-email-verification-refactoring ([af8c437](https://github.com/anvilresearch/connect/commit/af8c437))
+
+
+
 <a name="0.1.43"></a>
 ## 0.1.43 (2015-08-12)
 
