@@ -89,6 +89,12 @@ function loadProviders (dir, files) {
           provider.amr = settings.providers[providerName].amr || provider.amr;
         }
 
+        // provider-specific refresh_userinfo setting
+        if (settings.providers[providerName]) {
+          provider.refresh_userinfo =
+            settings.providers[providerName].refresh_userinfo;
+        }
+
         module.exports[providerName] = provider;
 
       } catch (e) {

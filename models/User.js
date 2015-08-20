@@ -373,7 +373,7 @@ User.connect = function (req, auth, info, callback) {
     // `refresh_userinfo` is set to `true`, in the configuration
     // file, claims will be updated.
     if (user) {
-      if (settings.refresh_userinfo) {
+      if (settings.refresh_userinfo || provider.refresh_userinfo) {
         Modinha.map(provider.mapping, info, data);
       }
 
