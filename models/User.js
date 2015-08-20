@@ -368,9 +368,15 @@ User.connect = function (req, auth, info, callback) {
     };
 
     // Update an existing user with the authorization response
-    // and raw userInfo from this provider. This will NOT update
-    // existing OIDC standard claims values.
+    // and userinfo from this provider. By default this will not
+    // update existing OIDC standard claims values. If
+    // `refresh_userinfo` is set to `true`, in the configuration
+    // file, claims will be updated.
     if (user) {
+      if (settings.refresh_userinfo) {
+        Modinha.map(provider.mapping, info, data);
+      }
+
       User.patch(user._id, data, function (err, user) {
         if (err) { return callback(err); }
         callback(null, user);

@@ -22,6 +22,7 @@ chai.should()
 Modinha  = require 'modinha'
 User     = require path.join(cwd, 'models/User')
 mailer   = require path.join(cwd, 'boot/mailer')
+settings = require path.join(cwd, 'boot/settings')
 Role     = require path.join(cwd, 'models/Role')
 
 
@@ -757,5 +758,89 @@ describe 'User', ->
       User.insert.should.have.been.calledWith sinon.match.object, sinon.match({
         password: false
       })
+
+
+
+
+  describe 'connect existing user with refreshed userinfo', ->
+
+    before (done) ->
+      settings.refresh_userinfo = true
+      user = new User email: 'initial@example.com'
+
+      req =
+        params:
+          provider: 'google'
+      auth =
+        access_token: 'b34r3r'
+      info =
+        id: 'g00gl3_2'
+        email: 'updated@example.com'
+
+      sinon.stub(User, 'lookup').callsArgWith(2, null, user)
+      sinon.stub(User, 'patch').callsArgWith(2, null, user)
+      sinon.spy(Modinha, 'map')
+
+      User.connect req, auth, info, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      delete settings.refresh_userinfo
+      User.lookup.restore()
+      User.patch.restore()
+      Modinha.map.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
+
+    it 'should update user claims from provider info', ->
+      Modinha.map.should.have.been.called
+
+
+
+
+  describe 'connect existing user without refreshed userinfo', ->
+
+    before (done) ->
+      user = new User email: 'initial@example.com'
+
+      req =
+        params:
+          provider: 'google'
+      auth =
+        access_token: 'b34r3r'
+      info =
+        id: 'g00gl3_2'
+        email: 'updated@example.com'
+
+      sinon.stub(User, 'lookup').callsArgWith(2, null, user)
+      sinon.stub(User, 'patch').callsArgWith(2, null, user)
+      sinon.spy(Modinha, 'map')
+
+      User.connect req, auth, info, (error, instance) ->
+        err = error
+        user = instance
+        done()
+
+    after ->
+      User.lookup.restore()
+      User.patch.restore()
+      Modinha.map.restore()
+
+    it 'should provide a null error', ->
+      expect(err).to.be.null
+
+    it 'should provide a user', ->
+      user.should.be.instanceof User
+
+    it 'should update user claims from provider info', ->
+      Modinha.map.should.not.have.been.called
+
+
 
 
