@@ -12,10 +12,9 @@ var customDirectory = path.join(cwd, 'providers')
 
 function loadProvider (dir, name, template) {
   return require(
-    template ?
-      path.join(dir, 'templates', name)
-      :
-      path.join(dir, name)
+    template
+      ? path.join(dir, 'templates', name)
+      : path.join(dir, name)
   )
 }
 
