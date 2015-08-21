@@ -1,3 +1,13 @@
+<a name="0.1.49"></a>
+## 0.1.49 (2015-08-21)
+
+
+### feat
+
+* feat(pwreset): Implement password reset ([184c559](https://github.com/anvilresearch/connect/commit/184c559))
+
+
+
 <a name="0.1.47"></a>
 ## 0.1.47 (2015-08-18)
 
