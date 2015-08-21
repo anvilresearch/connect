@@ -12,27 +12,27 @@ var PasswordsDisabledError = require('../errors/PasswordsDisabledError')
 
 /**
  * Account Recovery
+ *
+ * Recovery flow:
+ *
+ * 1. Accept user e-mail
+ * 2. Validate input as valid e-mail, display error if not
+ * 3. Verify user account exists with specified e-mail
+ * 4. If user account exists, issue token and send e-mail
+ * 5. Regardless of success/failure, direct user to emailSent view
+ *
+ * Password reset flow:
+ *
+ * 1. When user clicks on link, verify token exists and is for pw reset
+ * 2. Direct user to resetPassword view
+ * 3. Verify password fulfills password strength requirements
+ * 4. If error, re-display resetPassword view, but with error message
+ * 5. Update user object and revoke token
+ * 6. Send user an e-mail notifying them that their password was changed
+ * 7. Direct user to passwordReset view
+ *
+ * Default expiry time for tokens is 1 day
  */
-
-// Recovery flow:
-  //
-  // 1. Accept user e-mail
-  // 2. Validate input as valid e-mail, display error if not
-  // 3. Verify user account exists with specified e-mail
-  // 4. If user account exists, issue token and send e-mail
-  // 5. Regardless of success/failure, direct user to emailSent view
-  //
-  // Password reset flow:
-  //
-  // 1. When user clicks on link, verify token exists and is for pw reset
-  // 2. Direct user to resetPassword view
-  // 3. Verify password fulfills password strength requirements
-  // 4. If error, re-display resetPassword view, but with error message
-  // 5. Update user object and revoke token
-  // 6. Send user an e-mail notifying them that their password was changed
-  // 7. Direct user to passwordReset view
-  //
-  // Default expiry time for tokens is 1 day
 
 function verifyPasswordsEnabled (req, res, next) {
   if (!settings.providers.password) {
