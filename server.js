@@ -29,6 +29,7 @@ require('./routes/userinfo')(server);
 require('./routes/signin')(server);
 require('./routes/signup')(server);
 require('./routes/signout')(server);
+require('./routes/recovery')(server);
 require('./routes/resendEmail')(server);
 require('./routes/verifyEmail')(server);
 require('./routes/connect')(server);

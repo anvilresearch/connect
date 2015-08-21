@@ -360,6 +360,79 @@ describe 'User', ->
 
 
 
+  describe 'password strength validation', ->
+
+    describe 'with a weak password', ->
+
+      it 'should return false', ->
+        User.verifyPasswordStrength('password').should.equal false
+
+    describe 'with a strong password', ->
+
+      it 'should return true', ->
+        User.verifyPasswordStrength('_u247c^c5u4@$324v23').should.equal true
+
+
+
+
+  describe 'change password', ->
+
+    before ->
+      sinon.stub User, 'patch', (id, data, opts, cb) ->
+        cb null, { _id: id, hash: 'fakehash' }
+
+    after ->
+      User.patch.restore()
+
+    describe 'without a password', ->
+
+      {err,user} = {}
+
+      before ->
+        User.changePassword 'someid', null, (error, userObj) ->
+          err = error
+          user = userObj
+
+      it 'should provide a PasswordRequiredError', ->
+        err.name.should.equal 'PasswordRequiredError'
+
+      it 'should not return a user', ->
+        expect(user).to.not.be.ok
+
+    describe 'with a weak password', ->
+
+      {err,user} = {}
+
+      before ->
+        User.changePassword 'someid', 'password', (error, userObj) ->
+          err = error
+          user = userObj
+
+      it 'should provide a InsecurePasswordError', ->
+        err.name.should.equal 'InsecurePasswordError'
+
+      it 'should not return a user', ->
+        expect(user).to.not.be.ok
+
+    describe 'with a strong password', ->
+
+      {err,user} = {}
+
+      before ->
+        User.changePassword 'someid', '91385m%@%##$G.', (error, userObj) ->
+          err = error
+          user = userObj
+
+      it 'should provide a null error', ->
+        expect(err).to.not.be.ok
+
+      it 'should return a user instance', ->
+        expect(user).to.be.an 'object'
+        user._id.should.equal 'someid'
+        user.hash.should.be.a 'string'
+
+
+
 
   describe 'authentication', ->
 

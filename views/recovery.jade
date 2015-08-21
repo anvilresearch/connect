@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    title Account Recovery | Anvil Connect
+
+    link(rel='stylesheet', href='/stylesheets/app.css')
+    link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,400italic,700,700italic|Raleway:400,100,600,300|Playfair+Display+SC:900,400')
+  body
+
+    .anvilform
+      img.logo(src='/images/anvil.svg', alt='Anvil Connect')
+
+      .panel
+        h2 Having trouble signing in?
+        p
+          | Enter the e-mail address you use to sign in to Anvil Connect, and
+          | we'll send you a link to help you reset your password.
+        form(method='POST')
+          input(type='email', placeholder='E-mail address')
+          input.callout(type='submit', value='Continue')

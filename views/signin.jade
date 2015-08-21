@@ -67,6 +67,9 @@ html(lang="en")
               | Don't have an account?
               a(href='/signup?' + params)
                 |  Register in Seconds
+            if mailSupport
+              p.forgot-password
+                a(href='/recovery') Forgot your password?
     .screen(hidden)
       .loader
         svg.circular
@@ -81,15 +84,16 @@ html(lang="en")
           var formFieldContainer = document.querySelector('.form-fields');
           var formProviderLinks = document.querySelectorAll('.form-providers a');
           var registerMessage = document.querySelector('.register-message');
+          var forgotPassword = document.querySelector('.forgot-password');
           var screenElem = document.querySelector('.screen');
           var form = document.querySelector('form');
           var formWrapper = document.querySelector('.anvilform');
-          
+
           form.addEventListener('submit', function() {
             formWrapper.classList.add('blur');
             screenElem.removeAttribute('hidden');
           });
-          
+
           function changeProvider() {
             formFieldContainer.innerHTML = '';
             formFieldContainer.appendChild(this.providerFields.cloneNode(true));
@@ -103,9 +107,12 @@ html(lang="en")
             if (registerMessage) {
               registerMessage.style.display = this.provider === 'password' ? '' : 'none';
             }
+            if (forgotPassword) {
+              forgotPassword.style.display = this.provider === 'password' ? '' : 'none';
+            }
             this.classList.add('selected-provider');
           }
-          
+
           var fragment, fields, input;
           for (var i = 0; i < formProviderLinks.length; i++) {
             // We could use dataset, but unfortunately there is the dreaded IE10

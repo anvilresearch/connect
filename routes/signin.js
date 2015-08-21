@@ -4,6 +4,7 @@
 
 var oidc     = require('../oidc')
   , settings = require('../boot/settings')
+  , mailer   = require('../boot/mailer')
   , passport = require('passport')
   , crypto   = require('crypto')
   , qs       = require('qs')
@@ -34,10 +35,11 @@ module.exports = function (server) {
     oidc.verifyClient,
     function (req, res, next) {
       res.render('signin', {
-        params:    qs.stringify(req.query),
-        request:   req.query,
-        providers: settings.providers,
-        providerInfo: providerInfo
+        params:       qs.stringify(req.query),
+        request:      req.query,
+        providers:    settings.providers,
+        providerInfo: providerInfo,
+        mailSupport:  !!(mailer.transport)
       });
     });
 
@@ -59,19 +61,21 @@ module.exports = function (server) {
         passport.authenticate(req.body.provider, function (err, user, info) {
           if (err) {
             res.render('signin', {
-              params:    qs.stringify(req.body),
-              request:   req.body,
-              providers: settings.providers,
+              params:       qs.stringify(req.body),
+              request:      req.body,
+              providers:    settings.providers,
               providerInfo: providerInfo,
-              error:     err.message
+              mailSupport:  !!(mailer.transport),
+              error:        err.message
             });
           } else if (!user) {
             res.render('signin', {
-              params:    qs.stringify(req.body),
-              request:   req.body,
-              providers: settings.providers,
+              params:       qs.stringify(req.body),
+              request:      req.body,
+              providers:    settings.providers,
               providerInfo: providerInfo,
-              formError:     info.message
+              mailSupport:  !!(mailer.transport),
+              formError:    info.message
             });
           } else {
             req.login(user, function (err) {

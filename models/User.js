@@ -198,6 +198,49 @@ User.prototype.verifyPassword = function (password, callback) {
 
 
 /**
+ * Verify password strength
+ */
+
+User.verifyPasswordStrength = function (password) {
+  var daysToCrack = providers.password.daysToCrack;
+  if (CheckPassword(password) <= daysToCrack) {
+    return false;
+  }
+  return true;
+}
+
+
+/**
+ * Change password
+ */
+
+User.changePassword = function (id, password, callback) {
+  // require a password
+  if (!password) {
+    return callback(new PasswordRequiredError());
+  }
+
+  // require password to be strong
+  if (!User.verifyPasswordStrength(password)) {
+    return callback(new InsecurePasswordError());
+  }
+
+  User.patch(id,
+      { password: password },
+      { private: true },
+      function (err, user) {
+        if (err) { return callback(err); }
+        if (!user) { return callback(null, null); }
+
+        callback(null, user);
+      }
+  );
+};
+
+
+
+
+/**
  * Create
  */
 
@@ -216,8 +259,7 @@ User.insert = function (data, options, callback) {
     }
 
     // check the password strength
-    var daysToCrack = providers.password.daysToCrack;
-    if (CheckPassword(data.password) <= daysToCrack) {
+    if (!User.verifyPasswordStrength(data.password)) {
       return callback(new InsecurePasswordError());
     }
   }
