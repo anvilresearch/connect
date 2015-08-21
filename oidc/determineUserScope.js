@@ -14,7 +14,7 @@ function determineUserScope (req, res, next) {
   var subject = req.user
 
   Scope.determine(scope, subject, function (err, scope, scopes) {
-    if (err) { next(err) }
+    if (err) { return next(err) }
     req.scope = scope
     req.scopes = scopes
     next()
