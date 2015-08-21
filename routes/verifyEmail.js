@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc');
-
+var oidc = require('../oidc')
 
 /**
  * E-mail Verification Endpoint
@@ -14,6 +13,5 @@ module.exports = function (server) {
     oidc.selectConnectParams,
     oidc.verifyRedirectURI,
     oidc.verifyEmail
-  ]);
-};
-
+  ])
+}

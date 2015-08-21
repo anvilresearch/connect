@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var Client = require('../models/Client');
-
+var Client = require('../models/Client')
 
 /**
  * Authenticate Client
@@ -11,15 +10,14 @@ var Client = require('../models/Client');
 
 function authenticateClient (req, res, next) {
   Client.authenticate(req, function (err, client) {
-    if (err) { return next(err); }
-    req.client = client;
-    next();
-  });
+    if (err) { return next(err) }
+    req.client = client
+    next()
+  })
 }
-
 
 /**
  * Export
  */
 
-module.exports = authenticateClient;
+module.exports = authenticateClient

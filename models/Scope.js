@@ -2,11 +2,9 @@
  * Module dependencies
  */
 
-var client   = require('../boot/redis')
-  , Modinha  = require('modinha')
-  , Document = require('modinha-redis')
-  ;
-
+var client = require('../boot/redis')
+var Modinha = require('modinha')
+var Document = require('modinha-redis')
 
 /**
  * Model definition
@@ -26,23 +24,20 @@ var Scope = Modinha.define('scopes', {
     type: 'boolean',
     default: true
   }
-});
-
+})
 
 /**
  * Document persistence
  */
 
-Scope.extend(Document);
-Scope.__client = client;
-
+Scope.extend(Document)
+Scope.__client = client
 
 /**
  * Scope intersections
  */
 
-Scope.intersects('roles');
-
+Scope.intersects('roles')
 
 /**
  * Determine
@@ -58,37 +53,35 @@ Scope.intersects('roles');
 
 Scope.determine = function (scopes, subject, callback) {
   Scope.get(scopes.split(' '), function (err, scopes) {
-
-    if (err) { return callback(err); }
+    if (err) { return callback(err) }
 
     var knownScope = scopes.reduce(function (list, scope) {
       if (scope instanceof Scope) {
-        list.push(scope);
+        list.push(scope)
       }
-      return list;
-    }, []);
+      return list
+    }, [])
 
     subject.authorizedScope(function (err, authorizedScope) {
-      if (err) { return callback(err); }
+      if (err) { return callback(err) }
 
       // filter authorized scope
       scopes = knownScope.filter(function (scope) {
-        return !scope.restricted || authorizedScope.indexOf(scope.name) !== -1;
-      });
+        return !scope.restricted || authorizedScope.indexOf(scope.name) !== -1
+      })
 
       // extract scope names
       var scope = scopes.map(function (scope) {
-        return scope.name;
-      }).join(' ');
+        return scope.name
+      }).join(' ')
 
-      callback(null, scope, scopes);
-    });
-  });
-};
-
+      callback(null, scope, scopes)
+    })
+  })
+}
 
 /**
  * Exports
  */
 
-module.exports = Scope;
+module.exports = Scope

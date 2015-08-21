@@ -2,36 +2,33 @@
  * Module dependencies
  */
 
-var pkg      = require('../package.json')
-  , qs       = require('qs')
-  , URL      = require('url')
-  , util     = require('util')
-  , crypto   = require('crypto')
-  , request  = require('superagent')
-  , map      = require('modinha').map
-  , User     = require('../models/User')
-  , Strategy = require('passport-strategy')
-  , agent    = 'Anvil Connect/v' + pkg.version
-  , nowSeconds    = require('../lib/time-utils').nowSeconds
-  ;
-
+var pkg = require('../package.json')
+var qs = require('qs')
+var URL = require('url')
+var util = require('util')
+var crypto = require('crypto')
+var request = require('superagent')
+var map = require('modinha').map
+var User = require('../models/User')
+var Strategy = require('passport-strategy')
+var agent = 'Anvil Connect/v' + pkg.version
+var nowSeconds = require('../lib/time-utils').nowSeconds
 
 /**
  * OAuthStrategy
  */
 
 function OAuthStrategy (provider, client, verify) {
-  Strategy.call(this);
-  this.provider   = provider;
-  this.endpoints  = provider.endpoints;
-  this.mapping    = provider.mapping;
-  this.client     = client;
-  this.verify     = verify;
-  this.name       = provider.id;
+  Strategy.call(this)
+  this.provider = provider
+  this.endpoints = provider.endpoints
+  this.mapping = provider.mapping
+  this.client = client
+  this.verify = verify
+  this.name = provider.id
 }
 
-util.inherits(OAuthStrategy, Strategy);
-
+util.inherits(OAuthStrategy, Strategy)
 
 /**
  * Verifier
@@ -39,24 +36,22 @@ util.inherits(OAuthStrategy, Strategy);
 
 function verifier (req, auth, userInfo, done) {
   User.connect(req, auth, userInfo, function (err, user) {
-    if (err) { return done(err); }
-    done(null, user);
-  });
-};
+    if (err) { return done(err) }
+    done(null, user)
+  })
+}
 
-OAuthStrategy.verifier = verifier;
-
+OAuthStrategy.verifier = verifier
 
 /**
  * Initialize
  */
 
 function initialize (provider, configuration) {
-  return new OAuthStrategy(provider, configuration, verifier);
+  return new OAuthStrategy(provider, configuration, verifier)
 }
 
-OAuthStrategy.initialize = initialize;
-
+OAuthStrategy.initialize = initialize
 
 /**
  * Authorization Header Params
@@ -64,25 +59,23 @@ OAuthStrategy.initialize = initialize;
  */
 
 function authorizationHeaderParams (data) {
-  var keys    = Object.keys(data).sort()
-    , encoded = ''
-    ;
+  var keys = Object.keys(data).sort()
+  var encoded = ''
 
   keys.forEach(function (key, i) {
-    encoded += key;
-    encoded += '="';
-    encoded += encodeOAuthData(data[key]);
-    encoded += '"';
+    encoded += key
+    encoded += '="'
+    encoded += encodeOAuthData(data[key])
+    encoded += '"'
     if (i < keys.length - 1) {
-      encoded += ', ';
+      encoded += ', '
     }
-  });
+  })
 
-  return encoded;
+  return encoded
 }
 
-OAuthStrategy.authorizationHeaderParams = authorizationHeaderParams;
-
+OAuthStrategy.authorizationHeaderParams = authorizationHeaderParams
 
 /**
  * Encode Data
@@ -92,66 +85,61 @@ OAuthStrategy.authorizationHeaderParams = authorizationHeaderParams;
 function encodeOAuthData (data) {
   // empty data
   if (!data || data === '') {
-    return '';
-  }
+    return ''
 
   // non-empty data
-  else {
+  } else {
     return encodeURIComponent(data)
-      .replace(/\!/g, "%21")
-      .replace(/\'/g, "%27")
-      .replace(/\(/g, "%28")
-      .replace(/\)/g, "%29")
-      .replace(/\*/g, "%2A")
-      ;
+      .replace(/\!/g, '%21')
+      .replace(/\'/g, '%27')
+      .replace(/\(/g, '%28')
+      .replace(/\)/g, '%29')
+      .replace(/\*/g, '%2A')
+
   }
 }
 
-OAuthStrategy.encodeOAuthData = encodeOAuthData;
-
+OAuthStrategy.encodeOAuthData = encodeOAuthData
 
 /**
  * Timestamp
  */
 
 function timestamp () {
-  return nowSeconds();
+  return nowSeconds()
 }
 
-OAuthStrategy.timestamp = timestamp;
-
+OAuthStrategy.timestamp = timestamp
 
 /**
  * Nonce
  */
 
-//function nonce (size) {
-//  return crypto.randomBytes(size).toString('hex').slice(0, 10);
-//}
+// function nonce (size) {
+//  return crypto.randomBytes(size).toString('hex').slice(0, 10)
+// }
 var NCHARS = [
-  'a','b','c','d','e','f','g','h','i','j','k','l','m','n',
-  'o','p','q','r','s','t','u','v','w','x','y','z','A','B',
-  'C','D','E','F','G','H','I','J','K','L','M','N','O','P',
-  'Q','R','S','T','U','V','W','X','Y','Z','0','1','2','3',
-  '4','5','6','7','8','9'
-];
+  'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+  'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',
+  'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+  'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3',
+  '4', '5', '6', '7', '8', '9'
+]
 
 function nonce (size) {
   var res = []
-    , len = NCHARS.length
-    , pos
-    ;
+  var len = NCHARS.length
+  var pos
 
   for (var i = 0; i < size; i++) {
-    pos = Math.floor(Math.random() * len);
-    res[i] = NCHARS[pos];
+    pos = Math.floor(Math.random() * len)
+    res[i] = NCHARS[pos]
   }
 
-  return res.join('');
+  return res.join('')
 }
 
-OAuthStrategy.nonce = nonce;
-
+OAuthStrategy.nonce = nonce
 
 /**
  * Signature Base String URI
@@ -160,35 +148,33 @@ OAuthStrategy.nonce = nonce;
  */
 
 function signatureBaseStringURI (uri) {
-  var url      = URL.parse(uri, true)
-    , protocol = url.protocol
-    , hostname = url.hostname
-    , pathname = url.pathname
-    , port     = ''
-    , result   = ''
-    ;
+  var url = URL.parse(uri, true)
+  var protocol = url.protocol
+  var hostname = url.hostname
+  var pathname = url.pathname
+  var port = ''
+  var result = ''
 
   if (url.port) {
-    if ((protocol === 'http:'  && url.port !== '80')
-     || (protocol === 'https:' && url.port !== '443')) {
-      port = ':' + url.port;
+    if ((protocol === 'http:' && url.port !== '80') ||
+      (protocol === 'https:' && url.port !== '443')) {
+      port = ':' + url.port
     }
   }
 
   if (!pathname || pathname === '') {
-    pathname = '/';
+    pathname = '/'
   }
 
-  result += protocol;
-  result += '//';
-  result += hostname;
-  result += port;
-  result += pathname;
-  return result;
+  result += protocol
+  result += '//'
+  result += hostname
+  result += port
+  result += pathname
+  return result
 }
 
-OAuthStrategy.signatureBaseStringURI = signatureBaseStringURI;
-
+OAuthStrategy.signatureBaseStringURI = signatureBaseStringURI
 
 /**
  * Normalize Parameters
@@ -196,9 +182,8 @@ OAuthStrategy.signatureBaseStringURI = signatureBaseStringURI;
  */
 
 function normalizeParameters (data) {
-  var encoded    = []
-    , normalized = ''
-    ;
+  var encoded = []
+  var normalized = ''
 
   // Convert object into nested arrays
   // and encode the keys and values.
@@ -206,38 +191,37 @@ function normalizeParameters (data) {
     encoded[encoded.length] = [
       encodeOAuthData(key),
       encodeOAuthData(data[key])
-    ];
-  });
+    ]
+  })
 
   // Sort by keys and values
   encoded.sort(function (a, b) {
     return (a[0] === b[0])
-            ? (a[1] < b[1])
-               ? -1
-               : 1
-            : (a[0] < b[0])
-               ? -1
-               : 1
-               ;
-  });
+      ? (a[1] < b[1])
+        ? -1
+        : 1
+      : (a[0] < b[0])
+        ? -1
+        : 1
+
+  })
 
   // Encode parameters similar to
   // query string.
   encoded.forEach(function (pair, i) {
-    normalized += pair[0];
-    normalized += '=';
-    normalized += pair[1];
+    normalized += pair[0]
+    normalized += '='
+    normalized += pair[1]
     if (i < encoded.length - 1) {
-      normalized += '&';
+      normalized += '&'
     }
-  });
+  })
 
   // bada boom
-  return normalized;
+  return normalized
 }
 
-OAuthStrategy.normalizeParameters = normalizeParameters;
-
+OAuthStrategy.normalizeParameters = normalizeParameters
 
 /**
  * Signature Base String
@@ -245,14 +229,13 @@ OAuthStrategy.normalizeParameters = normalizeParameters;
  */
 
 function signatureBaseString (method, url, parameters) {
-  return method.toUpperCase() + '&'
-       + encodeOAuthData(signatureBaseStringURI(url)) + '&'
-       + encodeOAuthData(parameters)
-       ;
+  return method.toUpperCase() + '&' +
+  encodeOAuthData(signatureBaseStringURI(url)) + '&' +
+  encodeOAuthData(parameters)
+
 }
 
-OAuthStrategy.signatureBaseString = signatureBaseString;
-
+OAuthStrategy.signatureBaseString = signatureBaseString
 
 /**
  * Signature
@@ -260,35 +243,32 @@ OAuthStrategy.signatureBaseString = signatureBaseString;
 
 function sign (method, input, consumerSecret, tokenSecret) {
   var encoding = 'base64'
-    , result   = ''
-    , key      = encodeOAuthData(consumerSecret) + '&' +
-                 encodeOAuthData(tokenSecret)
-    ;
+  var result = ''
+  var key = encodeOAuthData(consumerSecret) + '&' +
+    encodeOAuthData(tokenSecret)
 
   switch (method) {
-
     case 'PLAINTEXT':
-      result = key;
-      break;
+      result = key
+      break
 
     case 'RSA-SHA1':
-      result = crypto.createSign(method).update(input).sign(key, encoding);
-      break;
+      result = crypto.createSign(method).update(input).sign(key, encoding)
+      break
 
     case 'HMAC-SHA1':
-      result = crypto.createHmac('sha1', key).update(input).digest(encoding);
-      break;
+      result = crypto.createHmac('sha1', key).update(input).digest(encoding)
+      break
 
     default:
-      // ERROR
+    // ERROR
 
   }
 
-  return result;
+  return result
 }
 
-OAuthStrategy.sign = sign;
-
+OAuthStrategy.sign = sign
 
 /**
  * Temporary Credentials
@@ -297,60 +277,59 @@ OAuthStrategy.sign = sign;
 
 function temporaryCredentials (done) {
   var strategy = this
-    , provider = strategy.provider
-    , endpoint = strategy.endpoints.credentials
-    , client   = strategy.client
-    , method   = endpoint.method && endpoint.method.toLowerCase()
-    , url      = endpoint.url
-    , header   = endpoint.header || 'Authorization'
-    , scheme   = endpoint.scheme || 'OAuth'
-    , accept   = endpoint.accept || 'application/x-www-form-urlencoded'
-    , key      = client.oauth_consumer_key
-    , secret   = client.oauth_consumer_secret
-    , signer   = provider.oauth_signature_method || 'PLAINTEXT'
-    , realm    = provider.realm
-    , callback = provider.oauth_callback
-    , params   = {}
-    ;
+  var provider = strategy.provider
+  var endpoint = strategy.endpoints.credentials
+  var client = strategy.client
+  var method = endpoint.method && endpoint.method.toLowerCase()
+  var url = endpoint.url
+  var header = endpoint.header || 'Authorization'
+  var scheme = endpoint.scheme || 'OAuth'
+  var accept = endpoint.accept || 'application/x-www-form-urlencoded'
+  var key = client.oauth_consumer_key
+  var secret = client.oauth_consumer_secret
+  var signer = provider.oauth_signature_method || 'PLAINTEXT'
+  var realm = provider.realm
+  var callback = provider.oauth_callback
+  var params = {}
 
   // Initialize request
-  var req = request[method || 'post'](url);
+  var req = request[method || 'post'](url)
 
   // Build request parameters
-  params.oauth_consumer_key     = key;
-  params.oauth_signature_method = signer;
-  params.oauth_timestamp        = timestamp();
-  params.oauth_nonce            = nonce(32);
-  params.oauth_callback         = callback;
-  params.oauth_version          = '1.0';
+  params.oauth_consumer_key = key
+  params.oauth_signature_method = signer
+  params.oauth_timestamp = timestamp()
+  params.oauth_nonce = nonce(32)
+  params.oauth_callback = callback
+  params.oauth_version = '1.0'
 
   // Generate signature (is next line needed for PLAINTEXT?)
-  var input = signatureBaseString(method, url, normalizeParameters(params));
-  params.oauth_signature = sign(signer, input, secret);
+  var input = signatureBaseString(method, url, normalizeParameters(params))
+  params.oauth_signature = sign(signer, input, secret)
 
-  if (realm) { params.realm = realm; }
+  if (realm) { params.realm = realm }
 
   // Set Authorization header
-  req.set(header, scheme + ' ' + authorizationHeaderParams(params));
+  req.set(header, scheme + ' ' + authorizationHeaderParams(params))
 
   // Set other headers
-  req.set('Accept',     accept);
-  req.set('User-Agent', agent);
+  req.set('Accept', accept)
+  req.set('User-Agent', agent)
 
   // Execute request
   return req.end(function (err, res) {
-    var response = qs.parse(res.text);
+    if (err) { return done(err) }
+    var response = qs.parse(res.text)
 
     if (res.statusCode !== 200) {
-      return done(new Error(res.text));
+      return done(new Error(res.text))
     }
 
-    done(null, response);
-  });
+    done(null, response)
+  })
 }
 
-OAuthStrategy.prototype.temporaryCredentials = temporaryCredentials;
-
+OAuthStrategy.prototype.temporaryCredentials = temporaryCredentials
 
 /**
  * Resource Owner Authorization
@@ -359,16 +338,14 @@ OAuthStrategy.prototype.temporaryCredentials = temporaryCredentials;
 
 function resourceOwnerAuthorization (token) {
   var strategy = this
-    , endpoint = strategy.endpoints.authorization
-    , url      = endpoint.url
-    , param    = endpoint.param || 'oauth_token'
-    ;
+  var endpoint = strategy.endpoints.authorization
+  var url = endpoint.url
+  var param = endpoint.param || 'oauth_token'
 
-  strategy.redirect(url + '?' + param + '=' + token);
+  strategy.redirect(url + '?' + param + '=' + token)
 }
 
-OAuthStrategy.prototype.resourceOwnerAuthorization = resourceOwnerAuthorization;
-
+OAuthStrategy.prototype.resourceOwnerAuthorization = resourceOwnerAuthorization
 
 /**
  * Token Credentials
@@ -377,58 +354,56 @@ OAuthStrategy.prototype.resourceOwnerAuthorization = resourceOwnerAuthorization;
 
 function tokenCredentials (authorization, secret, done) {
   var strategy = this
-    , provider = strategy.provider
-    , endpoint = strategy.endpoints.token
-    , client   = strategy.client
-    , method   = endpoint.method && endpoint.method.toLowerCase()
-    , url      = endpoint.url
-    , header   = endpoint.header || 'Authorization'
-    , scheme   = endpoint.scheme || 'OAuth'
-    , accept   = endpoint.accept || 'application/x-www-form-urlencoded'
-    , key      = client.oauth_consumer_key
-    , signer   = provider.oauth_signature_method || 'PLAINTEXT'
-    , realm    = provider.realm
-    , verifier = authorization.oauth_verifier || null
-    , token    = authorization.oauth_token
-    , params   = {}
-    ;
+  var provider = strategy.provider
+  var endpoint = strategy.endpoints.token
+  var client = strategy.client
+  var method = endpoint.method && endpoint.method.toLowerCase()
+  var url = endpoint.url
+  var header = endpoint.header || 'Authorization'
+  var scheme = endpoint.scheme || 'OAuth'
+  var accept = endpoint.accept || 'application/x-www-form-urlencoded'
+  var key = client.oauth_consumer_key
+  var signer = provider.oauth_signature_method || 'PLAINTEXT'
+  var verifier = authorization.oauth_verifier || null
+  var token = authorization.oauth_token
+  var params = {}
 
   // Initialize request
-  var req = request[method || 'post'](url);
+  var req = request[method || 'post'](url)
 
   // Build request parameters
-  params.oauth_consumer_key     = key;
-  params.oauth_signature_method = signer;
-  params.oauth_timestamp        = timestamp();
-  params.oauth_nonce            = nonce(32);
-  params.oauth_token            = token;
-  params.oauth_verifier         = verifier;
-  params.oauth_version          = '1.0';
+  params.oauth_consumer_key = key
+  params.oauth_signature_method = signer
+  params.oauth_timestamp = timestamp()
+  params.oauth_nonce = nonce(32)
+  params.oauth_token = token
+  params.oauth_verifier = verifier
+  params.oauth_version = '1.0'
 
-  var input = signatureBaseString(method, url, normalizeParameters(params));
-  params.oauth_signature = sign(signer, input, secret);
+  var input = signatureBaseString(method, url, normalizeParameters(params))
+  params.oauth_signature = sign(signer, input, secret)
 
   // Set Authorization header
-  req.set(header, scheme + ' ' + authorizationHeaderParams(params));
+  req.set(header, scheme + ' ' + authorizationHeaderParams(params))
 
   // Set other headers
-  req.set('Accept',     accept);
-  req.set('User-Agent', agent);
+  req.set('Accept', accept)
+  req.set('User-Agent', agent)
 
   // Execute request
   return req.end(function (err, res) {
+    if (err) { return done(err) }
     var response = qs.parse(res.text)
 
     if (res.statusCode !== 200) {
-      return done(new Error('Couldn\'t obtain token credentials'));
+      return done(new Error("Couldn't obtain token credentials"))
     }
 
-    done(null, response);
-  });
+    done(null, response)
+  })
 }
 
-OAuthStrategy.prototype.tokenCredentials = tokenCredentials;
-
+OAuthStrategy.prototype.tokenCredentials = tokenCredentials
 
 /**
  * User Info
@@ -436,36 +411,35 @@ OAuthStrategy.prototype.tokenCredentials = tokenCredentials;
 
 function userInfo (credentials, done) {
   var strategy = this
-    , provider = strategy.provider
-    , endpoint = strategy.endpoints.user
-    , mapping  = strategy.mapping
-    , client   = strategy.client
-    , method   = endpoint.method && endpoint.method.toLowerCase()
-    , url      = endpoint.url
-    , header   = endpoint.header || 'Authorization'
-    , scheme   = endpoint.scheme || 'OAuth'
-    , key      = client.oauth_consumer_key
-    , token    = credentials.oauth_token
-    , secret   = client.oauth_consumer_secret
-    , signer   = provider.oauth_signature_method || 'PLAINTEXT'
-    , ctype    = 'application/x-www-form-urlencoded'
-    , params   = {}
-    ;
+  var provider = strategy.provider
+  var endpoint = strategy.endpoints.user
+  var mapping = strategy.mapping
+  var client = strategy.client
+  var method = endpoint.method && endpoint.method.toLowerCase()
+  var url = endpoint.url
+  var header = endpoint.header || 'Authorization'
+  var scheme = endpoint.scheme || 'OAuth'
+  var key = client.oauth_consumer_key
+  var token = credentials.oauth_token
+  var secret = client.oauth_consumer_secret
+  var signer = provider.oauth_signature_method || 'PLAINTEXT'
+  var ctype = 'application/x-www-form-urlencoded'
+  var params = {}
 
   var query = { user_id: credentials.user_id } // twitter specific
 
   // Initialize request
-  var req = request[method || 'get'](url);
+  var req = request[method || 'get'](url)
 
   req.query(query)
 
   // Params
-  params.oauth_consumer_key     = key;
-  params.oauth_signature_method = signer;
-  params.oauth_timestamp        = timestamp();
-  params.oauth_nonce            = nonce(32);
-  params.oauth_token            = token;
-  params.oauth_version          = '1.0';
+  params.oauth_consumer_key = key
+  params.oauth_signature_method = signer
+  params.oauth_timestamp = timestamp()
+  params.oauth_nonce = nonce(32)
+  params.oauth_token = token
+  params.oauth_version = '1.0'
 
   // Authenticate
   var input = signatureBaseString(
@@ -473,102 +447,99 @@ function userInfo (credentials, done) {
     url,
     normalizeParameters(params) + '&' +
     normalizeParameters(query)
-  );
+  )
 
   params.oauth_signature = sign(
     signer, input, secret, credentials.oauth_token_secret
-  );
+  )
 
   // Set Authorization header
-  req.set(header, scheme + ' ' + authorizationHeaderParams(params));
+  req.set(header, scheme + ' ' + authorizationHeaderParams(params))
 
   // Set other headers
-  req.set('Content-Type', ctype);
-  req.set('User-Agent',   agent);
+  req.set('Content-Type', ctype)
+  req.set('User-Agent', agent)
 
   return req.end(function (err, res) {
+    if (err) { return done(err) }
     // error
     if (res.statusCode !== 200) {
       return done(
         new Error('Unable to obtain user profile.')
-      );
+      )
     }
 
-    var profile = { provider: strategy.name };
-    map(mapping, res.body, profile);
+    var profile = { provider: strategy.name }
+    map(mapping, res.body, profile)
 
-    done(null, profile);
-  });
+    done(null, profile)
+  })
 }
 
-OAuthStrategy.prototype.userInfo = userInfo;
-
+OAuthStrategy.prototype.userInfo = userInfo
 
 /**
  * Authenticate
  */
 
 function authenticate (req, options) {
-  var strategy = this;
+  var strategy = this
 
   // Handle the authorization response
   if (req.query && req.query.oauth_token) {
     if (!req.session['oauth']) {
       strategy.error(
         new Error('Failed to find request token in session')
-      );
+      )
     }
 
     var authorization = req.query
-      , secret = req.session['oauth'].oauth_token_secret
-      ;
+    var secret = req.session['oauth'].oauth_token_secret
 
     // request token credentials
     strategy.tokenCredentials(authorization, secret, function (err, credentials) {
-      if (err) { return strategy.error(err); }
+      if (err) { return strategy.error(err) }
 
       // clean up session
-      delete req.session['oauth'];
+      delete req.session['oauth']
 
       // request user info
       strategy.userInfo(credentials, function (err, profile) {
-        if (err) { return strategy.error(err); }
+        if (err) { return strategy.error(err) }
 
         // invoke the callback
         strategy.verify(req, credentials, profile, function (err, user, info) {
-          if (err)   { return strategy.error(err); }
-          if (!user) { return strategy.fail(info); }
-          strategy.success(user, info);
-        });
-      });
-    });
-  }
+          if (err) { return strategy.error(err) }
+          if (!user) { return strategy.fail(info) }
+          strategy.success(user, info)
+        })
+      })
+    })
 
   // Initiate the authorization flow
-  else {
+  } else {
     strategy.temporaryCredentials(function (err, response) {
       if (err || !response && response.oauth_token) {
         return strategy.error(
           new Error('Failed to obtain OAuth request token')
-        );
+        )
       }
 
       // Store response in session
-      if (!req.session['oauth']) { req.session['oauth'] = {}; }
-      req.session['oauth'].oauth_token = response.oauth_token;
-      req.session['oauth'].oauth_token_secret = response.oauth_token_secret;
+      if (!req.session['oauth']) { req.session['oauth'] = {} }
+      req.session['oauth'].oauth_token = response.oauth_token
+      req.session['oauth'].oauth_token_secret = response.oauth_token_secret
 
       // Redirect to OAuth server
-      strategy.resourceOwnerAuthorization(response.oauth_token);
-    });
+      strategy.resourceOwnerAuthorization(response.oauth_token)
+    })
   }
 }
 
-OAuthStrategy.prototype.authenticate = authenticate;
-
+OAuthStrategy.prototype.authenticate = authenticate
 
 /**
  * Exports
  */
 
-module.exports = OAuthStrategy;
+module.exports = OAuthStrategy

@@ -3,20 +3,17 @@
  */
 
 var settings = require('../boot/settings')
-  , oidc     = require('../oidc')
-  , passport = require('passport')
-  , crypto   = require('crypto')
-  , qs       = require('qs')
-  , NotFoundError = require('../errors/NotFoundError')
-  ;
-
+var oidc = require('../oidc')
+var passport = require('passport')
+var crypto = require('crypto')
+var qs = require('qs')
+var NotFoundError = require('../errors/NotFoundError')
 
 /**
  * Third Party Provider Authorization Endpoints
  */
 
 module.exports = function (server) {
-
   /**
    * Initiate Third Party Authorization
    */
@@ -29,24 +26,21 @@ module.exports = function (server) {
     oidc.determineProvider,
     function (req, res, next) {
       var provider = req.params.provider
-        , config = settings.providers[provider]
-        ;
+      var config = settings.providers[provider]
 
       // Authorize
       if (config) {
         passport.authenticate(provider, {
           scope: config.scope,
           state: req.authorizationId
-        })(req, res, next);
-      }
+        })(req, res, next)
 
       // NOT FOUND
-      else {
-        next(new NotFoundError());
+      } else {
+        next(new NotFoundError())
       }
 
-    });
-
+    })
 
   /**
    * Handle Third Party Authorization
@@ -60,31 +54,29 @@ module.exports = function (server) {
     function (req, res, next) {
       if (settings.providers[req.params.provider]) {
         passport.authenticate(req.params.provider, function (err, user, info) {
-          if (err) { return next(err); }
+          if (err) { return next(err) }
 
           // render the signin screen with an error
           if (!user) {
             res.render('signin', {
-              params:    qs.stringify(req.connectParams),
-              request:   req.body,
+              params: qs.stringify(req.connectParams),
+              request: req.body,
               providers: info.providers,
-              error:     info.message
-            });
-          }
+              error: info.message
+            })
 
           // login the user
-          else {
+          } else {
             req.login(user, function (err) {
-              req.session.opbs = crypto.randomBytes(256).toString('hex');
-              next(err);
-            });
+              req.session.opbs = crypto.randomBytes(256).toString('hex')
+              next(err)
+            })
           }
-        })(req, res, next);
-      }
+        })(req, res, next)
 
       // NOT FOUND
-      else {
-        next(new NotFoundError());
+      } else {
+        next(new NotFoundError())
       }
     },
 
@@ -93,14 +85,13 @@ module.exports = function (server) {
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize
-  ];
+  ]
 
   if (oidc.beforeAuthorize) {
-    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize);
+    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize)
   }
 
-  server.get('/connect/:provider/callback', handler);
-
+  server.get('/connect/:provider/callback', handler)
 
   /**
    * Revoke Third Party Authorization
@@ -111,10 +102,9 @@ module.exports = function (server) {
     oidc.getBearerToken,
     oidc.verifyAccessToken({
       iss: settings.issuer,
-      key: settings.publicKey,
+      key: settings.publicKey
     }),
     oidc.revoke
-  );
+  )
 
-};
-
+}

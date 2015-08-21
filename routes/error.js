@@ -2,15 +2,13 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc');
-
+var oidc = require('../oidc')
 
 /**
  * Exports
  */
 
 module.exports = function (server) {
+  server.use(oidc.error)
 
-  server.use(oidc.error);
-
-};
+}

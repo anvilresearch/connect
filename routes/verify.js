@@ -2,17 +2,14 @@
  * Module dependencies
  */
 
-var oidc     = require('../oidc')
-  , settings = require('../boot/settings')
-  ;
-
+var oidc = require('../oidc')
+var settings = require('../boot/settings')
 
 /**
  * Token Endpoint
  */
 
 module.exports = function (server) {
-
   server.all('/token/verify',
     oidc.authenticateClient,
     oidc.parseAuthorizationHeader,
@@ -22,17 +19,15 @@ module.exports = function (server) {
       key: settings.publicKey
     }),
     function (req, res, next) {
-
       // don't cache this response
       res.set({
         'Cache-Control': 'no-store',
         'Pragma': 'no-cache'
-      });
+      })
 
       // respond with decoded/retrieved claims
-      res.json(req.claims);
+      res.json(req.claims)
     }
-  );
+  )
 
-};
-
+}

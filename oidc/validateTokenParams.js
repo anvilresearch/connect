@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var AuthorizationError = require('../errors/AuthorizationError');
-
+var AuthorizationError = require('../errors/AuthorizationError')
 
 /**
  * Supported grant types
@@ -11,15 +10,14 @@ var AuthorizationError = require('../errors/AuthorizationError');
 
 var grantTypes = [
   'authorization_code', 'refresh_token', 'client_credentials'
-];
-
+]
 
 /**
  * Validate token parameters
  */
 
 function validateTokenParams (req, res, next) {
-  var params = req.body;
+  var params = req.body
 
   // missing grant type
   if (!params.grant_type) {
@@ -27,7 +25,7 @@ function validateTokenParams (req, res, next) {
       error: 'invalid_request',
       error_description: 'Missing grant type',
       statusCode: 400
-    }));
+    }))
   }
 
   // unsupported grant type
@@ -36,7 +34,7 @@ function validateTokenParams (req, res, next) {
       error: 'unsupported_grant_type',
       error_description: 'Unsupported grant type',
       statusCode: 400
-    }));
+    }))
   }
 
   // missing authorization code
@@ -45,7 +43,7 @@ function validateTokenParams (req, res, next) {
       error: 'invalid_request',
       error_description: 'Missing authorization code',
       statusCode: 400
-    }));
+    }))
   }
 
   // missing redirect uri
@@ -54,7 +52,7 @@ function validateTokenParams (req, res, next) {
       error: 'invalid_request',
       error_description: 'Missing redirect uri',
       statusCode: 400
-    }));
+    }))
   }
 
   // missing refresh token
@@ -63,15 +61,14 @@ function validateTokenParams (req, res, next) {
       error: 'invalid_request',
       error_description: 'Missing refresh token',
       statusCode: 400
-    }));
+    }))
   }
 
-  next();
+  next()
 }
-
 
 /**
  * Exports
  */
 
-module.exports = validateTokenParams;
+module.exports = validateTokenParams

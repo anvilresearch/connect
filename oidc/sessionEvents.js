@@ -2,34 +2,31 @@
  * Module dependencies
  */
 
-var checkSession = require('./checkSession');
-
+var checkSession = require('./checkSession')
 
 /**
  * Session Events endpoint (SSE)
  */
 
-
 function sessionEvents (req, res) {
-  req.socket.setTimeout(Infinity);
+  req.socket.setTimeout(Infinity)
 
   // Headers
   res.writeHead(200, {
-    "Content-Type":"text/event-stream",
-    "Cache-Control":"no-cache",
-    "Connection":"keep-alive"
-  });
+    'Content-Type': 'text/event-stream',
+    'Cache-Control': 'no-cache',
+    'Connection': 'keep-alive'
+  })
 
   // Set retry interval
-  res.write("retry: 2000\n");
+  res.write('retry: 2000\n')
 
   // Periodically update the client
-  checkSession(req, res);
-};
-
+  checkSession(req, res)
+}
 
 /**
  * Exports
  */
 
-module.exports = sessionEvents;
+module.exports = sessionEvents

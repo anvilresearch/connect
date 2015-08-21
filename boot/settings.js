@@ -2,25 +2,22 @@
  * Module dependencies
  */
 
-var cwd      = process.cwd()
-  , env      = process.env.NODE_ENV || 'development'
-  , fs       = require('fs')
-  , path     = require('path')
-  , keys     = require(path.join(__dirname, 'keys'))
-  , pkg      = require(path.join(__dirname, '..', 'package.json'))
-  , config   = path.join(cwd, 'config', env + '.json')
-  , settings = {}
-  ;
-
+var cwd = process.cwd()
+var env = process.env.NODE_ENV || 'development'
+var path = require('path')
+var keys = require(path.join(__dirname, 'keys'))
+var pkg = require(path.join(__dirname, '..', 'package.json'))
+var config = path.join(cwd, 'config', env + '.json')
+var settings = {}
 
 /**
  * Load config
  */
 
 try {
-  config = require(config);
+  config = require(config)
 } catch (e) {
-  console.log('Cannot load ' + env + ' configuration');
+  console.log('Cannot load ' + env + ' configuration')
   process.exit(1)
 }
 
@@ -28,15 +25,13 @@ try {
  * Anvil Connect Version
  */
 
-settings.version = pkg.version;
-
+settings.version = pkg.version
 
 /**
  * Server Port
  */
 
-settings.port = process.env.PORT || settings.port || 3000;
-
+settings.port = process.env.PORT || settings.port || 3000
 
 /**
  * client_registration
@@ -46,7 +41,7 @@ settings.port = process.env.PORT || settings.port || 3000;
  *    `client_registration` can be set to `dynamic`, `token`, or `scoped`.
  */
 
-settings.client_registration = 'scoped';
+settings.client_registration = 'scoped'
 
 /**
  * trusted_registration_scope
@@ -56,13 +51,13 @@ settings.client_registration = 'scoped';
  *    overridden if required.
  */
 
-settings.trusted_registration_scope = 'realm';
+settings.trusted_registration_scope = 'realm'
 
 /**
  * providers
  */
 
-settings.providers = {};
+settings.providers = {}
 
 /**
  * OpenID Provider Metadata Default Values
@@ -87,7 +82,7 @@ settings.response_types_supported = [
   'token id_token',
   'id_token token',
   'code id_token token'
-];
+]
 
 /**
  * response_modes_supported
@@ -99,7 +94,7 @@ settings.response_types_supported = [
 
 settings.response_modes_supported = [
   // TODO
-];
+]
 
 /**
  * grant_types_supported
@@ -113,7 +108,7 @@ settings.response_modes_supported = [
 settings.grant_types_supported = [
   'authorization_code',
   'refresh_token'
-];
+]
 
 /**
  * acr_values_supported
@@ -123,7 +118,7 @@ settings.grant_types_supported = [
 
 settings.acr_values_supported = [
   // TODO
-];
+]
 
 /**
  * subject_types_supported
@@ -133,9 +128,9 @@ settings.acr_values_supported = [
 
 settings.subject_types_supported = [
   // TODO
-  //'pairwise',
+  // 'pairwise',
   'public'
-];
+]
 
 /**
  * id_token_signing_alg_values_supported
@@ -149,7 +144,7 @@ settings.subject_types_supported = [
 
 settings.id_token_signing_alg_values_supported = [
   'RS256'
-];
+]
 
 /**
  * id_token_encryption_alg_values_supported
@@ -160,7 +155,7 @@ settings.id_token_signing_alg_values_supported = [
 
 settings.id_token_encryption_alg_values_supported = [
   // TODO
-];
+]
 
 /**
  * id_token_encryption_enc_values_supported
@@ -171,7 +166,7 @@ settings.id_token_encryption_alg_values_supported = [
 
 settings.id_token_encryption_enc_values_supported = [
   // TODO
-];
+]
 
 /**
  * userinfo_signing_alg_values_supported
@@ -183,7 +178,7 @@ settings.id_token_encryption_enc_values_supported = [
 settings.userinfo_signing_alg_values_supported = [
   // TODO
   'none'
-];
+]
 
 /**
  * userinfo_encryption_alg_values_supported
@@ -194,7 +189,7 @@ settings.userinfo_signing_alg_values_supported = [
 
 settings.userinfo_encryption_alg_values_supported = [
   // TODO
-];
+]
 
 /**
  * userinfo_encryption_enc_values_supported
@@ -205,7 +200,7 @@ settings.userinfo_encryption_alg_values_supported = [
 
 settings.userinfo_encryption_enc_values_supported = [
   // TODO
-];
+]
 
 /**
  * request_object_signing_alg_values_supported
@@ -219,7 +214,7 @@ settings.userinfo_encryption_enc_values_supported = [
 
 settings.request_object_signing_alg_values_supported = [
   // TODO
-];
+]
 
 /**
  * request_object_encryption_alg_values_supported
@@ -231,7 +226,7 @@ settings.request_object_signing_alg_values_supported = [
 
 settings.request_object_encryption_alg_values_supported = [
   // TODO
-];
+]
 
 /**
  * request_object_encryption_enc_values_supported
@@ -243,7 +238,7 @@ settings.request_object_encryption_alg_values_supported = [
 
 settings.request_object_encryption_enc_values_supported = [
   // TODO
-];
+]
 
 /**
  * token_endpoint_auth_methods_supported
@@ -258,11 +253,11 @@ settings.request_object_encryption_enc_values_supported = [
 
 settings.token_endpoint_auth_methods_supported = [
   'client_secret_basic',
-  'client_secret_post',
-  //'client_secret_jwt',
-  //'private_key_jwt',
-  //'none'
-];
+  'client_secret_post'
+// 'client_secret_jwt',
+// 'private_key_jwt',
+// 'none'
+]
 
 /**
  * token_endpoint_auth_signing_alg_values_supported
@@ -274,8 +269,8 @@ settings.token_endpoint_auth_methods_supported = [
  */
 
 settings.token_endpoint_auth_signing_alg_values_supported = [
-  //'RS256'
-];
+  // 'RS256'
+]
 
 /**
  * display_values_supported
@@ -286,7 +281,7 @@ settings.token_endpoint_auth_signing_alg_values_supported = [
 
 settings.display_values_supported = [
   // TODO
-];
+]
 
 /**
  * claim_types_supported
@@ -299,7 +294,7 @@ settings.display_values_supported = [
 
 settings.claim_types_supported = [
   'normal'
-];
+]
 
 /**
  * claims_supported
@@ -328,7 +323,7 @@ settings.claims_supported = [
   'locale',
   'joined_at',
   'updated_at'
-];
+]
 
 /**
  * service_documentation
@@ -339,7 +334,7 @@ settings.claims_supported = [
  *   provided in this documentation.
  */
 
-settings.service_documentation = 'http://anvil.io/docs/connect/';
+settings.service_documentation = 'http://anvil.io/docs/connect/'
 
 /**
  * claims_locales_supported
@@ -351,7 +346,7 @@ settings.service_documentation = 'http://anvil.io/docs/connect/';
 
 settings.claims_locales_supported = [
   // TODO
-];
+]
 
 /**
  * ui_locales_supported
@@ -361,7 +356,7 @@ settings.claims_locales_supported = [
 
 settings.ui_locales_supported = [
   // TODO
-];
+]
 
 /**
  * claims_parameter_supported
@@ -370,7 +365,7 @@ settings.ui_locales_supported = [
  *   value is false.
  */
 
-settings.claims_parameter_supported = false;
+settings.claims_parameter_supported = false
 
 /**
  * request_parameter_supported
@@ -379,7 +374,7 @@ settings.claims_parameter_supported = false;
  *   value is false.
  */
 
-settings.request_parameter_supported = false;
+settings.request_parameter_supported = false
 
 /**
  * request_uri_parameter_supported
@@ -388,7 +383,7 @@ settings.request_parameter_supported = false;
  *   default value is true.
  */
 
-settings.request_uri_parameter_supported = false;
+settings.request_uri_parameter_supported = false
 
 /**
  * request_request_uri_registration
@@ -398,7 +393,7 @@ settings.request_uri_parameter_supported = false;
  *   omitted, the default value is false.
  */
 
-settings.require_request_uri_registration = false;
+settings.require_request_uri_registration = false
 
 /**
  * op_policy_uri
@@ -408,7 +403,7 @@ settings.require_request_uri_registration = false;
  *   display this URL to the person registering the Client if it is given.
  */
 
-settings.op_policy_uri = undefined;
+settings.op_policy_uri = undefined
 
 /**
  * op_tos_uri
@@ -418,26 +413,23 @@ settings.op_policy_uri = undefined;
  *   Client if it is given.
  */
 
-settings.op_tos_uri = undefined;
-
+settings.op_tos_uri = undefined
 
 /**
  * Load config file settings and override defaults
  */
 
 Object.keys(config).forEach(function (key) {
-  settings[key] = config[key];
-});
-
+  settings[key] = config[key]
+})
 
 /**
  * Key pair and JWK set
  */
 
 Object.keys(keys).forEach(function (key) {
-  settings[key] = keys[key];
-});
-
+  settings[key] = keys[key]
+})
 
 /**
  * Required Configuration Values
@@ -453,21 +445,21 @@ Object.keys(keys).forEach(function (key) {
  */
 
 if (!settings.issuer) {
-  throw new Error('Issuer must be configured');
+  throw new Error('Issuer must be configured')
 }
 
 /**
  * Config-file dependenct settings
  */
 
-var issuer = settings.issuer;
+var issuer = settings.issuer
 
 /**
  * authorization_endpoint
  *   REQUIRED. URL of the OP's OAuth 2.0 Authorization Endpoint [OpenID.Core].
  */
 
-settings.authorization_endpoint = issuer + '/authorize';
+settings.authorization_endpoint = issuer + '/authorize'
 
 /**
  * token_endpoint
@@ -475,7 +467,7 @@ settings.authorization_endpoint = issuer + '/authorize';
  *   unless only the Implicit Flow is used.
  */
 
-settings.token_endpoint = issuer + '/token';
+settings.token_endpoint = issuer + '/token'
 
 /**
  * userinfo_endpoint
@@ -484,7 +476,7 @@ settings.token_endpoint = issuer + '/token';
  *   components.
  */
 
-settings.userinfo_endpoint = issuer + '/userinfo';
+settings.userinfo_endpoint = issuer + '/userinfo'
 
 /**
  * jwks_uri
@@ -501,7 +493,7 @@ settings.userinfo_endpoint = issuer + '/userinfo';
  *   match those in the certificate.
  */
 
-settings.jwks_uri = issuer + '/jwks';
+settings.jwks_uri = issuer + '/jwks'
 
 /**
  * registration_endpoint
@@ -509,7 +501,7 @@ settings.jwks_uri = issuer + '/jwks';
  *   [OpenID.Registration].
  */
 
-settings.registration_endpoint = issuer + '/register';
+settings.registration_endpoint = issuer + '/register'
 
 /**
  * scopes_supported
@@ -522,7 +514,7 @@ settings.registration_endpoint = issuer + '/register';
  *   TODO: Should these be pulled from redis?
  */
 
-settings.scopes_supported = ['openid', 'profile'];
+settings.scopes_supported = ['openid', 'profile']
 
 /**
  * OpenID Provider Discovery Metadata (Session)
@@ -540,7 +532,7 @@ settings.scopes_supported = ['openid', 'profile'];
  *   post back the login status of the End-User at the OP.
  */
 
-settings.check_session_iframe = issuer + '/session';
+settings.check_session_iframe = issuer + '/session'
 
 /**
  * end_session_endpoint
@@ -548,11 +540,10 @@ settings.check_session_iframe = issuer + '/session';
  *   that the End-User be logged out at the OP.
  */
 
-settings.end_session_endpoint = issuer + '/signout';
-
+settings.end_session_endpoint = issuer + '/signout'
 
 /**
  * Exports
  */
 
-module.exports = settings;
+module.exports = settings

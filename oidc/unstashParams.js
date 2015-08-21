@@ -3,10 +3,8 @@
  */
 
 var client = require('../boot/redis')
-  , MissingStateError = require('../errors/MissingStateError')
-  , ExpiredAuthorizationRequestError = require('../errors/ExpiredAuthorizationRequestError')
-  ;
-
+var MissingStateError = require('../errors/MissingStateError')
+var ExpiredAuthorizationRequestError = require('../errors/ExpiredAuthorizationRequestError')
 
 /**
  * Unstash authorization params
@@ -16,32 +14,30 @@ function unstashParams (req, res, next) {
   // OAuth 2.0 callbacks should have a state param
   // OAuth 1.0 must use the session to store the state value
   var id = req.query.state || req.session.state
-    , key = 'authorization:' + id
-    ;
+  var key = 'authorization:' + id
 
   if (!id) { // && request is OAuth 2.0
-    return next(new MissingStateError());
+    return next(new MissingStateError())
   }
 
   client.get(key, function (err, params) {
-    if (err)    { return next(err); }
+    if (err) { return next(err) }
 
     // This handles expired and mismatching state params
-    if (!params) { return next(new ExpiredAuthorizationRequestError()); }
+    if (!params) { return next(new ExpiredAuthorizationRequestError()) }
 
     try {
-      req.connectParams = JSON.parse(params);
+      req.connectParams = JSON.parse(params)
     } catch (err) {
-      next(err);
+      next(err)
     }
 
-    next();
-  });
+    next()
+  })
 }
-
 
 /**
  * Exports
  */
 
-module.exports = unstashParams;
+module.exports = unstashParams

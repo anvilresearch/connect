@@ -62,7 +62,7 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "test": "mocha --compilers coffee:coffee-script/register -R dot --watch"
+    "test": "standard && mocha --compilers coffee:coffee-script/register -R dot --watch"
   },
   "bin": {
     "nv": "./bin/nv"
@@ -84,6 +84,7 @@
     "nock": "^2.2.0",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
+    "standard": "^5.1.0",
     "supertest": "^1.0.1"
   },
   "dependencies": {

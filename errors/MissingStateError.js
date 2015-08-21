@@ -1,28 +1,23 @@
-
 /**
  * Module dependencies
  */
 
-var util = require('util');
-
+var util = require('util')
 
 /**
  * MissingStateError
  */
 
-function MissingStateError() {
-  this.name = 'MissingStateError';
-  this.message = 'Missing state param.';
-  this.statusCode = 400;
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
+function MissingStateError () {
+  this.name = 'MissingStateError'
+  this.message = 'Missing state param.'
+  this.statusCode = 400
 }
 
-util.inherits(MissingStateError, Error);
-
+util.inherits(MissingStateError, Error)
 
 /**
  * Exports
  */
 
-module.exports = MissingStateError;
+module.exports = MissingStateError

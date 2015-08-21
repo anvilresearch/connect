@@ -2,50 +2,46 @@
  * Module dependencies
  */
 var url = require('url')
-  , mailer = require('../boot/mailer')
-  , settings = require('../boot/settings')
-  , OneTimeToken = require('../models/OneTimeToken')
-  ;
-
+var mailer = require('../boot/mailer')
+var settings = require('../boot/settings')
+var OneTimeToken = require('../models/OneTimeToken')
 
 /**
  * Send verification email middleware
  */
 
-function sendVerificationEmail(req, res, next) {
-
+function sendVerificationEmail (req, res, next) {
   // skip if we don't need to send the email
   if (!req.sendVerificationEmail) {
-    next();
-  }
+    next()
 
   // send the email
-  else {
-    var user = req.user;
+  } else {
+    var user = req.user
 
     OneTimeToken.issue({
       ttl: 3600 * 24 * 7,
       sub: user._id,
       use: 'emailVerification'
     }, function (err, token) {
-      if (err) { return next(err); }
+      if (err) { return next(err) }
 
       var params = {
         token: token._id
-      };
+      }
 
-      [ 'redirect_uri', 'client_id', 'response_type', 'scope' ]
+      ;[ 'redirect_uri', 'client_id', 'response_type', 'scope' ]
         .forEach(function (key) {
-          var value = req.connectParams[key];
+          var value = req.connectParams[key]
           if (value) {
-            params[key] = value;
+            params[key] = value
           }
-        });
+        })
 
       // build email link
-      var verifyURL = url.parse(settings.issuer);
-      verifyURL.pathname = 'email/verify';
-      verifyURL.query = params;
+      var verifyURL = url.parse(settings.issuer)
+      verifyURL.pathname = 'email/verify'
+      verifyURL.query = params
 
       // email template data
       var locals = {
@@ -55,23 +51,23 @@ function sendVerificationEmail(req, res, next) {
           last: user.familyName
         },
         verifyURL: url.format(verifyURL)
-      };
+      }
 
       // Send verification email
       mailer.sendMail('verifyEmail', locals, {
         to: user.email,
         subject: 'Verify your e-mail address'
-      }, function(err, responseStatus) {
+      }, function (err, responseStatus) {
+        if (err) { }
         // TODO: REQUIRES REFACTOR TO MAIL QUEUE
-        next();
-      });
-    });
+        next()
+      })
+    })
   }
 }
-
 
 /**
  * Export
  */
 
-module.exports = sendVerificationEmail;
+module.exports = sendVerificationEmail

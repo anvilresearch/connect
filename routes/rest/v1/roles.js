@@ -2,18 +2,16 @@
  * Module dependencies
  */
 
-var Role         = require('../../../models/Role')
-  , NotFoundError = require('../../../errors/NotFoundError')
-  , settings      = require('../../../boot/settings')
-  , oidc          = require('../../../oidc')
-  ;
+var Role = require('../../../models/Role')
+var NotFoundError = require('../../../errors/NotFoundError')
+var settings = require('../../../boot/settings')
+var oidc = require('../../../oidc')
 
 /**
  * Export
  */
 
 module.exports = function (server) {
-
   /**
    * Token-based Auth Middleware
    */
@@ -22,12 +20,11 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    settings.issuer,
-      key:    settings.publicKey,
+      iss: settings.issuer,
+      key: settings.publicKey,
       scope: 'realm'
     })
-  ];
-
+  ]
 
   /**
    * GET /v1/roles
@@ -37,11 +34,10 @@ module.exports = function (server) {
     Role.list({
       // options
     }, function (err, instances) {
-      if (err) { return next(err); }
-      res.json(instances);
-    });
-  });
-
+      if (err) { return next(err) }
+      res.json(instances)
+    })
+  })
 
   /**
    * GET /v1/roles/:id
@@ -49,12 +45,11 @@ module.exports = function (server) {
 
   server.get('/v1/roles/:id', authorize, function (req, res, next) {
     Role.get(req.params.id, function (err, instance) {
-      if (err) { return next(err); }
-      if (!instance) { return next(new NotFoundError()); }
-      res.json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.json(instance)
+    })
+  })
 
   /**
    * POST /v1/roles
@@ -62,11 +57,10 @@ module.exports = function (server) {
 
   server.post('/v1/roles', authorize, function (req, res, next) {
     Role.insert(req.body, function (err, instance) {
-      if (err) { return next(err); }
-      res.status(201).json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      res.status(201).json(instance)
+    })
+  })
 
   /**
    * PATCH /v1/roles/:id
@@ -74,12 +68,11 @@ module.exports = function (server) {
 
   server.patch('/v1/roles/:id', authorize, function (req, res, next) {
     Role.patch(req.params.id, req.body, function (err, instance) {
-      if (err) { return next(err); }
-      if (!instance) { return next(new NotFoundError()); }
-      res.json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.json(instance)
+    })
+  })
 
   /**
    * DELETE /v1/roles/:id
@@ -87,11 +80,10 @@ module.exports = function (server) {
 
   server.delete('/v1/roles/:id', authorize, function (req, res, next) {
     Role.delete(req.params.id, function (err, result) {
-      if (err) { return next(err); }
-      if (!result) { return next(new NotFoundError()); }
-      res.sendStatus(204);
-    });
-  });
+      if (err) { return next(err) }
+      if (!result) { return next(new NotFoundError()) }
+      res.sendStatus(204)
+    })
+  })
 
-
-};
+}

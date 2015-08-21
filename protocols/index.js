@@ -3,8 +3,7 @@
  */
 
 var cwd = process.cwd()
-  , path = require('path');
-
+var path = require('path')
 
 /**
  * Initialize
@@ -12,27 +11,25 @@ var cwd = process.cwd()
 
 function initialize (name, provider, config) {
   var strategy
-    , protocol = provider.protocol
-    ;
+  var protocol = provider.protocol
 
   // try to load an officially supported provider
   try {
-    strategy = require(path.join(__dirname, protocol));
+    strategy = require(path.join(__dirname, protocol))
   } catch (e) {}
 
   // try to load a custom provider from the deployment repository
   try {
-    strategy = require(path.join(cwd, 'protocols', protocol));
+    strategy = require(path.join(cwd, 'protocols', protocol))
   } catch (e) {
     if (!strategy) {
-      throw new Error("Can't find custom protocol: " + protocol);
+      throw new Error("Can't find custom protocol: " + protocol)
     }
   }
 
-  provider.id = name;
-  return strategy.initialize(provider, config);
+  provider.id = name
+  return strategy.initialize(provider, config)
 }
-
 
 /**
  * Exports
@@ -40,4 +37,4 @@ function initialize (name, provider, config) {
 
 module.exports = {
   initialize: initialize
-};
+}

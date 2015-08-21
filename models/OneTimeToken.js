@@ -1,7 +1,5 @@
 var crypto = require('crypto')
-  , client = require('../boot/redis')
-  ;
-
+var client = require('../boot/redis')
 
 /**
  * OneTimeToken
@@ -19,16 +17,15 @@ var crypto = require('crypto')
  */
 
 function OneTimeToken (options) {
-  this._id = options._id || crypto.randomBytes(32).toString('hex');
-  this.exp = options.exp;
-  this.use = options.use;
-  this.sub = options.sub;
+  this._id = options._id || crypto.randomBytes(32).toString('hex')
+  this.exp = options.exp
+  this.use = options.use
+  this.sub = options.sub
 
   if (options.ttl) {
-    this.exp = Math.round(Date.now() / 1000) + options.ttl;
+    this.exp = Math.round(Date.now() / 1000) + options.ttl
   }
 }
-
 
 /**
  * Peek
@@ -44,23 +41,22 @@ function OneTimeToken (options) {
 
 OneTimeToken.peek = function (id, callback) {
   client.get('onetimetoken:' + id, function (err, result) {
-    if (err) { return callback(err); }
+    if (err) { return callback(err) }
     if (!result) { return callback(null, null) }
 
     try {
-      var token = new OneTimeToken(JSON.parse(result));
+      var token = new OneTimeToken(JSON.parse(result))
     } catch (err) {
-      return callback(err);
+      return callback(err)
     }
 
     if (Math.round(Date.now() / 1000) > token.exp) {
-      return callback(null, null);
+      return callback(null, null)
     }
 
-    callback(null, token);
-  });
-};
-
+    callback(null, token)
+  })
+}
 
 /**
  * Revoke
@@ -68,10 +64,9 @@ OneTimeToken.peek = function (id, callback) {
 
 OneTimeToken.revoke = function (id, callback) {
   client.del('onetimetoken:' + id, function (err) {
-    callback(err);
-  });
-};
-
+    callback(err)
+  })
+}
 
 /**
  * Consume
@@ -83,15 +78,14 @@ OneTimeToken.revoke = function (id, callback) {
 
 OneTimeToken.consume = function (id, callback) {
   OneTimeToken.peek(id, function (err, token) {
-    if (err) { return callback(err); }
+    if (err) { return callback(err) }
 
     OneTimeToken.revoke(id, function (err) {
-      if (err) { return callback(err); }
-      callback(null, token);
-    });
-  });
-};
-
+      if (err) { return callback(err) }
+      callback(null, token)
+    })
+  })
+}
 
 /**
  * Issue
@@ -101,25 +95,26 @@ OneTimeToken.consume = function (id, callback) {
  */
 
 OneTimeToken.issue = function (options, callback) {
+  var token
   if (options instanceof OneTimeToken) {
-    var token = options;
+    token = options
   } else {
-    var token = new OneTimeToken(options);
+    token = new OneTimeToken(options)
   }
 
   // transaction
-  var multi = client.multi();
-  multi.set('onetimetoken:' + token._id, JSON.stringify(token));
+  var multi = client.multi()
+  multi.set('onetimetoken:' + token._id, JSON.stringify(token))
 
   // only expire if "exp" is set on the token
   if (token.exp) {
-    multi.expireat('onetimetoken:' + token._id, token.exp);
+    multi.expireat('onetimetoken:' + token._id, token.exp)
   }
 
   multi.exec(function (err, results) {
-    if (err) { return callback(err); }
-    callback(null, token);
-  });
-};
+    if (err) { return callback(err) }
+    callback(null, token)
+  })
+}
 
-module.exports = OneTimeToken;
+module.exports = OneTimeToken

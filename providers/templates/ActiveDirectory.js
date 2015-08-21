@@ -2,7 +2,7 @@
  * Active Directory provider template
  */
 
-module.exports = function(config, templateConfig) {
+module.exports = function (config, templateConfig) {
   return {
     id: 'ActiveDirectory',
     serverType: 'AD',
@@ -12,20 +12,20 @@ module.exports = function(config, templateConfig) {
       { name: 'password', type: 'password' }
     ],
     mapping: {
-      id:          'objectGUID',
-      email:       'userPrincipalName',
-      name:        'name',
-      givenName:   'givenName',
-      familyName:  'sn',
+      id: 'objectGUID',
+      email: 'userPrincipalName',
+      name: 'name',
+      givenName: 'givenName',
+      familyName: 'sn',
       phoneNumber: function (info) {
         return info.telephoneNumber ||
-               info.mobile ||
-               info.homePhone ||
-               info.otherHomePhone ||
-               info.otherTelephone ||
-               info.ipPhone ||
-               info.otherIpPhone;
+        info.mobile ||
+        info.homePhone ||
+        info.otherHomePhone ||
+        info.otherTelephone ||
+        info.ipPhone ||
+        info.otherIpPhone
       }
     }
-  };
-};
+  }
+}
