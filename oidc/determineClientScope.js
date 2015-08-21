@@ -15,7 +15,7 @@ function determineClientScope (req, res, next) {
 
   if (params.grant_type === 'client_credentials') {
     Scope.determine(scope, subject, function (err, scope, scopes) {
-      if (err) { next(err) }
+      if (err) { return next(err) }
       req.scope = scope
       req.scopes = scopes
       next()
