@@ -2,15 +2,13 @@
  * Module dependencies
  */
 
-var oidc = require('../oidc');
-
+var oidc = require('../oidc')
 
 /**
  * Token Endpoint
  */
 
 module.exports = function (server) {
-
   server.post('/token',
     oidc.selectConnectParams,
     oidc.validateTokenParams,
@@ -18,7 +16,6 @@ module.exports = function (server) {
     oidc.verifyAuthorizationCode,
     oidc.determineClientScope,
     oidc.token
-  );
+  )
 
-};
-
+}

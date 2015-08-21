@@ -2,11 +2,9 @@
  * Module dependencies
  */
 
-var passport       = require('passport')
-  , Strategy 	   = require('passport-openid').Strategy
-  , util               = require('util')
-  , User           = require('../../models/User')
-  ;
+var Strategy = require('passport-openid').Strategy
+var util = require('util')
+var User = require('../../models/User')
 
 /**
  * OpenIDStrategy
@@ -17,17 +15,17 @@ var passport       = require('passport')
  */
 
 function OpenIDStrategy (provider, verify) {
-  this.provider   = provider;
-  this.name       = provider.id;
-  if (! provider.returnURL) {
-      provider.returnURL = provider.callbackURL;
+  this.provider = provider
+  this.name = provider.id
+  if (!provider.returnURL) {
+    provider.returnURL = provider.callbackURL
   }
-  Strategy.call(this, provider, verify);
-  this.client     = provider;
-  this.verify     = verify;
+  Strategy.call(this, provider, verify)
+  this.client = provider
+  this.verify = verify
 }
 
-util.inherits(OpenIDStrategy, Strategy);
+util.inherits(OpenIDStrategy, Strategy)
 
 /**
  * Verifier
@@ -38,40 +36,38 @@ function verifier (req, identifier, userInfo, done) {
   // for consistency with other protocols.
   var auth = {
     id: req.query['openid.identity'],
-    req_query:  req.query
-  };
+    req_query: req.query
+  }
 
-  userInfo.id         = req.query['openid.identity'];
-  userInfo.name       = req.query['openid.ext2.value.fullname'];
-  userInfo.givenName  = req.query['openid.ext2.value.firstname'];
-  userInfo.familyName = req.query['openid.ext2.value.lastname'];
-  userInfo.email      = req.query['openid.ext2.value.email'];
+  userInfo.id = req.query['openid.identity']
+  userInfo.name = req.query['openid.ext2.value.fullname']
+  userInfo.givenName = req.query['openid.ext2.value.firstname']
+  userInfo.familyName = req.query['openid.ext2.value.lastname']
+  userInfo.email = req.query['openid.ext2.value.email']
 
   User.connect(req, auth, userInfo, function (err, user) {
-    if (err) { return done(err); }
-    done(null, user);
-  });
-};
+    if (err) { return done(err) }
+    done(null, user)
+  })
+}
 
-OpenIDStrategy.verifier = verifier;
-
+OpenIDStrategy.verifier = verifier
 
 /**
  * Initialize - note provider === configuration
  */
 
 function initialize (provider, configuration) {
-  configuration.profile           = true;
-  configuration.passReqToCallback = true;
+  configuration.profile = true
+  configuration.passReqToCallback = true
 
-  return new OpenIDStrategy(configuration, verifier);
+  return new OpenIDStrategy(configuration, verifier)
 }
 
-OpenIDStrategy.initialize = initialize;
-
+OpenIDStrategy.initialize = initialize
 
 /**
  * Exports
  */
 
-module.exports = OpenIDStrategy;
+module.exports = OpenIDStrategy

@@ -2,26 +2,22 @@
  * Module dependencies
  */
 
-var util = require('util');
-
+var util = require('util')
 
 /**
  * NotFoundError
  */
 
-function NotFoundError() {
-  this.name = 'NotFoundError';
-  this.message = 'Not found.';
-  this.statusCode = 404;
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
+function NotFoundError () {
+  this.name = 'NotFoundError'
+  this.message = 'Not found.'
+  this.statusCode = 404
 }
 
-util.inherits(NotFoundError, Error);
-
+util.inherits(NotFoundError, Error)
 
 /**
  * Exports
  */
 
-module.exports = NotFoundError;
+module.exports = NotFoundError

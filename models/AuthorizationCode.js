@@ -2,42 +2,38 @@
  * Module dependencies
  */
 
-var client             = require('../boot/redis')
-  , Modinha            = require('modinha')
-  , Document           = require('modinha-redis')
-  , AuthorizationError = require('../errors/AuthorizationError')
-  , nowSeconds         = require('../lib/time-utils').nowSeconds
-  ;
-
+var client = require('../boot/redis')
+var Modinha = require('modinha')
+var Document = require('modinha-redis')
+var nowSeconds = require('../lib/time-utils').nowSeconds
 
 /**
  * Model definition
  */
 
 var AuthorizationCode = Modinha.define('authorizationcodes', {
-
   code: {
-    type:     'string',
+    type: 'string',
     required: true,
-    default:  Modinha.defaults.random(10),
-    unique:   true
-    //uniqueId: true
+    default: Modinha.defaults.random(10),
+    unique: true
+  // uniqueId: true
   },
 
   expires_at: {
-    type:     'number',
-    default:  expires
+    type: 'number',
+    default: expires
   },
 
   client_id: {
-    type:     'string',
+    type: 'string',
     required: true
   },
 
   redirect_uri: {
-    type:     'string',
+    type: 'string',
     required: true,
-    format:   'url'
+    format: 'url'
   },
 
   max_age: {
@@ -45,48 +41,45 @@ var AuthorizationCode = Modinha.define('authorizationcodes', {
   },
 
   user_id: {
-    type:     'string',
+    type: 'string',
     required: true
   },
 
   scope: {
-    type:     'string',
+    type: 'string',
     required: true
   },
 
   used: {
-    type:     'boolean',
-    default:  false
+    type: 'boolean',
+    default: false
   },
 
   nonce: {
-    type:     'string'
+    type: 'string'
   }
 
-});
-
+})
 
 /**
  * Expires
  */
 
 function expires () {
-  var	secs = nowSeconds(600);
+  var secs = nowSeconds(600)
 
-  return secs;
+  return secs
 }
-
 
 /**
  * Document persistence
  */
 
-AuthorizationCode.extend(Document);
-AuthorizationCode.__client = client;
-
+AuthorizationCode.extend(Document)
+AuthorizationCode.__client = client
 
 /**
  * Exports
  */
 
-module.exports = AuthorizationCode;
+module.exports = AuthorizationCode

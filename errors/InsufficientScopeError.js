@@ -2,27 +2,23 @@
  * Module dependencies
  */
 
-var util = require('util');
-
+var util = require('util')
 
 /**
  * InsufficientScopeError
  */
 
-function InsufficientScopeError() {
-  this.name = 'InsufficientScopeError';
-  this.message = 'insufficient_scope';
-  this.description = 'Insufficient scope';
-  this.statusCode = 400;
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
+function InsufficientScopeError () {
+  this.name = 'InsufficientScopeError'
+  this.message = 'insufficient_scope'
+  this.description = 'Insufficient scope'
+  this.statusCode = 400
 }
 
-util.inherits(InsufficientScopeError, Error);
-
+util.inherits(InsufficientScopeError, Error)
 
 /**
  * Exports
  */
 
-module.exports = InsufficientScopeError;
+module.exports = InsufficientScopeError

@@ -1,21 +1,18 @@
-
 /**
  * Module dependencies
  */
 
-var Role          = require('../../../models/Role')
-  , Scope          = require('../../../models/Scope')
-  , NotFoundError = require('../../../errors/NotFoundError')
-  , settings      = require('../../../boot/settings')
-  , oidc          = require('../../../oidc')
-  ;
+var Role = require('../../../models/Role')
+var Scope = require('../../../models/Scope')
+var NotFoundError = require('../../../errors/NotFoundError')
+var settings = require('../../../boot/settings')
+var oidc = require('../../../oidc')
 
 /**
  * Export
  */
 
 module.exports = function (server) {
-
   /**
    * Token-based Auth Middleware
    */
@@ -24,12 +21,11 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    settings.issuer,
-      key:    settings.publicKey,
+      iss: settings.issuer,
+      key: settings.publicKey,
       scope: 'realm'
     })
-  ];
-
+  ]
 
   /**
    * GET /v1/roles/:roleId/scopes
@@ -38,20 +34,18 @@ module.exports = function (server) {
   server.get('/v1/roles/:roleId/scopes',
     authorize,
     function (req, res, next) {
-
       // first, ensure the account exists
       Role.get(req.params.roleId, function (err, instance) {
-        if (err) { return next(err); }
-        if (!instance) { return next(new NotFoundError()); }
+        if (err) { return next(err) }
+        if (!instance) { return next(new NotFoundError()) }
 
         // then list scopes by account
         Scope.listByRoles(req.params.roleId, function (err, instances) {
-          if (err) { return next(err); }
-          res.json(instances);
-        });
-      });
-    });
-
+          if (err) { return next(err) }
+          res.json(instances)
+        })
+      })
+    })
 
   /**
    * PUT /v1/roles/:roleId/scopes/:scopeId
@@ -61,21 +55,20 @@ module.exports = function (server) {
     authorize,
     function (req, res, next) {
       Role.get(req.params.roleId, function (err, instance) {
-        if (err)       { return next(err); }
-        if (!instance) { return next(new NotFoundError()); }
+        if (err) { return next(err) }
+        if (!instance) { return next(new NotFoundError()) }
 
         Scope.get(req.params.scopeId, function (err, scope) {
-          if (err) { return next(err); }
-          if (!scope) { return next(new NotFoundError()); }
+          if (err) { return next(err) }
+          if (!scope) { return next(new NotFoundError()) }
 
           instance.addScopes(req.params.scopeId, function (err, result) {
-            if (err) { return next(err); }
-            res.json({ added: true });
-          });
-        });
-      });
-    });
-
+            if (err) { return next(err) }
+            res.json({ added: true })
+          })
+        })
+      })
+    })
 
   /**
    * DELETE /v1/roles/:roleId/scopes/:scopeId
@@ -85,15 +78,14 @@ module.exports = function (server) {
     authorize,
     function (req, res, next) {
       Role.get(req.params.roleId, function (err, instance) {
-        if (err)       { return next(err); }
-        if (!instance) { return next(new NotFoundError()); }
+        if (err) { return next(err) }
+        if (!instance) { return next(new NotFoundError()) }
 
         instance.removeScopes(req.params.scopeId, function (err, result) {
-          if (err) { return next(err); }
-          res.sendStatus(204);
-        });
-      });
-    });
+          if (err) { return next(err) }
+          res.sendStatus(204)
+        })
+      })
+    })
 
-
-};
+}

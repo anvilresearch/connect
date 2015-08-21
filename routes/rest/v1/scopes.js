@@ -2,18 +2,16 @@
  * Module dependencies
  */
 
-var Scope         = require('../../../models/Scope')
-  , NotFoundError = require('../../../errors/NotFoundError')
-  , settings      = require('../../../boot/settings')
-  , oidc          = require('../../../oidc')
-  ;
+var Scope = require('../../../models/Scope')
+var NotFoundError = require('../../../errors/NotFoundError')
+var settings = require('../../../boot/settings')
+var oidc = require('../../../oidc')
 
 /**
  * Export
  */
 
 module.exports = function (server) {
-
   /**
    * Token-based Auth Middleware
    */
@@ -22,12 +20,11 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    settings.issuer,
-      key:    settings.publicKey,
+      iss: settings.issuer,
+      key: settings.publicKey,
       scope: 'realm'
     })
-  ];
-
+  ]
 
   /**
    * GET /v1/scopes
@@ -37,11 +34,10 @@ module.exports = function (server) {
     Scope.list({
       // options
     }, function (err, instances) {
-      if (err) { return next(err); }
-      res.json(instances);
-    });
-  });
-
+      if (err) { return next(err) }
+      res.json(instances)
+    })
+  })
 
   /**
    * GET /v1/scopes/:id
@@ -49,12 +45,11 @@ module.exports = function (server) {
 
   server.get('/v1/scopes/:id', authorize, function (req, res, next) {
     Scope.get(req.params.id, function (err, instance) {
-      if (err) { return next(err); }
-      if (!instance) { return next(new NotFoundError()); }
-      res.json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.json(instance)
+    })
+  })
 
   /**
    * POST /v1/scopes
@@ -62,11 +57,10 @@ module.exports = function (server) {
 
   server.post('/v1/scopes', authorize, function (req, res, next) {
     Scope.insert(req.body, function (err, instance) {
-      if (err) { return next(err); }
-      res.status(201).json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      res.status(201).json(instance)
+    })
+  })
 
   /**
    * PATCH /v1/scopes/:id
@@ -74,12 +68,11 @@ module.exports = function (server) {
 
   server.patch('/v1/scopes/:id', authorize, function (req, res, next) {
     Scope.patch(req.params.id, req.body, function (err, instance) {
-      if (err) { return next(err); }
-      if (!instance) { return next(new NotFoundError()); }
-      res.json(instance);
-    });
-  });
-
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.json(instance)
+    })
+  })
 
   /**
    * DELETE /v1/scopes/:id
@@ -87,11 +80,10 @@ module.exports = function (server) {
 
   server.delete('/v1/scopes/:id', authorize, function (req, res, next) {
     Scope.delete(req.params.id, function (err, result) {
-      if (err) { return next(err); }
-      if (!result) { return next(new NotFoundError()); }
-      res.sendStatus(204);
-    });
-  });
+      if (err) { return next(err) }
+      if (!result) { return next(new NotFoundError()) }
+      res.sendStatus(204)
+    })
+  })
 
-
-};
+}

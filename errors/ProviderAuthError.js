@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var util = require('util');
-
+var util = require('util')
 
 /**
  * ProviderAuthError
@@ -12,32 +11,28 @@ var util = require('util');
  * error with a third party provider.
  */
 
-function ProviderAuthError(options, status) {
+function ProviderAuthError (options, status) {
   if (!status) {
     switch (options.error) {
-      case 'access_denied':           status = 403; break;
-      case 'server_error':            status = 502; break;
-      case 'temporarily_unavailable': status = 503; break;
+      case 'access_denied': status = 403
+        break
+      case 'server_error': status = 502
+        break
+      case 'temporarily_unavailable': status = 503
+        break
     }
   }
 
-  Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
-
-  this.name = 'ProviderAuthError';
-  this.code = options.error || 'server_error';
-  this.message = options.error_description;
-  this.status = status || 500;
+  this.name = 'ProviderAuthError'
+  this.code = options.error || 'server_error'
+  this.message = options.error_description
+  this.status = status || 500
 }
 
-util.inherits(ProviderAuthError, Error);
-
-
-
-
+util.inherits(ProviderAuthError, Error)
 
 /**
  * Exports
  */
 
-module.exports = ProviderAuthError;
+module.exports = ProviderAuthError

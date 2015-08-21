@@ -2,11 +2,9 @@
  * Module dependencies
  */
 
-var client   = require('../boot/redis')
-  , Modinha  = require('modinha')
-  , Document = require('modinha-redis')
-  ;
-
+var client = require('../boot/redis')
+var Modinha = require('modinha')
+var Document = require('modinha-redis')
 
 /**
  * Model definition
@@ -14,28 +12,25 @@ var client   = require('../boot/redis')
 
 var Role = Modinha.define('roles', {
   name: { type: 'string', required: true, uniqueId: true }
-});
-
+})
 
 /**
  * Document persistence
  */
 
-Role.extend(Document);
-Role.__client = client;
-
+Role.extend(Document)
+Role.__client = client
 
 /**
  * Role intersections
  */
 
-Role.intersects('users');
-Role.intersects('clients');
-Role.intersects('scopes');
-
+Role.intersects('users')
+Role.intersects('clients')
+Role.intersects('scopes')
 
 /**
  * Exports
  */
 
-module.exports = Role;
+module.exports = Role

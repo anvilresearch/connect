@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var qs = require('qs');
-
+var qs = require('qs')
 
 /**
  * Prompt to authorize
@@ -11,48 +10,40 @@ var qs = require('qs');
 
 function promptToAuthorize (req, res, next) {
   var params = req.connectParams
-    , client = req.client
-    , user   = req.user
-    , scopes = req.scopes
-    ;
-
+  var client = req.client
+  var user = req.user
+  var scopes = req.scopes
 
   // The client is not trusted and the user has yet to decide on consent
   if (client.trusted !== 'true' && typeof params.authorize === 'undefined') {
-
     // render the consent view
     if (req.path === '/authorize') {
       res.render('authorize', {
         request: params,
-        client:  client,
-        user:    user,
-        scopes:  scopes
-      });
-    }
+        client: client,
+        user: user,
+        scopes: scopes
+      })
 
     // redirect to the authorize endpoint
-    else {
-      res.redirect('/authorize?' + qs.stringify(params));
+    } else {
+      res.redirect('/authorize?' + qs.stringify(params))
     }
 
-  }
-
   // The client is trusted and consent is implied.
-  else if (client.trusted === 'true') {
-    params.authorize = 'true';
-    next();
-  }
+  } else if (client.trusted === 'true') {
+    params.authorize = 'true'
+    next()
 
   // The client is not trusted and consent is decided
-  else {
-    next();
+  } else {
+    next()
   }
 
 }
-
 
 /**
  * Exports
  */
 
-module.exports = promptToAuthorize;
+module.exports = promptToAuthorize

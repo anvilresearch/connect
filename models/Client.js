@@ -3,20 +3,17 @@
  */
 
 var client = require('../boot/redis')
-  , Modinha = require('modinha')
-  , Document = require('modinha-redis')
-  , User     = require('./User')
-  , AuthorizationError = require('../errors/AuthorizationError')
-  , base64url = require('base64url')
-  ;
-
+var Modinha = require('modinha')
+var Document = require('modinha-redis')
+var User = require('./User')
+var AuthorizationError = require('../errors/AuthorizationError')
+var base64url = require('base64url')
 
 /**
  * Client model
  */
 
 var Client = Modinha.define('clients', {
-
   /**
    * Client Metadata
    *
@@ -43,10 +40,10 @@ var Client = Modinha.define('clients', {
    */
 
   redirect_uris: {
-    type:     'array',
+    type: 'array',
     required: true,
-    format:   'url',
-    message:  'invalid_redirect_uri',
+    format: 'url',
+    message: 'invalid_redirect_uri',
     messages: {
       format: 'Must contain valid URIs'
     }
@@ -61,15 +58,14 @@ var Client = Modinha.define('clients', {
    */
 
   response_types: {
-    type:    'array',
-    //default: ['code'],
+    type: 'array',
+    // default: ['code'],
     enum: [
       'code',
       'id_token',
       'id_token token'
     ]
   },
-
 
   /**
    * grant_types
@@ -99,8 +95,8 @@ var Client = Modinha.define('clients', {
    */
 
   grant_types: {
-    type:    'array',
-    //default: ['authorization_code'],
+    type: 'array',
+    // default: ['authorization_code'],
     enum: [
       'authorization_code',
       'implicit',
@@ -112,7 +108,7 @@ var Client = Modinha.define('clients', {
    * application_type
    *      OPTIONAL. Kind of the application. The default, if omitted, is web. The
    *      defined values are native or web. Web Clients using the OAuth Implicit
-   *      Grant Type MUST only register URLs using the https scheme as redirect_uris;
+   *      Grant Type MUST only register URLs using the https scheme as redirect_uris
    *      they MUST NOT use localhost as the hostname. Native Clients MUST only
    *      register redirect_uris using custom URI schemes or URLs using the http:
    *      scheme with localhost as the hostname. Authorization Servers MAY place
@@ -124,7 +120,7 @@ var Client = Modinha.define('clients', {
    */
 
   application_type: {
-    type:    'string',
+    type: 'string',
     default: 'web',
     enum: [
       'web',
@@ -141,7 +137,7 @@ var Client = Modinha.define('clients', {
    */
 
   contacts: {
-    type:   'array',
+    type: 'array',
     format: 'email'
   },
 
@@ -153,7 +149,7 @@ var Client = Modinha.define('clients', {
    */
 
   client_name: {
-    type:   'string'
+    type: 'string'
   },
 
   /**
@@ -166,7 +162,7 @@ var Client = Modinha.define('clients', {
    */
 
   logo_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -180,7 +176,7 @@ var Client = Modinha.define('clients', {
    */
 
   client_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -195,7 +191,7 @@ var Client = Modinha.define('clients', {
    */
 
   policy_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -210,7 +206,7 @@ var Client = Modinha.define('clients', {
    */
 
   tos_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -231,7 +227,7 @@ var Client = Modinha.define('clients', {
    */
 
   jwks_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -309,7 +305,6 @@ var Client = Modinha.define('clients', {
     type: 'string'
   },
 
-
   /**
    * id_token_encrypted_response_enc
    *    OPTIONAL. JWE enc algorithm [JWA] REQUIRED for encrypting the ID Token
@@ -332,7 +327,7 @@ var Client = Modinha.define('clients', {
    *    using the application/json content-type.
    */
 
-  userinfo_signed_response_alg:     { type: 'string' },
+  userinfo_signed_response_alg: { type: 'string' },
 
   /**
    * userinfo_encrypted_response_alg
@@ -343,7 +338,7 @@ var Client = Modinha.define('clients', {
    *    performed.
    */
 
-  userinfo_encrypted_response_alg:  { type: 'string' },
+  userinfo_encrypted_response_alg: { type: 'string' },
 
   /**
    * userinfo_encrypted_response_enc
@@ -423,8 +418,8 @@ var Client = Modinha.define('clients', {
       'client_secret_basic',
       'client_secret_post',
       'client_secret_jwt',
-      'private_key_jwt',
-      //'none'
+      'private_key_jwt'
+    // 'none'
     ],
     default: 'client_secret_basic'
   },
@@ -499,7 +494,7 @@ var Client = Modinha.define('clients', {
    */
 
   initiate_login_uri: {
-    type:   'string',
+    type: 'string',
     format: 'url'
   },
 
@@ -519,7 +514,7 @@ var Client = Modinha.define('clients', {
    */
 
   request_uris: {
-    type:   'array',
+    type: 'array',
     format: 'url'
   },
 
@@ -528,7 +523,6 @@ var Client = Modinha.define('clients', {
    * other specifications, such as OpenID Connect Session Management 1.0
    * [OpenID.Session].
    */
-
 
   /**
    * OpenID Connect Session Management 1.0
@@ -546,14 +540,13 @@ var Client = Modinha.define('clients', {
    */
 
   post_logout_redirect_uris: {
-    type:     'array',
-    format:   'url',
-    message:  'invalid_post_logout_redirect_uri',
+    type: 'array',
+    format: 'url',
+    message: 'invalid_post_logout_redirect_uri',
     messages: {
       format: 'Must contain valid URIs'
     }
   },
-
 
   /**
    * client_secret
@@ -563,7 +556,6 @@ var Client = Modinha.define('clients', {
     type: 'string',
     default: Modinha.defaults.random(10)
   },
-
 
   /**
    * Anvil Connect specific properties
@@ -612,7 +604,7 @@ var Client = Modinha.define('clients', {
    */
 
   origins: {
-    type:   'array',
+    type: 'array',
     format: 'url'
   },
 
@@ -622,56 +614,52 @@ var Client = Modinha.define('clients', {
    */
 
   scopes: {
-    type:   'array',
+    type: 'array',
     default: []
   }
 
-});
-
+})
 
 /**
  * Document persistence
  */
 
-Client.extend(Document);
-Client.__client = client;
-
+Client.extend(Document)
+Client.__client = client
 
 /**
  * Client intersections
  */
 
-Client.intersects('roles');
-
+Client.intersects('roles')
 
 /**
  * Authorized scope
  */
 
 Client.prototype.authorizedScope = function (callback) {
-  var client   = Client.__client;
+  var client = Client.__client
 
   client.zrange('clients:' + this._id + ':roles', 0, -1, function (err, roles) {
-    if (err) { return callback(err); }
+    if (err) { return callback(err) }
 
     if (!roles || roles.length === 0) {
-      return callback(null, []);
+      return callback(null, [])
     }
 
-    var multi = client.multi();
+    var multi = client.multi()
 
     roles.forEach(function (role) {
-      multi.zrange('roles:' + role + ':scopes', 0, -1);
-    });
+      multi.zrange('roles:' + role + ':scopes', 0, -1)
+    })
 
     multi.exec(function (err, results) {
-      if (err) { return callback(err); }
-      callback(null, results);
-    });
+      if (err) { return callback(err) }
+      callback(null, results)
+    })
 
-  });
-};
-
+  })
+}
 
 /**
  * Authorized by user
@@ -679,43 +667,41 @@ Client.prototype.authorizedScope = function (callback) {
 
 Client.listAuthorizedByUser = function (userId, options, callback) {
   if (!callback) {
-    callback = options;
-    options = {};
+    callback = options
+    options = {}
   }
 
-  options.index = 'users:' + userId + ':clients';
+  options.index = 'users:' + userId + ':clients'
   options.select = [
     '_id',
     'client_name',
     'client_uri',
     'logo_uri',
     'trusted'
-  ];
+  ]
 
   Client.list(options, function (err, clients) {
-    if (err) { return callback(err); }
-    callback(null, clients);
-  });
-};
-
+    if (err) { return callback(err) }
+    callback(null, clients)
+  })
+}
 
 /**
  * Mappings
  */
 
 Client.mappings.registration = {
-  _id:                        'client_id',
-  client_secret:              'client_secret',
-  client_name:                'client_name',
-  logo_uri:                   'logo_uri',
-  contacts:                   'contacts',
+  _id: 'client_id',
+  client_secret: 'client_secret',
+  client_name: 'client_name',
+  logo_uri: 'logo_uri',
+  contacts: 'contacts',
   token_endpoint_auth_method: 'token_endpoint_auth_method',
-  application_type:           'application_type',
-  redirect_uris:              'redirect_uris',
-  request_uris:               'request_uris',
-  created:                    'client_id_issued_at'
-};
-
+  application_type: 'application_type',
+  redirect_uris: 'redirect_uris',
+  request_uris: 'request_uris',
+  created: 'client_id_issued_at'
+}
 
 /**
  * Client Configuration
@@ -723,276 +709,260 @@ Client.mappings.registration = {
 
 Client.prototype.configuration = function (settings, token) {
   var configuration = this.project('registration')
-    , registrationClientUri = settings.issuer + '/register/' + this._id
-    ;
+  var registrationClientUri = settings.issuer + '/register/' + this._id
 
-  configuration.registration_client_uri = registrationClientUri;
+  configuration.registration_client_uri = registrationClientUri
 
   if (token) {
-    configuration.registration_access_token = token;
+    configuration.registration_access_token = token
   }
 
-  return configuration;
-};
-
+  return configuration
+}
 
 /**
  * Authenticate
  */
 
 Client.authenticate = function (req, callback) {
-  var method;
+  var method
 
   // Use HTTP Basic Authentication Method
   if (req.headers && req.headers.authorization) {
-    method = 'client_secret_basic';
+    method = 'client_secret_basic'
   }
 
   // Use HTTP Post Authentication Method
   if (req.body && req.body.client_secret) {
-
     // Fail if multiple authentication methods are attempted
     if (method) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Must use only one authentication method',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Must use only one authentication method',
+        statusCode: 400
+      }))
     }
 
-    method = 'client_secret_post';
+    method = 'client_secret_post'
   }
 
   // Use Client JWT Authentication Method
   if (req.body && req.body.client_assertion_type) {
-    var type = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer';
+    var type = 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
 
     // Fail if multiple authentication methods are attempted
     if (method) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Must use only one authentication method',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Must use only one authentication method',
+        statusCode: 400
+      }))
     }
 
     // Invalid client assertion type
     if (req.body.client_assertion_type !== type) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Invalid client assertion type',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Invalid client assertion type',
+        statusCode: 400
+      }))
     }
 
     // Missing client assertion
     if (!req.body.client_assertion) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Missing client assertion',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Missing client assertion',
+        statusCode: 400
+      }))
     }
 
-    method = 'client_secret_jwt';
+    method = 'client_secret_jwt'
   }
 
   // Missing authentication parameters
   if (!method) {
     return callback(new AuthorizationError({
-      error:              'unauthorized_client',
-      error_description:  'Missing client credentials',
-      statusCode:          400
-    }));
+      error: 'unauthorized_client',
+      error_description: 'Missing client credentials',
+      statusCode: 400
+    }))
   }
 
   // Apply the appropriate authentication method
-  authenticators[method](req, callback);
-};
-
+  authenticators[method](req, callback)
+}
 
 /**
  *
  */
 
 var authenticators = {
-
   /**
    * HTTP Basic Authentication w/client_id and client_secret
    */
 
   'client_secret_basic': function (req, callback) {
-
     var authorization = req.headers.authorization.split(' ')
-      , scheme        = authorization[0]
-      , credentials   = new Buffer(authorization[1], 'base64')
-                        .toString('ascii')
-                        .split(':')
-      , clientId      = credentials[0]
-      , clientSecret  = credentials[1]
-      ;
+    var scheme = authorization[0]
+    var credentials = new Buffer(authorization[1], 'base64')
+      .toString('ascii')
+      .split(':')
+    var clientId = credentials[0]
+    var clientSecret = credentials[1]
 
     // malformed credentials
     if (credentials.length !== 2) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Malformed HTTP Basic credentials',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Malformed HTTP Basic credentials',
+        statusCode: 400
+      }))
     }
 
     // invalid authorization scheme
     if (!/^Basic$/i.test(scheme)) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Invalid authorization scheme',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Invalid authorization scheme',
+        statusCode: 400
+      }))
     }
 
     // missing credentials
     if (!clientId || !clientSecret) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Missing client credentials',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Missing client credentials',
+        statusCode: 400
+      }))
     }
 
-
     Client.get(clientId, function (err, client) {
-      if (err) { return callback(err); }
+      if (err) { return callback(err) }
 
       // Unknown client
       if (!client) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Unknown client identifier',
-          statusCode:          401
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Unknown client identifier',
+          statusCode: 401
+        }))
       }
 
       // Mismatching secret
       if (client.client_secret !== clientSecret) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Mismatching client secret',
-          statusCode:          401
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Mismatching client secret',
+          statusCode: 401
+        }))
       }
 
-      callback(null, client);
-    });
+      callback(null, client)
+    })
 
   },
-
 
   /**
    * HTTP POST body authentication
    */
 
   'client_secret_post': function (req, callback) {
-    var params       = req.body
-      , clientId     = params.client_id
-      , clientSecret = params.client_secret
-      ;
+    var params = req.body
+    var clientId = params.client_id
+    var clientSecret = params.client_secret
 
     // missing credentials
     if (!clientId || !clientSecret) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Missing client credentials',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Missing client credentials',
+        statusCode: 400
+      }))
     }
 
     Client.get(clientId, function (err, client) {
-      if (err) { return callback(err); }
+      if (err) { return callback(err) }
 
       // Unknown client
       if (!client) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Unknown client identifier',
-          statusCode:          401
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Unknown client identifier',
+          statusCode: 401
+        }))
       }
 
       // Mismatching secret
       if (client.client_secret !== clientSecret) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Mismatching client secret',
-          statusCode:          401
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Mismatching client secret',
+          statusCode: 401
+        }))
       }
 
-      callback(null, client);
-    });
+      callback(null, client)
+    })
   },
-
 
   'client_secret_jwt': function (req, callback) {
     // peek at the JWT body to get the sub
-    var jwt     = req.body.client_assertion
-      , payloadB64u = jwt.split('.')[1]
-      , payload     = JSON.parse(base64url.decode(payloadB64u))
-      ;
-
+    var jwt = req.body.client_assertion
+    var payloadB64u = jwt.split('.')[1]
+    var payload = JSON.parse(base64url.decode(payloadB64u))
 
     if (!payload || !payload.sub) {
       return callback(new AuthorizationError({
-        error:              'unauthorized_client',
-        error_description:  'Cannot extract client id from JWT',
-        statusCode:          400
-      }));
+        error: 'unauthorized_client',
+        error_description: 'Cannot extract client id from JWT',
+        statusCode: 400
+      }))
     }
 
     Client.get(payload.sub, function (err, client) {
-      if (err) { return callback(err); }
+      if (err) { return callback(err) }
 
       if (!client) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Unknown client identifier',
-          statusCode:          400
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Unknown client identifier',
+          statusCode: 400
+        }))
       }
 
       if (!client.client_secret) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Missing client secret',
-          statusCode:          400
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Missing client secret',
+          statusCode: 400
+        }))
       }
 
-      var token;// = ClientSecretToken.decode(jwt, client.client_secret);
+      var token // = ClientSecretToken.decode(jwt, client.client_secret)
 
       if (!token || token instanceof Error) {
         return callback(new AuthorizationError({
-          error:              'unauthorized_client',
-          error_description:  'Invalid client JWT',
-          statusCode:          400
-        }));
+          error: 'unauthorized_client',
+          error_description: 'Invalid client JWT',
+          statusCode: 400
+        }))
       }
 
       // TODO: validate the payload
 
-      callback(null, client, token);
-    });
-  },
+      callback(null, client, token)
+    })
+  }
 
+  // 'private_key_jwt': function () {},
 
-  //'private_key_jwt': function () {},
-
-
-  //'none': function () {}
-};
-
+// 'none': function () {}
+}
 
 /**
  * Exports
  */
 
-module.exports = Client;
+module.exports = Client

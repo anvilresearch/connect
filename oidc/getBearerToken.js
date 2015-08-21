@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var UnauthorizedError = require('../errors/UnauthorizedError');
-
+var UnauthorizedError = require('../errors/UnauthorizedError')
 
 /**
  * Get Bearer Token
@@ -13,53 +12,51 @@ var UnauthorizedError = require('../errors/UnauthorizedError');
  */
 
 function getBearerToken (req, res, next) {
-
   // check for access token in the authorization header
   if (req.authorization.scheme && req.authorization.scheme.match(/Bearer/i)) {
-    req.bearer = req.authorization.credentials;
+    req.bearer = req.authorization.credentials
   }
 
   // check for access token in the query params
   if (req.query && req.query.access_token) {
     if (req.bearer) {
       return next(new UnauthorizedError({
-        error:              'invalid_request',
-        error_description:  'Multiple authentication methods',
-        statusCode:          400
-      }));
+        error: 'invalid_request',
+        error_description: 'Multiple authentication methods',
+        statusCode: 400
+      }))
     }
 
-    req.bearer = req.query.access_token;
+    req.bearer = req.query.access_token
   }
 
   // check for access token in the request body
   if (req.body && req.body.access_token) {
     if (req.bearer) {
       return next(new UnauthorizedError({
-        error:              'invalid_request',
-        error_description:  'Multiple authentication methods',
-        statusCode:          400
-      }));
+        error: 'invalid_request',
+        error_description: 'Multiple authentication methods',
+        statusCode: 400
+      }))
     }
 
-    if (req.headers
-     && req.headers['content-type'] !== 'application/x-www-form-urlencoded') {
+    if (req.headers &&
+      req.headers['content-type'] !== 'application/x-www-form-urlencoded') {
       return next(new UnauthorizedError({
-        error:              'invalid_request',
-        error_description:  'Invalid content-type',
-        statusCode:          400
-      }));
+        error: 'invalid_request',
+        error_description: 'Invalid content-type',
+        statusCode: 400
+      }))
     }
 
-    req.bearer = req.body.access_token;
+    req.bearer = req.body.access_token
   }
 
-  next();
+  next()
 }
-
 
 /**
  * Export
  */
 
-module.exports = getBearerToken;
+module.exports = getBearerToken

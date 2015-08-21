@@ -2,17 +2,14 @@
  * Module dependencies
  */
 
-var JWT            = require('anvil-connect-jwt')
-  , nowSeconds     = require('../lib/time-utils').nowSeconds
-  ;
-
+var JWT = require('anvil-connect-jwt')
+var nowSeconds = require('../lib/time-utils').nowSeconds
 
 /**
  * Client Access Token
  */
 
 var ClientToken = JWT.define({
-
   // default header
   header: {
     alg: 'RS256'
@@ -25,7 +22,7 @@ var ClientToken = JWT.define({
 
   // modify header schema
   registeredHeaders: {
-    alg:   { format: 'StringOrURI', required: true, enum: ['RS256'] }
+    alg: { format: 'StringOrURI', required: true, enum: ['RS256'] }
   },
 
   // permitted claims
@@ -33,16 +30,15 @@ var ClientToken = JWT.define({
 
   // modify payload schema
   registeredClaims: {
-    iss:   { format: 'StringOrURI', required: true },
-    sub:   { format: 'StringOrURI', required: true },
-    aud:   { format: 'StringOrURI', required: true },
-    exp:   { format: 'IntDate' },
-    iat:   { format: 'IntDate',     required: true, default: nowSeconds },
-    scope: { format: 'String',      required: true, default: 'client' }
+    iss: { format: 'StringOrURI', required: true },
+    sub: { format: 'StringOrURI', required: true },
+    aud: { format: 'StringOrURI', required: true },
+    exp: { format: 'IntDate' },
+    iat: { format: 'IntDate', required: true, default: nowSeconds },
+    scope: { format: 'String', required: true, default: 'client' }
   }
 
-});
-
+})
 
 /**
  * Issue
@@ -50,18 +46,17 @@ var ClientToken = JWT.define({
 
 ClientToken.issue = function (claims, privateKey, callback) {
   try {
-    var token = new ClientToken(claims);
-    var jwt = token.encode(privateKey);
-    return callback(null, jwt);
+    var token = new ClientToken(claims)
+    var jwt = token.encode(privateKey)
+    return callback(null, jwt)
   } catch (err) {
-    callback(err);
-    //callback(new Error('Unable to issue client access token'));
+    callback(err)
+  // callback(new Error('Unable to issue client access token'))
   }
-};
-
+}
 
 /**
  * Exports
  */
 
-module.exports = ClientToken;
+module.exports = ClientToken

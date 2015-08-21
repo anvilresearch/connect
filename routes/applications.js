@@ -2,18 +2,15 @@
  * Module dependencies
  */
 
-var oidc     = require('../oidc')
-  , settings = require('../boot/settings')
-  , userApplications = require('../models/UserApplications')
-  ;
-
+var oidc = require('../oidc')
+var settings = require('../boot/settings')
+var userApplications = require('../models/UserApplications')
 
 /**
  * Exports
  */
 
 module.exports = function (server) {
-
   /**
    * Applications
    */
@@ -29,9 +26,9 @@ module.exports = function (server) {
     oidc.authenticateUser,
     function (req, res, next) {
       userApplications(req.user, function (err, apps) {
-        if (err) { return next(err); }
-        res.json(apps);
-      });
-    });
+        if (err) { return next(err) }
+        res.json(apps)
+      })
+    })
 
-};
+}

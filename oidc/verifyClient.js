@@ -3,8 +3,7 @@
  */
 
 var Client = require('../models/Client')
-  , AuthorizationError = require('../errors/AuthorizationError')
-  ;
+var AuthorizationError = require('../errors/AuthorizationError')
 
 /**
  * Verify Client
@@ -16,12 +15,12 @@ var Client = require('../models/Client')
  */
 
 function verifyClient (req, res, next) {
-  var params = req.connectParams;
+  var params = req.connectParams
 
   Client.get(params.client_id, {
     private: true
   }, function (err, client) {
-    if (err) { return next(err); }
+    if (err) { return next(err) }
 
     // The client must be registered.
     if (!client) {
@@ -29,11 +28,11 @@ function verifyClient (req, res, next) {
         error: 'unauthorized_client',
         error_description: 'Unknown client',
         statusCode: 401
-      }));
+      }))
     }
 
     // Make client available to downstream middleware.
-    req.client = client;
+    req.client = client
 
     // Redirect URI must be configured for this client.
     if (client.redirect_uris.indexOf(params.redirect_uri) === -1) {
@@ -41,16 +40,15 @@ function verifyClient (req, res, next) {
         error: 'invalid_request',
         error_description: 'Mismatching redirect uri',
         statusCode: 400
-      }));
+      }))
     }
 
-    next();
-  });
+    next()
+  })
 }
-
 
 /**
  * Exports
  */
 
-module.exports = verifyClient;
+module.exports = verifyClient

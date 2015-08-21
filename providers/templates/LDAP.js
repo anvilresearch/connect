@@ -2,7 +2,7 @@
  * LDAP provider template
  */
 
-module.exports = function(config, templateConfig) {
+module.exports = function (config, templateConfig) {
   return {
     id: 'LDAP',
     protocol: 'LDAP',
@@ -11,22 +11,22 @@ module.exports = function(config, templateConfig) {
       { name: 'password', type: 'password' }
     ],
     mapping: {
-      id:          'dn',
-      email:       'mail',
-      name:        'cn',
-      givenName:   'givenName',
-      familyName:  'sn',
+      id: 'dn',
+      email: 'mail',
+      name: 'cn',
+      givenName: 'givenName',
+      familyName: 'sn',
       phoneNumber: 'telephoneNumber',
       address: function (info) {
         return {
-          formatted:      info.postalAddress,
+          formatted: info.postalAddress,
           street_address: info.street,
-          locality:       info.l,
-          region:         info.st,
-          postal_code:    info.postalCode,
-          country:        info.co
-        };
+          locality: info.l,
+          region: info.st,
+          postal_code: info.postalCode,
+          country: info.co
+        }
       }
     }
-  };
-};
+  }
+}

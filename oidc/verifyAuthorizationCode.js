@@ -2,23 +2,20 @@
  * Module dependencies
  */
 
-var AuthorizationCode  = require('../models/AuthorizationCode')
-  , AuthorizationError = require('../errors/AuthorizationError')
-  , nowSeconds         = require('../lib/time-utils').nowSeconds
-  ;
-
+var AuthorizationCode = require('../models/AuthorizationCode')
+var AuthorizationError = require('../errors/AuthorizationError')
+var nowSeconds = require('../lib/time-utils').nowSeconds
 
 /**
  * Verify authorization code
  */
 
 function verifyAuthorizationCode (req, res, next) {
-  var params = req.connectParams;
+  var params = req.connectParams
 
   if (params.grant_type === 'authorization_code') {
-
     AuthorizationCode.getByCode(params.code, function (err, ac) {
-      if (err) { return next(err); }
+      if (err) { return next(err) }
 
       // Can't find authorization code
       if (!ac) {
@@ -26,7 +23,7 @@ function verifyAuthorizationCode (req, res, next) {
           error: 'invalid_grant',
           error_description: 'Authorization not found',
           statusCode: 400
-        }));
+        }))
       }
 
       // Authorization code has been previously used
@@ -35,7 +32,7 @@ function verifyAuthorizationCode (req, res, next) {
           error: 'invalid_grant',
           error_description: 'Authorization code invalid',
           statusCode: 400
-        }));
+        }))
       }
 
       // Authorization code is expired
@@ -44,7 +41,7 @@ function verifyAuthorizationCode (req, res, next) {
           error: 'invalid_grant',
           error_description: 'Authorization code expired',
           statusCode: 400
-        }));
+        }))
       }
 
       // Mismatching redirect uri
@@ -53,7 +50,7 @@ function verifyAuthorizationCode (req, res, next) {
           error: 'invalid_grant',
           error_description: 'Mismatching redirect uri',
           statusCode: 400
-        }));
+        }))
       }
 
       // Mismatching client id
@@ -62,34 +59,33 @@ function verifyAuthorizationCode (req, res, next) {
           error: 'invalid_grant',
           error_description: 'Mismatching client id',
           statusCode: 400
-        }));
+        }))
       }
 
       // Mismatching user id
-      //if (ac.user_id !== req.user._id) {
+      // if (ac.user_id !== req.user._id) {
       //  return next(new AuthorizationError({
       //    error: 'invalid_grant',
       //    error_description: 'Mismatching client id',
       //    statusCode: 400
-      //  }));
-      //}
+      //  }))
+      // }
 
-      req.code = ac;
+      req.code = ac
 
       // Update the code to show that it's been used.
       AuthorizationCode.patch(ac._id, { used: true }, function (err) {
-        next(err);
-      });
-    });
+        next(err)
+      })
+    })
 
   } else {
-    next();
+    next()
   }
 }
-
 
 /**
  * Exports
  */
 
-module.exports = verifyAuthorizationCode;
+module.exports = verifyAuthorizationCode

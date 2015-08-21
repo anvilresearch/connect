@@ -2,12 +2,10 @@
  * Module dependencies
  */
 
-var settings     = require('../boot/settings')
-  , User         = require('../models/User')
-  , OneTimeToken = require('../models/OneTimeToken')
-  , url          = require('url')
-  ;
-
+var settings = require('../boot/settings')
+var User = require('../models/User')
+var OneTimeToken = require('../models/OneTimeToken')
+var url = require('url')
 
 /**
  * Verify Email
@@ -27,18 +25,18 @@ function verifyEmail (req, res, next) {
   if (!req.query.token) {
     return res.render('verifyEmail', {
       error: 'Missing verification code.'
-    });
+    })
   }
 
   // consume the token
   OneTimeToken.consume(req.query.token, function (err, token) {
-    if (err) { return next(err); }
+    if (err) { return next(err) }
 
     // Invalid or expired token
     if (!token || token.use !== 'emailVerification') {
       return res.render('verifyEmail', {
         error: 'Invalid or expired verification code.'
-      });
+      })
     }
 
     // Update the user
@@ -46,43 +44,42 @@ function verifyEmail (req, res, next) {
       dateEmailVerified: Date.now(),
       emailVerified: true
     }, function (err, user) {
-      if (err) { return next(err); }
+      if (err) { return next(err) }
 
       // unknown user
       if (!user) {
         return res.render('verifyEmail', {
           error: 'Unable to verify email for this user.'
-        });
+        })
       }
 
       // check that the redirect uri is valid and safe to use
       if (req.client && req.connectParams.redirect_uri) {
-        var continueURL = url.parse(settings.issuer);
+        var continueURL = url.parse(settings.issuer)
 
-        continueURL.pathname = 'signin';
+        continueURL.pathname = 'signin'
         continueURL.query = {
           redirect_uri: req.connectParams.redirect_uri,
           client_id: req.connectParams.client_id,
           response_type: req.connectParams.response_type,
           scope: req.connectParams.scope
-        };
+        }
 
         res.render('verifyEmail', {
           signin: {
             url: url.format(continueURL),
             client: req.client
           }
-        });
+        })
       } else {
-        res.render('verifyEmail');
+        res.render('verifyEmail')
       }
-    });
-  });
+    })
+  })
 }
-
 
 /**
  * Exports
  */
 
-module.exports = verifyEmail;
+module.exports = verifyEmail

@@ -2,72 +2,65 @@
  * Configuration dependencies
  */
 
-var cwd          = process.cwd()
-  , path         = require('path')
-  , settings     = require('./settings')
-  , client       = require('./redis')(settings.redis)
-  , logger       = require('./logger')(settings.logger)
-  , mailer       = require('./mailer')(settings.mailer)
-  , database     = require('./database')()
-  , express      = require('express')
-  , passport     = require('passport')
-  , cons         = require('consolidate')
-  , cookieParser = require('cookie-parser')
-  , bodyParser   = require('body-parser')
-  , session      = require('express-session')
-  , RedisStore   = require('connect-redis')(session)
-  , sessionStore = new RedisStore({ client: client })
-  , connectFlash = require('connect-flash')
-  , cors         = require('cors')
-  ;
-
+var cwd = process.cwd()
+var path = require('path')
+var settings = require('./settings')
+var client = require('./redis')(settings.redis)
+var logger = require('./logger')(settings.logger)
+require('./mailer')(settings.mailer)
+require('./database')()
+var express = require('express')
+var passport = require('passport')
+var cons = require('consolidate')
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var session = require('express-session')
+var RedisStore = require('connect-redis')(session)
+var connectFlash = require('connect-flash')
+var cors = require('cors')
+var sessionStore = new RedisStore({ client: client })
 
 /**
  * Exports
  */
 
 module.exports = function (server) {
-
   /**
    * Disable default header
    */
 
-  server.disable('x-powered-by');
-
+  server.disable('x-powered-by')
 
   /**
    * Views configuration
    */
 
-  var engine = settings.view_engine || 'jade';
-  server.engine(engine, cons[engine]);
-  server.set('view engine', engine);
+  var engine = settings.view_engine || 'jade'
+  server.engine(engine, cons[engine])
+  server.set('view engine', engine)
 
   // First, look for views in the project directory.
   // If absent, look in the package views directory.
   server.set('views', [
     path.join(cwd, 'views'),
     path.join(__dirname, '..', 'views')
-  ]);
-
+  ])
 
   /**
    * Settings
    */
 
   Object.keys(settings).forEach(function (key) {
-    server.set(key, settings[key]);
-  });
-
+    server.set(key, settings[key])
+  })
 
   /**
    * Request Parsing
    */
 
-  server.use(cookieParser(settings.cookie_secret));
-  server.use(bodyParser.urlencoded({ extended: false }));
-  server.use(bodyParser.json());
-
+  server.use(cookieParser(settings.cookie_secret))
+  server.use(bodyParser.urlencoded({ extended: false }))
+  server.use(bodyParser.json())
 
   /**
    * Express Session
@@ -83,45 +76,40 @@ module.exports = function (server) {
       cookie: {
         secure: true
       }
-    }));
+    }))
   } else {
     server.use(session({
       store: sessionStore,
       resave: false,
       saveUninitialized: false,
       secret: settings.session_secret
-    }));
+    }))
   }
-
 
   /**
    * Flash messaging
    */
 
-  server.use(connectFlash());
-
+  server.use(connectFlash())
 
   /**
    * Passport Authentication Middleware
    */
 
-  server.use(passport.initialize());
-  server.use(passport.session());
-
+  server.use(passport.initialize())
+  server.use(passport.session())
 
   /**
    * Cross-Origin Support
    */
 
-  server.use(cors());
-
+  server.use(cors())
 
   /**
    * Logging
    */
 
-  server.use(logger.middleware());
-
+  server.use(logger.middleware())
 
   /**
    * Serve Static Files
@@ -130,9 +118,8 @@ module.exports = function (server) {
    * If absent, look in the package `public` directory.
    */
 
-  server.use(express.static(path.join(cwd, 'public')));
-  server.use(express.static(path.join(__dirname, '..', 'public')));
-
+  server.use(express.static(path.join(cwd, 'public')))
+  server.use(express.static(path.join(__dirname, '..', 'public')))
 
   /**
    * OpenID Provider Metadata Properties
@@ -176,17 +163,16 @@ module.exports = function (server) {
     'op_tos_uri',
     'check_session_iframe',
     'end_session_endpoint'
-  ];
-
+  ]
 
   /**
    * Build Provider Configuration Info from Metadata
    */
 
   server.OpenIDConfiguration = parameters.reduce(function (config, param) {
-    var value = settings[param];
-    if (value) { config[param] = value; }
-    return config;
-  }, {});
+    var value = settings[param]
+    if (value) { config[param] = value }
+    return config
+  }, {})
 
-};
+}

@@ -1,14 +1,13 @@
 module.exports = function (grunt) {
-  grunt.loadNpmTasks('grunt-release');
-  grunt.loadNpmTasks('grunt-conventional-changelog');
+  grunt.loadNpmTasks('grunt-release')
+  grunt.loadNpmTasks('grunt-conventional-changelog')
 
   grunt.initConfig({
     conventionalChangelog: {
       options: {
-
         changelogOpts: {
           // conventional-changelog options go here
-          //preset: 'angular'
+          // preset: 'angular'
         },
         context: {
           // context goes here
@@ -28,7 +27,7 @@ module.exports = function (grunt) {
         src: 'CHANGELOG.md'
       }
     }
-  });
+  })
 
-  grunt.registerTask('changelog', ['conventionalChangelog']);
-};
+  grunt.registerTask('changelog', ['conventionalChangelog'])
+}

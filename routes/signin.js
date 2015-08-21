@@ -2,29 +2,26 @@
  * Module dependencies
  */
 
-var oidc     = require('../oidc')
-  , settings = require('../boot/settings')
-  , mailer   = require('../boot/mailer')
-  , passport = require('passport')
-  , crypto   = require('crypto')
-  , qs       = require('qs')
-  , InvalidRequestError = require('../errors/InvalidRequestError')
-  , providers = require('../providers')
-  ;
+var oidc = require('../oidc')
+var settings = require('../boot/settings')
+var mailer = require('../boot/mailer')
+var passport = require('passport')
+var crypto = require('crypto')
+var qs = require('qs')
+var InvalidRequestError = require('../errors/InvalidRequestError')
+var providers = require('../providers')
 
-var providerInfo = {};
-var providerNames = Object.keys(providers);
+var providerInfo = {}
+var providerNames = Object.keys(providers)
 for (var i = 0; i < providerNames.length; i++) {
-  providerInfo[providerNames[i]] = providers[providerNames[i]];
+  providerInfo[providerNames[i]] = providers[providerNames[i]]
 }
-
 
 /**
  * Signin Endpoint
  */
 
 module.exports = function (server) {
-
   /**
    * Signin page
    */
@@ -35,14 +32,13 @@ module.exports = function (server) {
     oidc.verifyClient,
     function (req, res, next) {
       res.render('signin', {
-        params:       qs.stringify(req.query),
-        request:      req.query,
-        providers:    settings.providers,
+        params: qs.stringify(req.query),
+        request: req.query,
+        providers: settings.providers,
         providerInfo: providerInfo,
-        mailSupport:  !!(mailer.transport)
-      });
-    });
-
+        mailSupport: !!(mailer.transport)
+      })
+    })
 
   /**
    * Password signin handler
@@ -56,55 +52,54 @@ module.exports = function (server) {
     oidc.enforceReferrer('/signin'),
     function (req, res, next) {
       if (!req.provider) {
-        next(new InvalidRequestError("Invalid provider"));
+        next(new InvalidRequestError('Invalid provider'))
       } else {
         passport.authenticate(req.body.provider, function (err, user, info) {
           if (err) {
             res.render('signin', {
-              params:       qs.stringify(req.body),
-              request:      req.body,
-              providers:    settings.providers,
+              params: qs.stringify(req.body),
+              request: req.body,
+              providers: settings.providers,
               providerInfo: providerInfo,
-              mailSupport:  !!(mailer.transport),
-              error:        err.message
-            });
+              mailSupport: !!(mailer.transport),
+              error: err.message
+            })
           } else if (!user) {
             res.render('signin', {
-              params:       qs.stringify(req.body),
-              request:      req.body,
-              providers:    settings.providers,
+              params: qs.stringify(req.body),
+              request: req.body,
+              providers: settings.providers,
               providerInfo: providerInfo,
-              mailSupport:  !!(mailer.transport),
-              formError:    info.message
-            });
+              mailSupport: !!(mailer.transport),
+              formError: info.message
+            })
           } else {
             req.login(user, function (err) {
-              req.session.amr = req.session.amr || [];
-              var samr = req.session.amr;
-              var pamr = req.provider.amr;
+              req.session.amr = req.session.amr || []
+              var samr = req.session.amr
+              var pamr = req.provider.amr
 
               if (pamr && samr.indexOf(pamr) === -1) {
-                req.session.amr.push(pamr);
+                req.session.amr.push(pamr)
               }
 
-              req.session.opbs = crypto.randomBytes(256).toString('hex');
-              next(err);
-            });
+              req.session.opbs = crypto.randomBytes(256).toString('hex')
+              next(err)
+            })
           }
-        })(req, res, next);
+        })(req, res, next)
       }
     },
     oidc.requireVerifiedEmail(),
     oidc.determineUserScope,
     oidc.promptToAuthorize,
     oidc.authorize
-  ];
+  ]
 
   if (oidc.beforeAuthorize) {
-    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize);
+    handler.splice(handler.length - 1, 0, oidc.beforeAuthorize)
   }
 
-  server.post('/signin', handler);
+  server.post('/signin', handler)
 
-};
-
+}

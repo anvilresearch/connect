@@ -2,19 +2,16 @@
  * Module dependencies
  */
 
-var oidc     = require('../oidc')
-  , settings = require('../boot/settings')
-  , User     = require('../models/User')
-  , NotFoundError = require('../errors/NotFoundError')
-  ;
-
+var oidc = require('../oidc')
+var settings = require('../boot/settings')
+var User = require('../models/User')
+var NotFoundError = require('../errors/NotFoundError')
 
 /**
  * Exports
  */
 
 module.exports = function (server) {
-
   /**
    * UserInfo Endpoint
    */
@@ -23,17 +20,16 @@ module.exports = function (server) {
     oidc.parseAuthorizationHeader,
     oidc.getBearerToken,
     oidc.verifyAccessToken({
-      iss:    settings.issuer,
-      key:    settings.publicKey,
+      iss: settings.issuer,
+      key: settings.publicKey,
       scope: 'profile'
     }),
     function (req, res, next) {
       User.get(req.claims.sub, function (err, user) {
-        if (err)   { return next(err); }
-        if (!user) { return next(new NotFoundError()); }
-        res.status(200).json(user.project('userinfo'));
-      });
-    });
+        if (err) { return next(err) }
+        if (!user) { return next(new NotFoundError()) }
+        res.status(200).json(user.project('userinfo'))
+      })
+    })
 
-};
-
+}

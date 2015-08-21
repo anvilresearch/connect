@@ -2,8 +2,7 @@
  * Module dependencies
  */
 
-var bucker = require('bucker');
-
+var bucker = require('bucker')
 
 /**
  * Export
@@ -12,8 +11,9 @@ var bucker = require('bucker');
 module.exports = function (config) {
   var logger = bucker.createLogger(config || {
     console: true
-  });
+  })
 
-  return module.exports = logger;
-};
+  module.exports = logger
 
+  return logger
+}
