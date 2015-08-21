@@ -11,7 +11,7 @@ var client = require('../boot/redis')
 function checkSession (req, res, next) {
   var initialOpbs = req.session.opbs
   client.get('sess:' + req.sessionID, function (err, data) {
-    if (err) { next(err) }
+    if (err) { return next(err) }
     try {
       var opbs = JSON.parse(data).opbs
       if (opbs !== initialOpbs) {
