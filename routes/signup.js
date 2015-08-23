@@ -7,6 +7,7 @@
 var oidc = require('../oidc')
 var settings = require('../boot/settings')
 var passwordProvider = require('../providers').password
+var crypto = require('crypto')
 var passport = require('passport')
 var qs = require('qs')
 var User = require('../models/User')
@@ -54,15 +55,8 @@ module.exports = function (server) {
           } else {
             req.login(user, function (err) {
               if (err) { return next(err) }
-
-              req.session.amr = req.session.amr || []
-              var samr = req.session.amr
-              var pamr = req.provider.amr
-
-              if (pamr && samr.indexOf(pamr) === -1) {
-                req.session.amr.push(pamr)
-              }
-
+              oidc.setSessionAmr(req.session, req.provider.amr)
+              req.session.opbs = crypto.randomBytes(256).toString('hex')
               req.sendVerificationEmail =
                 req.provider.emailVerification.enable
               req.flash('isNewUser', true)
