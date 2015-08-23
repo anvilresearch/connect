@@ -85,13 +85,18 @@ function loadProviders (dir, files) {
 
         // override the default amr for the provider
         if (settings.providers[providerName]) {
-          provider.amr = settings.providers[providerName].amr || provider.amr
+          var oamr = settings.providers[providerName].amr
+          if (typeof oamr !== 'undefined') {
+            provider.amr = oamr
+          }
         }
 
         // provider-specific refresh_userinfo setting
         if (settings.providers[providerName]) {
-          provider.refresh_userinfo =
-            settings.providers[providerName].refresh_userinfo
+          var orefuser_info = settings.providers[providerName].refresh_userinfo
+          if (typeof orefuser_info !== 'undefined') {
+            provider.refresh_userinfo = orefuser_info
+          }
         }
 
         module.exports[providerName] = provider
