@@ -114,7 +114,7 @@
     "mkdirp": "^0.5.1",
     "mock-require": "^1.1.0",
     "modinha": "0.0.30",
-    "modinha-redis": "0.0.20",
+    "modinha-redis": "0.0.21",
     "nodemailer": "^1.4.0",
     "passport": "^0.3.0",
     "passport-adauth": "^0.1.2",
