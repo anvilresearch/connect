@@ -10,6 +10,7 @@ var cons = require('consolidate')
 var htmlToText = require('html-to-text')
 var path = require('path')
 var templatesDir = path.resolve(process.cwd(), 'email')
+var origTemplatesDir = path.resolve(__dirname, '..', 'email')
 var engine, engineName, defaultFrom
 
 /**
@@ -20,10 +21,9 @@ function render (template, locals, callback) {
   var engineExt =
   engineName.charAt(0) === '.' ? engineName : ('.' + engineName)
   var tmplPath = path.join(templatesDir, template + engineExt)
+  var origTmplPath = path.join(origTemplatesDir, template + engineExt)
 
-  engine(tmplPath, locals, function (err, html) {
-    if (err) { return callback(err) }
-
+  function renderToText (html) {
     var text = htmlToText.fromString(html, {
       wordwrap: 72 // A little less than 80 characters per line is the de-facto
     // standard for e-mails to allow for some room for quoting
@@ -31,7 +31,17 @@ function render (template, locals, callback) {
     })
 
     callback(null, html, text)
-  })
+  }
+
+  engine(tmplPath, locals)
+    .then(renderToText)
+    .catch(function () {
+      engine(origTmplPath, locals)
+        .then(renderToText)
+        .catch(function (err) {
+          callback(err)
+        })
+    })
 }
 
 /**
