@@ -75,16 +75,10 @@ module.exports = function (server) {
             })
           } else {
             req.login(user, function (err) {
-              req.session.amr = req.session.amr || []
-              var samr = req.session.amr
-              var pamr = req.provider.amr
-
-              if (pamr && samr.indexOf(pamr) === -1) {
-                req.session.amr.push(pamr)
-              }
-
+              if (err) { return next(err) }
+              oidc.setSessionAmr(req.session, req.provider.amr)
               req.session.opbs = crypto.randomBytes(256).toString('hex')
-              next(err)
+              next()
             })
           }
         })(req, res, next)

@@ -68,8 +68,10 @@ module.exports = function (server) {
           // login the user
           } else {
             req.login(user, function (err) {
+              if (err) { return next(err) }
+              oidc.setSessionAmr(req.session, req.provider.amr)
               req.session.opbs = crypto.randomBytes(256).toString('hex')
-              next(err)
+              next()
             })
           }
         })(req, res, next)
