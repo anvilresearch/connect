@@ -1,3 +1,44 @@
+<a name="0.1.50"></a>
+## 0.1.50 (2015-08-23)
+
+
+### chore
+
+* chore(npm): Remove unused mock-require dependency ([3c245a3](https://github.com/anvilresearch/connect/commit/3c245a3))
+* chore(npm): Update modinha-redis dependency ([eabb980](https://github.com/anvilresearch/connect/commit/eabb980))
+* chore(npm): update passport dependency ([3242095](https://github.com/anvilresearch/connect/commit/3242095))
+
+### feat
+
+* feat(public): add default favicon ([e55c20f](https://github.com/anvilresearch/connect/commit/e55c20f))
+
+### fix
+
+* fix(cli): correct date math for exp claim ([12f2109](https://github.com/anvilresearch/connect/commit/12f2109))
+
+### refactor
+
+* refactor: Use ioredis ([2fe2954](https://github.com/anvilresearch/connect/commit/2fe2954))
+
+### style
+
+* style: Use Javascript Standard Style ([4dfe09e](https://github.com/anvilresearch/connect/commit/4dfe09e))
+* style(providers): Adjust iif expression indentation ([546fc55](https://github.com/anvilresearch/connect/commit/546fc55))
+
+### test
+
+* test(standard): Check style conformance as part of `npm test` ([c09eae1](https://github.com/anvilresearch/connect/commit/c09eae1))
+
+* fix(lib/cli): Ensure error-handling stops function execution ([62db39c](https://github.com/anvilresearch/connect/commit/62db39c))
+* fix(oidc/checkSession): Ensure error-handling stops function execution ([1e54302](https://github.com/anvilresearch/connect/commit/1e54302))
+* fix(oidc/determineClientScope): Ensure error-handling stops function execution ([fe02eeb](https://github.com/anvilresearch/connect/commit/fe02eeb))
+* fix(oidc/determineUserScope): Ensure error-handling stops function execution ([ec2c4ce](https://github.com/anvilresearch/connect/commit/ec2c4ce))
+* Merge pull request #184 from anvilresearch/vsimonian-js-standard-style ([65a0a2e](https://github.com/anvilresearch/connect/commit/65a0a2e))
+* Merge pull request #188 from anvilresearch/vsimonian-ioredis ([ee3e79c](https://github.com/anvilresearch/connect/commit/ee3e79c))
+* style(routes/recovery): Adjust comment placement ([70134ba](https://github.com/anvilresearch/connect/commit/70134ba))
+
+
+
 <a name="0.1.49"></a>
 ## 0.1.49 (2015-08-21)
 
