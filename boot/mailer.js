@@ -54,31 +54,40 @@ function sendMail (template, locals, options, callback) {
 }
 
 /**
- * Export
+ * Get mailer
  */
 
-module.exports = function (config) {
-  var fromVerifier = /^(?:\w|\s)+<[a-z]+@[a-z]+\.[a-z]{2,}>$/igm
-  var transport = config && nodemailer.createTransport(config)
+var mailer
 
-  engineName = (config && config.view_engine) ||
-    settings.view_engine ||
-    'hogan'
-  engine = cons[engineName]
+exports.getMailer = function () {
+  if (mailer) {
+    return mailer
+  } else {
+    var fromVerifier = /^(?:\w|\s)+<[a-z]+@[a-z]+\.[a-z]{2,}>$/igm
+    var transport = settings.mailer &&
+      nodemailer.createTransport(settings.mailer)
 
-  if (transport && (typeof config.from !== 'string' ||
-    !fromVerifier.test(config.from))) {
-    console.error(config.from)
-    throw new Error('From field not provided for mailer. ' +
-      'Expected "Display Name <email@example.com>"')
-  }
+    engineName = (settings.mailer && settings.mailer.view_engine) ||
+      settings.view_engine ||
+      'hogan'
+    engine = cons[engineName]
 
-  defaultFrom = config && config.from
+    if (transport && (typeof settings.mailer.from !== 'string' ||
+      !fromVerifier.test(settings.mailer.from))) {
+      console.error(settings.mailer.from)
+      throw new Error('From field not provided for mailer. ' +
+        'Expected "Display Name <email@example.com>"')
+    }
 
-  module.exports = {
-    from: defaultFrom,
-    render: render,
-    transport: transport,
-    sendMail: sendMail
+    defaultFrom = settings.mailer && settings.mailer.from
+
+    mailer = {
+      from: defaultFrom,
+      render: render,
+      transport: transport,
+      sendMail: sendMail
+    }
+
+    return mailer
   }
 }

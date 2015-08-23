@@ -255,7 +255,6 @@ function userInfo (token, done) {
 
   // Execute the request
   return req.end(function (err, res) {
-
     // Handle unsuccessful response
     if (err || res.statusCode !== 200) {
       return done(

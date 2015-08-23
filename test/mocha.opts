@@ -1,1 +1,1 @@
---recursive
+--compilers coffee:coffee-script/register -R dot --watch --recursive

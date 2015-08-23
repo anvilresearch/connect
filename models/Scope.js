@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var client = require('../boot/redis')
+var client = require('../boot/redis').getClient()
 var Modinha = require('modinha')
 var Document = require('modinha-redis')
 

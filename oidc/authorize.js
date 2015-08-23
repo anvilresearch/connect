@@ -27,7 +27,7 @@ function authorize (req, res, next) {
   var params = req.connectParams
   var responseTypes = params.response_type.split(' ')
   var responseMode = params.response_mode ||
-    (responseTypes.indexOf('code') !== -1) ? '?' : '#'
+  (responseTypes.indexOf('code') !== -1) ? '?' : '#'
 
   // ACCESS GRANTED
   if (params.authorize === 'true') {

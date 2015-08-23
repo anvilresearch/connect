@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var client = require('../boot/redis')
+var client = require('../boot/redis').getClient()
 
 /**
  * Check session

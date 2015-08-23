@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var client = require('../boot/redis')
+var client = require('../boot/redis').getClient()
 var settings = require('../boot/settings')
 var providers = require('../providers')
 var bcrypt = require('bcrypt')

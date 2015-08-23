@@ -1,5 +1,5 @@
 var crypto = require('crypto')
-var client = require('../boot/redis')
+var client = require('../boot/redis').getClient()
 
 /**
  * OneTimeToken
