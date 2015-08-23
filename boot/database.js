@@ -3,8 +3,8 @@
  */
 
 var async = require('async')
-var settings = require('../boot/settings')
-var rclient = require('../boot/redis')
+var settings = require('./settings')
+var rclient = require('./redis').getClient()
 var Role = require('../models/Role')
 var Scope = require('../models/Scope')
 
@@ -103,8 +103,8 @@ module.exports = function setup () {
       process.exit(1)
     }
 
-    var version = results[1] || results[0]
-    var dbsize = results[2]
+    var version = results[1][1] || results[0][1]
+    var dbsize = results[2][1]
 
     if (!version && dbsize > 0) {
       if (process.argv.indexOf('--no-db-check') === -1) {

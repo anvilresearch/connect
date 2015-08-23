@@ -3,7 +3,7 @@
  */
 
 var async = require('async')
-var client = require('../boot/redis')
+var client = require('../boot/redis').getClient()
 var settings = require('../boot/settings')
 var Modinha = require('modinha')
 var Document = require('modinha-redis')
@@ -175,8 +175,8 @@ AccessToken.issue = function (request, callback) {
     uid: request.user._id,
     cid: request.client._id,
     ei: (
-        request.connectParams &&
-        parseInt(request.connectParams.max_age, 10)
+      request.connectParams &&
+      parseInt(request.connectParams.max_age, 10)
       ) ||
       request.client.default_max_age,
     scope: request.scope
