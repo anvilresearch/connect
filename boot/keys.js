@@ -4,60 +4,100 @@
 
 var cwd = process.cwd()
 var fs = require('fs')
+var mkdirp = require('mkdirp')
 var path = require('path')
 var pem2jwk = require('pem-jwk').pem2jwk
+var exec = require('child_process').execFileSync
 
 /**
- * Keys
+ * Paths and file names
  */
 
-var keys = {}
-var privateKey, publicKey
-var defaultPublicKeyFile = path.join(cwd, 'config', 'keys', 'public.pem')
-var defaultPrivateKeyFile = path.join(cwd, 'config', 'keys', 'private.pem')
+var keyDirectory = path.join(cwd, 'config', 'keys')
+var defaultPublicKeyFile = path.join(keyDirectory, 'public.pem')
+var defaultPrivateKeyFile = path.join(keyDirectory, 'private.pem')
 
 /**
- * Look for environment variables.
+ * Load Keys
  */
 
-if (process.env.ANVIL_CONNECT_PRIVATE_KEY) {
-  privateKey = new Buffer(process.env.ANVIL_CONNECT_PRIVATE_KEY, 'base64').toString('ascii')
+function loadKeys () {
+  var keys = null
+
+  // Try to read the key files. If they are available locally,
+  // they should override the environment variables.
+  try {
+    keys = {
+      privateKey: fs.readFileSync(defaultPrivateKeyFile).toString('ascii'),
+      publicKey: fs.readFileSync(defaultPublicKeyFile).toString('ascii')
+    }
+  } catch (err) {}
+
+  return keys
 }
 
-if (process.env.ANVIL_CONNECT_PUBLIC_KEY) {
-  publicKey = new Buffer(process.env.ANVIL_CONNECT_PUBLIC_KEY, 'base64').toString('ascii')
-}
-
 /**
- * Try to read the key files. If they are available locally,
- * they should override the environment variables.
+ * Try loading
  */
 
-try {
-  privateKey = fs.readFileSync(defaultPrivateKeyFile).toString('ascii')
-  publicKey = fs.readFileSync(defaultPublicKeyFile).toString('ascii')
-} catch (err) {}
+var keys = loadKeys()
 
 /**
- * Ensure the key pair has been loaded
+ * Generate keys if not present
  */
 
-if (!privateKey || !publicKey) {
-  console.log('Cannot load keypair')
-  process.exit(1)
+if (!keys) {
+
+  try {
+    mkdirp.sync(keyDirectory)
+
+    exec('openssl', [
+      'genrsa',
+      '-out',
+      defaultPrivateKeyFile,
+      '4096'
+    ])
+
+    exec('openssl', [
+      'rsa',
+      '-pubout',
+      '-in',
+      defaultPrivateKeyFile,
+      '-out',
+      defaultPublicKeyFile
+    ])
+
+  } catch (e) {
+    console.log(
+      'Failed to generate keys using OpenSSL. Please ensure you have OpenSSL ' +
+      'installed and configured on your system.'
+    )
+    process.exit(1)
+  }
+
+  // Try again
+  keys = loadKeys()
+
+  // If they still can't be loaded, kill the process
+  if (!keys) {
+    console.log(
+      'Unable to read the token-signing key pair from ' + keyDirectory
+    )
+    process.exit(1)
+  }
 }
 
 /**
  * Create JWK from public key
  */
 
-var jwk = pem2jwk(publicKey)
+var jwk = pem2jwk(keys.publicKey)
 
 /**
  * JWK Set
  */
 
-var jwks = {
+keys.jwks = {
   keys: [{
     kty: jwk.kty,
     use: 'sig',
@@ -71,7 +111,4 @@ var jwks = {
  * Export
  */
 
-keys.privateKey = privateKey
-keys.publicKey = publicKey
-keys.jwks = jwks
 module.exports = keys
