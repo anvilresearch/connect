@@ -83,6 +83,14 @@ function loadProviders (dir, files) {
           settings.providers[providerName].emailVerification) || {}
         )
 
+        // override the daysToCrack setting for the password provider
+        if (settings.providers[providerName]) {
+          var odays = settings.providers[providerName].daysToCrack
+          if (typeof odays !== 'undefined') {
+            provider.daysToCrack = odays
+          }
+        }
+
         // override the default amr for the provider
         if (settings.providers[providerName]) {
           var oamr = settings.providers[providerName].amr
