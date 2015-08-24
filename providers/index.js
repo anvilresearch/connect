@@ -83,24 +83,20 @@ function loadProviders (dir, files) {
           settings.providers[providerName].emailVerification) || {}
         )
 
-        // override the daysToCrack setting for the password provider
         if (settings.providers[providerName]) {
+          // override the daysToCrack setting for the password provider
           var odays = settings.providers[providerName].daysToCrack
           if (typeof odays !== 'undefined') {
             provider.daysToCrack = odays
           }
-        }
 
-        // override the default amr for the provider
-        if (settings.providers[providerName]) {
+          // override the default amr for the provider
           var oamr = settings.providers[providerName].amr
           if (typeof oamr !== 'undefined') {
             provider.amr = oamr
           }
-        }
 
-        // provider-specific refresh_userinfo setting
-        if (settings.providers[providerName]) {
+          // provider-specific refresh_userinfo setting
           var orefuser_info = settings.providers[providerName].refresh_userinfo
           if (typeof orefuser_info !== 'undefined') {
             provider.refresh_userinfo = orefuser_info
