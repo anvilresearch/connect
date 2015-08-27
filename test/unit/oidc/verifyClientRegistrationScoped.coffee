@@ -15,6 +15,7 @@ chai.should()
 settings        = require '../../../boot/settings'
 AccessToken     = require '../../../models/AccessToken'
 verifyClientReg = require('../../../oidc').verifyClientRegistration
+clientRegType   = settings.client_registration
 trustedRegScope = settings.trusted_registration_scope
 regScope        = settings.registration_scope
 
@@ -24,10 +25,12 @@ regScope        = settings.registration_scope
 describe 'Verify Scoped Client Registration', ->
 
   before ->
+    settings.client_registration = 'scoped'
     settings.trusted_registration_scope = 'realm'
     settings.registration_scope = 'developer'
 
   after ->
+    settings.client_registration = clientRegType
     settings.trusted_registration_scope = trustedRegScope
     settings.registration_scope = 'developer'
 
