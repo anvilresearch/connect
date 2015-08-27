@@ -12,8 +12,10 @@ chai.should()
 
 
 
+settings        = require '../../../boot/settings'
 AccessToken     = require '../../../models/AccessToken'
 verifyClientReg = require('../../../oidc').verifyClientRegistration
+clientRegType   = settings.client_registration
 
 
 
@@ -23,6 +25,11 @@ describe 'Verify Token Client Registration', ->
 
   {req,res,next,err} = {}
 
+  before ->
+    settings.client_registration = 'token'
+
+  after ->
+    settings.client_registration = clientRegType
 
   describe 'with missing bearer token', ->
 
