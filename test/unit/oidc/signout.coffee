@@ -38,7 +38,7 @@ describe 'Signout', ->
         sub: 'user-uuid',
         aud: 'client-uuid',
 
-      }).encode(settings.privateKey)
+      }).encode(settings.keys.sig.prv)
 
 
 

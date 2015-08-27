@@ -13,7 +13,7 @@ var sessionState = require('../oidc/sessionState')
  * Exchange code for token
  */
 
-var privateKey = settings.privateKey
+var privateKey = settings.keys.sig.prv
 
 function token (req, res, next) {
   var params = req.body

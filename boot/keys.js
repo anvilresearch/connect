@@ -37,9 +37,7 @@ function loadKeys () {
       enc: {
         pub: fs.readFileSync(encPubKeyFile).toString('ascii'),
         prv: fs.readFileSync(encPrvKeyFile).toString('ascii')
-      },
-      publicKey: fs.readFileSync(sigPubKeyFile).toString('ascii'),
-      privateKey: fs.readFileSync(sigPrvKeyFile).toString('ascii')
+      }
     }
   } catch (err) {}
 
@@ -106,23 +104,33 @@ if (!keys) {
 }
 
 /**
- * Create JWK from public key
+ * Create JWKs from public keys
  */
 
-var jwk = pem2jwk(keys.publicKey)
+var sig = pem2jwk(keys.sig.pub)
+var enc = pem2jwk(keys.enc.pub)
 
 /**
  * JWK Set
  */
 
 keys.jwks = {
-  keys: [{
-    kty: jwk.kty,
-    use: 'sig',
-    alg: 'RS256',
-    n: jwk.n,
-    e: jwk.e
-  }]
+  keys: [
+    {
+      kty: sig.kty,
+      use: 'sig',
+      alg: 'RS256',
+      n: sig.n,
+      e: sig.e
+    },
+    {
+      kty: enc.kty,
+      use: 'enc',
+      alg: 'RS256',
+      n: enc.n,
+      e: enc.e
+    }
+  ]
 }
 
 /**

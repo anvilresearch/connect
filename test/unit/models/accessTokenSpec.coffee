@@ -251,7 +251,7 @@ describe 'AccessToken', ->
       it 'should provide an "issue" projection of the token', ->
         res.access_token.length.should.be.above 100
         options =
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         decoded = AccessTokenJWT.decode(res.access_token, options.key)
         decoded.payload.should.have.property('iss', settings.issuer)
         decoded.payload.should.have.property('sub', 'uuid1')
@@ -410,8 +410,8 @@ describe 'AccessToken', ->
           uid:    'uid'
           cid:    'cid'
           scope:  'openid'
-        issued = token.toJWT(settings.privateKey)
-        decoded = AccessTokenJWT.decode(issued, settings.publicKey)
+        issued = token.toJWT(settings.keys.sig.prv)
+        decoded = AccessTokenJWT.decode(issued, settings.keys.sig.pub)
 
 
       it 'should issue a signed JWT', ->
@@ -467,7 +467,7 @@ describe 'AccessToken', ->
       before (done) ->
         token = 'bad.jwt'
         options =
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -489,10 +489,10 @@ describe 'AccessToken', ->
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid'
-        })).encode(settings.privateKey)
+        })).encode(settings.keys.sig.prv)
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -518,10 +518,10 @@ describe 'AccessToken', ->
           cid: 'uuid2'
           exp: nowSeconds(-1)
           scope: 'openid'
-        })).encode(settings.privateKey)
+        })).encode(settings.keys.sig.prv)
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -546,10 +546,10 @@ describe 'AccessToken', ->
           uid: 'uuid1'
           cid: 'uuid2'
           scope: 'openid'
-        })).encode(settings.privateKey)
+        })).encode(settings.keys.sig.prv)
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
           scope: 'other'
         AccessToken.verify token, options, (error, data) ->
           err    = error
@@ -573,7 +573,7 @@ describe 'AccessToken', ->
         token = 'r4nd0m'
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -601,7 +601,7 @@ describe 'AccessToken', ->
         token = 'r4nd0m'
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -631,7 +631,7 @@ describe 'AccessToken', ->
         token = 'r4nd0m'
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data
@@ -662,7 +662,7 @@ describe 'AccessToken', ->
         token = 'r4nd0m'
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
           scope: 'other'
         AccessToken.verify token, options, (error, data) ->
           err    = error
@@ -698,7 +698,7 @@ describe 'AccessToken', ->
         token = 'r4nd0m'
         options =
           iss: settings.issuer
-          key: settings.publicKey
+          key: settings.keys.sig.pub
         AccessToken.verify token, options, (error, data) ->
           err    = error
           claims = data

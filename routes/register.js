@@ -26,7 +26,7 @@ module.exports = function (server) {
     // presence and scope of the token.
     oidc.verifyAccessToken({
       iss: settings.issuer,
-      key: settings.publicKey,
+      key: settings.keys.sig.pub,
       required: false
     }),
 
@@ -55,7 +55,7 @@ module.exports = function (server) {
           sub: client._id,
           aud: client._id
 
-        }, settings.privateKey, function (err, token) {
+        }, settings.keys.sig.prv, function (err, token) {
           if (err) { return next(err) }
 
           res.set({

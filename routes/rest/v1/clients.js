@@ -21,7 +21,7 @@ module.exports = function (server) {
     oidc.getBearerToken,
     oidc.verifyAccessToken({
       iss: settings.issuer,
-      key: settings.publicKey,
+      key: settings.keys.sig.pub,
       scope: 'realm'
     })
   ]
