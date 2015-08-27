@@ -11,7 +11,7 @@ var settings = require('../boot/settings')
 module.exports = function (server) {
   server.get('/jwks',
     function (req, res, next) {
-      res.json(settings.jwks)
+      res.json(settings.keys.jwks)
     }
   )
 
