@@ -1,5 +1,6 @@
 config
 hooks
+keys
 node_modules
 public/vendor
 *.swp

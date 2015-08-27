@@ -13,7 +13,7 @@ var exec = require('child_process').execFileSync
  * Paths and file names
  */
 
-var keyDirectory = path.join(cwd, 'config', 'keys')
+var keyDirectory = path.join(cwd, 'keys')
 var defaultPublicKeyFile = path.join(keyDirectory, 'public.pem')
 var defaultPrivateKeyFile = path.join(keyDirectory, 'private.pem')
 
