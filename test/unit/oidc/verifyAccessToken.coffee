@@ -34,7 +34,7 @@ describe 'Verify Access Token', ->
 
       options =
         iss:    settings.issuer
-        key:    settings.publicKey
+        key:    settings.keys.sig.pub
         scope: 'profile'
 
       verifyAccessToken(options) req, res, (error) ->
@@ -68,7 +68,7 @@ describe 'Verify Access Token', ->
 
       options =
         iss:    settings.issuer
-        key:    settings.publicKey
+        key:    settings.keys.sig.pub
         scope: 'profile'
 
       verifyAccessToken(options) req, res, (error) ->
@@ -115,7 +115,7 @@ describe 'Verify Access Token', ->
 
       options =
         iss:      settings.issuer
-        key:      settings.publicKey
+        key:      settings.keys.sig.pub
         scope:   'profile'
         required: false
 
@@ -155,7 +155,7 @@ describe 'Verify Access Token', ->
 
       options =
         iss:    settings.issuer
-        key:    settings.publicKey
+        key:    settings.keys.sig.pub
         scope: 'profile'
 
       verifyAccessToken(options) req, res, next

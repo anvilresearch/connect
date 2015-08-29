@@ -424,12 +424,10 @@ Object.keys(config).forEach(function (key) {
 })
 
 /**
- * Key pair and JWK set
+ * Key pairs and JWK sets
  */
 
-Object.keys(keys).forEach(function (key) {
-  settings[key] = keys[key]
-})
+settings.keys = keys
 
 /**
  * Required Configuration Values

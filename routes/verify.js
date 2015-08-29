@@ -16,7 +16,7 @@ module.exports = function (server) {
     oidc.getBearerToken,
     oidc.verifyAccessToken({
       iss: settings.issuer,
-      key: settings.publicKey
+      key: settings.keys.sig.pub
     }),
     function (req, res, next) {
       // don't cache this response

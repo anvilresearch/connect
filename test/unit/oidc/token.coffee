@@ -81,7 +81,7 @@ describe 'Token response', ->
       res.json.should.have.been.calledWith sinon.match({ state: 'st4t3' })
 
     it 'should not have nonce', ->
-      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, settings.publicKey)
+      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, settings.keys.sig.pub)
       expect(jwt.payload.nonce).to.be.undefined
 
     it 'should respond with session_state', ->
@@ -129,7 +129,7 @@ describe 'Token response', ->
       AccessToken.exchange.restore()
 
     it 'should have nonce', ->
-      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, settings.publicKey)
+      jwt = IDToken.decode(res.json.firstCall.args[0].id_token, settings.keys.sig.pub)
       jwt.payload.nonce.should.equal 'noncf7'
 
 

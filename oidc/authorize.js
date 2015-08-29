@@ -90,7 +90,7 @@ function authorize (req, res, next) {
             amr: req.session.amr
           })
 
-          response.id_token = idToken.encode(settings.privateKey)
+          response.id_token = idToken.encode(settings.keys.sig.prv)
         }
 
         callback(null, response)

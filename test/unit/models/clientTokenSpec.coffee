@@ -113,7 +113,7 @@ describe 'Client Token', ->
   describe 'issue', ->
 
     {err,jwt} = {}
-    privateKey = settings.privateKey
+    privateKey = settings.keys.sig.prv
 
     describe 'with valid claims', ->
 

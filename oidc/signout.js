@@ -18,7 +18,7 @@ function signout (req, res, next) {
 
   // verify the uri using the hint
   if (uri && hint) {
-    var token = IDToken.decode(hint, settings.publicKey)
+    var token = IDToken.decode(hint, settings.keys.sig.pub)
 
     // the token checks out
     if (token && token instanceof Error === false) {

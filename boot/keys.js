@@ -14,8 +14,10 @@ var exec = require('child_process').execFileSync
  */
 
 var keyDirectory = path.join(cwd, 'keys')
-var defaultPublicKeyFile = path.join(keyDirectory, 'public.pem')
-var defaultPrivateKeyFile = path.join(keyDirectory, 'private.pem')
+var sigPubKeyFile = path.join(keyDirectory, 'sig.rsa.pub.pem')
+var sigPrvKeyFile = path.join(keyDirectory, 'sig.rsa.prv.pem')
+var encPubKeyFile = path.join(keyDirectory, 'enc.rsa.pub.pem')
+var encPrvKeyFile = path.join(keyDirectory, 'enc.rsa.prv.pem')
 
 /**
  * Load Keys
@@ -28,12 +30,50 @@ function loadKeys () {
   // they should override the environment variables.
   try {
     keys = {
-      privateKey: fs.readFileSync(defaultPrivateKeyFile).toString('ascii'),
-      publicKey: fs.readFileSync(defaultPublicKeyFile).toString('ascii')
+      sig: {
+        pub: fs.readFileSync(sigPubKeyFile).toString('ascii'),
+        prv: fs.readFileSync(sigPrvKeyFile).toString('ascii')
+      },
+      enc: {
+        pub: fs.readFileSync(encPubKeyFile).toString('ascii'),
+        prv: fs.readFileSync(encPrvKeyFile).toString('ascii')
+      }
     }
   } catch (err) {}
 
   return keys
+}
+
+/**
+ * Generate Keys
+ */
+
+function generateKeys (dir, pub, prv) {
+  try {
+    mkdirp.sync(dir)
+
+    exec('openssl', [
+      'genrsa',
+      '-out',
+      prv,
+      '4096'
+    ])
+
+    exec('openssl', [
+      'rsa',
+      '-pubout',
+      '-in',
+      prv,
+      '-out',
+      pub
+    ])
+  } catch (e) {
+    console.log(
+      'Failed to generate keys using OpenSSL. Please ensure you have OpenSSL ' +
+      'installed and configured on your system.'
+    )
+    process.exit(1)
+  }
 }
 
 /**
@@ -48,32 +88,8 @@ var keys = loadKeys()
 
 if (!keys) {
 
-  try {
-    mkdirp.sync(keyDirectory)
-
-    exec('openssl', [
-      'genrsa',
-      '-out',
-      defaultPrivateKeyFile,
-      '4096'
-    ])
-
-    exec('openssl', [
-      'rsa',
-      '-pubout',
-      '-in',
-      defaultPrivateKeyFile,
-      '-out',
-      defaultPublicKeyFile
-    ])
-
-  } catch (e) {
-    console.log(
-      'Failed to generate keys using OpenSSL. Please ensure you have OpenSSL ' +
-      'installed and configured on your system.'
-    )
-    process.exit(1)
-  }
+  generateKeys(keyDirectory, sigPubKeyFile, sigPrvKeyFile)
+  generateKeys(keyDirectory, encPubKeyFile, encPrvKeyFile)
 
   // Try again
   keys = loadKeys()
@@ -88,23 +104,33 @@ if (!keys) {
 }
 
 /**
- * Create JWK from public key
+ * Create JWKs from public keys
  */
 
-var jwk = pem2jwk(keys.publicKey)
+var sig = pem2jwk(keys.sig.pub)
+var enc = pem2jwk(keys.enc.pub)
 
 /**
  * JWK Set
  */
 
 keys.jwks = {
-  keys: [{
-    kty: jwk.kty,
-    use: 'sig',
-    alg: 'RS256',
-    n: jwk.n,
-    e: jwk.e
-  }]
+  keys: [
+    {
+      kty: sig.kty,
+      use: 'sig',
+      alg: 'RS256',
+      n: sig.n,
+      e: sig.e
+    },
+    {
+      kty: enc.kty,
+      use: 'enc',
+      alg: 'RS256',
+      n: enc.n,
+      e: enc.e
+    }
+  ]
 }
 
 /**

@@ -25,7 +25,7 @@ function verifyClientToken (req, res, next) {
   // header found
   } else {
     var jwt = header.replace('Bearer ', '')
-    var token = ClientToken.decode(jwt, settings.publicKey)
+    var token = ClientToken.decode(jwt, settings.keys.sig.pub)
 
     // failed to decode
     if (!token || token instanceof Error) {
