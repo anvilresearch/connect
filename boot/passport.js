@@ -88,7 +88,11 @@ exports.authenticate = function (provider, req, res, next, options, callback) {
 exports.login = function (req, user) {
   req.session.user = user._id
   oidc.setSessionAmr(req.session, req.provider.amr)
-  req.session.opbs = crypto.randomBytes(256).toString('hex')
+
+  // only update the OP Browser State if the user is not already logged in
+  if (!req.user) {
+    req.session.opbs = crypto.randomBytes(256).toString('hex')
+  }
 }
 
 exports.logout = function (req) {
