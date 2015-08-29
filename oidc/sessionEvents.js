@@ -9,7 +9,7 @@ var checkSession = require('./checkSession')
  */
 
 function sessionEvents (req, res) {
-  req.socket.setTimeout(Infinity)
+  req.socket.setTimeout(0)
 
   // Headers
   res.writeHead(200, {
