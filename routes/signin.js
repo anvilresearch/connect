@@ -5,8 +5,7 @@
 var oidc = require('../oidc')
 var settings = require('../boot/settings')
 var mailer = require('../boot/mailer').getMailer()
-var passport = require('passport')
-var crypto = require('crypto')
+var passport = require('../boot/passport')
 var qs = require('qs')
 var InvalidRequestError = require('../errors/InvalidRequestError')
 var providers = require('../providers')
@@ -54,7 +53,7 @@ module.exports = function (server) {
       if (!req.provider) {
         next(new InvalidRequestError('Invalid provider'))
       } else {
-        passport.authenticate(req.body.provider, function (err, user, info) {
+        passport.authenticate(req.body.provider, req, res, next, function (err, user, info) {
           if (err) {
             res.render('signin', {
               params: qs.stringify(req.body),
@@ -74,14 +73,10 @@ module.exports = function (server) {
               formError: info.message
             })
           } else {
-            req.login(user, function (err) {
-              if (err) { return next(err) }
-              oidc.setSessionAmr(req.session, req.provider.amr)
-              req.session.opbs = crypto.randomBytes(256).toString('hex')
-              next()
-            })
+            passport.login(req, user)
+            next()
           }
-        })(req, res, next)
+        })
       }
     },
     oidc.requireVerifiedEmail(),

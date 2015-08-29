@@ -22,7 +22,7 @@ describe 'Require Signin', ->
   beforeEach ->
     req = (params, authenticated) ->
       connectParams: params
-      isAuthenticated: -> authenticated
+      user: if authenticated then {} else undefined
       client: {}
       session: {}
     res = redirect: sinon.spy()

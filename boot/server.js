@@ -10,7 +10,6 @@ var logger = require('./logger')(settings.logger)
 require('./mailer').getMailer()
 require('./database')()
 var express = require('express')
-var passport = require('passport')
 var cons = require('consolidate')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
@@ -91,13 +90,6 @@ module.exports = function (server) {
    */
 
   server.use(connectFlash())
-
-  /**
-   * Passport Authentication Middleware
-   */
-
-  server.use(passport.initialize())
-  server.use(passport.session())
 
   /**
    * Cross-Origin Support

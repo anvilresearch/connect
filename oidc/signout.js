@@ -2,7 +2,7 @@
  * Module dependencies
  */
 
-var crypto = require('crypto')
+var passport = require('../boot/passport')
 var settings = require('../boot/settings')
 var Client = require('../models/Client')
 var IDToken = require('../models/IDToken')
@@ -34,9 +34,7 @@ function signout (req, res, next) {
         // the uri is not registered.
         // logout, but don't redirect.
         } else if (client.post_logout_redirect_uris.indexOf(uri) === -1) {
-          req.session.opbs = crypto.randomBytes(256).toString('hex')
-          delete req.session.amr
-          req.logout()
+          passport.logout(req)
 
           res.set({
             'Cache-Control': 'no-store',
@@ -47,9 +45,7 @@ function signout (req, res, next) {
 
         // logout and redirect
         } else {
-          req.session.opbs = crypto.randomBytes(256).toString('hex')
-          delete req.session.amr
-          req.logout()
+          passport.logout(req)
           res.redirect(uri)
         }
       })
@@ -61,16 +57,12 @@ function signout (req, res, next) {
 
   // there's no way to verify the uri
   } else if (uri) {
-    req.session.opbs = crypto.randomBytes(256).toString('hex')
-    delete req.session.amr
-    req.logout()
+    passport.logout(req)
     res.redirect(uri)
 
   // logout and respond without redirect
   } else {
-    req.session.opbs = crypto.randomBytes(256).toString('hex')
-    delete req.session.amr
-    req.logout()
+    passport.logout(req)
 
     res.set({
       'Cache-Control': 'no-store',
