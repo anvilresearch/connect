@@ -21,6 +21,29 @@ exports.registerProviders = function () {
   })
 }
 
+/**
+ * Set req.user
+ */
+
+function setUserOnRequest (req, res, next) {
+  if (!req.session.user) {
+    return next()
+  }
+  
+  User.get(req.session.user, function (err, user) {
+    if (err) {
+      return next(err)
+    }
+    if (!user) {
+      delete req.session.user
+      return next()
+    }
+    req.user = user
+    next()
+  })
+}
+exports.setUserOnRequest = setUserOnRequest
+
 exports.authenticate = function (provider, req, res, next, options, callback) {
   var baseStrategy = strategies[provider]
 
@@ -52,17 +75,7 @@ exports.authenticate = function (provider, req, res, next, options, callback) {
     if (callback) {
       callback(null, null, info)
     } else {
-      User.get(req.session.user, function (err, user) {
-        if (err) {
-          return strategy.error(err)
-        }
-        if (!user) {
-          delete req.session.user
-          return next()
-        }
-        req.user = user
-        next()
-      })
+      setUserOnRequest(req, res, next)
     }
   }
 
