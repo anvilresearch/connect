@@ -10,7 +10,7 @@ var server = express()
  */
 
 require('./boot/server')(server)
-require('./boot/passport').registerProviders()
+require('./lib/authenticator').registerProviders()
 
 /**
  * Routes

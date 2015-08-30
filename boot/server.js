@@ -9,7 +9,7 @@ var client = require('./redis').getClient()
 var logger = require('./logger')(settings.logger)
 require('./mailer').getMailer()
 require('./database')()
-var passport = require('./passport')
+var authenticator = require('../lib/authenticator')
 var express = require('express')
 var cons = require('consolidate')
 var cookieParser = require('cookie-parser')
@@ -91,12 +91,12 @@ module.exports = function (server) {
    */
 
   server.use(connectFlash())
-  
+
   /**
    * Set user on request
    */
-   
-  server.use(passport.setUserOnRequest)
+
+  server.use(authenticator.setUserOnRequest)
 
   /**
    * Cross-Origin Support

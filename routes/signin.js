@@ -5,7 +5,7 @@
 var oidc = require('../oidc')
 var settings = require('../boot/settings')
 var mailer = require('../boot/mailer').getMailer()
-var passport = require('../boot/passport')
+var authenticator = require('../lib/authenticator')
 var qs = require('qs')
 var InvalidRequestError = require('../errors/InvalidRequestError')
 var providers = require('../providers')
@@ -53,7 +53,7 @@ module.exports = function (server) {
       if (!req.provider) {
         next(new InvalidRequestError('Invalid provider'))
       } else {
-        passport.authenticate(req.body.provider, req, res, next, function (err, user, info) {
+        authenticator.dispatch(req.body.provider, req, res, next, function (err, user, info) {
           if (err) {
             res.render('signin', {
               params: qs.stringify(req.body),
@@ -73,7 +73,7 @@ module.exports = function (server) {
               formError: info.message
             })
           } else {
-            passport.login(req, user)
+            authenticator.login(req, user)
             next()
           }
         })
