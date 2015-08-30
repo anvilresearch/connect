@@ -19,8 +19,12 @@ function sendVerificationEmail (req, res, next) {
   } else {
     var user = req.user
 
+    var ttl = (settings.emailVerification &&
+      settings.emailVerification.tokenTTL) ||
+      (3600 * 24 * 7)
+
     OneTimeToken.issue({
-      ttl: 3600 * 24 * 7,
+      ttl: ttl,
       sub: user._id,
       use: 'emailVerification'
     }, function (err, token) {
