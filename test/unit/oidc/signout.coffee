@@ -85,28 +85,26 @@ describe 'Signout', ->
               opbs: opbs
           res =
             set: sinon.spy()
-            send: sinon.spy()
+            sendStatus: sinon.spy (status) ->
+              done()
             redirect: sinon.spy()
-          next = sinon.spy (error) ->
-            err = error
-            done()
-
+          next = sinon.spy()
           signout(req, res, next)
 
         after ->
           Client.get.restore()
 
-        it 'should not update OP browser state', ->
-          req.session.opbs.should.equal opbs
+        it 'should update OP browser state', ->
+          req.session.opbs.should.not.equal opbs
 
-        it 'should provide an error', ->
-          next.should.have.been.called
+        it 'should not continue', ->
+          next.should.not.have.been.called
 
         it 'should not redirect', ->
           res.redirect.should.not.have.been.called
 
-        it 'should not respond', ->
-          res.send.should.not.have.been.called
+        it 'should respond', ->
+          res.sendStatus.should.have.been.called
 
 
       describe 'and unknown uri', ->
@@ -195,17 +193,33 @@ describe 'Signout', ->
       invalidIDToken = 'WRONG'
 
 
-      before ->
+      before (done) ->
+        opbs = 'b3f0r3'
         req =
           query:
             post_logout_redirect_uri: 'http://example.com'
             id_token_hint: invalidIDToken
-        res = {}
+          session:
+            opbs: opbs
+        res =
+          set: sinon.spy()
+          sendStatus: sinon.spy (status) ->
+            done()
+          redirect: sinon.spy()
         next = sinon.spy()
         signout(req, res, next)
 
-      it 'should provide an InvalidTokenError', ->
-        next.should.have.been.calledWith sinon.match.instanceOf InvalidTokenError
+      it 'should update OP browser state', ->
+        req.session.opbs.should.not.equal opbs
+
+      it 'should not continue', ->
+        next.should.not.have.been.called
+
+      it 'should not redirect', ->
+        res.redirect.should.not.have.been.called
+
+      it 'should respond', ->
+        res.sendStatus.should.have.been.called
 
 
 
