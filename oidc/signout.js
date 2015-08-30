@@ -55,11 +55,6 @@ function signout (req, res, next) {
       return next(new InvalidTokenError("Can't decode id_token_hint"))
     }
 
-  // there's no way to verify the uri
-  } else if (uri) {
-    passport.logout(req)
-    res.redirect(uri)
-
   // logout and respond without redirect
   } else {
     passport.logout(req)
