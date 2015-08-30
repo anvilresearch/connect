@@ -12,6 +12,7 @@ chai.should()
 
 
 settings = require '../../../boot/settings'
+authenticator = require '../../../lib/authenticator'
 Client = require '../../../models/Client'
 IDToken = require '../../../models/IDToken'
 InvalidTokenError = require '../../../errors/InvalidTokenError'
@@ -54,7 +55,6 @@ describe 'Signout', ->
               id_token_hint: validIDToken
             session:
               opbs: opbs
-            logout: sinon.spy()
           res =
             set: sinon.spy()
             send: sinon.spy()
@@ -83,7 +83,6 @@ describe 'Signout', ->
               id_token_hint: validIDToken
             session:
               opbs: opbs
-            logout: sinon.spy()
           res =
             set: sinon.spy()
             send: sinon.spy()
@@ -113,6 +112,7 @@ describe 'Signout', ->
       describe 'and unknown uri', ->
 
         before ->
+          sinon.spy authenticator, 'logout'
           client = new Client
             post_logout_redirect_uris: []
           sinon.stub(Client, 'get').callsArgWith(1, null, client)
@@ -124,7 +124,6 @@ describe 'Signout', ->
             session:
               opbs: opbs
               amr: ['pwd']
-            logout: sinon.spy()
           res =
             set: sinon.spy()
             sendStatus: sinon.spy()
@@ -133,10 +132,11 @@ describe 'Signout', ->
           signout(req, res, next)
 
         after ->
+          authenticator.logout.restore()
           Client.get.restore()
 
         it 'should logout', ->
-          req.logout.should.have.been.called
+          authenticator.logout.should.have.been.called
 
         it 'should update OP browser state', ->
           req.session.opbs.should.not.equal opbs
@@ -151,6 +151,7 @@ describe 'Signout', ->
       describe 'and valid uri', ->
 
         before ->
+          sinon.spy authenticator, 'logout'
           client = new Client
             post_logout_redirect_uris: ['http://example.com']
           sinon.stub(Client, 'get').callsArgWith(1, null, client)
@@ -162,7 +163,6 @@ describe 'Signout', ->
             session:
               opbs: opbs
               amr: ['otp']
-            logout: sinon.spy()
           res =
             set: sinon.spy()
             send: sinon.spy()
@@ -171,10 +171,11 @@ describe 'Signout', ->
           signout(req, res, next)
 
         after ->
+          authenticator.logout.restore()
           Client.get.restore()
 
         it 'should logout', ->
-          req.logout.should.have.been.called
+          authenticator.logout.should.have.been.called
 
         it 'should update OP browser state', ->
           req.session.opbs.should.not.equal opbs
@@ -212,6 +213,7 @@ describe 'Signout', ->
   describe 'with uri only', ->
 
     before ->
+      sinon.spy authenticator, 'logout'
       opbs = 'b3f0r3'
       req =
         query:
@@ -219,14 +221,18 @@ describe 'Signout', ->
         session:
           opbs: opbs
           amr: ['sms', 'otp']
-        logout: sinon.spy()
       res =
         redirect: sinon.spy()
+        set: sinon.spy()
+        sendStatus: sinon.spy()
       next = sinon.spy()
       signout(req, res, next)
 
+    after ->
+      authenticator.logout.restore()
+
     it 'should logout', ->
-      req.logout.should.have.been.called
+      authenticator.logout.should.have.been.called
 
     it 'should update OP browser state', ->
       req.session.opbs.should.not.equal opbs
@@ -234,8 +240,8 @@ describe 'Signout', ->
     it 'should delete amr from session', ->
       expect(req.session.amr).to.be.undefined
 
-    it 'should redirect', ->
-      res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri
+    it 'should not redirect', ->
+      res.redirect.should.not.have.been.called
 
 
 
@@ -243,21 +249,24 @@ describe 'Signout', ->
   describe 'without uri', ->
 
     before ->
+      sinon.spy authenticator, 'logout'
       opbs = 'b3f0r3'
       req =
         query: {}
         session:
           opbs: opbs
           amr: ['pwd']
-        logout: sinon.spy()
       res =
         set: sinon.spy()
         sendStatus: sinon.spy()
       next = sinon.spy()
       signout(req, res, next)
 
+    after ->
+      authenticator.logout.restore()
+
     it 'should logout', ->
-      req.logout.should.have.been.called
+      authenticator.logout.should.have.been.called
 
     it 'should update OP browser state', ->
       req.session.opbs.should.not.equal opbs

@@ -9,8 +9,8 @@ var client = require('./redis').getClient()
 var logger = require('./logger')(settings.logger)
 require('./mailer').getMailer()
 require('./database')()
+var authenticator = require('../lib/authenticator')
 var express = require('express')
-var passport = require('passport')
 var cons = require('consolidate')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
@@ -93,11 +93,10 @@ module.exports = function (server) {
   server.use(connectFlash())
 
   /**
-   * Passport Authentication Middleware
+   * Set user on request
    */
 
-  server.use(passport.initialize())
-  server.use(passport.session())
+  server.use(authenticator.setUserOnRequest)
 
   /**
    * Cross-Origin Support

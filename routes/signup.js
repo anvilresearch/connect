@@ -7,8 +7,7 @@
 var oidc = require('../oidc')
 var settings = require('../boot/settings')
 var passwordProvider = require('../providers').password
-var crypto = require('crypto')
-var passport = require('passport')
+var authenticator = require('../lib/authenticator')
 var qs = require('qs')
 var User = require('../models/User')
 var PasswordsDisabledError = require('../errors/PasswordsDisabledError')
@@ -49,21 +48,17 @@ module.exports = function (server) {
           error: err.message
         })
       } else {
-        passport.authenticate('password', function (err, user, info) {
+        authenticator.dispatch('password', req, res, next, function (err, user, info) {
           if (err) { return next(err) }
           if (!user) {
           } else {
-            req.login(user, function (err) {
-              if (err) { return next(err) }
-              oidc.setSessionAmr(req.session, req.provider.amr)
-              req.session.opbs = crypto.randomBytes(256).toString('hex')
-              req.sendVerificationEmail =
-                req.provider.emailVerification.enable
-              req.flash('isNewUser', true)
-              next()
-            })
+            authenticator.login(req, user)
+            req.sendVerificationEmail =
+              req.provider.emailVerification.enable
+            req.flash('isNewUser', true)
+            next()
           }
-        })(req, res, next)
+        })
       }
     })
   }

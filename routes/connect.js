@@ -4,8 +4,7 @@
 
 var settings = require('../boot/settings')
 var oidc = require('../oidc')
-var passport = require('passport')
-var crypto = require('crypto')
+var authenticator = require('../lib/authenticator')
 var qs = require('qs')
 var NotFoundError = require('../errors/NotFoundError')
 
@@ -30,10 +29,10 @@ module.exports = function (server) {
 
       // Authorize
       if (config) {
-        passport.authenticate(provider, {
+        authenticator.dispatch(provider, req, res, next, {
           scope: config.scope,
           state: req.authorizationId
-        })(req, res, next)
+        })
 
       // NOT FOUND
       } else {
@@ -53,7 +52,7 @@ module.exports = function (server) {
 
     function (req, res, next) {
       if (settings.providers[req.params.provider]) {
-        passport.authenticate(req.params.provider, function (err, user, info) {
+        authenticator.dispatch(req.params.provider, req, res, next, function (err, user, info) {
           if (err) { return next(err) }
 
           // render the signin screen with an error
@@ -67,14 +66,10 @@ module.exports = function (server) {
 
           // login the user
           } else {
-            req.login(user, function (err) {
-              if (err) { return next(err) }
-              oidc.setSessionAmr(req.session, req.provider.amr)
-              req.session.opbs = crypto.randomBytes(256).toString('hex')
-              next()
-            })
+            authenticator.login(req, user)
+            next()
           }
-        })(req, res, next)
+        })
 
       // NOT FOUND
       } else {

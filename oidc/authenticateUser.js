@@ -31,7 +31,7 @@ function authenticateUser (req, res, next) {
     })
 
   // User is not authenticated.
-  } else if (!req.isAuthenticated()) {
+  } else if (!req.user) {
     next(new UnauthorizedError({
       statusCode: 401
     }))

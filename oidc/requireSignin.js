@@ -18,14 +18,14 @@ function requireSignin (req, res, next) {
 
   // redirect with error if unauthenticated
   // and prompt is "none"
-  if (!req.isAuthenticated() && prompt === 'none') {
+  if (!req.user && prompt === 'none') {
     res.redirect(req.connectParams.redirect_uri + responseMode + qs.stringify({
       error: 'login_required',
       session_state: sessionState(req.client, req.client.client_uri, req.session.opbs)
     }))
 
   // prompt to sign in
-  } else if (!req.isAuthenticated() || prompt === 'login') {
+  } else if (!req.user || prompt === 'login') {
     res.redirect('/signin?' + qs.stringify(req.connectParams))
 
   // do not prompt to sign in

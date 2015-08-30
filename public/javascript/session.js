@@ -5,8 +5,9 @@
    * Initialize browser state
    */
 
-  var re = new RegExp('[; ]anvil.connect.op.state=([^\\s;]*)')
-  var opbs = document.cookie.match(re).pop()
+  var re = /\banvil\.connect\.op\.state=([^\s;]*)/
+  var stateCookie = document.cookie.match(re)
+  var opbs = stateCookie && stateCookie.pop()
   var localStorage = window.localStorage
   var EventSource = window.EventSource
   var CryptoJS = window.CryptoJS

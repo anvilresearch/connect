@@ -3,7 +3,6 @@
  */
 
 var express = require('express')
-var passport = require('passport')
 var server = express()
 
 /**
@@ -11,7 +10,7 @@ var server = express()
  */
 
 require('./boot/server')(server)
-require('./boot/passport')(passport)
+require('./lib/authenticator').registerProviders()
 
 /**
  * Routes

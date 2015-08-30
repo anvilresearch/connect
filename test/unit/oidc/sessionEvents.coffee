@@ -36,7 +36,7 @@ describe 'Session Events', ->
     sessionEvents(req, res)
 
   it 'should set the socket timeout', ->
-    req.socket.setTimeout.should.have.been.calledWith Infinity
+    req.socket.setTimeout.should.have.been.calledWith 0
 
   it 'should respond 200', ->
 

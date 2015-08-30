@@ -7,3 +7,4 @@ public/vendor
 dump.rdb
 appendonly.aof
 npm-debug.log
+.settings

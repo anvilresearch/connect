@@ -89,7 +89,7 @@ describe 'Authenticate User', ->
 
     before ->
       req =
-        isAuthenticated: sinon.stub().returns(true)
+        user: {}
       res = {}
       next = sinon.spy()
 
@@ -107,8 +107,7 @@ describe 'Authenticate User', ->
   describe 'with unauthenticated session', ->
 
     before ->
-      req =
-        isAuthenticated: sinon.stub().returns(false)
+      req = {}
       res = {}
       next = sinon.spy()
 
