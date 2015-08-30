@@ -30,6 +30,7 @@ function checkSession (req, res, next) {
       }, 3000)
     })
   }
+  compareOpbs()
 }
 
 /**
