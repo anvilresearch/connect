@@ -6,7 +6,6 @@ var authenticator = require('../lib/authenticator')
 var settings = require('../boot/settings')
 var Client = require('../models/Client')
 var IDToken = require('../models/IDToken')
-var InvalidTokenError = require('../errors/InvalidTokenError')
 
 /**
  * Signout
