@@ -1,3 +1,67 @@
+<a name="0.1.51"></a>
+## 0.1.51 (2015-08-31)
+
+
+* Add Slack IRC Gateway link ([b5ac7d6](https://github.com/anvilresearch/connect/commit/b5ac7d6))
+* Add Slack IRC Gateway link to badges ([e93032e](https://github.com/anvilresearch/connect/commit/e93032e))
+* fix(oidc/sessionEvents): Infinity is not supported ([47b25b8](https://github.com/anvilresearch/connect/commit/47b25b8))
+* fix(public/javascript/session): Avoid TypeError ([57dd37c](https://github.com/anvilresearch/connect/commit/57dd37c))
+* fix(public/javascript/session): Improve cookie-handling regex ([6f71ab0](https://github.com/anvilresearch/connect/commit/6f71ab0))
+* Merge pull request #193 from anvilresearch/vsimonian-email-template-override ([b178e9a](https://github.com/anvilresearch/connect/commit/b178e9a))
+* Merge pull request #194 from anvilresearch/vsimonian-fix-amr-userinfo-config ([295e776](https://github.com/anvilresearch/connect/commit/295e776))
+* Merge pull request #195 from anvilresearch/christiansmith-amr-fixes ([bcad6b8](https://github.com/anvilresearch/connect/commit/bcad6b8))
+* Merge pull request #196 from anvilresearch/christiansmith-daystocrack ([d407b79](https://github.com/anvilresearch/connect/commit/d407b79))
+* Merge pull request #197 from anvilresearch/christiansmith-genkeypair-187 ([05d4e35](https://github.com/anvilresearch/connect/commit/05d4e35))
+* Merge pull request #199 from anvilresearch/christiansmith-keys-198 ([e57aaa8](https://github.com/anvilresearch/connect/commit/e57aaa8))
+* Merge pull request #201 from anvilresearch/vsimonian-fix-client-reg-tests ([ecece10](https://github.com/anvilresearch/connect/commit/ecece10))
+* Merge pull request #204 from anvilresearch/christiansmith-renamekeys-200 ([d55b578](https://github.com/anvilresearch/connect/commit/d55b578))
+* Merge pull request #205 from anvilresearch/vsimonian-no-passport ([251e670](https://github.com/anvilresearch/connect/commit/251e670))
+* Merge pull request #206 from anvilresearch/christiansmith-email-token-ttl-175 ([d4b9a8b](https://github.com/anvilresearch/connect/commit/d4b9a8b))
+
+### chore
+
+* chore(gitignore): Ignore IDE settings ([ee3ab78](https://github.com/anvilresearch/connect/commit/ee3ab78))
+* chore(npm): update dependencies ([f079dee](https://github.com/anvilresearch/connect/commit/f079dee))
+* chore(npm): update dependencies ([b450492](https://github.com/anvilresearch/connect/commit/b450492))
+
+### feat
+
+* feat(boot): generate token-signing keypair if missing on boot ([6326176](https://github.com/anvilresearch/connect/commit/6326176))
+* feat(email): configurable email verification token ttl ([ea5f95e](https://github.com/anvilresearch/connect/commit/ea5f95e))
+* feat(keys): add keypair for encryption and rename files ([d8dffe1](https://github.com/anvilresearch/connect/commit/d8dffe1))
+* feat(settings): configurable "daysToCrack" for password provider ([2dea0c8](https://github.com/anvilresearch/connect/commit/2dea0c8))
+
+### fix
+
+* fix: Allow overriding amr and refresh_userinfo values with falsy values ([3410730](https://github.com/anvilresearch/connect/commit/3410730)), closes [#191](https://github.com/anvilresearch/connect/issues/191)
+* fix: Move conditional logic for amr/refresh_userinfo set ([a9bb320](https://github.com/anvilresearch/connect/commit/a9bb320)), closes [#191](https://github.com/anvilresearch/connect/issues/191)
+* fix(checkSession): Avoid unecessary throws ([d5de56b](https://github.com/anvilresearch/connect/commit/d5de56b))
+* fix(checkSession): Execute inner logic ([e9a88e7](https://github.com/anvilresearch/connect/commit/e9a88e7))
+* fix(checkSession): only issue event once per opbs change ([a901685](https://github.com/anvilresearch/connect/commit/a901685))
+* fix(email): Allow e-mail templates to be overridden ([d150e24](https://github.com/anvilresearch/connect/commit/d150e24)), closes [#190](https://github.com/anvilresearch/connect/issues/190)
+* fix(jwks): correct reference at jwks endpoint ([f3f22e0](https://github.com/anvilresearch/connect/commit/f3f22e0))
+* fix(login): change OP Browser state on login only when user is unauthenticated ([8a8d8c1](https://github.com/anvilresearch/connect/commit/8a8d8c1))
+* fix(login): Fix conditional logic for opbs ([c98dae7](https://github.com/anvilresearch/connect/commit/c98dae7))
+* fix(oidc): set amr values consistently ([dfeb0eb](https://github.com/anvilresearch/connect/commit/dfeb0eb))
+* fix(req.user): Always set req.user during authenticated sessions ([3f372d0](https://github.com/anvilresearch/connect/commit/3f372d0))
+* fix(signout): Don't use unverified redirect URIs ([20f651d](https://github.com/anvilresearch/connect/commit/20f651d))
+* fix(test): fix signout middleware tests ([112a3a3](https://github.com/anvilresearch/connect/commit/112a3a3))
+* fix(tests): Stub client reg type setting for client reg tests ([1e3d10a](https://github.com/anvilresearch/connect/commit/1e3d10a))
+
+### refactor
+
+* refactor: Remove passport dependency ([aacc12d](https://github.com/anvilresearch/connect/commit/aacc12d)), closes [#143](https://github.com/anvilresearch/connect/issues/143)
+* refactor(authenticator): rename passport shim to Authenticator ([f72cdf6](https://github.com/anvilresearch/connect/commit/f72cdf6))
+* refactor(keys): de-nest config/keys directory ([3d8fdbc](https://github.com/anvilresearch/connect/commit/3d8fdbc))
+* refactor(keys): reorganize keys on settings ([cc095c1](https://github.com/anvilresearch/connect/commit/cc095c1))
+* refactor(providers): Merge duplicate conditional statement ([b9dd8f8](https://github.com/anvilresearch/connect/commit/b9dd8f8))
+
+### style
+
+* style: Remove unused InvalidTokenError import ([7ba3d07](https://github.com/anvilresearch/connect/commit/7ba3d07))
+
+
+
 <a name="0.1.50"></a>
 ## 0.1.50 (2015-08-23)
 
