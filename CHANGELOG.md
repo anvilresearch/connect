@@ -1,3 +1,15 @@
+<a name="0.1.52"></a>
+## 0.1.52 (2015-09-01)
+
+
+### fix
+
+* fix(authenticator): Guard against undefined sessions ([81ef8ea](https://github.com/anvilresearch/connect/commit/81ef8ea))
+
+* Merge pull request #209 from anvilresearch/vsimonian-fix-undefined-sessions ([8c06877](https://github.com/anvilresearch/connect/commit/8c06877))
+
+
+
 <a name="0.1.51"></a>
 ## 0.1.51 (2015-08-31)
 
