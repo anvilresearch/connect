@@ -415,6 +415,52 @@ describe 'Authorize', ->
       )
 
 
+  describe 'with consent and "none" response type', ->
+
+    before (done) ->
+      sinon.stub(AuthorizationCode, 'insert').callsArgWith(1, null, {
+        code: '1234'
+      })
+
+      req =
+        session: {}
+        client:
+          _id: 'uuid1'
+        user:
+          _id: 'uuid2'
+        connectParams:
+          authorize:      'true'
+          response_type:  'none'
+          redirect_uri:   'https://host/callback'
+          state:          'r4nd0m'
+      res =
+        redirect: sinon.spy()
+      next = sinon.spy()
+
+      authorize req, res, next
+      done()
+
+    after ->
+      AuthorizationCode.insert.restore()
+
+    it 'should redirect to the redirect_uri', ->
+      res.redirect.should.have.been.calledWith sinon.match(
+        req.connectParams.redirect_uri
+      )
+
+    it 'should provide a query string', ->
+      res.redirect.should.have.been.calledWith sinon.match('?')
+
+    it 'should not provide authorization code', ->
+      res.redirect.should.not.have.been.calledWith sinon.match 'code=1234'
+
+    it 'should provide state', ->
+      res.redirect.should.have.been.calledWith sinon.match 'state=r4nd0m'
+
+    it 'should not provide session_state', ->
+      res.redirect.should.not.have.been.calledWith sinon.match('session_state=')
+
+
 
   describe 'with consent and response mode param', ->
 

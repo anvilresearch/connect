@@ -81,7 +81,8 @@ settings.response_types_supported = [
   'id_token',
   'token id_token',
   'id_token token',
-  'code id_token token'
+  'code id_token token',
+  'none'
 ]
 
 /**
