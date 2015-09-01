@@ -15,7 +15,8 @@ var responseTypes = [
   'id_token', // implicit flow
   'token id_token', // implicit flow
   'id_token token', // implicit flow
-  'code id_token token' // hybrid flow
+  'code id_token token', // hybrid flow
+  'none' //
 ]
 
 /**

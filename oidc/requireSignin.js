@@ -12,9 +12,9 @@ var sessionState = require('./sessionState')
 function requireSignin (req, res, next) {
   var params = req.connectParams
   var prompt = params.prompt
-  var responseTypes = params.response_type.split(' ')
   var responseMode = params.response_mode ||
-    (responseTypes.indexOf('code') !== -1) ? '?' : '#'
+    (params.response_type === 'code' ||
+      params.response_type === 'none') ? '?' : '#'
 
   // redirect with error if unauthenticated
   // and prompt is "none"

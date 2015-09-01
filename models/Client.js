@@ -63,7 +63,8 @@ var Client = Modinha.define('clients', {
     enum: [
       'code',
       'id_token',
-      'id_token token'
+      'id_token token',
+      'none'
     ]
   },
 
