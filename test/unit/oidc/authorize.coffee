@@ -188,8 +188,8 @@ describe 'Authorize', ->
         req.connectParams.redirect_uri
       )
 
-    it 'should provide a query string', ->
-      res.redirect.should.have.been.calledWith sinon.match('?')
+    it 'should provide a uri fragment', ->
+      res.redirect.should.have.been.calledWith sinon.match('#')
 
     it 'should provide authorization code', ->
       res.redirect.should.have.been.calledWith sinon.match 'code=1234'
@@ -256,8 +256,8 @@ describe 'Authorize', ->
         req.connectParams.redirect_uri
       )
 
-    it 'should provide a query string', ->
-      res.redirect.should.have.been.calledWith sinon.match('?')
+    it 'should provide a uri fragment', ->
+      res.redirect.should.have.been.calledWith sinon.match('#')
 
     it 'should provide authorization code', ->
       res.redirect.should.have.been.calledWith sinon.match 'code=1234'
@@ -385,8 +385,8 @@ describe 'Authorize', ->
         req.connectParams.redirect_uri
       )
 
-    it 'should provide a query string', ->
-      res.redirect.should.have.been.calledWith sinon.match('?')
+    it 'should provide a uri fragment', ->
+      res.redirect.should.have.been.calledWith sinon.match('#')
 
     it 'should provide authorization code', ->
       res.redirect.should.have.been.calledWith sinon.match 'code=1234'
