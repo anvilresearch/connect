@@ -1,3 +1,5 @@
+/* global process */
+
 /**
  * Module dependencies
  */
@@ -8,6 +10,7 @@ var Document = require('modinha-redis')
 var User = require('./User')
 var AuthorizationError = require('../errors/AuthorizationError')
 var base64url = require('base64url')
+var url = require('url')
 
 /**
  * Client model
@@ -45,7 +48,81 @@ var Client = Modinha.define('clients', {
     format: 'url',
     message: 'invalid_redirect_uri',
     messages: {
-      format: 'Must contain valid URIs'
+      format: 'Must contain valid URIs',
+      conform: 'Must follow guidelines in OpenID Connect Registration 1.0 ' +
+        'specification for client metadata'
+    },
+    conform: function (value, instance) {
+      var valid = true
+      var inDevelopment = process.env.NODE_ENV === 'development'
+
+      // Proceed with validation if there are redirect URIs defined
+      if (Array.isArray(instance.redirect_uris)) {
+
+        // Native clients
+        if (
+          instance.application_type === 'native'
+        ) {
+
+          // Check each redirect URI
+          instance.redirect_uris.forEach(function (uri) {
+            try {
+              var parsedURI = url.parse(uri)
+
+              // Native clients must register with http://localhost[:PORT]
+              // Here, we check if they are not
+              if (
+                parsedURI.hostname !== 'localhost' ||
+                parsedURI.protocol !== 'http:'
+              ) {
+                // If they don't, then they must use a custom scheme
+                // Here, we check if they are not
+                if (
+                  parsedURI.protocol === 'https:' ||
+                  parsedURI.protocol === 'http:'
+                ) {
+                  // Fail validation if the client has redirect URIs that are
+                  // neither http://localhost[:PORT] or using a custom scheme
+                  valid = false
+                }
+              }
+            } catch (err) {
+              // Fail validation in the unlikely event that URI cannot be parsed
+              valid = false
+            }
+          })
+
+        // Web clients with implicit grant type (not enforced in development)
+        } else if (
+          !inDevelopment &&
+          Array.isArray(instance.grant_types) &&
+          instance.grant_types.indexOf('implicit') !== -1
+        ) {
+
+          // Check each redirect URI
+          instance.redirect_uris.forEach(function (uri) {
+            try {
+              var parsedURI = url.parse(uri)
+
+              // Web clients must register with https and NOT with localhost
+              // Here, we check if they don't obey this rule
+              if (
+                parsedURI.hostname === 'localhost' ||
+                parsedURI.protocol !== 'https:'
+              ) {
+                // Fail validation
+                valid = false
+              }
+            } catch (err) {
+              // Fail validation in the unlikely event that URI cannot be parsed
+              valid = false
+            }
+          })
+
+        }
+      }
+
+      return valid
     }
   },
 

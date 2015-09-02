@@ -47,7 +47,7 @@ describe 'Client', ->
     rclient.multi.restore()
 
   {data,client,clients,role,roles,jsonClients} = {}
-  {err,validation,instance,instances,update,deleted,original,ids,info} = {}
+  {err,validation,instance,instances,update,deleted,original,ids,info,env} = {}
 
 
   before ->
@@ -298,6 +298,220 @@ describe 'Client', ->
 
       it 'should provide an error for jwks_uri', ->
         expect(withJWKsAndJWKsURI.errors.jwks_uri).to.be.an 'object'
+
+    describe 'redirect_uris', ->
+      
+      describe 'with native application_type', ->
+        
+        describe 'and http scheme with localhost', ->
+          
+          before ->          
+            validation = Client.initialize(
+              application_type: 'native'
+              redirect_uris: [
+                'http://localhost/callback',
+                'http://localhost/callback.html'
+              ]
+            ).validate()
+          
+          it 'should not provide an error', ->
+            expect(validation.errors.redirect_uris).to.be.undefined
+          
+        describe 'and custom scheme with localhost', ->
+          
+          before ->
+            validation = Client.initialize(
+              application_type: 'native'
+              redirect_uris: [
+                'udp://localhost/callback',
+                'udp://localhost/callback.html'
+              ]
+            ).validate()
+          
+          it 'should not provide an error', ->
+            expect(validation.errors.redirect_uris).to.be.undefined
+          
+        describe 'and custom scheme with custom host', ->
+          
+          before ->
+            validation = Client.initialize(
+              application_type: 'native'
+              redirect_uris: [
+                'udp://example.com/callback',
+                'udp://example.com/callback.html'
+              ]
+            ).validate()
+          
+          it 'should not provide an error', ->
+            expect(validation.errors.redirect_uris).to.be.undefined
+          
+        describe 'and https scheme with localhost', ->
+          
+          before ->
+            validation = Client.initialize(
+              application_type: 'native'
+              redirect_uris: [
+                'http://localhost/callback',
+                'https://localhost/callback'
+              ]
+            ).validate()
+          
+          it 'should provide an error', ->
+            expect(validation.errors.redirect_uris).to.be.an 'object'
+          
+        describe 'and http scheme with custom host', ->
+          
+          before ->
+            validation = Client.initialize(
+              application_type: 'native'
+              redirect_uris: [
+                'https://example.com/callback',
+                'http://example.com/callback'
+              ]
+            ).validate()
+          
+          it 'should provide an error', ->
+            expect(validation.errors.redirect_uris).to.be.an 'object'
+      
+      describe 'with web application_type and implicit grant_type', ->
+        
+        describe 'in development', ->
+          
+          before ->
+            env = process.env.NODE_ENV
+            process.env.NODE_ENV = 'development'
+            
+          after ->
+            process.env.NODE_ENV = env
+          
+          describe 'and https scheme with custom host', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'https://example.com/callback',
+                  'https://example.com/callback.html'
+                ]
+              ).validate()
+            
+            it 'should not provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.undefined
+            
+          describe 'and https scheme with localhost', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'https://localhost/callback',
+                  'https://localhost/callback.html'
+                ]
+              ).validate()
+            
+            it 'should not provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.undefined
+            
+          describe 'and http scheme with custom host', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'http://example.com/callback',
+                  'http://example.com/callback.html'
+                ]
+              ).validate()
+            
+            it 'should not provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.undefined
+            
+          describe 'and http scheme with localhost', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'http://localhost/callback',
+                  'http://localhost/callback.html'
+                ]
+              ).validate()
+            
+            it 'should not provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.undefined
+          
+        describe 'in production', ->
+          
+          before ->
+            env = process.env.NODE_ENV
+            process.env.NODE_ENV = 'production'
+            
+          after ->
+            process.env.NODE_ENV = env
+          
+          describe 'and https scheme with custom host', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'https://example.com/callback',
+                  'https://example.com/callback.html'
+                ]
+              ).validate()
+            
+            it 'should not provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.undefined
+            
+          describe 'and https scheme with localhost', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'https://localhost/callback',
+                  'https://localhost/callback.html'
+                ]
+              ).validate()
+            
+            it 'should provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.an 'object'
+            
+          describe 'and http scheme with custom host', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'http://example.com/callback',
+                  'http://example.com/callback.html'
+                ]
+              ).validate()
+            
+            it 'should provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.an 'object'
+            
+          describe 'and http scheme with localhost', ->
+          
+            before ->
+              validation = Client.initialize(
+                application_type: 'web'
+                grant_types: ['implicit']
+                redirect_uris: [
+                  'http://localhost/callback',
+                  'http://localhost/callback.html'
+                ]
+              ).validate()
+            
+            it 'should provide an error', ->
+              expect(validation.errors.redirect_uris).to.be.an 'object'
 
 
 
