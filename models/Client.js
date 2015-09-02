@@ -92,7 +92,7 @@ var Client = Modinha.define('clients', {
             }
           })
 
-        // Web clients with implicit grant type (enforced only in development)
+        // Web clients with implicit grant type (not enforced in development)
         } else if (
           !inDevelopment &&
           Array.isArray(instance.grant_types) &&
