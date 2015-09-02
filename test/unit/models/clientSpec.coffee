@@ -265,6 +265,43 @@ describe 'Client', ->
 
 
 
+  describe 'validation', ->
+
+    {withJWKs,withJWKsURI,withJWKsAndJWKsURI} = {}
+
+    describe 'with either jwks or jwks_uri set', ->
+
+      before ->
+        withJWKs = Client.initialize(
+          jwks: '1234567890'
+        ).validate()
+        withJWKsURI = Client.initialize(
+          jwks_uri: 'http://example.com/jwks'
+        ).validate()
+
+      it 'should not provide an error for jwks', ->
+        expect(withJWKs.errors.jwks).to.be.undefined
+
+      it 'should not provide an error for jwks_uri', ->
+        expect(withJWKs.errors.jwks_uri).to.be.undefined
+
+    describe 'with both jwks and jwks_uri set', ->
+
+      before ->
+        withJWKsAndJWKsURI = Client.initialize(
+          jwks: '1234567890'
+          jwks_uri: 'http://example.com/jwks'
+        ).validate()
+
+      it 'should provide an error for jwks', ->
+        expect(withJWKsAndJWKsURI.errors.jwks).to.be.an 'object'
+
+      it 'should provide an error for jwks_uri', ->
+        expect(withJWKsAndJWKsURI.errors.jwks_uri).to.be.an 'object'
+
+
+
+
   describe 'configuration', ->
 
     {client,configuration,token} = {}
