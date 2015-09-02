@@ -61,7 +61,6 @@ var Client = Modinha.define('clients', {
 
         // Native clients
         if (
-          instance.application_type &&
           instance.application_type === 'native'
         ) {
 
