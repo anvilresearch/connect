@@ -229,7 +229,13 @@ var Client = Modinha.define('clients', {
 
   jwks_uri: {
     type: 'string',
-    format: 'url'
+    format: 'url',
+    conform: function (value, instance) {
+      return !(value && instance.jwks)
+    },
+    messages: {
+      conform: 'Cannot use jwks_uri at the same time as jwks'
+    }
   },
 
   /**
@@ -247,7 +253,13 @@ var Client = Modinha.define('clients', {
    */
 
   jwks: {
-    type: 'string'
+    type: 'string',
+    conform: function (value, instance) {
+      return !(value && instance.jwks_uri)
+    },
+    messages: {
+      conform: 'Cannot use jwks at the same time as jwks_uri'
+    }
   },
 
   /**
@@ -633,41 +645,6 @@ Client.__client = client
  */
 
 Client.intersects('roles')
-
-/**
- * Custom validation
- */
-
-var originalValidate = Client.validate
-Client.validate = function (data) {
-  var validation = originalValidate.apply(this, arguments)
-
-  // http://openid.net/specs/openid-connect-registration-1_0.html#ClientMetadata
-  // "The jwks_uri and jwks parameters MUST NOT be used together."
-  if (data.jwks && data.jwks_uri) {
-    validation = validation || new Modinha.ValidationError({ errors: {} })
-
-    validation.errors.jwks = {
-      property: 'jwks',
-      expected: false,
-      actual: data.jwks,
-      message: 'Cannot use jwks at the same time as jwks_uri'
-    }
-
-    validation.errors.jwks_uri = {
-      property: 'jwks_uri',
-      expected: false,
-      actual: data.jwks_uri,
-      message: 'Cannot use jwks_uri at the same time as jwks'
-    }
-  }
-
-  return validation
-}
-
-Client.prototype.validate = function () {
-  return Client.validate(this)
-}
 
 /**
  * Authorized scope
