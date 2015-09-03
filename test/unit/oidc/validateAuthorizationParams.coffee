@@ -1,10 +1,12 @@
 chai = require 'chai'
 chai.should()
+expect = chai.expect
 
 
 
 
 {validateAuthorizationParams} = require '../../../oidc'
+settings = require '../../../boot/settings'
 
 
 
@@ -108,16 +110,56 @@ describe 'Validate Authorization Parameters', ->
 
 
 
-    describe 'with unsupported response_type', ->
+    describe 'with invalid response_type', ->
 
       before (done) ->
         params =
           redirect_uri: 'https://redirect.uri'
-          response_type: 'unsupported'
+          response_type: 'invalid'
 
         validateAuthorizationParams req(params), res, (error) ->
           err = error
           done()
+
+      it 'should provide an AuthorizationError', ->
+        err.name.should.equal 'AuthorizationError'
+
+      it 'should provide an error code', ->
+        err.error.should.equal 'unsupported_response_type'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Unsupported response type'
+
+      it 'should provide a redirect_uri', ->
+        err.redirect_uri.should.equal 'https://redirect.uri'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 302
+
+
+
+
+    describe 'with unsupported response_type', ->
+
+      supportedResponseTypes = settings.response_types_supported
+
+      before (done) ->
+        settings.response_types_supported = [
+          'code',
+          'id_token token',
+          'code id_token token'
+        ]
+
+        params =
+          redirect_uri: 'https://redirect.uri'
+          response_type: 'code token'
+
+        validateAuthorizationParams req(params), res, (error) ->
+          err = error
+          done()
+
+      after ->
+        settings.response_types_supported = supportedResponseTypes
 
       it 'should provide an AuthorizationError', ->
         err.name.should.equal 'AuthorizationError'
@@ -164,6 +206,37 @@ describe 'Validate Authorization Parameters', ->
 
       it 'should provide a status code', ->
         err.statusCode.should.equal 302
+
+
+
+
+    describe 'with supported and rearranged response_type', ->
+
+      supportedResponseTypes = settings.response_types_supported
+
+      before (done) ->
+        settings.response_types_supported = [
+          'code',
+          'id_token token',
+          'code id_token token'
+        ]
+
+        params =
+          redirect_uri: 'https://redirect.uri'
+          response_type: 'code token id_token'
+          client_id: 'uuid'
+          scope: 'openid'
+          nonce: 'nonce'
+
+        validateAuthorizationParams req(params), res, (error) ->
+          err = error
+          done()
+
+      after ->
+        settings.response_types_supported = supportedResponseTypes
+
+      it 'should not provide an error', ->
+        expect(err).to.not.be.ok
 
 
 
@@ -314,7 +387,3 @@ describe 'Validate Authorization Parameters', ->
 
       it 'should provide a status code', ->
         err.statusCode.should.equal 302
-
-
-
-

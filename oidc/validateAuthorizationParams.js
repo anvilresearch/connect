@@ -2,10 +2,11 @@
  * Module dependencies
  */
 
+var settings = require('../boot/settings')
 var AuthorizationError = require('../errors/AuthorizationError')
 
 /**
- * Supported response types
+ * Valid response types
  */
 
 var validResponseTypes = [
@@ -75,8 +76,38 @@ function validateAuthorizationParams (req, res, next) {
       }
     )
 
-  // unsupported response type
+  // invalid response type
   if (!isValidResponseType) {
+    return next(new AuthorizationError({
+      error: 'unsupported_response_type',
+      error_description: 'Unsupported response type',
+      redirect_uri: params.redirect_uri,
+      statusCode: 302
+    }))
+  }
+
+  // Check that there is at least one defined set of response_types that are
+  // supported together in settings.
+  //
+  // For example, if the settings allow 'code', 'id_token token', and
+  // 'code id_token token', then:
+  //
+  // - 'code' will pass
+  // - 'id_token token' will pass
+  // - 'code token id_token' will pass
+  // - 'token' will NOT pass
+  // - 'id_token code' will NOT pass
+  var isSupportedResponseType = settings.response_types_supported
+    .some(function (responseTypeString) {
+      var responseTypeSet = responseTypeString.split(' ')
+      return responseTypes.length === responseTypeSet.length &&
+        responseTypes.every(function (responseType) {
+          return responseTypeSet.indexOf(responseType) !== -1
+        })
+    })
+
+  // unsupported response type
+  if (!isSupportedResponseType) {
     return next(new AuthorizationError({
       error: 'unsupported_response_type',
       error_description: 'Unsupported response type',
