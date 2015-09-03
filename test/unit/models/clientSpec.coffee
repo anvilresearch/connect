@@ -92,11 +92,6 @@ describe 'Client', ->
     it 'should have response types', ->
       Client.schema.response_types.type.should.equal 'array'
 
-    it 'should enumerate valid response types', ->
-      Client.schema.response_types.enum.should.contain 'code'
-      Client.schema.response_types.enum.should.contain 'id_token'
-      Client.schema.response_types.enum.should.contain 'id_token token'
-
     it 'should have grant types', ->
       Client.schema.grant_types.type.should.equal 'array'
 
@@ -300,12 +295,12 @@ describe 'Client', ->
         expect(withJWKsAndJWKsURI.errors.jwks_uri).to.be.an 'object'
 
     describe 'redirect_uris', ->
-      
+
       describe 'with native application_type', ->
-        
+
         describe 'and http scheme with localhost', ->
-          
-          before ->          
+
+          before ->
             validation = Client.initialize(
               application_type: 'native'
               redirect_uris: [
@@ -313,12 +308,12 @@ describe 'Client', ->
                 'http://localhost/callback.html'
               ]
             ).validate()
-          
+
           it 'should not provide an error', ->
             expect(validation.errors.redirect_uris).to.be.undefined
-          
+
         describe 'and custom scheme with localhost', ->
-          
+
           before ->
             validation = Client.initialize(
               application_type: 'native'
@@ -327,12 +322,12 @@ describe 'Client', ->
                 'udp://localhost/callback.html'
               ]
             ).validate()
-          
+
           it 'should not provide an error', ->
             expect(validation.errors.redirect_uris).to.be.undefined
-          
+
         describe 'and custom scheme with custom host', ->
-          
+
           before ->
             validation = Client.initialize(
               application_type: 'native'
@@ -341,12 +336,12 @@ describe 'Client', ->
                 'udp://example.com/callback.html'
               ]
             ).validate()
-          
+
           it 'should not provide an error', ->
             expect(validation.errors.redirect_uris).to.be.undefined
-          
+
         describe 'and https scheme with localhost', ->
-          
+
           before ->
             validation = Client.initialize(
               application_type: 'native'
@@ -355,12 +350,12 @@ describe 'Client', ->
                 'https://localhost/callback'
               ]
             ).validate()
-          
+
           it 'should provide an error', ->
             expect(validation.errors.redirect_uris).to.be.an 'object'
-          
+
         describe 'and http scheme with custom host', ->
-          
+
           before ->
             validation = Client.initialize(
               application_type: 'native'
@@ -369,23 +364,23 @@ describe 'Client', ->
                 'http://example.com/callback'
               ]
             ).validate()
-          
+
           it 'should provide an error', ->
             expect(validation.errors.redirect_uris).to.be.an 'object'
-      
+
       describe 'with web application_type and implicit grant_type', ->
-        
+
         describe 'in development', ->
-          
+
           before ->
             env = process.env.NODE_ENV
             process.env.NODE_ENV = 'development'
-            
+
           after ->
             process.env.NODE_ENV = env
-          
+
           describe 'and https scheme with custom host', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -395,12 +390,12 @@ describe 'Client', ->
                   'https://example.com/callback.html'
                 ]
               ).validate()
-            
+
             it 'should not provide an error', ->
               expect(validation.errors.redirect_uris).to.be.undefined
-            
+
           describe 'and https scheme with localhost', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -410,12 +405,12 @@ describe 'Client', ->
                   'https://localhost/callback.html'
                 ]
               ).validate()
-            
+
             it 'should not provide an error', ->
               expect(validation.errors.redirect_uris).to.be.undefined
-            
+
           describe 'and http scheme with custom host', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -425,12 +420,12 @@ describe 'Client', ->
                   'http://example.com/callback.html'
                 ]
               ).validate()
-            
+
             it 'should not provide an error', ->
               expect(validation.errors.redirect_uris).to.be.undefined
-            
+
           describe 'and http scheme with localhost', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -440,21 +435,21 @@ describe 'Client', ->
                   'http://localhost/callback.html'
                 ]
               ).validate()
-            
+
             it 'should not provide an error', ->
               expect(validation.errors.redirect_uris).to.be.undefined
-          
+
         describe 'in production', ->
-          
+
           before ->
             env = process.env.NODE_ENV
             process.env.NODE_ENV = 'production'
-            
+
           after ->
             process.env.NODE_ENV = env
-          
+
           describe 'and https scheme with custom host', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -464,12 +459,12 @@ describe 'Client', ->
                   'https://example.com/callback.html'
                 ]
               ).validate()
-            
+
             it 'should not provide an error', ->
               expect(validation.errors.redirect_uris).to.be.undefined
-            
+
           describe 'and https scheme with localhost', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -479,12 +474,12 @@ describe 'Client', ->
                   'https://localhost/callback.html'
                 ]
               ).validate()
-            
+
             it 'should provide an error', ->
               expect(validation.errors.redirect_uris).to.be.an 'object'
-            
+
           describe 'and http scheme with custom host', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -494,12 +489,12 @@ describe 'Client', ->
                   'http://example.com/callback.html'
                 ]
               ).validate()
-            
+
             it 'should provide an error', ->
               expect(validation.errors.redirect_uris).to.be.an 'object'
-            
+
           describe 'and http scheme with localhost', ->
-          
+
             before ->
               validation = Client.initialize(
                 application_type: 'web'
@@ -509,9 +504,141 @@ describe 'Client', ->
                   'http://localhost/callback.html'
                 ]
               ).validate()
-            
+
             it 'should provide an error', ->
               expect(validation.errors.redirect_uris).to.be.an 'object'
+
+    describe 'response_types', ->
+
+      describe 'with invalid response_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'code',
+                  'id_token code',
+                  'invalid_response_type'
+                ]
+                grant_types: [
+                  'authorization_code',
+                  'implicit'
+                ]
+              ).validate()
+
+        it 'should provide an error', ->
+          expect(validation.errors.response_types).to.be.an 'object'
+
+      describe 'with a value containing "none" and another response_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'code',
+                  'token none'
+                ],
+                grant_types: [
+                  'authorization_code'
+                ]
+              ).validate()
+
+        it 'should provide an error', ->
+          expect(validation.errors.response_types).to.be.an 'object'
+
+      describe 'with code response_type but no authorization_code grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'code'
+                ]
+                grant_types: [
+                  'implicit'
+                ]
+              ).validate()
+
+        it 'should provide an error', ->
+          expect(validation.errors.response_types).to.be.an 'object'
+
+      describe 'with id_token response_type but no implicit grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'id_token'
+                ]
+              ).validate()
+
+        it 'should provide an error', ->
+          expect(validation.errors.response_types).to.be.an 'object'
+
+      describe 'with token response_type but no implicit grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'token'
+                ]
+              ).validate()
+
+        it 'should provide an error', ->
+          expect(validation.errors.response_types).to.be.an 'object'
+
+      describe 'with code response_type and authorization_code grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'code'
+                ]
+                grant_types: [
+                  'authorization_code'
+                ]
+              ).validate()
+
+        it 'should not provide an error', ->
+          expect(validation.errors.response_types).to.be.undefined
+
+      describe 'with id_token response_type and implicit grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'id_token'
+                ]
+                grant_types: [
+                  'implicit'
+                ]
+              ).validate()
+
+        it 'should not provide an error', ->
+          expect(validation.errors.response_types).to.be.undefined
+
+      describe 'with token response_type and implicit grant_type', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'token'
+                ]
+                grant_types: [
+                  'implicit'
+                ]
+              ).validate()
+
+        it 'should not provide an error', ->
+          expect(validation.errors.response_types).to.be.undefined
+
+      describe 'with none response_type on its own', ->
+
+        before ->
+              validation = Client.initialize(
+                response_types: [
+                  'none'
+                ]
+              ).validate()
+
+        it 'should not provide an error', ->
+          expect(validation.errors.response_types).to.be.undefined
 
 
 

@@ -135,7 +135,3 @@ describe 'Verify Client', ->
 
     it 'should provide a status code', ->
       err.statusCode.should.equal 400
-
-
-
-

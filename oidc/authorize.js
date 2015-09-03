@@ -25,8 +25,8 @@ var sessionState = require('../oidc/sessionState')
 
 function authorize (req, res, next) {
   var params = req.connectParams
-  var responseTypes = params.response_type.split(' ')
-  var responseMode = params.response_mode ||
+  var responseTypes = params.response_type.trim().split(' ')
+  var responseMode = (params.response_mode && params.response_mode.trim()) ||
     (params.response_type === 'code' ||
       params.response_type === 'none') ? '?' : '#'
 

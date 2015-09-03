@@ -54,7 +54,8 @@ var Client = Modinha.define('clients', {
     },
     conform: function (value, instance) {
       var valid = true
-      var inDevelopment = process.env.NODE_ENV === 'development'
+      var inDevelopment = process.env.NODE_ENV === 'development' ||
+        !process.env.NODE_ENV
 
       // Proceed with validation if there are redirect URIs defined
       if (Array.isArray(value)) {
@@ -136,13 +137,56 @@ var Client = Modinha.define('clients', {
 
   response_types: {
     type: 'array',
-    // default: ['code'],
-    enum: [
-      'code',
-      'id_token',
-      'id_token token',
-      'none'
-    ]
+    required: true,
+    default: ['code'],
+    messages: {
+      conform: 'Invalid response_type or insufficient grant_types defined ' +
+        'for desired response_types'
+    },
+    conform: function (value, instance) {
+      var valid = true
+
+      // authorization_code grant type is default if grant_types are not defined
+      var hasAuthorizationCodeGrant = true
+      var hasImplicitGrant = false
+
+      if (Array.isArray(instance.grant_types)) {
+        hasAuthorizationCodeGrant =
+          instance.grant_types.indexOf('authorization_code') !== -1
+
+        hasImplicitGrant =
+          instance.grant_types.indexOf('implicit') !== -1
+      }
+
+      // Proceed with validation if there are response types defined
+      if (Array.isArray(value)) {
+        // Check each response type
+        value.forEach(function (responseTypeString) {
+          var responseTypeSet = responseTypeString.split(' ')
+          responseTypeSet.forEach(function (responseType) {
+            if (
+              // invalid response_type value
+              ['code', 'id_token', 'token', 'none']
+                .indexOf(responseType) === -1 ||
+              // none response_type with other response_type values in the same
+              // set, e.g. "none code"
+              (responseType === 'none' && responseTypeSet.length !== 1) ||
+              // code response_type but no authorization_code grant_type
+              (responseType === 'code' && !hasAuthorizationCodeGrant) ||
+              // id_token response_type but no implicit grant_type
+              (responseType === 'id_token' && !hasImplicitGrant) ||
+              // token response_type but no implicit grant_type
+              (responseType === 'token' && !hasImplicitGrant)
+            ) {
+              // Fail validation
+              valid = false
+            }
+          })
+        })
+      }
+
+      return valid
+    }
   },
 
   /**
@@ -174,7 +218,8 @@ var Client = Modinha.define('clients', {
 
   grant_types: {
     type: 'array',
-    // default: ['authorization_code'],
+    required: true,
+    default: ['authorization_code'],
     enum: [
       'authorization_code',
       'implicit',
