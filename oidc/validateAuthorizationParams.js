@@ -38,24 +38,6 @@ var responseModes = [
 function validateAuthorizationParams (req, res, next) {
   var params = req.connectParams
 
-  // missing redirect uri
-  if (!params.redirect_uri) {
-    return next(new AuthorizationError({
-      error: 'invalid_request',
-      error_description: 'Missing redirect uri',
-      statusCode: 400
-    }))
-  }
-
-  // invalid redirect uri
-  // if (!params.redirect_uri) {     // HOW SHOULD WE VALIDATE THIS?
-  //  return next(new AuthorizationError({
-  //    error: 'invalid_request',
-  //    error_description: 'Invalid redirect uri',
-  //    statusCode: 400
-  //  }))
-  // }
-
   // missing response type
   if (!params.response_type) {
     return next(new AuthorizationError({
@@ -84,15 +66,6 @@ function validateAuthorizationParams (req, res, next) {
       error_description: 'Unsupported response mode',
       redirect_uri: params.redirect_uri,
       statusCode: 302
-    }))
-  }
-
-  // missing client id
-  if (!params.client_id) {
-    return next(new AuthorizationError({
-      error: 'unauthorized_client',
-      error_description: 'Missing client id',
-      statusCode: 403
     }))
   }
 

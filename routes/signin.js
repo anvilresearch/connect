@@ -27,8 +27,8 @@ module.exports = function (server) {
 
   server.get('/signin',
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     function (req, res, next) {
       res.render('signin', {
         params: qs.stringify(req.query),
@@ -45,8 +45,8 @@ module.exports = function (server) {
 
   var handler = [
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     oidc.determineProvider,
     oidc.enforceReferrer('/signin'),
     function (req, res, next) {

@@ -23,8 +23,8 @@ module.exports = function (server) {
 
   var getSignupHandler = [
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     function (req, res, next) {
       res.render('signup', {
         params: qs.stringify(req.query),
@@ -70,8 +70,8 @@ module.exports = function (server) {
 
   var postSignupHandler = [
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     usePasswordProvider,
     oidc.enforceReferrer('/signup'),
     createUser,
