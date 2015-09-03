@@ -92,11 +92,6 @@ describe 'Client', ->
     it 'should have response types', ->
       Client.schema.response_types.type.should.equal 'array'
 
-    it 'should enumerate valid response types', ->
-      Client.schema.response_types.enum.should.contain 'code'
-      Client.schema.response_types.enum.should.contain 'id_token'
-      Client.schema.response_types.enum.should.contain 'id_token token'
-
     it 'should have grant types', ->
       Client.schema.grant_types.type.should.equal 'array'
 

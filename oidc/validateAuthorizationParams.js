@@ -8,22 +8,18 @@ var AuthorizationError = require('../errors/AuthorizationError')
  * Supported response types
  */
 
-var responseTypes = [
-  'code', // authorization code flow
-  'code token', // hybrid flow
-  'code id_token', // hybrid flow
-  'id_token', // implicit flow
-  'token id_token', // implicit flow
-  'id_token token', // implicit flow
-  'code id_token token', // hybrid flow
-  'none' //
+var validResponseTypes = [
+  'code',
+  'token',
+  'id_token',
+  'none'
 ]
 
 /**
  * Supported response modes
  */
 
-var responseModes = [
+var validResponseModes = [
   'query',
   'fragment'
 ]
@@ -66,8 +62,21 @@ function validateAuthorizationParams (req, res, next) {
     }))
   }
 
+  var responseTypes = params.response_type.trim().split(' ')
+
+  // Check that
+  // - All response_types are valid
+  // - If `none` response_type is given, that it is the only response_type
+  var isValidResponseType = responseTypes.indexOf('none') !== -1 ?
+    responseTypes.length === 1 :
+    responseTypes.every(
+      function (responseType) {
+        return validResponseTypes.indexOf(responseType) !== -1
+      }
+    )
+
   // unsupported response type
-  if (responseTypes.indexOf(params.response_type) === -1) {
+  if (!isValidResponseType) {
     return next(new AuthorizationError({
       error: 'unsupported_response_type',
       error_description: 'Unsupported response type',
@@ -78,7 +87,7 @@ function validateAuthorizationParams (req, res, next) {
 
   // unsupported response mode
   if (params.response_mode &&
-    responseModes.indexOf(params.response_mode) === -1) {
+    validResponseModes.indexOf(params.response_mode) === -1) {
     return next(new AuthorizationError({
       error: 'unsupported_response_mode',
       error_description: 'Unsupported response mode',
@@ -117,7 +126,7 @@ function validateAuthorizationParams (req, res, next) {
   }
 
   // missing nonce
-  if (requiresNonce(params.response_type) && !params.nonce) {
+  if (!params.nonce && requiresNonce(responseTypes)) {
     return next(new AuthorizationError({
       error: 'invalid_request',
       error_description: 'Missing nonce',
@@ -133,8 +142,10 @@ function validateAuthorizationParams (req, res, next) {
  * Check if a nonce is required
  */
 
-function requiresNonce (responseType) {
-  return (['id_token', 'id_token token'].indexOf(responseType) !== -1)
+function requiresNonce (responseTypes) {
+  return responseTypes.some(function (responseType) {
+    return responseType === 'id_token' || responseType === 'token'
+  })
 }
 
 /**

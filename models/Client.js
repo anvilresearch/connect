@@ -138,14 +138,9 @@ var Client = Modinha.define('clients', {
     type: 'array',
     required: true,
     default: ['code'],
-    enum: [
-      'code',
-      'id_token',
-      'id_token token',
-      'none'
-    ],
     messages: {
-      conform: 'Insufficient grant_types defined for desired response_types'
+      conform: 'Invalid response_type or insufficient grant_types defined ' +
+        'for desired response_types'
     },
     conform: function (value, instance) {
       var valid = true
@@ -165,18 +160,27 @@ var Client = Modinha.define('clients', {
       // Proceed with validation if there are response types defined
       if (Array.isArray(value)) {
         // Check each response type
-        value.forEach(function (responseType) {
-          if (
-            // code response_type but no authorization_code grant_type
-            (responseType === 'code' && !hasAuthorizationCodeGrant) ||
-            // id_token response_type but no implicit grant_type
-            (responseType === 'id_token' && !hasImplicitGrant) ||
-            // token response_type but no implicit grant_type
-            (responseType === 'token' && !hasImplicitGrant)
-          ) {
-            // Fail validation
-            valid = false
-          }
+        value.forEach(function (responseTypeString) {
+          var responseTypeSet = responseTypeString.split(' ')
+          responseTypeSet.forEach(function (responseType) {
+            if (
+              // invalid response_type value
+              ['code', 'id_token', 'token', 'none']
+                .indexOf(responseType) === -1 ||
+              // none response_type with other response_type values in the same
+              // set, e.g. "none code"
+              (responseType === 'none' && responseTypeSet.length !== 1) ||
+              // code response_type but no authorization_code grant_type
+              (responseType === 'code' && !hasAuthorizationCodeGrant) ||
+              // id_token response_type but no implicit grant_type
+              (responseType === 'id_token' && !hasImplicitGrant) ||
+              // token response_type but no implicit grant_type
+              (responseType === 'token' && !hasImplicitGrant)
+            ) {
+              // Fail validation
+              valid = false
+            }
+          })
         })
       }
 
