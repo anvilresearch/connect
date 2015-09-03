@@ -174,7 +174,8 @@ var Client = Modinha.define('clients', {
 
   grant_types: {
     type: 'array',
-    // default: ['authorization_code'],
+    required: true,
+    default: ['authorization_code'],
     enum: [
       'authorization_code',
       'implicit',
