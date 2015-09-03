@@ -38,7 +38,7 @@
 
 #### Requirements
 
-The CLI tools require recent versions [Node.js](https://nodejs.org/) (or
+The CLI tools require recent versions of [Node.js](https://nodejs.org/) (or
 [io.js](https://iojs.org/en/index.html)) and npm. If you plan to run your
 server with [Docker](https://www.docker.com/), you'll need Docker and Docker
 Compose installed (we provide Dockerfiles and docker-compose.yml). On Mac OS X
