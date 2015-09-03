@@ -136,7 +136,8 @@ var Client = Modinha.define('clients', {
 
   response_types: {
     type: 'array',
-    // default: ['code'],
+    required: true,
+    default: ['code'],
     enum: [
       'code',
       'id_token',
