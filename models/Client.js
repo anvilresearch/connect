@@ -54,7 +54,8 @@ var Client = Modinha.define('clients', {
     },
     conform: function (value, instance) {
       var valid = true
-      var inDevelopment = process.env.NODE_ENV === 'development'
+      var inDevelopment = process.env.NODE_ENV === 'development' ||
+        !process.env.NODE_ENV
 
       // Proceed with validation if there are redirect URIs defined
       if (Array.isArray(instance.redirect_uris)) {
