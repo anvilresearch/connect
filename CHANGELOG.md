@@ -1,3 +1,48 @@
+<a name="0.1.53"></a>
+## 0.1.53 (2015-09-03)
+
+
+### chore
+
+* chore(npm): update modinha and modinha-redis dependencies ([57c670e](https://github.com/anvilresearch/connect/commit/57c670e))
+* chore(npm): update modinha and modinha-redis dependencies ([6a91ee9](https://github.com/anvilresearch/connect/commit/6a91ee9))
+
+### feat
+
+* feat: Support `none` response_type (#55) ([85343cf](https://github.com/anvilresearch/connect/commit/85343cf))
+* feat(Client): Validate client application_type (#97) ([c6c6ec1](https://github.com/anvilresearch/connect/commit/c6c6ec1))
+
+### fix
+
+* fix: Always verify redirect_uri before issuing redirect ([5cc0c62](https://github.com/anvilresearch/connect/commit/5cc0c62))
+* fix(authorize): Use fragment encoding where required by spec ([e08b36c](https://github.com/anvilresearch/connect/commit/e08b36c))
+* fix(cli): Clean up CLI output ([2046b7e](https://github.com/anvilresearch/connect/commit/2046b7e))
+* fix(cli): Display more meaningful output on error ([a484403](https://github.com/anvilresearch/connect/commit/a484403))
+* fix(Client): Add missing space in redirect_uris validation error message ([6bc6c07](https://github.com/anvilresearch/connect/commit/6bc6c07))
+* fix(Client): Update comment to reflect logic ([c71dc0e](https://github.com/anvilresearch/connect/commit/c71dc0e))
+* fix(Client): Validate new redirect_uris instead of original values ([bae4ffe](https://github.com/anvilresearch/connect/commit/bae4ffe))
+* fix(Client): Validate that jwks and jwks_uri are not used together (#98) ([8fc8017](https://github.com/anvilresearch/connect/commit/8fc8017))
+* fix(README.md): Minor grammatical fix ([9f363ae](https://github.com/anvilresearch/connect/commit/9f363ae))
+
+### refactor
+
+* refactor(Client): Remove redundant truthy check ([c561fff](https://github.com/anvilresearch/connect/commit/c561fff))
+* refactor(Client): Use lx-valid validation hooks for jwks and jwks_uri ([7763504](https://github.com/anvilresearch/connect/commit/7763504))
+* refactor(Client): Use lx-valid validation hooks for jwks and jwks_uri ([147c90e](https://github.com/anvilresearch/connect/commit/147c90e))
+
+### test
+
+* test(validateAuthorizationParams): Test for extraneous response types ([5f79b97](https://github.com/anvilresearch/connect/commit/5f79b97))
+
+* Merge pull request #211 from anvilresearch/vsimonian-none-response-type ([6f74fa1](https://github.com/anvilresearch/connect/commit/6f74fa1))
+* Merge pull request #212 from anvilresearch/vsimonian-validate-jwks-jwks_uri ([8b61322](https://github.com/anvilresearch/connect/commit/8b61322))
+* Merge pull request #213 from anvilresearch/vsimonian-lx-valid ([d993492](https://github.com/anvilresearch/connect/commit/d993492))
+* Merge pull request #214 from anvilresearch/vsimonian-validate-application_type ([5d2b8dd](https://github.com/anvilresearch/connect/commit/5d2b8dd))
+* Merge pull request #215 from anvilresearch/vsimonian-fix-redirect_uris_validation ([be7c7d3](https://github.com/anvilresearch/connect/commit/be7c7d3))
+* Merge pull request #216 from anvilresearch/vsimonian-fix-unverified-redirects ([a2f1d03](https://github.com/anvilresearch/connect/commit/a2f1d03))
+
+
+
 <a name="0.1.52"></a>
 ## 0.1.52 (2015-09-01)
 
