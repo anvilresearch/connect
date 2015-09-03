@@ -11,8 +11,8 @@ var oidc = require('../oidc')
 module.exports = function (server) {
   var handler = [
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     oidc.requireSignin,
     oidc.determineUserScope,
     oidc.promptToAuthorize,

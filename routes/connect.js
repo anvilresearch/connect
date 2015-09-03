@@ -19,8 +19,8 @@ module.exports = function (server) {
 
   server.get('/connect/:provider',
     oidc.selectConnectParams,
-    oidc.validateAuthorizationParams,
     oidc.verifyClient,
+    oidc.validateAuthorizationParams,
     oidc.stashParams,
     oidc.determineProvider,
     function (req, res, next) {

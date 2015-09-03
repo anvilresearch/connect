@@ -17,6 +17,24 @@ var AuthorizationError = require('../errors/AuthorizationError')
 function verifyClient (req, res, next) {
   var params = req.connectParams
 
+  // missing redirect uri
+  if (!params.redirect_uri) {
+    return next(new AuthorizationError({
+      error: 'invalid_request',
+      error_description: 'Missing redirect uri',
+      statusCode: 400
+    }))
+  }
+
+  // missing client id
+  if (!params.client_id) {
+    return next(new AuthorizationError({
+      error: 'unauthorized_client',
+      error_description: 'Missing client id',
+      statusCode: 403
+    }))
+  }
+
   Client.get(params.client_id, {
     private: true
   }, function (err, client) {
