@@ -57,7 +57,7 @@ var Client = Modinha.define('clients', {
       var inDevelopment = process.env.NODE_ENV === 'development'
 
       // Proceed with validation if there are redirect URIs defined
-      if (Array.isArray(instance.redirect_uris)) {
+      if (Array.isArray(value)) {
 
         // Native clients
         if (
@@ -65,7 +65,7 @@ var Client = Modinha.define('clients', {
         ) {
 
           // Check each redirect URI
-          instance.redirect_uris.forEach(function (uri) {
+          value.forEach(function (uri) {
             try {
               var parsedURI = url.parse(uri)
 
@@ -100,7 +100,7 @@ var Client = Modinha.define('clients', {
         ) {
 
           // Check each redirect URI
-          instance.redirect_uris.forEach(function (uri) {
+          value.forEach(function (uri) {
             try {
               var parsedURI = url.parse(uri)
 
