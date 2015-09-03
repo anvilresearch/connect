@@ -43,6 +43,28 @@ function verifyClient (req, res, next) {
       }))
     }
 
+    var responseTypes = params.response_type.trim().split(' ')
+
+    // Response type must be configured for this client.
+    var isRegisteredResponseType = Array.isArray(client.response_types) ?
+      client.response_types.some(function (responseTypeString) {
+        var responseTypeSet = responseTypeString.split(' ')
+        return responseTypes.length === responseTypeSet.length &&
+          responseTypes.every(function (responseType) {
+            return responseTypeSet.indexOf(responseType) !== -1
+          })
+      }) :
+      (responseTypes.length === 1 && responseTypes[0] === 'code')
+
+    if (!isRegisteredResponseType) {
+      return next(new AuthorizationError({
+        error: 'unsupported_response_type',
+        error_description: 'Unsupported response type',
+        redirect_uri: params.redirect_uri,
+        statusCode: 302
+      }))
+    }
+
     next()
   })
 }
