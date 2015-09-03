@@ -80,6 +80,34 @@ describe 'Validate Authorization Parameters', ->
 
 
 
+    describe 'with only whitespace for a response_type', ->
+
+      before (done) ->
+        params =
+          redirect_uri: 'https://redirect.uri'
+          response_type: '    '
+        validateAuthorizationParams req(params), res, (error) ->
+          err = error
+          done()
+
+      it 'should provide an AuthorizationError', ->
+        err.name.should.equal 'AuthorizationError'
+
+      it 'should provide an error code', ->
+        err.error.should.equal 'invalid_request'
+
+      it 'should provide an error description', ->
+        err.error_description.should.equal 'Missing response type'
+
+      it 'should provide a redirect_uri', ->
+        err.redirect_uri.should.equal 'https://redirect.uri'
+
+      it 'should provide a status code', ->
+        err.statusCode.should.equal 302
+
+
+
+
     describe 'with unsupported response_type', ->
 
       before (done) ->

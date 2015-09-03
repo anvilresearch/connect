@@ -53,7 +53,7 @@ function validateAuthorizationParams (req, res, next) {
   // }
 
   // missing response type
-  if (!params.response_type) {
+  if (!params.response_type || !params.response_type.trim()) {
     return next(new AuthorizationError({
       error: 'invalid_request',
       error_description: 'Missing response type',
@@ -86,8 +86,8 @@ function validateAuthorizationParams (req, res, next) {
   }
 
   // unsupported response mode
-  if (params.response_mode &&
-    validResponseModes.indexOf(params.response_mode) === -1) {
+  if (params.response_mode && params.response_mode.trim() &&
+    validResponseModes.indexOf(params.response_mode.trim()) === -1) {
     return next(new AuthorizationError({
       error: 'unsupported_response_mode',
       error_description: 'Unsupported response mode',
