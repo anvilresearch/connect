@@ -1,416 +1,462 @@
-<a name="0.1.54"></a>
-## 0.1.54 (2015-09-04)
+# Change Log
 
+## [0.1.54](https://github.com/anvilresearch/connect/tree/0.1.54) (2015-09-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.53...0.1.54)
 
-### feat
+**Implemented enhancements:**
 
-* feat: Check that requested response types are allowed in settings ([a0a7350](https://github.com/anvilresearch/connect/commit/a0a7350))
-* feat(Client): Require and provide default for grant_type ([acfe1ee](https://github.com/anvilresearch/connect/commit/acfe1ee))
-* feat(Client): Require and provide default for response_types ([8136ad6](https://github.com/anvilresearch/connect/commit/8136ad6))
-* feat(Client): Validate response_types against grant_types ([9846da6](https://github.com/anvilresearch/connect/commit/9846da6))
-* feat(verifyClient): Enforce response_types (#95) ([f4ebf52](https://github.com/anvilresearch/connect/commit/f4ebf52))
+- Enforce client grant\_types [\#96](https://github.com/anvilresearch/connect/issues/96)
+- Enforce client response\_types [\#95](https://github.com/anvilresearch/connect/issues/95)
 
-### fix
+**Fixed bugs:**
 
-* fix: Trim leading and trailing whitespace in response_type and response_mode ([d951c28](https://github.com/anvilresearch/connect/commit/d951c28))
-* fix: Validate response_types regardless of order ([75b6e8d](https://github.com/anvilresearch/connect/commit/75b6e8d))
-* fix(authenticator): Fix handling of optional `options` parameter ([85e0f1b](https://github.com/anvilresearch/connect/commit/85e0f1b))
-* fix(Client): Equate undefined NODE_ENV to development environment ([76d0937](https://github.com/anvilresearch/connect/commit/76d0937))
+- Fix handling of optional `options` parameter in Passport shim [\#218](https://github.com/anvilresearch/connect/pull/218) ([vsimonian](https://github.com/vsimonian))
 
-### refactor
+**Merged pull requests:**
 
-* refactor: consolidate response_type verification logic ([8dc37bc](https://github.com/anvilresearch/connect/commit/8dc37bc))
+- Enforce client grant\_types and response\_types [\#217](https://github.com/anvilresearch/connect/pull/217) ([vsimonian](https://github.com/vsimonian))
 
-### test
+## [0.1.53](https://github.com/anvilresearch/connect/tree/0.1.53) (2015-09-03)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.52...0.1.53)
 
-* test(Client): Test response_type validation ([9d4f834](https://github.com/anvilresearch/connect/commit/9d4f834))
+**Implemented enhancements:**
 
-* Merge branch 'vsimonian-fix-unverified-redirects' into vsimonian-enforce-grant_types-response_types ([0271fe3](https://github.com/anvilresearch/connect/commit/0271fe3))
-* Merge pull request #217 from anvilresearch/vsimonian-enforce-grant_types-response_types ([36ea8b2](https://github.com/anvilresearch/connect/commit/36ea8b2))
-* Merge pull request #218 from anvilresearch/vsimonian-fix-passport-shim-options ([e872679](https://github.com/anvilresearch/connect/commit/e872679))
+- Validate client does not use both `jwks` and `jwks\_uri` [\#98](https://github.com/anvilresearch/connect/issues/98)
+- Validate client application\_type [\#97](https://github.com/anvilresearch/connect/issues/97)
+- Support response\_type "none" [\#55](https://github.com/anvilresearch/connect/issues/55)
+- Validate client application\_type [\#214](https://github.com/anvilresearch/connect/pull/214) ([vsimonian](https://github.com/vsimonian))
+- Validate that jwks and jwks\_uri are not used together [\#212](https://github.com/anvilresearch/connect/pull/212) ([vsimonian](https://github.com/vsimonian))
+- Support `none` response\_type and fix response\_type handling [\#211](https://github.com/anvilresearch/connect/pull/211) ([vsimonian](https://github.com/vsimonian))
 
+**Fixed bugs:**
 
+- Always verify redirect\_uri before issuing redirect [\#216](https://github.com/anvilresearch/connect/pull/216) ([vsimonian](https://github.com/vsimonian))
+- Validate new redirect\_uris instead of original values [\#215](https://github.com/anvilresearch/connect/pull/215) ([vsimonian](https://github.com/vsimonian))
+- Support `none` response\\_type and fix response\\_type handling [\#211](https://github.com/anvilresearch/connect/pull/211) ([vsimonian](https://github.com/vsimonian))
 
-<a name="0.1.53"></a>
-## 0.1.53 (2015-09-03)
+**Merged pull requests:**
 
+- Use lx-valid validation hooks for jwks and jwks\_uri [\#213](https://github.com/anvilresearch/connect/pull/213) ([vsimonian](https://github.com/vsimonian))
 
-### chore
+## [0.1.52](https://github.com/anvilresearch/connect/tree/0.1.52) (2015-09-01)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.51...0.1.52)
 
-* chore(npm): update modinha and modinha-redis dependencies ([57c670e](https://github.com/anvilresearch/connect/commit/57c670e))
-* chore(npm): update modinha and modinha-redis dependencies ([6a91ee9](https://github.com/anvilresearch/connect/commit/6a91ee9))
+**Fixed bugs:**
 
-### feat
+- Guard against undefined sessions [\#209](https://github.com/anvilresearch/connect/pull/209) ([vsimonian](https://github.com/vsimonian))
 
-* feat: Support `none` response_type (#55) ([85343cf](https://github.com/anvilresearch/connect/commit/85343cf))
-* feat(Client): Validate client application_type (#97) ([c6c6ec1](https://github.com/anvilresearch/connect/commit/c6c6ec1))
+## [0.1.51](https://github.com/anvilresearch/connect/tree/0.1.51) (2015-08-31)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.50...0.1.51)
 
-### fix
+**Implemented enhancements:**
 
-* fix: Always verify redirect_uri before issuing redirect ([5cc0c62](https://github.com/anvilresearch/connect/commit/5cc0c62))
-* fix(authorize): Use fragment encoding where required by spec ([e08b36c](https://github.com/anvilresearch/connect/commit/e08b36c))
-* fix(cli): Clean up CLI output ([2046b7e](https://github.com/anvilresearch/connect/commit/2046b7e))
-* fix(cli): Display more meaningful output on error ([a484403](https://github.com/anvilresearch/connect/commit/a484403))
-* fix(Client): Add missing space in redirect_uris validation error message ([6bc6c07](https://github.com/anvilresearch/connect/commit/6bc6c07))
-* fix(Client): Update comment to reflect logic ([c71dc0e](https://github.com/anvilresearch/connect/commit/c71dc0e))
-* fix(Client): Validate new redirect_uris instead of original values ([bae4ffe](https://github.com/anvilresearch/connect/commit/bae4ffe))
-* fix(Client): Validate that jwks and jwks_uri are not used together (#98) ([8fc8017](https://github.com/anvilresearch/connect/commit/8fc8017))
-* fix(README.md): Minor grammatical fix ([9f363ae](https://github.com/anvilresearch/connect/commit/9f363ae))
+- Rename key pair files [\#200](https://github.com/anvilresearch/connect/issues/200)
+- Make "daysToCrack" password strength property configurable from password provider [\#189](https://github.com/anvilresearch/connect/issues/189)
+- Key pair generation [\#187](https://github.com/anvilresearch/connect/issues/187)
+- E-mail verification token TTL should be configurable [\#175](https://github.com/anvilresearch/connect/issues/175)
+- OIDC Sessions [\#138](https://github.com/anvilresearch/connect/issues/138)
+- Separate key pairs for signing and encryption [\#5](https://github.com/anvilresearch/connect/issues/5)
+- feat\(email\): configurable email verification token ttl [\#206](https://github.com/anvilresearch/connect/pull/206) ([christiansmith](https://github.com/christiansmith))
+- feat\(boot\): generate token-signing keypair if missing on boot [\#197](https://github.com/anvilresearch/connect/pull/197) ([christiansmith](https://github.com/christiansmith))
 
-### refactor
+**Fixed bugs:**
 
-* refactor(Client): Remove redundant truthy check ([c561fff](https://github.com/anvilresearch/connect/commit/c561fff))
-* refactor(Client): Use lx-valid validation hooks for jwks and jwks_uri ([7763504](https://github.com/anvilresearch/connect/commit/7763504))
-* refactor(Client): Use lx-valid validation hooks for jwks and jwks_uri ([147c90e](https://github.com/anvilresearch/connect/commit/147c90e))
+- Allow overriding provider-specific amr and refresh\_userinfo options with falsy values [\#191](https://github.com/anvilresearch/connect/issues/191)
+- Enable email templates to be overridden [\#190](https://github.com/anvilresearch/connect/issues/190)
+- Stub client reg type setting for client reg tests [\#201](https://github.com/anvilresearch/connect/pull/201) ([vsimonian](https://github.com/vsimonian))
+- fix\(oidc\): set amr values consistently [\#195](https://github.com/anvilresearch/connect/pull/195) ([christiansmith](https://github.com/christiansmith))
+- Allow overriding amr and refresh\_userinfo values with falsy values  [\#194](https://github.com/anvilresearch/connect/pull/194) ([vsimonian](https://github.com/vsimonian))
+- Allow e-mail templates to be overridden [\#193](https://github.com/anvilresearch/connect/pull/193) ([vsimonian](https://github.com/vsimonian))
 
-### test
+**Closed issues:**
 
-* test(validateAuthorizationParams): Test for extraneous response types ([5f79b97](https://github.com/anvilresearch/connect/commit/5f79b97))
+- De-nest config/keys directory [\#198](https://github.com/anvilresearch/connect/issues/198)
+- Eliminate repetitive code in signin, signup, and signout [\#143](https://github.com/anvilresearch/connect/issues/143)
 
-* Merge pull request #211 from anvilresearch/vsimonian-none-response-type ([6f74fa1](https://github.com/anvilresearch/connect/commit/6f74fa1))
-* Merge pull request #212 from anvilresearch/vsimonian-validate-jwks-jwks_uri ([8b61322](https://github.com/anvilresearch/connect/commit/8b61322))
-* Merge pull request #213 from anvilresearch/vsimonian-lx-valid ([d993492](https://github.com/anvilresearch/connect/commit/d993492))
-* Merge pull request #214 from anvilresearch/vsimonian-validate-application_type ([5d2b8dd](https://github.com/anvilresearch/connect/commit/5d2b8dd))
-* Merge pull request #215 from anvilresearch/vsimonian-fix-redirect_uris_validation ([be7c7d3](https://github.com/anvilresearch/connect/commit/be7c7d3))
-* Merge pull request #216 from anvilresearch/vsimonian-fix-unverified-redirects ([a2f1d03](https://github.com/anvilresearch/connect/commit/a2f1d03))
+**Merged pull requests:**
 
+- Remove passport dependency [\#205](https://github.com/anvilresearch/connect/pull/205) ([vsimonian](https://github.com/vsimonian))
+- Rename RSA key pair files and add separate encryption key pair [\#204](https://github.com/anvilresearch/connect/pull/204) ([christiansmith](https://github.com/christiansmith))
+- refactor\(keys\): de-nest config/keys directory [\#199](https://github.com/anvilresearch/connect/pull/199) ([christiansmith](https://github.com/christiansmith))
+- feat\(settings\): configurable "daysToCrack" for password provider [\#196](https://github.com/anvilresearch/connect/pull/196) ([christiansmith](https://github.com/christiansmith))
 
+## [0.1.50](https://github.com/anvilresearch/connect/tree/0.1.50) (2015-08-23)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.49...0.1.50)
 
-<a name="0.1.52"></a>
-## 0.1.52 (2015-09-01)
+**Implemented enhancements:**
 
+- sentinel support and ioredis [\#125](https://github.com/anvilresearch/connect/issues/125)
+- Code Conventions, Formatters, and Linting [\#116](https://github.com/anvilresearch/connect/issues/116)
+- Use ioredis [\#188](https://github.com/anvilresearch/connect/pull/188) ([vsimonian](https://github.com/vsimonian))
 
-### fix
+**Merged pull requests:**
 
-* fix(authenticator): Guard against undefined sessions ([81ef8ea](https://github.com/anvilresearch/connect/commit/81ef8ea))
+- Use Javascript Standard Style [\#184](https://github.com/anvilresearch/connect/pull/184) ([vsimonian](https://github.com/vsimonian))
 
-* Merge pull request #209 from anvilresearch/vsimonian-fix-undefined-sessions ([8c06877](https://github.com/anvilresearch/connect/commit/8c06877))
+## [0.1.49](https://github.com/anvilresearch/connect/tree/0.1.49) (2015-08-21)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.48...0.1.49)
 
+**Implemented enhancements:**
 
+- Configurable refresh of user claims upon call to userinfo [\#181](https://github.com/anvilresearch/connect/issues/181)
+- Support `amr` claim. [\#136](https://github.com/anvilresearch/connect/issues/136)
+- Password reset [\#20](https://github.com/anvilresearch/connect/issues/20)
 
-<a name="0.1.51"></a>
-## 0.1.51 (2015-08-31)
+## [0.1.48](https://github.com/anvilresearch/connect/tree/0.1.48) (2015-08-20)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.47...0.1.48)
 
+## [0.1.47](https://github.com/anvilresearch/connect/tree/0.1.47) (2015-08-18)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.46...0.1.47)
 
-* Add Slack IRC Gateway link ([b5ac7d6](https://github.com/anvilresearch/connect/commit/b5ac7d6))
-* Add Slack IRC Gateway link to badges ([e93032e](https://github.com/anvilresearch/connect/commit/e93032e))
-* fix(oidc/sessionEvents): Infinity is not supported ([47b25b8](https://github.com/anvilresearch/connect/commit/47b25b8))
-* fix(public/javascript/session): Avoid TypeError ([57dd37c](https://github.com/anvilresearch/connect/commit/57dd37c))
-* fix(public/javascript/session): Improve cookie-handling regex ([6f71ab0](https://github.com/anvilresearch/connect/commit/6f71ab0))
-* Merge pull request #193 from anvilresearch/vsimonian-email-template-override ([b178e9a](https://github.com/anvilresearch/connect/commit/b178e9a))
-* Merge pull request #194 from anvilresearch/vsimonian-fix-amr-userinfo-config ([295e776](https://github.com/anvilresearch/connect/commit/295e776))
-* Merge pull request #195 from anvilresearch/christiansmith-amr-fixes ([bcad6b8](https://github.com/anvilresearch/connect/commit/bcad6b8))
-* Merge pull request #196 from anvilresearch/christiansmith-daystocrack ([d407b79](https://github.com/anvilresearch/connect/commit/d407b79))
-* Merge pull request #197 from anvilresearch/christiansmith-genkeypair-187 ([05d4e35](https://github.com/anvilresearch/connect/commit/05d4e35))
-* Merge pull request #199 from anvilresearch/christiansmith-keys-198 ([e57aaa8](https://github.com/anvilresearch/connect/commit/e57aaa8))
-* Merge pull request #201 from anvilresearch/vsimonian-fix-client-reg-tests ([ecece10](https://github.com/anvilresearch/connect/commit/ecece10))
-* Merge pull request #204 from anvilresearch/christiansmith-renamekeys-200 ([d55b578](https://github.com/anvilresearch/connect/commit/d55b578))
-* Merge pull request #205 from anvilresearch/vsimonian-no-passport ([251e670](https://github.com/anvilresearch/connect/commit/251e670))
-* Merge pull request #206 from anvilresearch/christiansmith-email-token-ttl-175 ([d4b9a8b](https://github.com/anvilresearch/connect/commit/d4b9a8b))
+**Implemented enhancements:**
 
-### chore
+- Use built in views unless project directory contains custom views [\#165](https://github.com/anvilresearch/connect/issues/165)
+- Allow views to be overridden individually. [\#179](https://github.com/anvilresearch/connect/pull/179) ([christiansmith](https://github.com/christiansmith))
 
-* chore(gitignore): Ignore IDE settings ([ee3ab78](https://github.com/anvilresearch/connect/commit/ee3ab78))
-* chore(npm): update dependencies ([f079dee](https://github.com/anvilresearch/connect/commit/f079dee))
-* chore(npm): update dependencies ([b450492](https://github.com/anvilresearch/connect/commit/b450492))
+**Fixed bugs:**
 
-### feat
+- Fix intermittently failing tests [\#178](https://github.com/anvilresearch/connect/pull/178) ([vsimonian](https://github.com/vsimonian))
 
-* feat(boot): generate token-signing keypair if missing on boot ([6326176](https://github.com/anvilresearch/connect/commit/6326176))
-* feat(email): configurable email verification token ttl ([ea5f95e](https://github.com/anvilresearch/connect/commit/ea5f95e))
-* feat(keys): add keypair for encryption and rename files ([d8dffe1](https://github.com/anvilresearch/connect/commit/d8dffe1))
-* feat(settings): configurable "daysToCrack" for password provider ([2dea0c8](https://github.com/anvilresearch/connect/commit/2dea0c8))
+## [0.1.46](https://github.com/anvilresearch/connect/tree/0.1.46) (2015-08-18)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.45...0.1.46)
 
-### fix
+**Implemented enhancements:**
 
-* fix: Allow overriding amr and refresh_userinfo values with falsy values ([3410730](https://github.com/anvilresearch/connect/commit/3410730)), closes [#191](https://github.com/anvilresearch/connect/issues/191)
-* fix: Move conditional logic for amr/refresh_userinfo set ([a9bb320](https://github.com/anvilresearch/connect/commit/a9bb320)), closes [#191](https://github.com/anvilresearch/connect/issues/191)
-* fix(checkSession): Avoid unecessary throws ([d5de56b](https://github.com/anvilresearch/connect/commit/d5de56b))
-* fix(checkSession): Execute inner logic ([e9a88e7](https://github.com/anvilresearch/connect/commit/e9a88e7))
-* fix(checkSession): only issue event once per opbs change ([a901685](https://github.com/anvilresearch/connect/commit/a901685))
-* fix(email): Allow e-mail templates to be overridden ([d150e24](https://github.com/anvilresearch/connect/commit/d150e24)), closes [#190](https://github.com/anvilresearch/connect/issues/190)
-* fix(jwks): correct reference at jwks endpoint ([f3f22e0](https://github.com/anvilresearch/connect/commit/f3f22e0))
-* fix(login): change OP Browser state on login only when user is unauthenticated ([8a8d8c1](https://github.com/anvilresearch/connect/commit/8a8d8c1))
-* fix(login): Fix conditional logic for opbs ([c98dae7](https://github.com/anvilresearch/connect/commit/c98dae7))
-* fix(oidc): set amr values consistently ([dfeb0eb](https://github.com/anvilresearch/connect/commit/dfeb0eb))
-* fix(req.user): Always set req.user during authenticated sessions ([3f372d0](https://github.com/anvilresearch/connect/commit/3f372d0))
-* fix(signout): Don't use unverified redirect URIs ([20f651d](https://github.com/anvilresearch/connect/commit/20f651d))
-* fix(test): fix signout middleware tests ([112a3a3](https://github.com/anvilresearch/connect/commit/112a3a3))
-* fix(tests): Stub client reg type setting for client reg tests ([1e3d10a](https://github.com/anvilresearch/connect/commit/1e3d10a))
+- Create mechanism for generic expiring tokens [\#168](https://github.com/anvilresearch/connect/issues/168)
+- E-mail verification tokens should expire [\#167](https://github.com/anvilresearch/connect/issues/167)
+- Support expiring, single-use tokens [\#171](https://github.com/anvilresearch/connect/pull/171) ([vsimonian](https://github.com/vsimonian))
 
-### refactor
+**Fixed bugs:**
 
-* refactor: Remove passport dependency ([aacc12d](https://github.com/anvilresearch/connect/commit/aacc12d)), closes [#143](https://github.com/anvilresearch/connect/issues/143)
-* refactor(authenticator): rename passport shim to Authenticator ([f72cdf6](https://github.com/anvilresearch/connect/commit/f72cdf6))
-* refactor(keys): de-nest config/keys directory ([3d8fdbc](https://github.com/anvilresearch/connect/commit/3d8fdbc))
-* refactor(keys): reorganize keys on settings ([cc095c1](https://github.com/anvilresearch/connect/commit/cc095c1))
-* refactor(providers): Merge duplicate conditional statement ([b9dd8f8](https://github.com/anvilresearch/connect/commit/b9dd8f8))
+- Ensure database always has default entries [\#172](https://github.com/anvilresearch/connect/pull/172) ([vsimonian](https://github.com/vsimonian))
 
-### style
+**Merged pull requests:**
 
-* style: Remove unused InvalidTokenError import ([7ba3d07](https://github.com/anvilresearch/connect/commit/7ba3d07))
+- Refactor email verification to use new OneTimeToken model [\#174](https://github.com/anvilresearch/connect/pull/174) ([christiansmith](https://github.com/christiansmith))
+- Fix one time token [\#173](https://github.com/anvilresearch/connect/pull/173) ([vsimonian](https://github.com/vsimonian))
 
+## [0.1.45](https://github.com/anvilresearch/connect/tree/0.1.45) (2015-08-14)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.44...0.1.45)
 
+**Fixed bugs:**
 
-<a name="0.1.50"></a>
-## 0.1.50 (2015-08-23)
+- Set jwks to array of keys instead of single object [\#161](https://github.com/anvilresearch/connect/pull/161) ([vsimonian](https://github.com/vsimonian))
 
+## [0.1.44](https://github.com/anvilresearch/connect/tree/0.1.44) (2015-08-14)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.43...0.1.44)
 
-### chore
+**Merged pull requests:**
 
-* chore(npm): Remove unused mock-require dependency ([3c245a3](https://github.com/anvilresearch/connect/commit/3c245a3))
-* chore(npm): Update modinha-redis dependency ([eabb980](https://github.com/anvilresearch/connect/commit/eabb980))
-* chore(npm): update passport dependency ([3242095](https://github.com/anvilresearch/connect/commit/3242095))
+- Use pem-jwk instead of ursa to convert public key to JWK [\#156](https://github.com/anvilresearch/connect/pull/156) ([vsimonian](https://github.com/vsimonian))
 
-### feat
+## [0.1.43](https://github.com/anvilresearch/connect/tree/0.1.43) (2015-08-12)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.42...0.1.43)
 
-* feat(public): add default favicon ([e55c20f](https://github.com/anvilresearch/connect/commit/e55c20f))
+**Implemented enhancements:**
 
-### fix
+- Boot time database init to deprecate `nv migrate` [\#128](https://github.com/anvilresearch/connect/issues/128)
+- Containerized Deployment [\#121](https://github.com/anvilresearch/connect/issues/121)
+- LDAP protocol [\#120](https://github.com/anvilresearch/connect/issues/120)
+- Throw error for unreachable Redis instance [\#39](https://github.com/anvilresearch/connect/issues/39)
+- E-mail verification [\#21](https://github.com/anvilresearch/connect/issues/21)
+- Add LDAP support [\#144](https://github.com/anvilresearch/connect/pull/144) ([vsimonian](https://github.com/vsimonian))
+- Initialize database during boot. [\#142](https://github.com/anvilresearch/connect/pull/142) ([christiansmith](https://github.com/christiansmith))
+- E-mail verification support [\#123](https://github.com/anvilresearch/connect/pull/123) ([vsimonian](https://github.com/vsimonian))
 
-* fix(cli): correct date math for exp claim ([12f2109](https://github.com/anvilresearch/connect/commit/12f2109))
+**Closed issues:**
 
-### refactor
+- Slack vs. Gitter [\#122](https://github.com/anvilresearch/connect/issues/122)
+- Standard OAuth2 protocol require error [\#74](https://github.com/anvilresearch/connect/issues/74)
+- cli help [\#34](https://github.com/anvilresearch/connect/issues/34)
 
-* refactor: Use ioredis ([2fe2954](https://github.com/anvilresearch/connect/commit/2fe2954))
+**Merged pull requests:**
 
-### style
+- Support OIDC `amr` claim in id\_tokens [\#141](https://github.com/anvilresearch/connect/pull/141) ([christiansmith](https://github.com/christiansmith))
+- Reject auth requests with mismatching referrer [\#135](https://github.com/anvilresearch/connect/pull/135) ([vsimonian](https://github.com/vsimonian))
+- Clarified setup instructions [\#134](https://github.com/anvilresearch/connect/pull/134) ([Cynfusion](https://github.com/Cynfusion))
+- style and content revisions [\#133](https://github.com/anvilresearch/connect/pull/133) ([Cynfusion](https://github.com/Cynfusion))
+- Updates to content and style of ReadMe [\#132](https://github.com/anvilresearch/connect/pull/132) ([Cynfusion](https://github.com/Cynfusion))
+- Add error message for invalid providers during sign-in [\#117](https://github.com/anvilresearch/connect/pull/117) ([vsimonian](https://github.com/vsimonian))
 
-* style: Use Javascript Standard Style ([4dfe09e](https://github.com/anvilresearch/connect/commit/4dfe09e))
-* style(providers): Adjust iif expression indentation ([546fc55](https://github.com/anvilresearch/connect/commit/546fc55))
+## [0.1.42](https://github.com/anvilresearch/connect/tree/0.1.42) (2015-07-01)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.41...0.1.42)
 
-### test
+**Merged pull requests:**
 
-* test(standard): Check style conformance as part of `npm test` ([c09eae1](https://github.com/anvilresearch/connect/commit/c09eae1))
+- Various bugfixes and style adjustments [\#110](https://github.com/anvilresearch/connect/pull/110) ([vsimonian](https://github.com/vsimonian))
+- Fix callback function name [\#109](https://github.com/anvilresearch/connect/pull/109) ([vsimonian](https://github.com/vsimonian))
+- Update to match express v4 API [\#108](https://github.com/anvilresearch/connect/pull/108) ([vsimonian](https://github.com/vsimonian))
+- Add Active Directory support [\#107](https://github.com/anvilresearch/connect/pull/107) ([vsimonian](https://github.com/vsimonian))
+- fix\(routes\): Pass `next` to `passport.authenticate` [\#106](https://github.com/anvilresearch/connect/pull/106) ([vsimonian](https://github.com/vsimonian))
+- feat\(fields\): Generate sign in form for providers with defined fields [\#105](https://github.com/anvilresearch/connect/pull/105) ([vsimonian](https://github.com/vsimonian))
+- Add provider templating for boot-time inheritance [\#104](https://github.com/anvilresearch/connect/pull/104) ([vsimonian](https://github.com/vsimonian))
 
-* fix(lib/cli): Ensure error-handling stops function execution ([62db39c](https://github.com/anvilresearch/connect/commit/62db39c))
-* fix(oidc/checkSession): Ensure error-handling stops function execution ([1e54302](https://github.com/anvilresearch/connect/commit/1e54302))
-* fix(oidc/determineClientScope): Ensure error-handling stops function execution ([fe02eeb](https://github.com/anvilresearch/connect/commit/fe02eeb))
-* fix(oidc/determineUserScope): Ensure error-handling stops function execution ([ec2c4ce](https://github.com/anvilresearch/connect/commit/ec2c4ce))
-* Merge pull request #184 from anvilresearch/vsimonian-js-standard-style ([65a0a2e](https://github.com/anvilresearch/connect/commit/65a0a2e))
-* Merge pull request #188 from anvilresearch/vsimonian-ioredis ([ee3e79c](https://github.com/anvilresearch/connect/commit/ee3e79c))
-* style(routes/recovery): Adjust comment placement ([70134ba](https://github.com/anvilresearch/connect/commit/70134ba))
+## [0.1.41](https://github.com/anvilresearch/connect/tree/0.1.41) (2015-06-29)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.40...0.1.41)
 
+**Implemented enhancements:**
 
+- Error display for `nv init deployment` and other commands [\#31](https://github.com/anvilresearch/connect/issues/31)
+- Make password signin optional [\#25](https://github.com/anvilresearch/connect/issues/25)
 
-<a name="0.1.49"></a>
-## 0.1.49 (2015-08-21)
+**Closed issues:**
 
+- Reduce/minimize size of dependencies [\#72](https://github.com/anvilresearch/connect/issues/72)
+- Throw error for malformed JSON in config file [\#38](https://github.com/anvilresearch/connect/issues/38)
 
-### feat
+**Merged pull requests:**
 
-* feat(pwreset): Implement password reset ([184c559](https://github.com/anvilresearch/connect/commit/184c559))
+- Update to match express v4 API [\#103](https://github.com/anvilresearch/connect/pull/103) ([vsimonian](https://github.com/vsimonian))
+- Fix broken git URL [\#101](https://github.com/anvilresearch/connect/pull/101) ([vsimonian](https://github.com/vsimonian))
 
+## [0.1.40](https://github.com/anvilresearch/connect/tree/0.1.40) (2015-06-20)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.39...0.1.40)
 
+## [0.1.39](https://github.com/anvilresearch/connect/tree/0.1.39) (2015-06-09)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.38...0.1.39)
 
-<a name="0.1.47"></a>
-## 0.1.47 (2015-08-18)
+**Implemented enhancements:**
 
+- Generating a CHANGELOG [\#66](https://github.com/anvilresearch/connect/issues/66)
 
-### chore
+**Closed issues:**
 
-* chore(README): update getting started info ([dd77f61](https://github.com/anvilresearch/connect/commit/dd77f61))
+- anvil.io 'docs' link in footer points to anvil.io, docs aren't on the site [\#94](https://github.com/anvilresearch/connect/issues/94)
+- Cannot GET / - what to do after installation [\#93](https://github.com/anvilresearch/connect/issues/93)
 
-* fix(test/idToken): Convert exp to ms before passing to Date constructor ([c65a7bd](https://github.com/anvilresearch/connect/commit/c65a7bd))
-* Merge pull request #178 from anvilresearch/vsimonian-fix-tests ([23e2b66](https://github.com/anvilresearch/connect/commit/23e2b66))
-* Merge pull request #179 from anvilresearch/christiansmith-view-override ([e4a4696](https://github.com/anvilresearch/connect/commit/e4a4696))
+**Merged pull requests:**
 
-### feat
+- Deployment [\#92](https://github.com/anvilresearch/connect/pull/92) ([tomkersten](https://github.com/tomkersten))
 
-* feat(public): allow static assets to be overridden individually. ([d44b9cf](https://github.com/anvilresearch/connect/commit/d44b9cf))
-* feat(views): allow views to be overridden individually. ([9d13791](https://github.com/anvilresearch/connect/commit/9d13791))
+## [0.1.38](https://github.com/anvilresearch/connect/tree/0.1.38) (2015-05-19)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.37...0.1.38)
 
-### fix
+## [0.1.37](https://github.com/anvilresearch/connect/tree/0.1.37) (2015-05-18)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.36...0.1.37)
 
-* fix(test): Stub registration scopes in scoped client registration test ([d6ddd09](https://github.com/anvilresearch/connect/commit/d6ddd09))
+**Closed issues:**
 
+- Anvil incompatible with Node 0.12.x [\#91](https://github.com/anvilresearch/connect/issues/91)
+- Empty user name after normal registration. [\#87](https://github.com/anvilresearch/connect/issues/87)
 
+**Merged pull requests:**
 
-<a name="0.1.46"></a>
-## 0.1.46 (2015-08-18)
+- Change the names for form fields "first name" and "last name", to match the mapping in User model. [\#88](https://github.com/anvilresearch/connect/pull/88) ([ovi-tamasan-3pg](https://github.com/ovi-tamasan-3pg))
+- dev dependencies update [\#86](https://github.com/anvilresearch/connect/pull/86) ([adi-ads](https://github.com/adi-ads))
+- don't add password as a icon in views [\#84](https://github.com/anvilresearch/connect/pull/84) ([adi-ads](https://github.com/adi-ads))
+- update faker [\#83](https://github.com/anvilresearch/connect/pull/83) ([adi-ads](https://github.com/adi-ads))
 
+## [0.1.36](https://github.com/anvilresearch/connect/tree/0.1.36) (2015-04-20)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.35...0.1.36)
 
-### feat
+## [0.1.35](https://github.com/anvilresearch/connect/tree/0.1.35) (2015-04-08)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.34...0.1.35)
 
-* feat(OneTimeToken): Support expiring, single-use tokens ([0bf03f2](https://github.com/anvilresearch/connect/commit/0bf03f2))
-* feat(password): set default daysToCrack property on password provider ([7a20b1e](https://github.com/anvilresearch/connect/commit/7a20b1e))
+**Merged pull requests:**
 
-### fix
+- Support optional nonce for auth code flow [\#82](https://github.com/anvilresearch/connect/pull/82) ([adi-ads](https://github.com/adi-ads))
+- update faker package name to lowercase [\#81](https://github.com/anvilresearch/connect/pull/81) ([adi-ads](https://github.com/adi-ads))
 
-* fix(emailVerification): Fix tests, merge changes ([9c90e06](https://github.com/anvilresearch/connect/commit/9c90e06))
-* fix(jwks): add "use" and "alg" properties to signature JWK ([ccd2cb7](https://github.com/anvilresearch/connect/commit/ccd2cb7))
-* fix(OneTimeToken): Add missing key parameter to EXPIREAT call ([34c0e2f](https://github.com/anvilresearch/connect/commit/34c0e2f))
-* fix(OneTimeToken): Use seconds for expiration/TTL ([64ff426](https://github.com/anvilresearch/connect/commit/64ff426))
+## [0.1.34](https://github.com/anvilresearch/connect/tree/0.1.34) (2015-04-08)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.33...0.1.34)
 
-### refactor
+## [0.1.33](https://github.com/anvilresearch/connect/tree/0.1.33) (2015-04-07)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.32...0.1.33)
 
-* refactor(emailVerification): Move decision to send email upstream ([da00595](https://github.com/anvilresearch/connect/commit/da00595))
-* refactor(emailVerification): use OneTimeToken for email verification ([982905d](https://github.com/anvilresearch/connect/commit/982905d))
-* refactor(emailVerification): use OneTimeToken for email verification ([6c04fea](https://github.com/anvilresearch/connect/commit/6c04fea))
+## [0.1.32](https://github.com/anvilresearch/connect/tree/0.1.32) (2015-04-07)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.31...0.1.32)
 
-### test
+**Closed issues:**
 
-* test(OneTimeToken): fix OneTimeToken.consume() test ([d9c6106](https://github.com/anvilresearch/connect/commit/d9c6106))
+- Cannot run nv init [\#77](https://github.com/anvilresearch/connect/issues/77)
+- Does anvil-connect server work via https? [\#76](https://github.com/anvilresearch/connect/issues/76)
 
-* fix(boot/database): Ensure database always has default entries ([f78ae9b](https://github.com/anvilresearch/connect/commit/f78ae9b))
-* Merge pull request #171 from anvilresearch/vsimonian-expiring-tokens ([c2719c9](https://github.com/anvilresearch/connect/commit/c2719c9))
-* Merge pull request #172 from anvilresearch/vsimonian-boot-db-fix ([0b4faf6](https://github.com/anvilresearch/connect/commit/0b4faf6))
-* Merge pull request #173 from anvilresearch/vsimonian-fix-one-time-token ([aa639dd](https://github.com/anvilresearch/connect/commit/aa639dd))
-* Merge pull request #174 from anvilresearch/christiansmith-email-verification-refactoring ([af8c437](https://github.com/anvilresearch/connect/commit/af8c437))
+**Merged pull requests:**
 
+- update modinha version [\#79](https://github.com/anvilresearch/connect/pull/79) ([adi-ads](https://github.com/adi-ads))
+- app default config update [\#78](https://github.com/anvilresearch/connect/pull/78) ([adi-ads](https://github.com/adi-ads))
 
+## [0.1.31](https://github.com/anvilresearch/connect/tree/0.1.31) (2015-04-05)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.30...0.1.31)
 
-<a name="0.1.43"></a>
-## 0.1.43 (2015-08-12)
+## [0.1.30](https://github.com/anvilresearch/connect/tree/0.1.30) (2015-04-05)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.29...0.1.30)
 
+## [0.1.29](https://github.com/anvilresearch/connect/tree/0.1.29) (2015-04-02)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.28...0.1.29)
 
-### chore
+**Closed issues:**
 
-* chore(cli): remove .modulusignore file from init ([39a896a](https://github.com/anvilresearch/connect/commit/39a896a))
-* chore(gitignore): Ignore Redis data files ([84dcf62](https://github.com/anvilresearch/connect/commit/84dcf62))
-* chore(npm): add LDAP keyword to package ([8075464](https://github.com/anvilresearch/connect/commit/8075464))
-* chore(npm): update anvil-connect-jwt dependency ([932dd19](https://github.com/anvilresearch/connect/commit/932dd19))
-* chore(npm): update dependencies ([770a9c7](https://github.com/anvilresearch/connect/commit/770a9c7))
-* chore(npm): update fs-extra and faker dependencies ([0e3a5fe](https://github.com/anvilresearch/connect/commit/0e3a5fe))
-* chore(npm): update fs-extra and qs dependencies ([3c2100e](https://github.com/anvilresearch/connect/commit/3c2100e))
-* chore(npm): update inquirer dependency ([ae6f634](https://github.com/anvilresearch/connect/commit/ae6f634))
-* chore(npm): update modinha and modinha-redis dependencies ([4cb8035](https://github.com/anvilresearch/connect/commit/4cb8035))
-* chore(npm): Update modinha and modinha-redis dependencies ([dd666bc](https://github.com/anvilresearch/connect/commit/dd666bc))
-* chore(npm): update modinha/modinha-redis dependencies ([b346a33](https://github.com/anvilresearch/connect/commit/b346a33))
+- nv migrate fails [\#73](https://github.com/anvilresearch/connect/issues/73)
 
-### docs
+## [0.1.28](https://github.com/anvilresearch/connect/tree/0.1.28) (2015-03-14)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.27...0.1.28)
 
-* docs(README): note build in LDAP support ([860dbbe](https://github.com/anvilresearch/connect/commit/860dbbe))
-* docs(resendEmail): Explain logic behind messages ([1f1297e](https://github.com/anvilresearch/connect/commit/1f1297e))
+## [0.1.27](https://github.com/anvilresearch/connect/tree/0.1.27) (2015-03-10)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.26...0.1.27)
 
-### feat
+**Implemented enhancements:**
 
-* feat(boot/database): allow overriding foreign data check ([cef8ae4](https://github.com/anvilresearch/connect/commit/cef8ae4))
-* feat(boot/database): deprecate nv migrate ([3b94c76](https://github.com/anvilresearch/connect/commit/3b94c76))
-* feat(boot/database): Display error if unable to set data in Redis ([a6380fd](https://github.com/anvilresearch/connect/commit/a6380fd))
-* feat(signin & signup): Reject auth requests with mismatching referrer ([466fc01](https://github.com/anvilresearch/connect/commit/466fc01))
-* feat(boot): initialize database on first boot ([904d744](https://github.com/anvilresearch/connect/commit/904d744))
-* feat(cli): nv init generates containerized deployment scheme for Connect, Redis, and nginx ([18eb3d8](https://github.com/anvilresearch/connect/commit/18eb3d8))
-* feat(email): Initial e-mail verification support ([1d66d55](https://github.com/anvilresearch/connect/commit/1d66d55))
-* feat(emailVerify): Initial feature-complete email verification support ([e7e51cc](https://github.com/anvilresearch/connect/commit/e7e51cc))
-* feat(IDToken): add `amr` claim ([4b94a55](https://github.com/anvilresearch/connect/commit/4b94a55))
-* feat(IDToken): add `amr` to permitted claims ([b09638b](https://github.com/anvilresearch/connect/commit/b09638b))
-* feat(init): replace nv init with instructions for new CLI ([99fa55d](https://github.com/anvilresearch/connect/commit/99fa55d))
-* feat(middleware): Load provider object onto req ([0e468fc](https://github.com/anvilresearch/connect/commit/0e468fc))
-* feat(oidc): add `amr` claim to id_token at token endpoint ([8e4dedb](https://github.com/anvilresearch/connect/commit/8e4dedb))
-* feat(oidc): add amr claim to id_token payload for password signin ([9bcdcd0](https://github.com/anvilresearch/connect/commit/9bcdcd0))
-* feat(oidc): config overrides default `amr` value for provider ([5360834](https://github.com/anvilresearch/connect/commit/5360834))
-* feat(package): add Vartan Simonian to contributors ([cc6622f](https://github.com/anvilresearch/connect/commit/cc6622f))
-* feat(protocols): Add LDAP support ([94eedb9](https://github.com/anvilresearch/connect/commit/94eedb9))
-* feat(session): enable secure cookies in production environment ([039a4ec](https://github.com/anvilresearch/connect/commit/039a4ec))
-* feat(user): Add user.sendVerificationEmail method ([091b34b](https://github.com/anvilresearch/connect/commit/091b34b))
+- Authorization flow [\#1](https://github.com/anvilresearch/connect/issues/1)
 
-### fix
+**Fixed bugs:**
 
-* fix(boot/database): display error when Redis is unreachable ([faa5942](https://github.com/anvilresearch/connect/commit/faa5942))
-* fix(boot): remove unused dependencies ([b52bd3c](https://github.com/anvilresearch/connect/commit/b52bd3c))
-* fix(error): Remove debug logging code ([32d9fe5](https://github.com/anvilresearch/connect/commit/32d9fe5))
-* fix(logout): Revert req.logout refactor ([553f9d5](https://github.com/anvilresearch/connect/commit/553f9d5))
-* fix(npm): move faker to dev dependencies ([9e5d5b6](https://github.com/anvilresearch/connect/commit/9e5d5b6))
-* fix(password): Remove dated configuration property check ([0e0c48c](https://github.com/anvilresearch/connect/commit/0e0c48c))
-* fix(protocols): Respect id mapping set on LDAP provider/config ([50064a9](https://github.com/anvilresearch/connect/commit/50064a9))
-* fix(signin): Add error message for invalid providers ([d3ea3ca](https://github.com/anvilresearch/connect/commit/d3ea3ca))
-* fix(verifyEmail): Use correct property for email verified claim ([c691fa9](https://github.com/anvilresearch/connect/commit/c691fa9))
-* fix(views): Make view titles match content ([2e9d744](https://github.com/anvilresearch/connect/commit/2e9d744))
+- Authorization flow [\#1](https://github.com/anvilresearch/connect/issues/1)
 
-### refactor
+**Closed issues:**
 
-* refactor(boot/database): deprecate "version" key, renaming as "anvil:connect:version" ([a9f571f](https://github.com/anvilresearch/connect/commit/a9f571f))
-* refactor(boot/database): rename "tag" function to "version" ([c30f816](https://github.com/anvilresearch/connect/commit/c30f816))
-* refactor(protocols): Remove AD protocol, AD provider uses LDAP protocol now ([e22e1e5](https://github.com/anvilresearch/connect/commit/e22e1e5))
-* refactor(signup): Use user.sendVerificationEmail ([ac55b90](https://github.com/anvilresearch/connect/commit/ac55b90))
+- mongodb support [\#69](https://github.com/anvilresearch/connect/issues/69)
+- Storing Provider Auth + UserInfo Responses with Anvil user object [\#63](https://github.com/anvilresearch/connect/issues/63)
 
-### style
+**Merged pull requests:**
 
-* style(email): Add EOF newline ([33c2ede](https://github.com/anvilresearch/connect/commit/33c2ede))
+- protocol/OpenID.js works against master [\#71](https://github.com/anvilresearch/connect/pull/71) ([nrhope](https://github.com/nrhope))
+- Add a Gitter chat badge to README.md [\#70](https://github.com/anvilresearch/connect/pull/70) ([gitter-badger](https://github.com/gitter-badger))
+- fix ID Token expiry delta \(was undefined so token expired immediately\) [\#60](https://github.com/anvilresearch/connect/pull/60) ([nrhope](https://github.com/nrhope))
+- tweaks to get server talking to external Java \(mitreid\) and passport-openid clients [\#59](https://github.com/anvilresearch/connect/pull/59) ([nrhope](https://github.com/nrhope))
+- Renamed function [\#58](https://github.com/anvilresearch/connect/pull/58) ([tomkersten](https://github.com/tomkersten))
 
-### test
+## [0.1.26](https://github.com/anvilresearch/connect/tree/0.1.26) (2014-10-28)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.25...0.1.26)
 
-* test(User): add spies for req.flash ([f58577e](https://github.com/anvilresearch/connect/commit/f58577e))
+**Implemented enhancements:**
 
+- JWK set URI [\#19](https://github.com/anvilresearch/connect/issues/19)
 
+## [0.1.25](https://github.com/anvilresearch/connect/tree/0.1.25) (2014-10-22)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.24...0.1.25)
 
+## [0.1.24](https://github.com/anvilresearch/connect/tree/0.1.24) (2014-10-20)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.23...0.1.24)
 
-<a name"0.1.42"></a>
-### 0.1.42 (2015-06-30)
+**Implemented enhancements:**
 
+- JWT Access Tokens [\#15](https://github.com/anvilresearch/connect/issues/15)
+- Hybrid Authorization Flow [\#8](https://github.com/anvilresearch/connect/issues/8)
+- Multiple response types [\#6](https://github.com/anvilresearch/connect/issues/6)
 
-#### Bug Fixes
+**Merged pull requests:**
 
-* **authorizations:** Use correct function to send only status code ([3a27f8fb](https://github.com/anvilresearch/connect/commit/3a27f8fb))
-* **boot:** Define variables that are used but not defined ([9553367d](https://github.com/anvilresearch/connect/commit/9553367d))
-* **client:**
-  * Remove unused variable ([f89e8bd2](https://github.com/anvilresearch/connect/commit/f89e8bd2))
-  * Fix callback function name ([756a1b5a](https://github.com/anvilresearch/connect/commit/756a1b5a))
-* **oidc:**
-  * Don't dereference indexOf if scope is falsy ([7b65497b](https://github.com/anvilresearch/connect/commit/7b65497b))
-  * Fix callback function name ([69ac4623](https://github.com/anvilresearch/connect/commit/69ac4623))
-* **openid:** Correct use of undefined variable ([269d5243](https://github.com/anvilresearch/connect/commit/269d5243))
-* **register:** Fix missing NotFoundError require ([51e2796e](https://github.com/anvilresearch/connect/commit/51e2796e))
-* **routes:**
-  * Update to match express v4 API ([e4aa50a4](https://github.com/anvilresearch/connect/commit/e4aa50a4))
-  * Update to match express v4 API ([3ecdfe7f](https://github.com/anvilresearch/connect/commit/3ecdfe7f))
-  * Pass `next` to `passport.authenticate` ([29caf252](https://github.com/anvilresearch/connect/commit/29caf252))
-* **signout:** Update deprecated express API call ([40ee238c](https://github.com/anvilresearch/connect/commit/40ee238c))
-* **time-utils:** Fix variable double-definition ([38867105](https://github.com/anvilresearch/connect/commit/38867105))
-* **userapplications:** Add missing semicolon ([abd38c5c](https://github.com/anvilresearch/connect/commit/abd38c5c))
-* **userinfo:** Add missing NotFoundError require ([612f4e31](https://github.com/anvilresearch/connect/commit/612f4e31))
+- Fixed `revoke` argument parsing indice mistake [\#56](https://github.com/anvilresearch/connect/pull/56) ([tomkersten](https://github.com/tomkersten))
 
+## [0.1.23](https://github.com/anvilresearch/connect/tree/0.1.23) (2014-08-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.22...0.1.23)
 
-#### Features
+## [0.1.22](https://github.com/anvilresearch/connect/tree/0.1.22) (2014-07-25)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.21...0.1.22)
 
-* **fields:** Generate sign in form for providers with defined fields ([2769b1fe](https://github.com/anvilresearch/connect/commit/2769b1fe))
-* **providers:** Add Active Directory support ([a25cae79](https://github.com/anvilresearch/connect/commit/a25cae79))
-* **views:** use consolidate.js for configurable view engine ([e955ad2c](https://github.com/anvilresearch/connect/commit/e955ad2c))
+**Closed issues:**
 
+- Configurable token expiration [\#50](https://github.com/anvilresearch/connect/issues/50)
+- "Requires login" prompt? [\#45](https://github.com/anvilresearch/connect/issues/45)
 
-<a name"0.1.41"></a>
-### 0.1.41 (2015-06-29)
+## [0.1.21](https://github.com/anvilresearch/connect/tree/0.1.21) (2014-06-27)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.20...0.1.21)
 
+## [0.1.20](https://github.com/anvilresearch/connect/tree/0.1.20) (2014-06-27)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.19...0.1.20)
 
-#### Bug Fixes
+## [0.1.19](https://github.com/anvilresearch/connect/tree/0.1.19) (2014-06-26)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.18...0.1.19)
 
-* **signin:** disable password signup and signin routes when password provider is not enabled ([2c819082](https://github.com/anvilresearch/connect/commit/2c819082))
+**Merged pull requests:**
 
+- Added some basic styling to views [\#43](https://github.com/anvilresearch/connect/pull/43) ([petebot](https://github.com/petebot))
 
-#### Features
+## [0.1.18](https://github.com/anvilresearch/connect/tree/0.1.18) (2014-06-19)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.17...0.1.18)
 
-* **migrate:** remove default clients ([fab5a13b](https://github.com/anvilresearch/connect/commit/fab5a13b))
-* **routes:** add status endpoint ([58eb5e87](https://github.com/anvilresearch/connect/commit/58eb5e87))
-* **settings:** print readable message when configuration file is malformed ([4a399ee2](https://github.com/anvilresearch/connect/commit/4a399ee2))
+**Fixed bugs:**
 
+- nv-commands fail without env variables set [\#41](https://github.com/anvilresearch/connect/issues/41)
 
-<a name"0.1.40"></a>
-### 0.1.40 (2015-06-20)
+**Closed issues:**
 
+- Rewrite `nv init db` [\#42](https://github.com/anvilresearch/connect/issues/42)
 
-#### Features
+## [0.1.17](https://github.com/anvilresearch/connect/tree/0.1.17) (2014-06-16)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.16...0.1.17)
 
-* **redis:** check REDIS_PORT environment variable ([4e4ba747](https://github.com/anvil-research/connect/commit/4e4ba747))
+## [0.1.16](https://github.com/anvilresearch/connect/tree/0.1.16) (2014-06-16)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.15...0.1.16)
 
+## [0.1.15](https://github.com/anvilresearch/connect/tree/0.1.15) (2014-06-12)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.14...0.1.15)
 
-<a name"0.1.39"></a>
-### 0.1.39 (2015-06-09)
+## [0.1.14](https://github.com/anvilresearch/connect/tree/0.1.14) (2014-06-12)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.13...0.1.14)
 
+## [0.1.13](https://github.com/anvilresearch/connect/tree/0.1.13) (2014-06-12)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.12...0.1.13)
 
-#### Bug Fixes
+## [0.1.12](https://github.com/anvilresearch/connect/tree/0.1.12) (2014-06-12)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.11...0.1.12)
 
-* **deployment:** update default Docker config file to functional version ([9358fe55](https://github.com/anvil-research/connect/commit/9358fe55))
-* **discovery:** include all registered scopes in server metadata ([6b8077c8](https://github.com/anvil-research/connect/commit/6b8077c8))
-* **docker:** update node version installed in container to be 0.12.x ([757247f5](https://github.com/anvil-research/connect/commit/757247f5))
-* **settings:** update default service documentation setting ([0ec49ba8](https://github.com/anvil-research/connect/commit/0ec49ba8))
+**Implemented enhancements:**
 
+- Keyfiles [\#2](https://github.com/anvilresearch/connect/issues/2)
 
-#### Features
+## [0.1.11](https://github.com/anvilresearch/connect/tree/0.1.11) (2014-06-10)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.10...0.1.11)
 
-* **Client:** add "service" to allowed `application_type` values ([5ee0b5cb](https://github.com/anvil-research/connect/commit/5ee0b5cb))
-* **cli:** `nv init` generates docker-compose.yml and nginx.conf ([20d7af62](https://github.com/anvil-research/connect/commit/20d7af62))
-* **deployment:**
-  * add example of Docker Compose config ([79dc3352](https://github.com/anvil-research/connect/commit/79dc3352))
-  * add example of nginx config ([f005b985](https://github.com/anvil-research/connect/commit/f005b985))
+## [0.1.10](https://github.com/anvilresearch/connect/tree/0.1.10) (2014-06-10)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.9...0.1.10)
 
+## [0.1.9](https://github.com/anvilresearch/connect/tree/0.1.9) (2014-06-09)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.8...0.1.9)
+
+## [0.1.8](https://github.com/anvilresearch/connect/tree/0.1.8) (2014-06-09)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.7...0.1.8)
+
+**Implemented enhancements:**
+
+- Logging [\#27](https://github.com/anvilresearch/connect/issues/27)
+
+**Fixed bugs:**
+
+- .gitignore on `nv init deployment` [\#29](https://github.com/anvilresearch/connect/issues/29)
+
+**Closed issues:**
+
+- cli usage [\#33](https://github.com/anvilresearch/connect/issues/33)
+- cli version [\#32](https://github.com/anvilresearch/connect/issues/32)
+
+## [0.1.7](https://github.com/anvilresearch/connect/tree/0.1.7) (2014-06-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.6...0.1.7)
+
+**Implemented enhancements:**
+
+- Support global install for `nv` cli [\#30](https://github.com/anvilresearch/connect/issues/30)
+
+## [0.1.6](https://github.com/anvilresearch/connect/tree/0.1.6) (2014-06-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.5...0.1.6)
+
+**Merged pull requests:**
+
+- Add public/.gitkeep so 'public' dir is in repo [\#28](https://github.com/anvilresearch/connect/pull/28) ([tomkersten](https://github.com/tomkersten))
+
+## [0.1.5](https://github.com/anvilresearch/connect/tree/0.1.5) (2014-06-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.4...0.1.5)
+
+## [0.1.4](https://github.com/anvilresearch/connect/tree/0.1.4) (2014-06-04)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.3...0.1.4)
+
+## [0.1.3](https://github.com/anvilresearch/connect/tree/0.1.3) (2014-06-03)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.2...0.1.3)
+
+## [0.1.2](https://github.com/anvilresearch/connect/tree/0.1.2) (2014-06-03)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.1...0.1.2)
+
+## [0.1.1](https://github.com/anvilresearch/connect/tree/0.1.1) (2014-06-03)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.0...0.1.1)
+
+**Implemented enhancements:**
+
+- Node Cluster [\#17](https://github.com/anvilresearch/connect/issues/17)
+- Static assets [\#4](https://github.com/anvilresearch/connect/issues/4)
+- Project/deployment generator [\#3](https://github.com/anvilresearch/connect/issues/3)
+
+## [0.1.0](https://github.com/anvilresearch/connect/tree/0.1.0) (2014-05-30)
+
+
+\* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
