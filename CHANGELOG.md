@@ -1,3 +1,36 @@
+<a name="0.1.54"></a>
+## 0.1.54 (2015-09-04)
+
+
+### feat
+
+* feat: Check that requested response types are allowed in settings ([a0a7350](https://github.com/anvilresearch/connect/commit/a0a7350))
+* feat(Client): Require and provide default for grant_type ([acfe1ee](https://github.com/anvilresearch/connect/commit/acfe1ee))
+* feat(Client): Require and provide default for response_types ([8136ad6](https://github.com/anvilresearch/connect/commit/8136ad6))
+* feat(Client): Validate response_types against grant_types ([9846da6](https://github.com/anvilresearch/connect/commit/9846da6))
+* feat(verifyClient): Enforce response_types (#95) ([f4ebf52](https://github.com/anvilresearch/connect/commit/f4ebf52))
+
+### fix
+
+* fix: Trim leading and trailing whitespace in response_type and response_mode ([d951c28](https://github.com/anvilresearch/connect/commit/d951c28))
+* fix: Validate response_types regardless of order ([75b6e8d](https://github.com/anvilresearch/connect/commit/75b6e8d))
+* fix(authenticator): Fix handling of optional `options` parameter ([85e0f1b](https://github.com/anvilresearch/connect/commit/85e0f1b))
+* fix(Client): Equate undefined NODE_ENV to development environment ([76d0937](https://github.com/anvilresearch/connect/commit/76d0937))
+
+### refactor
+
+* refactor: consolidate response_type verification logic ([8dc37bc](https://github.com/anvilresearch/connect/commit/8dc37bc))
+
+### test
+
+* test(Client): Test response_type validation ([9d4f834](https://github.com/anvilresearch/connect/commit/9d4f834))
+
+* Merge branch 'vsimonian-fix-unverified-redirects' into vsimonian-enforce-grant_types-response_types ([0271fe3](https://github.com/anvilresearch/connect/commit/0271fe3))
+* Merge pull request #217 from anvilresearch/vsimonian-enforce-grant_types-response_types ([36ea8b2](https://github.com/anvilresearch/connect/commit/36ea8b2))
+* Merge pull request #218 from anvilresearch/vsimonian-fix-passport-shim-options ([e872679](https://github.com/anvilresearch/connect/commit/e872679))
+
+
+
 <a name="0.1.53"></a>
 ## 0.1.53 (2015-09-03)
 
