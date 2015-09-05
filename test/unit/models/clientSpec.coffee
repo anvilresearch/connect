@@ -643,6 +643,32 @@ describe 'Client', ->
 
 
 
+  describe 'initialization', ->
+
+    describe 'redirect_uris', ->
+
+      before ->
+        client = new Client
+          redirect_uris: [
+            "    https://example.org",
+            "https://example.net    ",
+            "    https://example.com    "
+          ]
+
+      it 'should trim leading whitespace', ->
+        client.redirect_uris[0].should.equal 'https://example.org'
+
+      it 'should trim trailing whitespace', ->
+        client.redirect_uris[1].should.equal 'https://example.net'
+
+      it 'should trim both leading and trailing whitespace', ->
+        client.redirect_uris[2].should.equal 'https://example.com'
+
+
+
+
+
+
   describe 'configuration', ->
 
     {client,configuration,token} = {}
