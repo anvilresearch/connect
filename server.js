@@ -16,6 +16,7 @@ require('./lib/authenticator').registerProviders()
  * Routes
  */
 
+require('./routes/setup')(server)
 require('./routes/status')(server)
 require('./routes/discover')(server)
 require('./routes/register')(server)

@@ -5,6 +5,7 @@
 var cwd = process.cwd()
 var path = require('path')
 var settings = require('./settings')
+var setup = require('./setup')
 var client = require('./redis').getClient()
 var logger = require('./logger')(settings.logger)
 require('./mailer').getMailer()
@@ -19,6 +20,20 @@ var RedisStore = require('connect-redis')(session)
 var connectFlash = require('connect-flash')
 var cors = require('cors')
 var sessionStore = new RedisStore({ client: client })
+
+/**
+ * Read setup token if the server is in out-of-box mode
+ */
+
+setup.isOOB(function (err, oob) {
+  if (err) { return console.log(err) }
+  if (oob) {
+    setup.readSetupToken(function (err, token) {
+      if (err) { return console.log(err) }
+      settings.setupToken = token
+    })
+  }
+})
 
 /**
  * Exports
