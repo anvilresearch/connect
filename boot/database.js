@@ -1,10 +1,15 @@
+/* global process */
+
 /**
  * Dependencies
  */
 
 var async = require('async')
+var semver = require('semver')
 var settings = require('./settings')
+var providers = require('../providers')
 var rclient = require('./redis').getClient()
+var User = require('../models/User')
 var Role = require('../models/Role')
 var Scope = require('../models/Scope')
 
@@ -75,6 +80,40 @@ function assignPermissions (done) {
 }
 
 /**
+ * Migrate data
+ */
+
+function migrateData (version, done) {
+  if (!version) { return done() }
+
+  if (semver.satisfies(version, '<=0.1.54')) {
+    // 0.1.54 and prior did not namespace user-by-provider indexes
+    var providerIDs = Object.keys(providers)
+
+    async.map(providerIDs, function (provider, callback) {
+      var index = User.collection + ':' + provider
+      var newIndex = User.collection + ':provider:' + provider
+
+      rclient.hgetall(index, function (err, result) {
+        if (err) { return callback(err) }
+
+        if (result && Object.getOwnPropertyNames(result).length) {
+          rclient.rename(index, newIndex, function (err) {
+            if (err) { return callback(err) }
+
+            return callback()
+          })
+        } else {
+          return callback()
+        }
+      })
+    }, function (err) {
+      return done(err)
+    })
+  }
+}
+
+/**
  * Tag Version
  */
 
@@ -121,13 +160,23 @@ module.exports = function setup () {
       insertRoles,
       insertScopes,
       assignPermissions,
-      updateVersion
+      async.apply(migrateData, version)
     ], function (err, results) {
       if (err) {
         console.log('Unable to initialize Redis database.')
         console.log(err.message)
-        process.exit(1)
+        return process.exit(1)
       }
+
+      updateVersion(function (err) {
+        if (err) {
+          console.log('Unable to initialize Redis database.')
+          console.log(err.message)
+          return process.exit(1)
+        }
+
+        console.log('Successfully initialized Redis database.')
+      })
     })
   })
 }
