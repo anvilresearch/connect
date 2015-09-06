@@ -447,6 +447,23 @@ if (!settings.issuer) {
 }
 
 /**
+ * Always enable password provider
+ *
+ * Authority users always need to be able to sign in to administer the server
+ */
+
+if (!settings.providers.password) {
+  settings.providers.password = {
+    hidden: true,
+    allowRoles: [ 'authority' ]
+  }
+} else if (settings.providers.password.allowRoles) {
+  if (settings.providers.password.allowRoles.indexOf('authority') === -1) {
+    settings.providers.password.allowRoles.push('authority')
+  }
+}
+
+/**
  * Config-file dependenct settings
  */
 

@@ -13,6 +13,7 @@ chai.should()
 
 
 {requireVerifiedEmail} = require '../../../oidc'
+Role = require '../../../models/Role'
 
 
 
@@ -23,7 +24,7 @@ describe 'Require verified email', ->
 
   describe 'with email already verified', ->
 
-    before ->
+    before (done) ->
       req =
         user:
           emailVerified: true
@@ -31,14 +32,60 @@ describe 'Require verified email', ->
           emailVerification:
             enable: true
             require: true
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, []
 
-      res = { render: sinon.spy() }
-      next = sinon.spy()
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
 
       options =
         force: true
 
       requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
+
+    it 'should not prompt the user for verification', ->
+      res.render.should.not.have.been.called
+
+    it 'should continue', ->
+      next.should.have.been.called
+
+
+
+
+  describe 'with authority user', ->
+
+    before (done) ->
+      req =
+        user:
+          emailVerified: false
+        provider:
+          emailVerification:
+            enable: true
+            require: true
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, [{
+        name: 'authority'
+      }]
+
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
+
+      options =
+        force: true
+
+      requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
 
     it 'should not prompt the user for verification', ->
       res.render.should.not.have.been.called
@@ -51,7 +98,7 @@ describe 'Require verified email', ->
 
   describe 'with unverified email and verification required', ->
 
-    before ->
+    before (done) ->
       req =
         user:
           emailVerified: false
@@ -60,14 +107,22 @@ describe 'Require verified email', ->
             enable: true
             require: true
         flash: sinon.spy (key) -> [true]
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, []
 
-      res = { render: sinon.spy() }
-      next = sinon.spy()
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
 
       options =
         force: true
 
       requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
 
     it 'should prompt the user for verification', ->
       res.render.should.have.been.called
@@ -91,7 +146,7 @@ describe 'Require verified email', ->
 
   describe 'with unverified email, verification required, and custom view', ->
 
-    before ->
+    before (done) ->
       req =
         user:
           emailVerified: false
@@ -100,9 +155,14 @@ describe 'Require verified email', ->
             enable: true
             require: true
         flash: sinon.spy (key) -> [true]
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, []
 
-      res = { render: sinon.spy() }
-      next = sinon.spy()
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
 
       options =
         view: 'testView'
@@ -111,6 +171,9 @@ describe 'Require verified email', ->
         force: true
 
       requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
 
     it 'should prompt the user for verification', ->
       res.render.should.have.been.called
@@ -129,7 +192,7 @@ describe 'Require verified email', ->
 
   describe 'with unverified email and email verification disabled', ->
 
-    before ->
+    before (done) ->
       req =
         user:
           emailVerified: false
@@ -137,14 +200,22 @@ describe 'Require verified email', ->
           emailVerification:
             enable: false
             require: true
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, []
 
-      res = { render: sinon.spy() }
-      next = sinon.spy()
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
 
       options =
         force: true
 
       requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
 
     it 'should not prompt the user for verification', ->
       res.render.should.not.have.been.called
@@ -157,7 +228,7 @@ describe 'Require verified email', ->
 
   describe 'with unverified email, verification enabled, forced, not required', ->
 
-    before ->
+    before (done) ->
       req =
         user:
           emailVerified: false
@@ -166,14 +237,22 @@ describe 'Require verified email', ->
             enable: true
             require: false
         flash: sinon.spy (key) -> [true]
+      sinon.stub(Role, 'listByUsers').callsArgWith 1, null, []
 
-      res = { render: sinon.spy() }
-      next = sinon.spy()
+      res =
+        render: sinon.spy ->
+          done()
+
+      next = sinon.spy ->
+        done()
 
       options =
         force: true
 
       requireVerifiedEmail(options) req, res, next
+
+    after ->
+      Role.listByUsers.restore()
 
     it 'should prompt the user for verification', ->
       res.render.should.have.been.called
