@@ -122,6 +122,7 @@
     "pem-jwk": "^1.5.1",
     "qs": "^5.0.0",
     "revalidator": "^0.3.1",
+    "semver": "^5.0.1",
     "superagent": "^1.2.0",
     "yargs": "^3.8.0"
   }
