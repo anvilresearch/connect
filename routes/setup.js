@@ -54,7 +54,7 @@ module.exports = function (server) {
             if (err) { return next(err) }
 
             // 6. Return with client and user details
-            res.send({
+            res.status(201).send({
               user: user.project('userinfo'),
               client: client.project('registration')
             })
