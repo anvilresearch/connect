@@ -189,6 +189,8 @@ describe 'User Roles REST Routes', ->
 
       before (done) ->
         user = new User
+        user.addRoles = (id, cb) ->
+          cb()
         role = roles[0]
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
         sinon.stub(User, 'get').callsArgWith(1, null, user)

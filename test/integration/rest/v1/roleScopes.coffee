@@ -189,6 +189,8 @@ describe 'Role Scopes REST Routes', ->
 
       before (done) ->
         role = new Role
+        role.addScopes = (id, cb) ->
+          cb()
         scope = scopes[0]
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
         sinon.stub(Role, 'get').callsArgWith(1, null, role)

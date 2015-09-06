@@ -63,6 +63,7 @@ describe 'RESTful Scope Routes', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(Scope, 'list').callsArgWith 1, null, []
         request
           .get('/v1/scopes')
           .set('Authorization', 'Bearer valid.signed.token')
@@ -73,6 +74,7 @@ describe 'RESTful Scope Routes', ->
 
       after ->
         AccessToken.verify.restore()
+        Scope.list.restore()
 
       it 'should respond 200', ->
         res.statusCode.should.equal 200
