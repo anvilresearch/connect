@@ -4,7 +4,7 @@ keys
 node_modules
 public/vendor
 *.swp
-dump.rdb
-appendonly.aof
+*.rdb
+*.aof
 npm-debug.log
 .settings
