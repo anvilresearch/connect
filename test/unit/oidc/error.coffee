@@ -26,21 +26,25 @@ describe 'Error Response', ->
   describe 'with 302 status code', ->
 
     before ->
-        err =
-          error:              'error_code'
-          error_description:  'description'
-          redirect_uri:       'https://client.tld/callback'
-          statusCode:         302
+      err =
+        error:              'error_code'
+        error_description:  'description'
+        redirect_uri:       'https://client.tld/callback'
+        statusCode:         302
 
-        req = {}
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
 
-        res =
-          render: sinon.spy()
-          redirect: sinon.spy()
+      res =
+        render: sinon.spy()
+        redirect: sinon.spy()
 
-        next = sinon.spy()
+      next = sinon.spy()
 
-        error err, req, res, next
+      error err, req, res, next
 
     it 'should redirect', ->
       res.redirect.should.have.been.calledWith sinon.match(err.redirect_uri)
@@ -62,27 +66,31 @@ describe 'Error Response', ->
   describe 'with 400 status code', ->
 
     before ->
-        err =
-          error:              'error_code'
-          error_description:  'description'
-          statusCode:         400
+      err =
+        error:              'error_code'
+        error_description:  'description'
+        statusCode:         400
 
-        req = {}
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
 
-        json = sinon.spy()
-        status = sinon.stub().returns { json: json }
+      json = sinon.spy()
+      status = sinon.stub().returns { json: json }
 
 
-        res =
-          status: status
-          set: sinon.spy (headers) -> res.headers = headers
-          render: sinon.spy()
-          redirect: sinon.spy()
-        res.status.json = sinon.spy()
+      res =
+        status: status
+        set: sinon.spy (headers) -> res.headers = headers
+        render: sinon.spy()
+        redirect: sinon.spy()
+      res.status.json = sinon.spy()
 
-        next = sinon.spy()
+      next = sinon.spy()
 
-        error err, req, res, next
+      error err, req, res, next
 
     it 'should respond 400', ->
       res.status.should.have.been.calledWith 400
@@ -112,32 +120,36 @@ describe 'Error Response', ->
   describe 'with 401 status code', ->
 
     before ->
-        err =
-          realm:              'realm'
-          error:              'error_code'
-          error_description:  'description'
-          statusCode:         401
+      err =
+        realm:              'realm'
+        error:              'error_code'
+        error_description:  'description'
+        statusCode:         401
 
-        req = {}
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
 
-        send = sinon.spy()
-        status = sinon.stub().returns { send: send }
+      send = sinon.spy()
+      status = sinon.stub().returns { send: send }
 
-        res =
-          status: status
-          set: sinon.spy (headers) -> res.headers = headers
-          render: sinon.spy()
-          redirect: sinon.spy()
+      res =
+        status: status
+        set: sinon.spy (headers) -> res.headers = headers
+        render: sinon.spy()
+        redirect: sinon.spy()
 
-        next = sinon.spy()
+      next = sinon.spy()
 
-        error err, req, res, next
+      error err, req, res, next
 
     it 'should respond 401', ->
       res.status.should.have.been.calledWith 401
 
     it 'should respond "Unauthorized"', ->
-      send.should.have.been.calledWith 'Unauthorized'
+      send.should.have.been.calledWith 'Unauthorized<br><br>description'
 
     it 'should challenge to authenticate', ->
       res.headers['WWW-Authenticate'].should.be.defined
@@ -156,25 +168,29 @@ describe 'Error Response', ->
   describe 'with 403 status code', ->
 
     before ->
-        err =
-          error:              'error_code'
-          error_description:  'description'
-          statusCode:         403
+      err =
+        error:              'error_code'
+        error_description:  'description'
+        statusCode:         403
 
-        req = {}
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
 
-        send = sinon.spy()
-        status = sinon.stub().returns { send: send }
+      send = sinon.spy()
+      status = sinon.stub().returns { send: send }
 
-        res =
-          status: status
-          set: sinon.spy (headers) -> res.headers = headers
-          render: sinon.spy()
-          redirect: sinon.spy()
+      res =
+        status: status
+        set: sinon.spy (headers) -> res.headers = headers
+        render: sinon.spy()
+        redirect: sinon.spy()
 
-        next = sinon.spy()
+      next = sinon.spy()
 
-        error err, req, res, next
+      error err, req, res, next
 
     it 'should respond 403', ->
       res.status.should.have.been.calledWith 403
@@ -188,17 +204,21 @@ describe 'Error Response', ->
   describe 'with other status code', ->
 
     before ->
-        err =
-          message:    'I am a teapot'
-          statusCode: 418
+      err =
+        message:    'I am a teapot'
+        statusCode: 418
 
-        send = sinon.spy()
-        status = sinon.stub().returns { send: send }
+      send = sinon.spy()
+      status = sinon.stub().returns { send: send }
 
-        req = {}
-        res = { status: status }
-        next = sinon.spy()
-        error err, req, res, next
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
+      res = { status: status }
+      next = sinon.spy()
+      error err, req, res, next
 
 
     it 'should respond with error status code', ->
@@ -213,14 +233,18 @@ describe 'Error Response', ->
   describe 'with no error status code', ->
 
     before ->
-        send = sinon.spy()
-        status = sinon.stub().returns { send: send }
+      send = sinon.spy()
+      status = sinon.stub().returns { send: send }
 
-        err = {}
-        req = {}
-        res = { status: status }
-        next = sinon.spy()
-        error err, req, res, next
+      err = {}
+      req =
+        app:
+          get: ->
+            'production'
+        connectParams: {}
+      res = { status: status }
+      next = sinon.spy()
+      error err, req, res, next
 
     it 'should respond 500', ->
       res.status.should.have.been.calledWith 500
