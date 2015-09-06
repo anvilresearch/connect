@@ -136,7 +136,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid token and known client id', ->
@@ -301,7 +301,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid data', ->
@@ -413,7 +413,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->

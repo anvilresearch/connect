@@ -62,7 +62,7 @@ describe 'User Roles REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'by default', ->
@@ -158,7 +158,7 @@ describe 'User Roles REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
 
@@ -182,7 +182,7 @@ describe 'User Roles REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'with valid data', ->
@@ -240,7 +240,7 @@ describe 'User Roles REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with unknown role', ->
@@ -270,7 +270,7 @@ describe 'User Roles REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
 
@@ -294,7 +294,7 @@ describe 'User Roles REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'with unknown user', ->
@@ -321,7 +321,7 @@ describe 'User Roles REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->

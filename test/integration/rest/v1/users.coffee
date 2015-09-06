@@ -132,7 +132,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid token and known user id', ->
@@ -297,7 +297,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid data', ->
@@ -409,7 +409,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->
