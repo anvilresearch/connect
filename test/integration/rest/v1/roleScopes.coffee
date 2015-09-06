@@ -62,7 +62,7 @@ describe 'Role Scopes REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'by default', ->
@@ -158,7 +158,7 @@ describe 'Role Scopes REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
 
@@ -182,13 +182,15 @@ describe 'Role Scopes REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'with valid data', ->
 
       before (done) ->
         role = new Role
+        role.addScopes = (id, cb) ->
+          cb()
         scope = scopes[0]
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
         sinon.stub(Role, 'get').callsArgWith(1, null, role)
@@ -240,7 +242,7 @@ describe 'Role Scopes REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with unknown scope', ->
@@ -270,7 +272,7 @@ describe 'Role Scopes REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
 
@@ -294,7 +296,7 @@ describe 'Role Scopes REST Routes', ->
         res.statusCode.should.equal 401
 
       it 'should respond "Unauthorized"', ->
-        res.text.should.equal 'Unauthorized'
+        res.text.should.contain 'Unauthorized'
 
 
     describe 'with unknown role', ->
@@ -321,7 +323,7 @@ describe 'Role Scopes REST Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found" error', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->

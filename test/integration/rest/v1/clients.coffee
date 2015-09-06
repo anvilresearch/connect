@@ -67,6 +67,7 @@ describe 'RESTful Client Routes', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(Client, 'list').callsArgWith 1, null, []
         request
           .get('/v1/clients')
           .set('Authorization', 'Bearer valid.signed.token')
@@ -77,6 +78,7 @@ describe 'RESTful Client Routes', ->
 
       after ->
         AccessToken.verify.restore()
+        Client.list.restore()
 
       it 'should respond 200', ->
         res.statusCode.should.equal 200
@@ -136,7 +138,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid token and known client id', ->
@@ -301,7 +303,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid data', ->
@@ -413,7 +415,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->

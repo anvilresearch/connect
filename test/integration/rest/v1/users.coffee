@@ -63,6 +63,7 @@ describe 'RESTful User Routes', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(User, 'list').callsArgWith 1, null, []
         request
           .get('/v1/users')
           .set('Authorization', 'Bearer valid.signed.token')
@@ -73,6 +74,7 @@ describe 'RESTful User Routes', ->
 
       after ->
         AccessToken.verify.restore()
+        User.list.restore()
 
       it 'should respond 200', ->
         res.statusCode.should.equal 200
@@ -132,7 +134,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid token and known user id', ->
@@ -297,7 +299,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid data', ->
@@ -409,7 +411,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->

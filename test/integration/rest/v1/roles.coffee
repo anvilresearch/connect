@@ -63,6 +63,7 @@ describe 'RESTful Role Routes', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
+        sinon.stub(Role, 'list').callsArgWith 1, null, []
         request
           .get('/v1/roles')
           .set('Authorization', 'Bearer valid.signed.token')
@@ -73,6 +74,7 @@ describe 'RESTful Role Routes', ->
 
       after ->
         AccessToken.verify.restore()
+        Role.list.restore()
 
       it 'should respond 200', ->
         res.statusCode.should.equal 200
@@ -132,7 +134,7 @@ describe 'RESTful Role Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid token and known role id', ->
@@ -297,7 +299,7 @@ describe 'RESTful Role Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid data', ->
@@ -409,7 +411,7 @@ describe 'RESTful Role Routes', ->
         res.headers['content-type'].should.contain 'text/html'
 
       it 'should respond with "Not found."', ->
-        res.text.should.equal 'Not found.'
+        res.text.should.contain 'Not found.'
 
 
     describe 'with valid request', ->
