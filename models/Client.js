@@ -52,20 +52,7 @@ var Client = Modinha.define('clients', {
       conform: 'Must follow guidelines in OpenID Connect Registration 1.0 ' +
         'specification for client metadata'
     },
-    set: function (source) {
-      // If redirect URIs were given
-      if (Array.isArray(source.redirect_uris)) {
-        // Iterate through each one
-        for (var i = 0; i < source.redirect_uris.length; i++) {
-          if (typeof source.redirect_uris[i] === 'string') {
-            // And remove any leading or trailing whitespace
-            source.redirect_uris[i] = source.redirect_uris[i].trim()
-          }
-        }
-      }
-      // Lastly, set the new URIs
-      this.redirect_uris = source.redirect_uris
-    },
+    trim: true,
     conform: function (value, instance) {
       var valid = true
       var inDevelopment = process.env.NODE_ENV === 'development' ||
