@@ -321,7 +321,7 @@ User.lookup = function (req, info, callback) {
   if (req.user) { return callback(null, req.user) }
 
   var provider = req.params.provider || req.body.provider
-  var index = User.collection + ':' + provider
+  var index = User.collection + ':provider:' + provider
 
   User.__client.hget(index, info.id, function (err, id) {
     if (err) { return callback(err) }
@@ -353,7 +353,7 @@ User.lookup = function (req, info, callback) {
 
 User.defineIndex({
   type: 'hash',
-  key: [User.collection + ':$', 'lastProvider'],
+  key: [User.collection + ':provider:$', 'lastProvider'],
   field: ['$', ['providers.$.info.id', 'lastProvider']],
   value: '_id'
 })
