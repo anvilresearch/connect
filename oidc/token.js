@@ -47,8 +47,8 @@ function token (req, res, next) {
     } else {
       idToken = new IDToken({
         iss: settings.issuer,
-        sub: token.cid,
-        aud: token.uid,
+        sub: token.uid,
+        aud: token.cid,
         exp: nowSeconds(token.ei),
         amr: req.session.amr
       })
