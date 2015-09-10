@@ -1,5 +1,28 @@
 # Change Log
 
+## [0.1.55](https://github.com/anvilresearch/connect/tree/0.1.55) (2015-09-09)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.54...0.1.55)
+
+**Implemented enhancements:**
+
+- Improve error-handling and display [\#224](https://github.com/anvilresearch/connect/pull/224) ([vsimonian](https://github.com/vsimonian))
+- Create first time setup endpoint [\#223](https://github.com/anvilresearch/connect/pull/223) ([vsimonian](https://github.com/vsimonian))
+
+**Fixed bugs:**
+
+- Fix tests for error-handling middleware [\#226](https://github.com/anvilresearch/connect/pull/226) ([vsimonian](https://github.com/vsimonian))
+
+**Closed issues:**
+
+- Strip leading/trailing whitespace from JSON inputs. [\#220](https://github.com/anvilresearch/connect/issues/220)
+
+**Merged pull requests:**
+
+- Namespace user-by-provider index  [\#227](https://github.com/anvilresearch/connect/pull/227) ([vsimonian](https://github.com/vsimonian))
+- Use Modinha trim property for client redirect\_uris [\#225](https://github.com/anvilresearch/connect/pull/225) ([vsimonian](https://github.com/vsimonian))
+- Trim whitespace around redirect URIs [\#221](https://github.com/anvilresearch/connect/pull/221) ([vsimonian](https://github.com/vsimonian))
+- Use GitHub Changelog Generator [\#219](https://github.com/anvilresearch/connect/pull/219) ([vsimonian](https://github.com/vsimonian))
+
 ## [0.1.54](https://github.com/anvilresearch/connect/tree/0.1.54) (2015-09-04)
 [Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.53...0.1.54)
 
