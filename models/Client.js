@@ -220,7 +220,8 @@ var Client = Modinha.define('clients', {
     enum: [
       'authorization_code',
       'implicit',
-      'refresh_token'
+      'refresh_token',
+      'client_credentials'
     ]
   },
 

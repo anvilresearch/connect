@@ -99,6 +99,7 @@ describe 'Client', ->
       Client.schema.grant_types.enum.should.contain 'authorization_code'
       Client.schema.grant_types.enum.should.contain 'implicit'
       Client.schema.grant_types.enum.should.contain 'refresh_token'
+      Client.schema.grant_types.enum.should.contain 'client_credentials'
 
     it 'should have an application type', ->
       Client.schema.application_type.type.should.equal 'string'
