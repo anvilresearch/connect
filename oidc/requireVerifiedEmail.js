@@ -65,10 +65,10 @@ module.exports = function (options) {
         var isNewUser = req.flash('isNewUser').indexOf(true) !== -1
 
         var locals = {
-          error: options.locals.error === undefined ?
-            (!isNewUser ? existingUserMsg : undefined) : options.locals.error,
-          message: options.locals.message === undefined ?
-            (isNewUser ? newUserMsg : undefined) : options.locals.message,
+          error: options.locals.error === undefined
+            ? (!isNewUser ? existingUserMsg : undefined) : options.locals.error,
+          message: options.locals.message === undefined
+            ? (isNewUser ? newUserMsg : undefined) : options.locals.message,
           from: options.locals.from || mailer.from,
           resendURL: options.locals.resendURL || url.format(resendURL)
         }

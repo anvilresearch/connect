@@ -27,5 +27,4 @@ module.exports = function (server) {
       res.json(server.OpenIDConfiguration)
     })
   })
-
 }

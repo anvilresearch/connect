@@ -1,3 +1,5 @@
+/* global process, __dirname */
+
 /**
  * Configuration dependencies
  */
@@ -188,5 +190,4 @@ module.exports = function (server) {
     if (value) { config[param] = value }
     return config
   }, {})
-
 }

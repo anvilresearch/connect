@@ -36,5 +36,4 @@ module.exports = function (server) {
       res.sendStatus(204)
     })
   })
-
 }

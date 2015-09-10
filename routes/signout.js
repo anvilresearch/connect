@@ -15,5 +15,4 @@ module.exports = function (server) {
 
   server.get('/signout', oidc.signout)
   server.post('/signout', oidc.signout)
-
 }

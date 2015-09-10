@@ -78,7 +78,6 @@ function verifyAuthorizationCode (req, res, next) {
         next(err)
       })
     })
-
   } else {
     next()
   }

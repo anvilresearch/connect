@@ -97,5 +97,4 @@ module.exports = function (server) {
   }
 
   server.post('/signin', handler)
-
 }

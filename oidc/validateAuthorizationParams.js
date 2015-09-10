@@ -50,9 +50,9 @@ function validateAuthorizationParams (req, res, next) {
   // Check that
   // - All response_types are valid
   // - If `none` response_type is given, that it is the only response_type
-  var isValidResponseType = responseTypes.indexOf('none') !== -1 ?
-    responseTypes.length === 1 :
-    responseTypes.every(
+  var isValidResponseType = responseTypes.indexOf('none') !== -1
+    ? responseTypes.length === 1
+    : responseTypes.every(
       function (responseType) {
         return validResponseTypes.indexOf(responseType) !== -1
       }
@@ -84,21 +84,20 @@ function validateAuthorizationParams (req, res, next) {
   var registeredResponseTypeSets =
 
     // If the client exists and has response_types defined
-    (req.client && Array.isArray(req.client.response_types)) ?
+    (req.client && Array.isArray(req.client.response_types))
 
       // Return an array of response_type sets
-      req.client.response_types.map(function (responseTypeString) {
+      ? req.client.response_types.map(function (responseTypeString) {
         return responseTypeString.trim().split(' ')
-      }) :
+      })
       // Otherwise, return an array with the default set, [ 'code' ]
-      [ [ 'code' ] ]
+      : [ [ 'code' ] ]
 
   // In the array of response_types in the settings...
   var isSupportedResponseType = settings.response_types_supported
 
     // check each set until we find one that satisfies the following:
     .some(function (responseTypeString) {
-
       var responseTypeSet = responseTypeString.split(' ')
 
       // if there is at least one response_type set registered on the client...

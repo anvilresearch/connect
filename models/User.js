@@ -168,7 +168,6 @@ User.prototype.authorizedScope = function (callback) {
       if (err) { return callback(err) }
       callback(null, [].concat.apply(defaults, results))
     })
-
   })
 }
 
@@ -418,7 +417,6 @@ User.connect = function (req, auth, info, callback) {
               message: error.message,
               providers: user.providers
             })
-
           })
 
         // Handle other error
@@ -433,7 +431,6 @@ User.connect = function (req, auth, info, callback) {
         }
       })
     }
-
   })
 }
 

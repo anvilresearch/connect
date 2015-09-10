@@ -61,8 +61,8 @@ function normalizeDN (dn) {
 
 function verifier (provider, config) {
   return function (req, user, done) {
-    user.id = (config.serverType || provider.serverType) === 'AD' ?
-      user.objectGUID : user[provider.mapping.id]
+    user.id = (config.serverType || provider.serverType) === 'AD'
+      ? user.objectGUID : user[provider.mapping.id]
 
     User.connect(req, null, user, function (err, connectUser, info) {
       if (err) { return done(err) }

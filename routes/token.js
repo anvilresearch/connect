@@ -17,5 +17,4 @@ module.exports = function (server) {
     oidc.determineClientScope,
     oidc.token
   )
-
 }

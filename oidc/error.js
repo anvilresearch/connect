@@ -70,7 +70,6 @@ function error (err, req, res, next) {
 
     res.status(statusCode).send(message)
   }
-
 }
 
 /**

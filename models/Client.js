@@ -1,4 +1,4 @@
-/* global process */
+/* global process, Buffer */
 
 /**
  * Module dependencies
@@ -60,12 +60,10 @@ var Client = Modinha.define('clients', {
 
       // Proceed with validation if there are redirect URIs defined
       if (Array.isArray(value)) {
-
         // Native clients
         if (
           instance.application_type === 'native'
         ) {
-
           // Check each redirect URI
           value.forEach(function (uri) {
             try {
@@ -100,7 +98,6 @@ var Client = Modinha.define('clients', {
           Array.isArray(instance.grant_types) &&
           instance.grant_types.indexOf('implicit') !== -1
         ) {
-
           // Check each redirect URI
           value.forEach(function (uri) {
             try {
@@ -120,7 +117,6 @@ var Client = Modinha.define('clients', {
               valid = false
             }
           })
-
         }
       }
 
@@ -793,7 +789,6 @@ Client.prototype.authorizedScope = function (callback) {
       if (err) { return callback(err) }
       callback(null, results)
     })
-
   })
 }
 
@@ -997,7 +992,6 @@ var authenticators = {
 
       callback(null, client)
     })
-
   },
 
   /**

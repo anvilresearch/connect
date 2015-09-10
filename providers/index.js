@@ -1,3 +1,5 @@
+/* global process, __dirname */
+
 /**
  * Module dependencies
  */
@@ -104,7 +106,6 @@ function loadProviders (dir, files) {
         }
 
         module.exports[providerName] = provider
-
       } catch (e) {
         throw new Error("Can't load " + providerName + ' provider.')
       }

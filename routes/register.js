@@ -108,5 +108,4 @@ module.exports = function (server) {
         next(err)
       }
     })
-
 }

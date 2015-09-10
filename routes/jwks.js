@@ -14,5 +14,4 @@ module.exports = function (server) {
       res.json(settings.keys.jwks)
     }
   )
-
 }

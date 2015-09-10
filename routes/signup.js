@@ -103,5 +103,4 @@ module.exports = function (server) {
     server.get('/signup', passwordsDisabledHandler)
     server.post('/signup', passwordsDisabledHandler)
   }
-
 }

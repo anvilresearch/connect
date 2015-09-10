@@ -1,3 +1,5 @@
+/* global process */
+
 /**
  * Module dependencies
  */
@@ -87,7 +89,6 @@ var keys = loadKeys()
  */
 
 if (!keys) {
-
   generateKeys(keyDirectory, sigPubKeyFile, sigPrvKeyFile)
   generateKeys(keyDirectory, encPubKeyFile, encPrvKeyFile)
 

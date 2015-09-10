@@ -95,7 +95,6 @@ function encodeOAuthData (data) {
       .replace(/\(/g, '%28')
       .replace(/\)/g, '%29')
       .replace(/\*/g, '%2A')
-
   }
 }
 
@@ -203,7 +202,6 @@ function normalizeParameters (data) {
       : (a[0] < b[0])
         ? -1
         : 1
-
   })
 
   // Encode parameters similar to
@@ -232,7 +230,6 @@ function signatureBaseString (method, url, parameters) {
   return method.toUpperCase() + '&' +
   encodeOAuthData(signatureBaseStringURI(url)) + '&' +
   encodeOAuthData(parameters)
-
 }
 
 OAuthStrategy.signatureBaseString = signatureBaseString

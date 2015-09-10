@@ -21,5 +21,4 @@ module.exports = function (server) {
    */
 
   server.get('/session/events', oidc.sessionEvents)
-
 }

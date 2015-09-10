@@ -31,5 +31,4 @@ module.exports = function (server) {
         res.status(200).json(user.project('userinfo'))
       })
     })
-
 }

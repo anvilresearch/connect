@@ -38,7 +38,6 @@ module.exports = function (server) {
       } else {
         next(new NotFoundError())
       }
-
     })
 
   /**
@@ -103,5 +102,4 @@ module.exports = function (server) {
     }),
     oidc.revoke
   )
-
 }

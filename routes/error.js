@@ -10,5 +10,4 @@ var oidc = require('../oidc')
 
 module.exports = function (server) {
   server.use(oidc.error)
-
 }

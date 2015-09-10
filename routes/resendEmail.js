@@ -16,8 +16,8 @@ module.exports = function (server) {
     oidc.verifyRedirectURI,
     function (req, res, next) {
       var params = {
-        message: req.query.email ?
-          'If we have this e-mail address on file, then we have sent it a ' +
+        message: req.query.email
+          ? 'If we have this e-mail address on file, then we have sent it a ' +
           'verification request.' : '',
         error: !req.query.email ? 'No e-mail address specified.' : '',
         email: req.query.email,
@@ -46,7 +46,6 @@ module.exports = function (server) {
         delete emailParams.client_id
         delete emailParams.response_type
         delete emailParams.scope
-
       }
 
       User.getByEmail(req.query.email, function (err, user) {

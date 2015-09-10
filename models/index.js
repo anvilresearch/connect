@@ -1,3 +1,5 @@
+/* global __dirname */
+
 /**
  * Module dependencies
  */

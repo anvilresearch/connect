@@ -95,7 +95,6 @@ function authorize (req, res, next) {
         }
 
         callback(null, response)
-
       }
 
     ], function (err, response) {

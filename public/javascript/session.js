@@ -115,5 +115,4 @@
   }
 
   window.addEventListener('message', respondToRPMessage, false)
-
 })()

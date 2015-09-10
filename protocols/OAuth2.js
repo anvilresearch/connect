@@ -1,3 +1,5 @@
+/* global Buffer */
+
 /**
  * Module dependencies
  */
@@ -66,7 +68,6 @@ function authenticate (req, options) {
   // Handle authorization endpoint error
   if (error && error === 'access_denied') {
     return strategy.fail('Access denied', 403)
-
   } else if (error) {
     return strategy.error(new AuthorizationError(req.query))
   }

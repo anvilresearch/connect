@@ -39,7 +39,6 @@ function promptToAuthorize (req, res, next) {
   } else {
     next()
   }
-
 }
 
 /**

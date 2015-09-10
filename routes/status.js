@@ -17,5 +17,4 @@ module.exports = function (server) {
       'version': pkg.version
     })
   })
-
 }

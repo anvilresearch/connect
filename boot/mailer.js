@@ -1,4 +1,4 @@
-/* global process:true */
+/* global process, __dirname */
 
 /**
  * Module dependencies

@@ -29,5 +29,4 @@ module.exports = function (server) {
       res.json(req.claims)
     }
   )
-
 }
