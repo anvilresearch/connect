@@ -8,3 +8,4 @@ public/vendor
 *.aof
 npm-debug.log
 .settings
+.vscode
