@@ -788,7 +788,9 @@ Client.prototype.authorizedScope = function (callback) {
 
     multi.exec(function (err, results) {
       if (err) { return callback(err) }
-      callback(null, results)
+      callback(null, results.map(function (result) {
+        return result[1]
+      }))
     })
   })
 }

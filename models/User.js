@@ -166,7 +166,9 @@ User.prototype.authorizedScope = function (callback) {
 
     multi.exec(function (err, results) {
       if (err) { return callback(err) }
-      callback(null, [].concat.apply(defaults, results))
+      callback(null, [].concat.apply(defaults, results.map(function (result) {
+        return result[1]
+      })))
     })
   })
 }
