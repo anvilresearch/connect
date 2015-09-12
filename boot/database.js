@@ -120,7 +120,7 @@ function migrateData (version, done) {
         Client.list({
           // list all clients, avoid paging
           page: 1,
-          size: '0'
+          size: 0
         }, function (err, clients) {
           if (err) { return next(err) }
 
