@@ -117,7 +117,11 @@ function migrateData (version, done) {
       if (semver.satisfies(version, '<=0.1.55')) {
         // 0.1.55 and prior used strings instead of booleans for the trusted
         // property on clients
-        Client.list(function (err, clients) {
+        Client.list({
+          // list all clients, avoid paging
+          page: 1,
+          size: '0'
+        }, function (err, clients) {
           if (err) { return next(err) }
 
           async.map(clients, function (client, callback) {
