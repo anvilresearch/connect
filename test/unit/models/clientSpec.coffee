@@ -236,10 +236,6 @@ describe 'Client', ->
     it 'should have trusted', ->
       Client.schema.trusted.type.should.equal 'boolean'
 
-    it 'should enumerate valid trusted values', ->
-      Client.schema.trusted.enum.should.contain true
-      Client.schema.trusted.enum.should.contain false
-
     it 'should have a default trusted value', ->
       Client.schema.trusted.default.should.equal false
 
