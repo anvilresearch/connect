@@ -9,6 +9,7 @@ var semver = require('semver')
 var settings = require('./settings')
 var providers = require('../providers')
 var rclient = require('./redis').getClient()
+var Client = require('../models/Client')
 var User = require('../models/User')
 var Role = require('../models/Role')
 var Scope = require('../models/Scope')
@@ -86,31 +87,56 @@ function assignPermissions (done) {
 function migrateData (version, done) {
   if (!version) { return done() }
 
-  if (semver.satisfies(version, '<=0.1.54')) {
-    // 0.1.54 and prior did not namespace user-by-provider indexes
-    var providerIDs = Object.keys(providers)
+  async.series([
+    function namespaceUserByProviderIndex (next) {
+      if (semver.satisfies(version, '<=0.1.54')) {
+        // 0.1.54 and prior did not namespace user-by-provider indexes
+        var providerIDs = Object.keys(providers)
 
-    async.map(providerIDs, function (provider, callback) {
-      var index = User.collection + ':' + provider
-      var newIndex = User.collection + ':provider:' + provider
+        async.map(providerIDs, function (provider, callback) {
+          var index = User.collection + ':' + provider
+          var newIndex = User.collection + ':provider:' + provider
 
-      rclient.hgetall(index, function (err, result) {
-        if (err) { return callback(err) }
-
-        if (result && Object.getOwnPropertyNames(result).length) {
-          rclient.rename(index, newIndex, function (err) {
+          rclient.hgetall(index, function (err, result) {
             if (err) { return callback(err) }
 
-            return callback()
+            if (result && Object.getOwnPropertyNames(result).length) {
+              rclient.rename(index, newIndex, function (err) {
+                if (err) { return callback(err) }
+
+                return callback()
+              })
+            } else {
+              return callback()
+            }
           })
-        } else {
-          return callback()
-        }
-      })
-    }, function (err) {
-      return done(err)
-    })
-  }
+        }, next)
+      } else { next() }
+    },
+    function updateClientTrustedToBoolean (next) {
+      if (semver.satisfies(version, '<=0.1.55')) {
+        // 0.1.55 and prior used strings instead of booleans for the trusted
+        // property on clients
+        Client.list(function (err, clients) {
+          if (err) { return next(err) }
+
+          async.map(clients, function (client, callback) {
+            if (typeof client.trusted === 'string') {
+              if (client.trusted === 'true') {
+                client.trusted = true
+              } else {
+                client.trusted = false
+              }
+
+              Client.patch(client._id, client, function (err) {
+                callback(err)
+              })
+            } else { callback() }
+          }, next)
+        })
+      } else { next() }
+    }
+  ], done)
 }
 
 /**
