@@ -65,7 +65,7 @@ describe 'Verify Dynamic Client Registration', ->
         bearer: 'valid.jwt'
         claims:
           sub: 'uuid1'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
 
@@ -99,7 +99,7 @@ describe 'Verify Dynamic Client Registration', ->
         claims:
           sub: 'uuid1'
           scope: 'realm other'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
       next = sinon.spy (error) ->

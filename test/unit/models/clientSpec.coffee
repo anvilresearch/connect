@@ -234,14 +234,10 @@ describe 'Client', ->
       Client.schema.post_logout_redirect_uris.type.should.equal 'array'
 
     it 'should have trusted', ->
-      Client.schema.trusted.type.should.equal 'string'
-
-    it 'should enumerate valid trusted values', ->
-      Client.schema.trusted.enum.should.contain 'true'
-      Client.schema.trusted.enum.should.contain 'false'
+      Client.schema.trusted.type.should.equal 'boolean'
 
     it 'should have a default trusted value', ->
-      Client.schema.trusted.default.should.equal 'false'
+      Client.schema.trusted.default.should.equal false
 
     it 'should have user id', ->
       Client.schema.userId.type.should.equal 'string'
