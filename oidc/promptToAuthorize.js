@@ -15,7 +15,7 @@ function promptToAuthorize (req, res, next) {
   var scopes = req.scopes
 
   // The client is not trusted and the user has yet to decide on consent
-  if (client.trusted !== 'true' && typeof params.authorize === 'undefined') {
+  if (client.trusted !== true && typeof params.authorize === 'undefined') {
     // render the consent view
     if (req.path === '/authorize') {
       res.render('authorize', {
@@ -31,7 +31,7 @@ function promptToAuthorize (req, res, next) {
     }
 
   // The client is trusted and consent is implied.
-  } else if (client.trusted === 'true') {
+  } else if (client.trusted === true) {
     params.authorize = 'true'
     next()
 

@@ -56,7 +56,7 @@ describe 'User Applications', ->
       client_uri: "http://#{faker.internet.domainName()}"
       application_type: 'web'
       logo_uri: faker.image.imageUrl()
-      trusted: 'true'
+      trusted: true
 
   data[1].scopes = ['n0p3']
   data[2].scopes = ['a', 'b', 'c']

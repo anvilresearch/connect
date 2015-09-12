@@ -68,7 +68,7 @@ describe 'Verify Token Client Registration', ->
         claims:
           sub: 'uuid1'
           scope: 'other'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
 
@@ -102,7 +102,7 @@ describe 'Verify Token Client Registration', ->
         claims:
           sub: 'uuid1'
           scope: 'realm'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
       next = sinon.spy (error) ->

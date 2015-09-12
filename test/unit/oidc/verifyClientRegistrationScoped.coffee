@@ -74,7 +74,7 @@ describe 'Verify Scoped Client Registration', ->
         bearer: 'valid.jwt'
         claims:
           sub: 'uuid1'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
 
@@ -108,7 +108,7 @@ describe 'Verify Scoped Client Registration', ->
         claims:
           sub: 'uuid1'
           scope: 'other'
-        body: { trusted: "false" }
+        body: { trusted: false }
 
 
       res = {}
@@ -143,7 +143,7 @@ describe 'Verify Scoped Client Registration', ->
         claims:
           sub: 'uuid1'
           scope: 'realm'
-        body: { trusted: "true" }
+        body: { trusted: true }
 
       res = {}
       next = sinon.spy (error) ->
