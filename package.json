@@ -62,7 +62,12 @@
   ],
   "scripts": {
     "start": "node server.js",
-    "test": "eslint --ignore-path .gitignore . && mocha test/unit"
+    "test": "eslint --ignore-path .gitignore . && echo Code looks good! && mocha test/unit",
+    "lint": "eslint --ignore-path .gitignore . && echo Code looks good!",
+    "test-watch": "mocha test/unit --watch",
+    "test-integration": "mocha test/integration",
+    "test-integration-watch": "mocha test/integration --watch",
+    "test-all": "mocha test/unit && mocha test/integration"
   },
   "bin": {
     "nv": "./bin/nv"
