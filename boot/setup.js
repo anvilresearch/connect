@@ -5,11 +5,8 @@
  */
 
 var User = require('../models/User')
-var crypto = require('crypto')
-var fs = require('fs')
-var path = require('path')
-var cwd = process.cwd()
-var setupTokenPath = path.join(cwd, 'keys', 'setup.token')
+var AnvilConnectKeys = require('anvil-connect-keys')
+var keygen = new AnvilConnectKeys()
 
 /**
  * Check if server is in out-of-box mode
@@ -22,6 +19,7 @@ function isOOB (cb) {
     return cb(null, !users || !users.length)
   })
 }
+
 exports.isOOB = isOOB
 
 /**
@@ -34,7 +32,7 @@ function readSetupToken (cb) {
 
   try {
     // try to read setup token from filesystem
-    token = fs.readFileSync(setupTokenPath).toString()
+    token = keygen.loadSetupToken()
     // if token is blank, try to generate a new token and save it
     if (!token.trim()) {
       write = true
@@ -45,9 +43,8 @@ function readSetupToken (cb) {
   }
 
   if (write) {
-    token = crypto.randomBytes(256).toString('hex')
     try {
-      fs.writeFileSync(setupTokenPath, token)
+      token = keygen.generateSetupToken()
     } catch (err) {
       // if we can't write the token to disk, something is very wrong
       return cb(err)
