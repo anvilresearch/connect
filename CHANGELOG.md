@@ -1,6 +1,18 @@
 # Change Log
 
-## [0.1.55](https://github.com/anvilresearch/connect/tree/0.1.55) (2015-09-09)
+## [0.1.56](https://github.com/anvilresearch/connect/tree/0.1.56) (2015-09-17)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.55...0.1.56)
+
+**Implemented enhancements:**
+
+- SSL and secure cookies in production [\#90](https://github.com/anvilresearch/connect/issues/90)
+
+**Merged pull requests:**
+
+- Use anvil-connect-keys package [\#229](https://github.com/anvilresearch/connect/pull/229) ([christiansmith](https://github.com/christiansmith))
+- Change type of client "trusted" property to boolean  [\#228](https://github.com/anvilresearch/connect/pull/228) ([christiansmith](https://github.com/christiansmith))
+
+## [0.1.55](https://github.com/anvilresearch/connect/tree/0.1.55) (2015-09-10)
 [Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.54...0.1.55)
 
 **Implemented enhancements:**
