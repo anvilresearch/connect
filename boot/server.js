@@ -4,13 +4,12 @@
 var semver = require('semver')
 var packageJson = require('../package.json')
 if (packageJson.engines &&
-    packageJson.engines.node &&
-    !semver.satisfies(process.versions.node, packageJson.engines.node)) {
-    console.error('Incompatible version of node - running [%s] but require [%s]',
-            process.versions.node, packageJson.engines.node)
-    process.exit(1)
+  packageJson.engines.node &&
+  !semver.satisfies(process.versions.node, packageJson.engines.node)) {
+  console.error('Incompatible version of node - running [%s] but require [%s]',
+    process.versions.node, packageJson.engines.node)
+  process.exit(1)
 }
-
 
 /**
  * Configuration dependencies
