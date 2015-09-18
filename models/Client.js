@@ -742,7 +742,11 @@ var Client = Modinha.define('clients', {
 
   /**
    * scopes
-   *    List of scopes required to access this client
+   *    List of user-authorized scopes required to display this client at the
+   *    applications endpoint.
+   *
+   *    In the future, this value may be used to restrict users from signing into
+   *    clients they have no permissions for.
    */
 
   scopes: {
