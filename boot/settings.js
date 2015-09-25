@@ -6,6 +6,7 @@
 
 var cwd = process.cwd()
 var env = process.env.NODE_ENV || 'development'
+var crypto = require('crypto')
 var path = require('path')
 var keys = require(path.join(__dirname, 'keys'))
 var pkg = require(path.join(__dirname, '..', 'package.json'))
@@ -19,8 +20,16 @@ var settings = {}
 try {
   config = require(config)
 } catch (e) {
-  console.log('Cannot load ' + env + ' configuration')
-  process.exit(1)
+  if (env !== 'test') {
+    console.log('Cannot load ' + env + ' configuration')
+    process.exit(1)
+  } else {
+    config = {
+      issuer: 'http://localhost:3000',
+      cookie_secret: crypto.randomBytes(64).toString('hex'),
+      session_secret: crypto.randomBytes(64).toString('hex')
+    }
+  }
 }
 
 /**
