@@ -105,6 +105,7 @@ module.exports = function (server) {
   }
 
   server.get('/connect/:provider/callback', handler)
+  server.post('/connect/:provider/callback', handler)
 
   /**
    * Revoke Third Party Authorization
