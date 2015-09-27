@@ -73,6 +73,10 @@ function migrate () {
       })
     })
   })
-
-
 }
+
+/**
+ * Export
+ */
+
+module.exports = migrate

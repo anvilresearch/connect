@@ -19,12 +19,14 @@ function loadMigrations (version) {
   //    can we load only those modules that we'll need based on difference between
   //    existing version in db and current version of code?
 
-  files.forEach(function () {
+  files.forEach(function (file) {
     if (path.extname(file) === '.js' && file !== 'index.js') {
       var key = path.basename(file, '.js')
-      migrations[key] = require(file)(version)
+      migrations[key] = require(path.join(__dirname, file))(version)
     }
   })
+
+  return migrations
 }
 /**
  * Export
