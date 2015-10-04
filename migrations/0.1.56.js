@@ -6,7 +6,6 @@ var async = require('async')
 var semver = require('semver')
 var Client = require('../models/Client')
 
-
 /**
  * Migration
  *
@@ -16,7 +15,7 @@ var Client = require('../models/Client')
 
 module.exports = function (version) {
   return function migration_0_1_56 (next) {
-    if (semver.satisfies(version), '<0.1.56') {
+    if (semver.satisfies(version, '<0.1.56')) {
       Client.list({
         // list all clients, avoid paging
         page: 1,

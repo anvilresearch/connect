@@ -4,9 +4,9 @@
 
 var async = require('async')
 var semver = require('semver')
+var providers = require('../providers')
 var User = require('../models/User')
 var rclient = require('../boot/redis').getClient()
-
 
 /**
  * Migration
