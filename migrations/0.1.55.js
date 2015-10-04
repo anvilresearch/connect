@@ -16,7 +16,7 @@ var rclient = require('../boot/redis').getClient()
 
 module.exports = function (version) {
   return function migration_0_1_55 (next) {
-    if (semver.satisfies(version, '<=0.1.54')) {
+    if (semver.satisfies(version, '<0.1.55')) {
       var providerIDs = Object.keys(providers)
 
       async.map(providerIDs, function (provider, callback) {

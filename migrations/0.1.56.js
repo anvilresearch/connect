@@ -16,7 +16,7 @@ var Client = require('../models/Client')
 
 module.exports = function (version) {
   return function migration_0_1_56 (next) {
-    if (semver.satisfies(version), '<=0.1.55') {
+    if (semver.satisfies(version), '<0.1.56') {
       Client.list({
         // list all clients, avoid paging
         page: 1,
