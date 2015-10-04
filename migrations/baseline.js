@@ -3,7 +3,6 @@
  */
 
 var async = require('async')
-var semver = require('semver')
 var Role = require('../models/Role')
 var Scope = require('../models/Scope')
 
@@ -77,17 +76,15 @@ function assignPermissions (done) {
  * Exports
  */
 
-module.exports = function (version) {
-  return function migration_0_0_0 (next) {
-    if (semver.satisfies(version, '<=0.0.0')) {
-      async.parallel([
-        insertRoles,
-        insertScopes,
-        assignPermissions
-      ], function (err, results) {
-        if (err) { return next(err) }
-        next(null, results)
-      })
-    }
+module.exports = function () {
+  return function baseline (next) {
+    async.parallel([
+      insertRoles,
+      insertScopes,
+      assignPermissions
+    ], function (err, results) {
+      if (err) { return next(err) }
+      next(null, results)
+    })
   }
 }

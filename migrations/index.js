@@ -6,23 +6,24 @@
 
 var fs = require('fs')
 var path = require('path')
+var semver = require('semver')
 
 /**
  * Load migrations
  */
 
 function loadMigrations (version) {
-  var migrations = {}
+  var migrations = []
   var files = fs.readdirSync(__dirname)
 
-  // TODO:
-  //    can we load only those modules that we'll need based on difference between
-  //    existing version in db and current version of code?
-
+  // iterate through the files and load required modules
   files.forEach(function (file) {
-    if (path.extname(file) === '.js' && file !== 'index.js') {
-      var key = path.basename(file, '.js')
-      migrations[key] = require(path.join(__dirname, file))(version)
+    var isJavaScript = path.extname(file) === '.js'
+    var isMigration = ['baseline.js', 'index.js'].indexOf(file) === -1
+    var isRequired = isMigration && !semver.satisfies(path.basename(file, '.js'))
+
+    if (isJavaScript && isMigration && isRequired) {
+      migrations.push(require(path.join(__dirname, file))(version))
     }
   })
 

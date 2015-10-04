@@ -40,6 +40,8 @@ function migrate () {
     var version = results[1][1] || results[0][1]
     var dbsize = results[2][1]
 
+    // check for a non-empty database that isn't versioned for
+    // Anvil Connect
     if (!version && dbsize > 0) {
       if (process.argv.indexOf('--no-db-check') === -1) {
         console.log(
@@ -51,8 +53,16 @@ function migrate () {
       }
     }
 
-    // load migrations for this version
-    var migrations = require('../migrations')(version)
+    // initialize migrations
+    var migrations = [
+      // always run the baseline migration
+      // to ensure required values are present
+      require('../migrations/baseline')()
+    ].concat(
+      // then run all the migrations between the current database version
+      // and current package.json version
+      require('../migrations')(version)
+    )
 
     // run migrations
     async.parallel(migrations, function (err, results) {
