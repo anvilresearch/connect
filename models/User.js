@@ -149,26 +149,31 @@ User.intersects('roles')
 
 User.prototype.authorizedScope = function (callback) {
   var client = User.__client
-  var defaults = ['openid', 'profile']
 
-  client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
+  // get a list of unrestricted scope names
+  client.zrange('scopes:restricted:false', 0, -1, function (err, unrestricted) {
     if (err) { return callback(err) }
 
-    if (!roles || roles.length === 0) {
-      return callback(null, defaults)
-    }
-
-    var multi = client.multi()
-
-    roles.forEach(function (role) {
-      multi.zrange('roles:' + role + ':scopes', 0, -1)
-    })
-
-    multi.exec(function (err, results) {
+    // get a list of roles for this user
+    client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
       if (err) { return callback(err) }
-      callback(null, [].concat.apply(defaults, results.map(function (result) {
-        return result[1]
-      })))
+
+      if (!roles || roles.length === 0) {
+        return callback(null, unrestricted)
+      }
+
+      var multi = client.multi()
+
+      roles.forEach(function (role) {
+        multi.zrange('roles:' + role + ':scopes', 0, -1)
+      })
+
+      multi.exec(function (err, results) {
+        if (err) { return callback(err) }
+        callback(null, [].concat.apply(unrestricted, results.map(function (result) {
+          return result[1]
+        })))
+      })
     })
   })
 }

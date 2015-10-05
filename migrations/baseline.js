@@ -17,10 +17,55 @@ var defaults = {
   ],
 
   scopes: [
-    { name: 'openid', description: 'View your identity' },
-    { name: 'profile', description: 'View your basic account info' },
-    { name: 'client', description: 'Register and configure clients' },
-    { name: 'realm', description: 'Configure the security realm' }
+    {
+      name: 'openid',
+      description: 'View your identity',
+      restricted: false
+    },
+    {
+      name: 'profile',
+      description: 'View your basic account info',
+      restricted: false,
+      attributes: {
+        user: [
+          'name', 'family_name', 'given_name', 'middle_name', 'nickname',
+          'preferred_username', 'profile', 'picture', 'website', 'gender',
+          'birthdate', 'zoneinfo', 'locale', 'updated_at'
+        ]
+      }
+    },
+    {
+      name: 'email',
+      description: 'View your email address',
+      restricted: false,
+      attributes: {
+        user: ['email', 'email_verified']
+      }
+    },
+    {
+      name: 'address',
+      description: 'View your address',
+      restricted: false,
+      attributes: {
+        user: ['address']
+      }
+    },
+    {
+      name: 'phone',
+      description: 'View your phone number',
+      restricted: false,
+      attributes: {
+        user: ['phone_number', 'phone_number_verified']
+      }
+    },
+    {
+      name: 'client',
+      description: 'Register and configure clients'
+    },
+    {
+      name: 'realm',
+      description: 'Configure the security realm'
+    }
   ],
 
   permissions: [
