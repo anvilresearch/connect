@@ -104,8 +104,8 @@ settings.response_types_supported = [
  */
 
 settings.response_modes_supported = [
-  "query",
-  "fragment"
+  'query',
+  'fragment'
 ]
 
 /**
