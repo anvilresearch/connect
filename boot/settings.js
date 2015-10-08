@@ -104,7 +104,8 @@ settings.response_types_supported = [
  */
 
 settings.response_modes_supported = [
-  // TODO
+  "query",
+  "fragment"
 ]
 
 /**
@@ -118,7 +119,9 @@ settings.response_modes_supported = [
 
 settings.grant_types_supported = [
   'authorization_code',
-  'refresh_token'
+  'implicit',
+  'refresh_token',
+  'client_credentials'
 ]
 
 /**
