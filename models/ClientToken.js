@@ -2,6 +2,7 @@
  * Module dependencies
  */
 
+var crypto = require('crypto')
 var JWT = require('anvil-connect-jwt')
 var nowSeconds = require('../lib/time-utils').nowSeconds
 
@@ -26,10 +27,11 @@ var ClientToken = JWT.define({
   },
 
   // permitted claims
-  claims: ['iss', 'sub', 'aud', 'iat', 'scope'],
+  claims: ['jti', 'iss', 'sub', 'aud', 'exp', 'iat', 'scope'],
 
   // modify payload schema
   registeredClaims: {
+    jti: { format: 'String', required: true, default: random },
     iss: { format: 'StringOrURI', required: true },
     sub: { format: 'StringOrURI', required: true },
     aud: { format: 'StringOrURI', required: true },
@@ -39,6 +41,14 @@ var ClientToken = JWT.define({
   }
 
 })
+
+/**
+ * Random
+ */
+
+function random () {
+  return crypto.randomBytes(10).toString('hex')
+}
 
 /**
  * Issue
