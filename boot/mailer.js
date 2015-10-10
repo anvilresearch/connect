@@ -73,7 +73,7 @@ exports.getMailer = function () {
   if (mailer) {
     return mailer
   } else {
-    var fromVerifier = /^(?:\w|\s)+<[a-z]+@[a-z]+\.[a-z]{2,}>$/igm
+    var fromVerifier = /^(?:\w|\s)+<[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}>$/igm
     var transport = settings.mailer &&
       nodemailer.createTransport(settings.mailer)
 
