@@ -62,6 +62,9 @@ describe 'Client Token', ->
 
   describe 'claims', ->
 
+    it 'should have "jti" Token Identifer', ->
+      ClientToken.registeredClaims.jti.format.should.equal 'String'
+
     it 'should require "iss" Issuer Identifier', ->
       ClientToken.registeredClaims.iss.required.should.be.true
 
