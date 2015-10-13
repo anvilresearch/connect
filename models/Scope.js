@@ -22,7 +22,11 @@ var Scope = Modinha.define('scopes', {
   },
   restricted: {
     type: 'boolean',
-    default: true
+    default: true,
+    secondary: true
+  },
+  attributes: {
+    type: 'object'
   }
 })
 

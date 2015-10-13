@@ -47,6 +47,89 @@ We welcome code contributions and participation in bug fixes and issues.
   - Verify that dependencies are listed in manifest
   - Features must include test coverage and code review to be accepted
 
+#### Style guidelines
+##### Javascript
+We follow [Javascript Standard Style](https://github.com/feross/standard#rules).
+
+##### Other
+- **Indents are 2 spaces; no tab characters** (unless required by the language).  
+  <table>
+  <tr><th>Not OK</th><th>OK</th></tr>
+  <tr><td><pre lang="html">
+&lt;html&gt;
+&nbsp;   &lt;head&gt;&lt;/head&gt;
+&nbsp;   &lt;body&gt;
+&nbsp;       &lt;div&gt;Hello world&lt;/div&gt;
+&nbsp;   &lt;/body&gt;
+&lt;/html&gt;
+</pre></td>
+  <td><pre lang="html">
+&lt;html&gt;
+&nbsp; &lt;head&gt;&lt;/head&gt;
+&nbsp; &lt;body&gt;
+&nbsp;   &lt;div&gt;Hello world&lt;/div&gt;
+&nbsp; &lt;/body&gt;
+&lt;/html&gt;
+</pre></td></tr>
+  </table>
+
+
+- **Non-binary files must end with a new-line character.**  
+  <table>
+  <tr><th>Not OK</th><th>OK</th></tr>
+  <tr><td><img src="https://cloud.githubusercontent.com/assets/9868643/10029550/5f7d2a8e-6127-11e5-85bd-e59e6a048f2a.png" alt="Missing new-line character" width="200"></td>
+  <td><img src="https://cloud.githubusercontent.com/assets/9868643/10029556/6750fbfa-6127-11e5-8283-85124cc119dd.png" alt="New-line character" width="200"></td></tr>
+  </table>
+
+
+- **No trailing whitespace** (unless required by the language).  
+  <table>
+  <tr><th>Not OK</th><th>OK</th></tr>
+  <tr><td><img src="https://cloud.githubusercontent.com/assets/9868643/10030416/6ead5010-612c-11e5-9093-f96e32ca53af.png" alt="Trailing whitespace" width="225"></td>
+  <td><img src="https://cloud.githubusercontent.com/assets/9868643/10030415/6dad6470-612c-11e5-89a7-607fe49620f4.png" alt="No trailing whitespace" width="225"></td></tr>
+  </table>
+
+- **Avoid excess whitespace around code.**  
+  <table>
+  <tr><th>Not OK</th><th>OK</th></tr>
+  <tr><td><code>identifier( param, &nbsp; &nbsp; &nbsp; param )</code></td>
+  <td><code>identifier(param, param)</code></td></tr>
+  <tr><td><pre lang="yaml">
+prop:    value
+prop1:   value
+prop1a:  value
+</pre></td>
+  <td><pre lang="yaml">
+prop: value
+prop1: value
+prop1a: value
+</pre></td></tr>
+  </table>
+- **No more than one empty line at a time.**  
+  <table>
+  <tr><th>Not OK</th><th>OK</th></tr>
+<tr><td>
+  <pre lang="css">
+  /* Special Classes */
+  .fancy { ... }
+  .jumbotron { ... }
+  
+  
+  /* Other Classes */
+  .floaty-boaty { ... }
+  </pre>
+</td>
+<td>
+  <pre lang="css">
+  /* Special Classes */
+  .fancy { ... }
+  .jumbotron { ... }
+  
+  /* Other Classes */
+  .floaty-boaty { ... }
+  </pre>
+</td></tr>
+  </table>
 
 ### How to submit new code:
 
