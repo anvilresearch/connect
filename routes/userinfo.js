@@ -43,8 +43,8 @@ module.exports = function (server) {
         if (err) { return next(err) }
         if (!user) { return next(new NotFoundError()) }
 
-        var userInfo = {}
         var projection = user.project('userinfo')
+        var userInfo = { sub: projection.sub }
 
         req.scopes.forEach(function (scope) {
           scope.attributes && scope.attributes.user && scope.attributes.user.forEach(function (key) {
