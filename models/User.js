@@ -149,13 +149,14 @@ User.intersects('roles')
 
 User.prototype.authorizedScope = function (callback) {
   var client = User.__client
+  var self = this
 
   // get a list of unrestricted scope names
   client.zrange('scopes:restricted:false', 0, -1, function (err, unrestricted) {
     if (err) { return callback(err) }
 
     // get a list of roles for this user
-    client.zrange('users:' + this._id + ':roles', 0, -1, function (err, roles) {
+    client.zrange('users:' + self._id + ':roles', 0, -1, function (err, roles) {
       if (err) { return callback(err) }
 
       if (!roles || roles.length === 0) {
