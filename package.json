@@ -67,7 +67,8 @@
     "test-watch": "mocha test/unit --watch",
     "test-integration": "mocha test/integration",
     "test-integration-watch": "mocha test/integration --watch",
-    "test-all": "mocha test/unit && mocha test/integration"
+    "test-all": "mocha test/unit && mocha test/integration",
+    "coverage": "./coverage.sh"
   },
   "bin": {
     "nv": "./bin/nv"
