@@ -1,5 +1,47 @@
 # Change Log
 
+## [0.1.57](https://github.com/anvilresearch/connect/tree/0.1.57) (2015-10-21)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.56...0.1.57)
+
+**Implemented enhancements:**
+
+- Expose coverage script as an npm script [\#272](https://github.com/anvilresearch/connect/issues/272)
+- Node version check [\#235](https://github.com/anvilresearch/connect/issues/235)
+- SAML Protocol [\#137](https://github.com/anvilresearch/connect/issues/137)
+- Split CLI to separate repo and communicate w/server via REST API [\#44](https://github.com/anvilresearch/connect/issues/44)
+- Use Travis CI [\#247](https://github.com/anvilresearch/connect/pull/247) ([vsimonian](https://github.com/vsimonian))
+- Implement SAML 2.0 protocol support [\#245](https://github.com/anvilresearch/connect/pull/245) ([vsimonian](https://github.com/vsimonian))
+
+**Fixed bugs:**
+
+- Make from field validation regex more flexible [\#255](https://github.com/anvilresearch/connect/pull/255) ([vsimonian](https://github.com/vsimonian))
+
+**Closed issues:**
+
+- Issuer Config - response\_modes\_supported is empty array [\#264](https://github.com/anvilresearch/connect/issues/264)
+- Issuer Config - response\_types\_supported includes none [\#263](https://github.com/anvilresearch/connect/issues/263)
+- Ready for production? [\#261](https://github.com/anvilresearch/connect/issues/261)
+- Suggestion: mention the use of git in the readme for dependencies [\#234](https://github.com/anvilresearch/connect/issues/234)
+
+**Merged pull requests:**
+
+- Remove `nv` binary reference [\#279](https://github.com/anvilresearch/connect/pull/279) ([bauglir](https://github.com/bauglir))
+- refactor\(cli\): nuke deprecated CLI [\#278](https://github.com/anvilresearch/connect/pull/278) ([christiansmith](https://github.com/christiansmith))
+- Adding coverage script to package.json [\#273](https://github.com/anvilresearch/connect/pull/273) ([EternalDeiwos](https://github.com/EternalDeiwos))
+- adding coverage to gitignore [\#271](https://github.com/anvilresearch/connect/pull/271) ([henrjk](https://github.com/henrjk))
+- adding basic coverage for istanbul [\#270](https://github.com/anvilresearch/connect/pull/270) ([henrjk](https://github.com/henrjk))
+- Repair broken `this` reference in authorizedScope\(\) [\#269](https://github.com/anvilresearch/connect/pull/269) ([christiansmith](https://github.com/christiansmith))
+- Include `sub` claim in userinfo response [\#267](https://github.com/anvilresearch/connect/pull/267) ([christiansmith](https://github.com/christiansmith))
+- Update anvil-connect-jwt dependency [\#262](https://github.com/anvilresearch/connect/pull/262) ([christiansmith](https://github.com/christiansmith))
+- Add `jti` claim to Client Token [\#250](https://github.com/anvilresearch/connect/pull/250) ([christiansmith](https://github.com/christiansmith))
+- Requesting claims using scope values [\#248](https://github.com/anvilresearch/connect/pull/248) ([christiansmith](https://github.com/christiansmith))
+- Create separate section for code style guidelines [\#243](https://github.com/anvilresearch/connect/pull/243) ([vsimonian](https://github.com/vsimonian))
+- Migrations [\#240](https://github.com/anvilresearch/connect/pull/240) ([christiansmith](https://github.com/christiansmith))
+- Link to getting started guide in connect-docs [\#239](https://github.com/anvilresearch/connect/pull/239) ([vsimonian](https://github.com/vsimonian))
+- Added Bountysource link and text [\#238](https://github.com/anvilresearch/connect/pull/238) ([Cynfusion](https://github.com/Cynfusion))
+- Remove unused dependencies [\#237](https://github.com/anvilresearch/connect/pull/237) ([vsimonian](https://github.com/vsimonian))
+- Added version check to server.js [\#236](https://github.com/anvilresearch/connect/pull/236) ([msamblanet](https://github.com/msamblanet))
+
 ## [0.1.56](https://github.com/anvilresearch/connect/tree/0.1.56) (2015-09-17)
 [Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.55...0.1.56)
 
