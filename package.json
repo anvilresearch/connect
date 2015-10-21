@@ -70,9 +70,6 @@
     "test-all": "mocha test/unit && mocha test/integration",
     "coverage": "./coverage.sh"
   },
-  "bin": {
-    "nv": "./bin/nv"
-  },
   "main": "server.js",
   "license": "MIT",
   "engines": {
