@@ -8,16 +8,24 @@ var path = require('path')
 var bunyan = require('express-bunyan-logger')
 
 /**
+ * Logstreams
+ */
+
+var streams = []
+
+if (!env.match(/test/i)) {
+  streams.push({ stream: process.stdout })
+  streams.push({ path: path.join(cwd, 'logs', env + '.log') })
+}
+
+/**
  * Export
  */
 
 module.exports = function (config) {
   var logger = bunyan(config || {
     name: 'request',
-    streams: [
-      { stream: process.stdout },
-      { path: path.join(cwd, 'logs', env + '.log') }
-    ]
+    streams: streams
   })
 
   module.exports = logger
