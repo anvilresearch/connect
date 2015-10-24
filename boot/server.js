@@ -136,7 +136,7 @@ module.exports = function (server) {
    * Logging
    */
 
-  server.use(logger.middleware())
+  server.use(logger)
 
   /**
    * Serve Static Files
