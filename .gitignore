@@ -2,6 +2,7 @@ config
 coverage
 hooks
 keys
+logs
 node_modules
 public/vendor
 *.swp
