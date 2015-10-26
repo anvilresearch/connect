@@ -66,7 +66,7 @@ function verifier (provider, config) {
 
     User.connect(req, null, user, function (err, connectUser, info) {
       if (err) { return done(err) }
-      if (connectUser && connectUser._groups) {
+      if (connectUser && user._groups) {
         // Put the distinguished names of the directory server groups the user is
         // in into an array.
         var rolesToAdd = user._groups.map(function (group) {
