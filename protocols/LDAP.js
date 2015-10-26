@@ -116,10 +116,15 @@ function verifier (provider, config) {
 
             function (next) {
               async.each(rolesToAdd, function (roleName, callback) {
-                User.addRoles(connectUser, roleName, function (err, result) {
+                Role.get(roleName, function (err, role) {
                   if (err) { return callback(err) }
-                  rolesToAdd.splice(rolesToAdd.indexOf(roleName), 1)
-                  callback()
+                  if (!role) { return callback() }
+
+                  User.addRoles(connectUser, roleName, function (err, result) {
+                    if (err) { return callback(err) }
+                    rolesToAdd.splice(rolesToAdd.indexOf(roleName), 1)
+                    callback()
+                  })
                 })
               }, next)
             },
