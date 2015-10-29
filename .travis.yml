@@ -7,6 +7,10 @@ node_js:
   - "iojs"
   - "0.12"
 
+env:
+  - global:
+    - secure: "HkRiiONB4cs7t4+OEOjg6ZHdYeeMa1ZpqlvnRBBGSTnxWPQykd8dB88Upt5WvwRJdRcQZtHXhG63e7Lqynn7yZxZ2N7V2gNmv3APnfqnrQZ66Lr4H5vWoa6LFwRkgp3gTW1YWODZwMz08SnJKosSedISXyfzjFPDwNNuA9OO/Tg="
+
 addons:
   apt:
     sources:
@@ -24,6 +28,6 @@ install:
   - $CXX --version
   - npm install
 
-script: 
-  - NODE_ENV=test npm run test-all
+script:
+  - NODE_ENV=test istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
   - NODE_ENV=test npm run lint
