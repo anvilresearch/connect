@@ -4,6 +4,7 @@
 [![IRC](https://img.shields.io/badge/Slack-IRC-green.svg)](https://anvilresearch.slack.com/account/gateways)
 
 [![Build Status](https://travis-ci.org/anvilresearch/connect.svg?branch=master)](https://travis-ci.org/anvilresearch/connect)
+[![Coverage Status](https://coveralls.io/repos/anvilresearch/connect/badge.svg?branch=master&service=github)](https://coveralls.io/github/anvilresearch/connect?branch=master)
 ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg)
 ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
 
@@ -77,4 +78,3 @@ Support and consulting also available, contact us via [the website](http://anvil
 ## MIT License
 
 Copyright (c) 2015 [Anvil Research, Inc.](http://anvil.io)
-
