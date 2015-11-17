@@ -46,8 +46,8 @@ var Client = Modinha.define('clients', {
     type: 'array',
     required: true,
     format: 'url',
-    message: 'invalid_redirect_uri',
     messages: {
+      message: 'invalid_redirect_uri',
       format: 'Must contain valid URIs',
       conform: 'Must follow guidelines in OpenID Connect Registration 1.0 ' +
         'specification for client metadata'

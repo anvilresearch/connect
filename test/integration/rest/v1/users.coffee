@@ -248,7 +248,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'application/json'
 
       it 'should respond with an error', ->
-        res.body.error.should.equal 'Validation error.'
+        res.body.error.should.contain 'validation_error'
 
 
 
@@ -360,7 +360,7 @@ describe 'RESTful User Routes', ->
         res.headers['content-type'].should.contain 'application/json'
 
       it 'should respond with an error', ->
-        res.body.error.should.equal 'Validation error.'
+        res.body.error.should.contain 'validation_error'
 
 
 

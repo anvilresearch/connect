@@ -115,7 +115,7 @@
     "ldapjs": "mcavage/node-ldapjs",
     "lodash": "^3.8.0",
     "mellt": "~1.0.0",
-    "modinha": "0.0.36",
+    "modinha": "0.0.38",
     "modinha-redis": "0.0.26",
     "nodemailer": "^1.4.0",
     "passport-adauth": "^0.1.2",

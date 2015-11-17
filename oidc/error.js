@@ -23,6 +23,19 @@ function error (err, req, res, next) {
 
     res.redirect(uri)
 
+  // 400 Validation Error
+  } else if (err.name === 'ValidationError') {
+    res.set({
+      'Cache-Control': 'no-store',
+      'Pragma': 'no-cache'
+    })
+
+    res.status(400).json({
+      error: 'validation_error',
+      error_description: err.message,
+      errors: err.errors
+    })
+
   // 400 Bad Request
   } else if (err.statusCode === 400) {
     res.set({

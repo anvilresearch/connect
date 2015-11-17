@@ -226,7 +226,7 @@ describe 'RESTful Client Routes', ->
 
     describe 'with invalid data', ->
 
-      client = new Client name: false
+      client = new Client application_type: false
       validation = client.validate()
 
       before (done) ->
@@ -252,7 +252,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'application/json'
 
       it 'should respond with an error', ->
-        res.body.error.should.equal 'Validation error.'
+        res.body.error.should.contain 'validation_error'
 
 
 
@@ -364,7 +364,7 @@ describe 'RESTful Client Routes', ->
         res.headers['content-type'].should.contain 'application/json'
 
       it 'should respond with an error', ->
-        res.body.error.should.equal 'Validation error.'
+        res.body.error.should.contain 'validation_error'
 
 
 
