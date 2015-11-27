@@ -11,7 +11,7 @@ chai.should()
 
 
 
-
+AccessToken = require '../../../models/AccessToken'
 {promptToAuthorize} = require '../../../oidc'
 
 
@@ -25,7 +25,7 @@ describe 'Prompt to Authorize', ->
 
   describe 'with third party client', ->
 
-    describe 'at authorize endpoint', ->
+    describe 'at authorize endpoint with pre-existing consent', ->
 
       before ->
         req =
@@ -41,23 +41,24 @@ describe 'Prompt to Authorize', ->
 
         next = sinon.spy()
 
+        sinon.stub(AccessToken, 'exists').callsArgWith(2, null, true)
+
         promptToAuthorize req, res, next
 
-      it 'should render the consent view', ->
-        res.render.should.have.been.calledWith 'authorize',
-          request: req.connectParams
-          client:  req.client
-          user:    req.user
-          scopes:  req.scopes
+      after ->
+        AccessToken.exists.restore()
+
+      it 'should not render the consent view', ->
+        res.render.should.not.have.been.called
 
       it 'should not redirect', ->
         res.redirect.should.not.have.been.called
 
-      it 'should not continue', ->
-        next.should.not.have.been.called
+      it 'should continue', ->
+        next.should.have.been.called
 
 
-    describe 'at other endpoint', ->
+    describe 'at other endpoint with pre-existing consent', ->
 
       before ->
         req =
@@ -80,7 +81,90 @@ describe 'Prompt to Authorize', ->
 
         next = sinon.spy()
 
+        sinon.stub(AccessToken, 'exists')
+          .callsArgWith(2, null, true)
+
+        promptToAuthorize req, res, next
+
+      after ->
+        AccessToken.exists.restore()
+
+      it 'should not render the consent view', ->
+        res.render.should.not.have.been.called
+
+      it 'should not redirect to the authorize endpoint', ->
+        res.redirect.should.not.have.been.called
+
+      it 'should continue', ->
+        next.should.have.been.called
+
+
+    describe 'at authorize endpoint without pre-existing consent', ->
+
+      before ->
+        req =
+          connectParams: {}
+          client: {}
+          user:   {}
+          scopes: {}
+          path:   '/authorize'
+
+        res =
+          render: sinon.spy()
+          redirect: sinon.spy()
+
+        next = sinon.spy()
+
+        sinon.stub(AccessToken, 'exists').callsArgWith(2, null, false)
+
+        promptToAuthorize req, res, next
+
+      after ->
+        AccessToken.exists.restore()
+
+      it 'should render the consent view', ->
+        res.render.should.have.been.calledWith 'authorize',
+          request: req.connectParams
+          client:  req.client
+          user:    req.user
+          scopes:  req.scopes
+
+      it 'should not redirect', ->
+        res.redirect.should.not.have.been.called
+
+      it 'should not continue', ->
+        next.should.not.have.been.called
+
+
+    describe 'at other endpoint without pre-existing consent', ->
+
+      before ->
+        req =
+          connectParams:
+            response_type:  'code'
+            client_id:      'uuid'
+            redirect_uri:   'https://host/callback'
+            scope:          'openid profile'
+            nonce:          'n0nc3'
+            state:          'st4t3'
+            max_age:        '1000'
+          client: {}
+          user:   {}
+          scopes: {}
+          path:   '/signin'
+
+        res =
+          render: sinon.spy()
+          redirect: sinon.spy()
+
+        next = sinon.spy()
+
+        sinon.stub(AccessToken, 'exists').callsArgWith(2, null, false)
+
         promptToAuthorize req, res
+
+      after ->
+        AccessToken.exists.restore()
 
       it 'should not render the consent view', ->
         res.render.should.not.have.been.called
