@@ -108,22 +108,19 @@ AccessToken.defineIndex({
   value: 'at'
 })
 
-// AccessToken.existing = function (userId, clientId, callback) {
-//  var key = 'user:client:token'
-//    , field = userId + ':' + clientId
-//
+/**
+ *
+ */
 
-//  this.__client.hget(key, field, function (err, id) {
-//    if (err) { return callback(err); }
-//    if (!id) { return callback(null, null); }
+AccessToken.exists = function (userId, clientId, callback) {
+  var key = 'user:client:token'
+  var field = userId + ':' + clientId
 
-//    AccessToken.get(id, function (err, token) {
-//      if (err) { return callback(err); }
-//      if (!token) { return callback(null, null); }
-//      callback(null, token.project('issue'))
-//    })
-//  })
-// }
+  this.__client.hget(key, field, function (err, id) {
+    if (err) return callback(err)
+    return callback(null, Boolean(id))
+  })
+}
 
 /**
  * Mappings

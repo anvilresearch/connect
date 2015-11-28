@@ -128,9 +128,51 @@ describe 'AccessToken', ->
 
 
 
+  describe 'exists', ->
+
+    {err,exist} = {}
+
+    describe 'with pre-existing consent', ->
+
+      before (done) ->
+        sinon.stub(rclient, 'hget')
+          .callsArgWith(2, null, 'uuid1')
+
+        AccessToken.exists 'uuid1', 'uuid2', (error, exists) ->
+          err = error
+          exist = exists
+          done()
+
+      it 'should provide true', ->
+        exist.should.equal true
+
+      it 'should not provide an error', ->
+        expect(err).to.be.null
+
+      after ->
+        rclient.hget.restore()
+
+    describe 'without pre-existing consent', ->
+      before (done) ->
+        sinon.stub(rclient, 'hget')
+          .callsArgWith(2, null, null)
+
+        AccessToken.exists 'uuid1', 'uuid2', (error, exists) ->
+          err = error
+          exist = exists
+          done()
+
+      after ->
+        rclient.hget.restore()
+
+      it 'should provide false', ->
+        expect(exist).to.be.false
+
+      it 'should not provide an error', ->
+        expect(err).to.be.null
+
+
   describe 'indexing', ->
-
-
 
 
   describe 'exchange', ->
