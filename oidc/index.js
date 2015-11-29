@@ -21,6 +21,7 @@ var oidc = {
   determineProvider: require('./determineProvider'),
   enforceReferrer: require('./enforceReferrer'),
   error: require('./error'),
+  getAuthorizedScopes: require('./getAuthorizedScopes'),
   getBearerToken: require('./getBearerToken'),
   parseAuthorizationHeader: require('./parseAuthorizationHeader'),
   promptToAuthorize: require('./promptToAuthorize'),
