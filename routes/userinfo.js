@@ -74,14 +74,11 @@ module.exports = function (server) {
         })
       })
 
-      var options = { /*private: true*/ } // Not sure what to do here
-
       // Do the update and return the usual userinfo data after the update is complete.
-      User.patch(req.claims.sub, authorizedUpdates, options, function (err, user) {
+      User.patch(req.claims.sub, authorizedUpdates, function (err, user) {
         if (err) { return next(err) }
         if (!user) { return next(new NotFoundError()) }
 
-        
         var projection = user.project('userinfo')
         var userInfo = { sub: projection.sub }
 
