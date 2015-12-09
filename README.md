@@ -22,7 +22,7 @@
 - Enable third-party developers using two- and three-legged OAuth 2.0
 
 #### Flexible User Authentication
-- Use local passwords, OAuth 1.0, OAuth 2.0, OpenID, LDAP, Active Directory, and more
+- Use local passwords, OAuth 1.0, OAuth 2.0, OpenID, SAML 2.0, LDAP, Active Directory, and more
 - Works out of the box with Google, Facebook, Twitter, GitHub, and a [growing list of providers](https://github.com/christiansmith/anvil-connect/tree/master/providers)
 - Custom schemes using virtually any existing Passport.js strategy or your own code
 
