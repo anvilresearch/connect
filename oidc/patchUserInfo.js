@@ -1,8 +1,17 @@
+/**
+ * Module dependencies
+ */
+
 var User = require('../models/User')
 var NotFoundError = require('../errors/NotFoundError')
 
+/**
+ * Export
+ */
+
 module.exports = function (req, res, next) {
-  // Map updates given in the request body to attributes in the scopes authorized by the access token.
+  // Map updates given in the request body to attributes
+  // in the scopes authorized by the access token.
   var scopeUserAttributes = []
   var authorizedUpdates = {}
   req.scopes.forEach(function (scope) {
@@ -14,7 +23,8 @@ module.exports = function (req, res, next) {
     })
   })
 
-  // Do the update and return the usual userinfo data after the update is complete.
+  // Do the update and return the usual userinfo data
+  // after the update is complete.
   User.patch(req.claims.sub, authorizedUpdates, function (err, user) {
     if (err) { return next(err) }
     if (!user) { return next(new NotFoundError()) }
