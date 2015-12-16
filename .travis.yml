@@ -3,9 +3,7 @@ sudo: false
 language: node_js
 
 node_js:
-  - "4.0"
-  - "iojs"
-  - "0.12"
+  - "4.2.3"
 
 env:
   - global:

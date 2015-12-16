@@ -88,7 +88,7 @@
     "istanbul": "^0.4.0",
     "mocha": "^2.3.2",
     "mocha-lcov-reporter": "^1.0.0",
-    "nock": "^2.2.0",
+    "nock": "^3.4.1",
     "sinon": "^1.15.1",
     "sinon-chai": "^2.8.0",
     "supertest": "^1.0.1"
@@ -124,7 +124,7 @@
     "passport-openid": "^0.4.0",
     "passport-saml": "^0.13.0",
     "passport-strategy": "~1.0.0",
-    "qs": "^5.0.0",
+    "qs": "^6.0.1",
     "revalidator": "^0.3.1",
     "semver": "^5.0.1",
     "superagent": "^1.2.0"
