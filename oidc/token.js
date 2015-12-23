@@ -87,7 +87,7 @@ function token (req, res, next) {
       iss: settings.issuer,
       sub: req.client._id,
       aud: req.client._id,
-      exp: req.client.default_max_age,
+      exp: nowSeconds(req.client.default_max_age),
       scope: req.scope
     }, privateKey, function (err, token) {
       if (err) { return next(err) }
