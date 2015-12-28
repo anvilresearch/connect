@@ -17,7 +17,7 @@ module.exports = function (req, res, next) {
   req.scopes.forEach(function (scope) {
     scope.attributes && scope.attributes.user && scope.attributes.user.forEach(function (key) {
       scopeUserAttributes.push(key)
-      if (req.body && req.body[key]) {
+      if (req.body && req.body[key] !== undefined) {
         authorizedUpdates[key] = req.body[key]
       }
     })
