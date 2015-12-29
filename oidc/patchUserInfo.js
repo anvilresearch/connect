@@ -25,7 +25,9 @@ module.exports = function (req, res, next) {
 
   // Do the update and return the usual userinfo data
   // after the update is complete.
-  User.patch(req.claims.sub, authorizedUpdates, function (err, user) {
+  User.patch(req.claims.sub, authorizedUpdates, {
+    mapping: 'userinfo'
+  }, function (err, user) {
     if (err) { return next(err) }
     if (!user) { return next(new NotFoundError()) }
 

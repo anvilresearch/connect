@@ -90,7 +90,7 @@ describe 'Update UserInfo', ->
       json = sinon.spy()
       status = sinon.spy -> json: json
       sinon.stub(User, 'patch')
-        .callsArgWith(2, null, null)
+        .callsArgWith(3, null, null)
 
       req =
         claims: sub: 'uuid'
@@ -128,7 +128,7 @@ describe 'Update UserInfo', ->
       json = sinon.spy()
       status = sinon.spy -> json: json
       sinon.stub(User, 'patch')
-        .callsArgWith(2, new Error('Validation error'))
+        .callsArgWith(3, new Error('Validation error'))
 
       req =
         claims: sub: 'uuid'
@@ -164,7 +164,7 @@ describe 'Update UserInfo', ->
       json = sinon.spy()
       status = sinon.spy -> json: json
       sinon.stub(User, 'patch')
-        .callsArgWith(2, null, user)
+        .callsArgWith(3, null, user)
 
       req =
         claims: sub: 'uuid'
