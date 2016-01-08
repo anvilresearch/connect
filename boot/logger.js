@@ -9,30 +9,34 @@ var bunyan = require('express-bunyan-logger')
 var ensureWritableDirectory = require('../lib/fs-utils').ensureWritableDirectory
 
 /**
- * Logstreams
- */
-
-var streams = []
-
-if (!env.match(/test/i)) {
-  var logs_path = path.join(cwd, 'logs')
-  ensureWritableDirectory(logs_path)
-
-  streams.push({ stream: process.stdout })
-  streams.push({ path: path.join(logs_path, env + '.log') })
-}
-
-/**
  * Export
  */
 
-module.exports = function (config) {
-  var logger = bunyan(config || {
-    name: 'request',
-    streams: streams
-  })
+module.exports = function (options) {
+  var logger
+  var config
 
+  if (!env.match(/test/i)) {
+    var streams = []
+    var logsPath = path.join(cwd, 'logs')
+    ensureWritableDirectory(logsPath)
+
+    if (options && options.stdio) { streams.push({ stream: process.stdout }) }
+    if (options && options.file) { streams.push({ path: path.join(logsPath, env + '.log') }) }
+
+    config = {
+      name: 'request',
+      streams: streams
+    }
+
+    try {
+      config = require('../logger')
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') { throw e }
+    }
+  }
+
+  logger = bunyan(config)
   module.exports = logger
-
   return logger
 }
