@@ -20,7 +20,7 @@ module.exports = function (options) {
     var logsPath = path.join(cwd, 'logs')
     ensureWritableDirectory(logsPath)
 
-    if (options && options.stdio) { config.streams.push({ stream: process.stdout }) }
+    if (options && options.stdout) { config.streams.push({ stream: process.stdout }) }
     if (options && options.file) { config.streams.push({ path: path.join(logsPath, env + '.log') }) }
 
     try {
