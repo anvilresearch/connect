@@ -14,20 +14,14 @@ var ensureWritableDirectory = require('../lib/fs-utils').ensureWritableDirectory
 
 module.exports = function (options) {
   var logger
-  var config
+  var config = { name: 'request', streams: [] }
 
   if (!env.match(/test/i)) {
-    var streams = []
     var logsPath = path.join(cwd, 'logs')
     ensureWritableDirectory(logsPath)
 
-    if (options && options.stdio) { streams.push({ stream: process.stdout }) }
-    if (options && options.file) { streams.push({ path: path.join(logsPath, env + '.log') }) }
-
-    config = {
-      name: 'request',
-      streams: streams
-    }
+    if (options && options.stdio) { config.streams.push({ stream: process.stdout }) }
+    if (options && options.file) { config.streams.push({ path: path.join(logsPath, env + '.log') }) }
 
     try {
       config = require('../logger')
