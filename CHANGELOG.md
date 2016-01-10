@@ -1,5 +1,41 @@
 # Change Log
 
+## [0.1.59](https://github.com/anvilresearch/connect/tree/0.1.59) (2016-01-09)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.58...0.1.59)
+
+**Implemented enhancements:**
+
+- Reuse previous user consent when reauthorizing a third party client [\#26](https://github.com/anvilresearch/connect/issues/26)
+
+**Fixed bugs:**
+
+- connect-redis - ERR wrong number of arguments for 'set' command [\#298](https://github.com/anvilresearch/connect/issues/298)
+
+**Closed issues:**
+
+- Will you accept a PR updating the Dependencies? [\#300](https://github.com/anvilresearch/connect/issues/300)
+- Getting connect up and running on OS X [\#294](https://github.com/anvilresearch/connect/issues/294)
+- npm install on OS X with node 0.12 failing  [\#287](https://github.com/anvilresearch/connect/issues/287)
+- Coverage data for the Travis build? [\#274](https://github.com/anvilresearch/connect/issues/274)
+
+**Merged pull requests:**
+
+- Extract `ensureWritableDirectory` to `fs-utils` [\#308](https://github.com/anvilresearch/connect/pull/308) ([bauglir](https://github.com/bauglir))
+- Return array of strings from `authorizedScope` [\#307](https://github.com/anvilresearch/connect/pull/307) ([bauglir](https://github.com/bauglir))
+- Add endpoints for manipulating client roles [\#306](https://github.com/anvilresearch/connect/pull/306) ([bauglir](https://github.com/bauglir))
+- Ensure writable `logs` folder on boot [\#305](https://github.com/anvilresearch/connect/pull/305) ([bauglir](https://github.com/bauglir))
+- UserInfo update [\#303](https://github.com/anvilresearch/connect/pull/303) ([christiansmith](https://github.com/christiansmith))
+- udpate dependencies [\#301](https://github.com/anvilresearch/connect/pull/301) ([nelsonic](https://github.com/nelsonic))
+- feat\(authorize\): reuse existing consent with third party client [\#299](https://github.com/anvilresearch/connect/pull/299) ([EternalDeiwos](https://github.com/EternalDeiwos))
+- Specifying 'query' response\_mode still resulted in fragmented \(\#\) response. [\#297](https://github.com/anvilresearch/connect/pull/297) ([tonyevans](https://github.com/tonyevans))
+- eslint to ignore public vendor scripts. [\#295](https://github.com/anvilresearch/connect/pull/295) ([henrjk](https://github.com/henrjk))
+- Improve coveralls in travis build [\#293](https://github.com/anvilresearch/connect/pull/293) ([henrjk](https://github.com/henrjk))
+- Add coveralls.io to build [\#290](https://github.com/anvilresearch/connect/pull/290) ([christiansmith](https://github.com/christiansmith))
+- feat\(logger\): replace bucker with bunyan [\#282](https://github.com/anvilresearch/connect/pull/282) ([anth1y](https://github.com/anth1y))
+
+## [0.1.58](https://github.com/anvilresearch/connect/tree/0.1.58) (2015-10-22)
+[Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.57...0.1.58)
+
 ## [0.1.57](https://github.com/anvilresearch/connect/tree/0.1.57) (2015-10-21)
 [Full Changelog](https://github.com/anvilresearch/connect/compare/0.1.56...0.1.57)
 

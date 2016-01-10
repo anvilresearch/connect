@@ -1,7 +1,7 @@
 {
   "name": "anvil-connect",
   "description": "A modern authorization server built to authenticate your users and protect your APIs",
-  "version": "0.1.58",
+  "version": "0.1.59",
   "author": {
     "name": "Christian Smith",
     "email": "smith@anvil.io",
