@@ -151,7 +151,7 @@ AccessToken.mappings.exchange = {
 AccessToken.exchange = function (request, callback) {
   var token = AccessToken.initialize(request.code, { mapping: 'exchange' })
   token.iss = settings.issuer
-  token.rt = random(10)()
+  token.rt = random(settings.refresh_token_bytes_range)()
   this.insert(token, function (err, token) {
     if (err) { return callback(err) }
     callback(null, token)
@@ -214,6 +214,7 @@ AccessToken.refresh = function (refreshToken, clientId, callback) {
       uid: at.uid,
       cid: at.cid,
       ei: at.ei,
+      rt: random(settings.refresh_token_bytes_range)(),
       scope: at.scope
     }, function (err, token) {
       if (err) { return callback(err) }

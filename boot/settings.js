@@ -430,6 +430,14 @@ settings.op_policy_uri = undefined
 settings.op_tos_uri = undefined
 
 /**
+ * refresh_token_bytes_range
+ *   Define the range of random bytes used to generate the refresh_token
+ *   with crypto.randomBytes
+ */
+
+settings.refresh_token_bytes_range = 10
+
+/**
  * Load config file settings and override defaults
  */
 
