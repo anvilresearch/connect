@@ -412,6 +412,7 @@ describe 'AccessToken', ->
           ei:      600
           scope:  'openid profile'
         })
+        sinon.spy(AccessToken, 'insert')
         AccessToken.refresh 'r3fr3sh', 'uuid2', (error, result) ->
           err = error
           instance = result
@@ -420,6 +421,7 @@ describe 'AccessToken', ->
       after ->
         multi.exec.restore()
         AccessToken.delete.restore()
+        AccessToken.insert.restore()
         AccessToken.getByRt.restore()
 
       it 'should delete the existing token', ->
@@ -430,6 +432,17 @@ describe 'AccessToken', ->
 
       it 'should provide a new token instance', ->
         expect(instance).to.be.instanceof AccessToken
+
+      it 'should persist the new token instance with a refresh_token and same client_id', ->
+        AccessToken.insert.should.have.been.calledWith sinon.match({
+          cid: 'uuid2'
+          rt: sinon.match.string
+        })
+
+      it 'should provide a new value for the refresh_token', ->
+        AccessToken.insert.should.have.not.been.calledWith sinon.match({
+          rt: 'r3fr3sh'
+        })
 
 
 
