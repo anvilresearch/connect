@@ -8,12 +8,7 @@
 ![Dependencies](https://img.shields.io/david/anvilresearch/connect.svg) ![License](https://img.shields.io/github/license/anvilresearch/connect.svg) ![Downloads](https://img.shields.io/npm/dm/anvil-connect.svg)
 ![npm](https://img.shields.io/npm/v/anvil-connect.svg)
 
-## What We're Doing
 ### We're building a modern authorization server to authenticate your users and protect your APIs.
-
-#### You can find professional services and sponsor information on [our website](http://anvil.io).
-
-#### You can support us on [Bountysource](https://salt.bountysource.com/teams/anvilresearch). We are 100% open source, we appreciate the help!
 
 #### Simplified Security
 - Share user accounts between multiple apps and services with Single Sign-On (shared sessions)
