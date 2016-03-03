@@ -53,7 +53,7 @@ function errorLogging () {
 
 module.exports = function (options) {
   var logger
-  var config = { name: 'request', streams: [], level: 'error' }
+  var config = { name: 'request', streams: [], level: 'info' }
 
   if (!env.match(/test/i)) {
     var logsPath = path.join(cwd, 'logs')
