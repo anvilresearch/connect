@@ -11,15 +11,34 @@ var oidc = require('../oidc')
 
 var FN_ARGS_SPLIT = /^[^\(]*\(\s*([^\)]*)\)/m
 
-function getSignature (fn) {
+/**
+ * Returns a given function's parameter list in string form.
+ * E.g. 'req, res, next' for a middleware function.
+ */
+
+function getParams (fn) {
   return fn.toString().match(FN_ARGS_SPLIT)[1]
 }
+
+/**
+ * Adds logging to Anvil by looping through the applicable Anvil modules
+ * and injecting any function whose parameter list matches the parameter
+ * list of the given addLogging function into the addLogging function where
+ * it will be executed along with the embedded log statement.
+ *
+ * Applicable modules have an index.js which contains the module's
+ * functions. The module's functions are iterated through shallowly, nested
+ * functions cannot be matched against. The functions should be named
+ * rather than anonymous to improve the logging output.
+ *
+ * Currently only the oidc module is applicable.
+ */
 
 function addLoggingAnvil (addLogging) {
   function addLoggingModule (module) {
     for (var idx in module) {
       var fn = module[idx]
-      if (getSignature(fn) === addLogging.signature) {
+      if (getParams(fn) === addLogging.params) {
         // wrap function with logging
         module[fn.name] = addLogging(fn)
       }
@@ -28,6 +47,13 @@ function addLoggingAnvil (addLogging) {
   addLoggingModule(oidc)
 }
 
+/**
+ * For each log level that has been implemented, a function has been added
+ * below containing the desired logging statement, the original function
+ * call (either before or after as desired). This function accepts a 'fn'
+ * param which is a function (with matching parameter list) it will wrap.
+ */
+
 function addDebugLogging () {
   var addLogging = function (fn) {
     return function (req, res, next) {
@@ -35,7 +61,7 @@ function addDebugLogging () {
       fn(req, res, next)
     }
   }
-  addLogging.signature = 'req, res, next'
+  addLogging.params = 'req, res, next'
   addLoggingAnvil(addLogging)
 }
 
@@ -46,7 +72,7 @@ function addErrorLogging () {
       fn(err, req, res, next)
     }
   }
-  addLogging.signature = 'err, req, res, next'
+  addLogging.params = 'err, req, res, next'
   addLoggingAnvil(addLogging)
 }
 
