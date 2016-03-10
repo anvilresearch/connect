@@ -43,6 +43,7 @@ require('./routes/applications')(server)
  */
 
 require('./routes/rest/v1/users')(server)
+require('./routes/rest/v1/userPassword')(server)
 require('./routes/rest/v1/clientRoles')(server)
 require('./routes/rest/v1/clients')(server)
 require('./routes/rest/v1/scopes')(server)
