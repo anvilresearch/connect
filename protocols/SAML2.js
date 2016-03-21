@@ -12,7 +12,10 @@ var User = require('../models/User')
 
 function verifier (provider, configuration) {
   return function (req, user, done) {
-    user.id = user[provider.mapping.id]
+    if (typeof provider.mapping.id === 'function') 
+      user.id = provider.mapping.id(user)
+    else
+      user.id = user[provider.mapping.id]
     console.log(user, user.getAssertionXml())
     User.connect(req, null, user, done)
   }
