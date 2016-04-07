@@ -75,6 +75,18 @@ module.exports = function (server) {
   })
 
   /**
+   * PATCH /v1/users/:id/password
+   */
+
+  server.patch('/v1/users/:id/password', authorize, function (req, res, next) {
+    User.changePassword(req.params.id, req.body.password, function (err, user) {
+      if (err) { return next(err) }
+      if (!user) { return next(new NotFoundError()) }
+      res.json(user)
+    })
+  })
+
+  /**
    * DELETE /v1/users/:id
    */
 
