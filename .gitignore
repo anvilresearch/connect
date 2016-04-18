@@ -1,6 +1,7 @@
 config
 coverage
 hooks
+extensions
 keys
 logs
 node_modules
