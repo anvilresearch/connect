@@ -121,5 +121,4 @@ module.exports = function (server) {
       res.json(instance)
     })
   })
-
 }
