@@ -97,4 +97,29 @@ module.exports = function (server) {
       res.sendStatus(204)
     })
   })
+
+  /**
+   * HEAD /v1/users/email/:email
+   */
+
+  server.head('/v1/users/email/:email', authorize, function (req, res, next) {
+    User.getByEmail(req.params.email, function (err, instance) {
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.sendStatus(204)
+    })
+  })
+
+  /**
+   * GET /v1/users/email/:email
+   */
+
+  server.get('/v1/users/email/:email', authorize, function (req, res, next) {
+    User.getByEmail(req.params.email, function (err, instance) {
+      if (err) { return next(err) }
+      if (!instance) { return next(new NotFoundError()) }
+      res.json(instance)
+    })
+  })
+
 }
