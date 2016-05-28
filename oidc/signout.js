@@ -40,6 +40,9 @@ function signout (req, res, next) {
       // logout and redirect
       } else {
         authenticator.logout(req)
+        if (req.query.state) {
+          uri += '?state=' + req.query.state
+        }
         res.redirect(uri)
       }
     })

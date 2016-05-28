@@ -158,6 +158,7 @@ describe 'Signout', ->
             query:
               post_logout_redirect_uri: 'http://example.com'
               id_token_hint: validIDToken
+              state: 'encodedState'
             session:
               opbs: opbs
               amr: ['otp']
@@ -184,8 +185,8 @@ describe 'Signout', ->
         it 'should not respond 204', ->
           res.send.should.not.have.been.calledWith 204
 
-        it 'should redirect', ->
-          res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri
+        it 'should redirect with state param', ->
+          res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri + '?state='+req.query.state
 
 
     describe 'with invalid token', ->
