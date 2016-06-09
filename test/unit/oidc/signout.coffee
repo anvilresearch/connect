@@ -19,7 +19,6 @@ InvalidTokenError = require '../../../errors/InvalidTokenError'
 {signout} = require('../../../oidc')
 
 
-
 describe 'Signout', ->
 
 
@@ -32,16 +31,12 @@ describe 'Signout', ->
     describe 'valid token', ->
 
 
-
-
       validIDToken = new IDToken({
         iss: 'https://anvil.io',
         sub: 'user-uuid',
         aud: 'client-uuid',
 
       }).encode(settings.keys.sig.prv)
-
-
 
 
       describe 'and client get error', ->
@@ -59,6 +54,7 @@ describe 'Signout', ->
             set: sinon.spy()
             send: sinon.spy()
             redirect: sinon.spy()
+            sendStatus: sinon.spy()
           next = sinon.spy (error) ->
             err = error
             done()
@@ -145,7 +141,6 @@ describe 'Signout', ->
         it 'should respond 204', ->
           res.sendStatus.should.have.been.calledWith 204
 
-
       describe 'and valid uri', ->
 
         before ->
@@ -166,6 +161,7 @@ describe 'Signout', ->
             set: sinon.spy()
             send: sinon.spy()
             redirect: sinon.spy()
+            sendStatus: sinon.spy()
           next = sinon.spy()
           signout(req, res, next)
 
@@ -186,13 +182,12 @@ describe 'Signout', ->
           res.send.should.not.have.been.calledWith 204
 
         it 'should redirect with state param', ->
-          res.redirect.should.have.been.calledWith req.query.post_logout_redirect_uri + '?state='+req.query.state
+          res.redirect.should.have.been.calledWith 303, req.query.post_logout_redirect_uri + '?state='+req.query.state
 
 
     describe 'with invalid token', ->
 
       invalidIDToken = 'WRONG'
-
 
       before (done) ->
         opbs = 'b3f0r3'
@@ -207,22 +202,21 @@ describe 'Signout', ->
           sendStatus: sinon.spy (status) ->
             done()
           redirect: sinon.spy()
-        next = sinon.spy()
+        next = sinon.spy (err) ->
+          done()
         signout(req, res, next)
 
-      it 'should update OP browser state', ->
-        req.session.opbs.should.not.equal opbs
-
-      it 'should not continue', ->
-        next.should.not.have.been.called
+      it 'should not update OP browser state', ->
+        req.session.opbs.should.equal opbs
 
       it 'should not redirect', ->
         res.redirect.should.not.have.been.called
 
+      it 'should provide an error', ->
+        next.should.have.been.calledWith new Error()
+
       it 'should respond', ->
-        res.sendStatus.should.have.been.called
-
-
+        res.sendStatus.should.not.have.been.called
 
 
   describe 'with uri only', ->
@@ -257,8 +251,6 @@ describe 'Signout', ->
 
     it 'should not redirect', ->
       res.redirect.should.not.have.been.called
-
-
 
 
   describe 'without uri', ->
