@@ -34,7 +34,7 @@ module.exports = function (options) {
       if (err) { return next(err) }
 
       var isAuthority = roles && roles.some(function (role) {
-        return role.name === 'authority'
+        return role && role.name && role.name === 'authority'
       })
 
       if (req.user.emailVerified || isAuthority) {
