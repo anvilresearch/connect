@@ -115,7 +115,7 @@ module.exports = function (options) {
     }
 
     try {
-      config = require('../logger')
+      config = require(path.join(cwd, 'logger'))
     } catch (e) {
       if (e.code !== 'MODULE_NOT_FOUND') { throw e }
     }
