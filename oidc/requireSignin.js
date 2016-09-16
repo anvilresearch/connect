@@ -21,6 +21,7 @@ function requireSignin (req, res, next) {
   if (!req.user && prompt === 'none') {
     res.redirect(req.connectParams.redirect_uri + responseMode + qs.stringify({
       error: 'login_required',
+      state: req.connectParams.state,
       session_state: sessionState(req.client, req.client.client_uri, req.session.opbs)
     }))
 
