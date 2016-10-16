@@ -34,9 +34,10 @@ function signout (req, res, next) {
     if (idToken instanceof Error) { return next(idToken) }
     clientId = idToken.payload.aud
   }
-  if (idToken && postLogoutUri) {
+  authenticator.logout(req)
+  if (clientId && postLogoutUri) {
     // Verify the post-signout uri (must have been registered for this client)
-    Client.get(clientId, function (err, client) {
+    return Client.get(clientId, function (err, client) {
       if (err) { return next(err) }
       var isValidUri = false
       if (client) {
@@ -49,22 +50,24 @@ function signout (req, res, next) {
           postLogoutUri += '?state=' + state
         }
         // sign out and redirect
-        authenticator.logout(req)
-        res.redirect(303, postLogoutUri)
-        return
+        return res.redirect(303, postLogoutUri)
       }
       // Otherwise, fall through to default case below
+      return emptyresponse(res)
     })
   }
   // Handle all the other cases - no postLogoutUri specified, or the client is
   // unknown, or the given postLogoutUri has not been registered previously.
   // Do not redirect, simply sign out
-  authenticator.logout(req)
+  return emptyresponse(res)
+}
+
+function emptyresponse (res) {
   res.set({
     'Cache-Control': 'no-store',
     'Pragma': 'no-cache'
   })
-  res.sendStatus(204)
+  return res.sendStatus(204)
 }
 
 /**
