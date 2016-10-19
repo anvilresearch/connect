@@ -82,7 +82,7 @@ function addErrorLogging () {
 
 module.exports = function (options) {
   var logger
-  var config = { name: 'request', streams: [], level: 'info' }
+  var config = { name: 'request', streams: [], level: 'info', obfuscate: [ 'body.password' ] }
 
   if (!env.match(/test/i)) {
     var logsPath = path.join(cwd, 'logs')
