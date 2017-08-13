@@ -64,7 +64,7 @@ module.exports = function (server) {
    * Views configuration
    */
 
-  var engine = settings.view_engine || 'jade'
+  var engine = settings.view_engine || 'pug'
   server.engine(engine, cons[engine])
   server.set('view engine', engine)
 
