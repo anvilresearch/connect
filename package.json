@@ -101,7 +101,7 @@
     "anvil-connect-keys": "^0.1.0",
     "async": "^2.5.0",
     "base64url": "^2.0.0",
-    "bcrypt": "~1.0.2",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
     "connect-redis": "^3.3.0",
