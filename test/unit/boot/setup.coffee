@@ -78,9 +78,9 @@ describe 'Setup', ->
       {err,token} = {}
 
       before (done) ->
-        sinon.stub fs, 'readFileSync', ->
+        sinon.stub(fs, 'readFileSync').callsFake( ->
           toString: ->
-            '0123456789abcdef'
+            '0123456789abcdef')
         sinon.stub fs, 'writeFileSync'
 
         setup.readSetupToken (error, setupToken) ->
@@ -106,8 +106,8 @@ describe 'Setup', ->
       {err,token} = {}
 
       before (done) ->
-        sinon.stub fs, 'readFileSync', ->
-          throw new Error()
+        sinon.stub(fs, 'readFileSync').callsFake( ->
+          throw new Error())
         sinon.stub fs, 'writeFileSync'
 
         setup.readSetupToken (error, setupToken) ->
@@ -133,9 +133,9 @@ describe 'Setup', ->
       {err,token} = {}
 
       before (done) ->
-        sinon.stub fs, 'readFileSync', ->
+        sinon.stub(fs, 'readFileSync').callsFake( ->
           toString: ->
-            ''
+            '')
         sinon.stub fs, 'writeFileSync'
 
         setup.readSetupToken (error, setupToken) ->
@@ -161,9 +161,9 @@ describe 'Setup', ->
       {err,token} = {}
 
       before (done) ->
-        sinon.stub fs, 'readFileSync', ->
+        sinon.stub(fs, 'readFileSync').callsFake( ->
           toString: ->
-            '        '
+            '        ')
         sinon.stub fs, 'writeFileSync'
 
         setup.readSetupToken (error, setupToken) ->
