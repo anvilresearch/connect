@@ -99,9 +99,9 @@ function loadProviders (dir, files) {
           }
 
           // provider-specific refresh_userinfo setting
-          var orefuser_info = settings.providers[providerName].refresh_userinfo
-          if (typeof orefuser_info !== 'undefined') {
-            provider.refresh_userinfo = orefuser_info
+          var orefuserInfo = settings.providers[providerName].refresh_userinfo
+          if (typeof orefuserInfo !== 'undefined') {
+            provider.refresh_userinfo = orefuserInfo
           }
         }
 

@@ -174,7 +174,7 @@ AccessToken.issue = function (request, callback) {
     ei: (
       request.connectParams &&
       parseInt(request.connectParams.max_age, 10)
-      ) ||
+    ) ||
       request.client.default_max_age,
     scope: request.scope
   }, function (err, token) {

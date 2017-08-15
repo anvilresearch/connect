@@ -104,15 +104,15 @@ OAuth2Strategy.prototype.authenticate = authenticate
  *
  * Base64 encodes the user:password value for an HTTP Basic Authorization
  * header from a provider configuration object. The provider object should
- * specify a client_id and client_secret.
+ * specify a clientId and client_secret.
  */
 
 function base64credentials () {
-  var id = this.client.client_id
+  var id = this.client.clientId
   var secret = this.client.client_secret
   var credentials = id + ':' + secret
 
-  return new Buffer(credentials).toString('base64')
+  return Buffer.alloc(credentials.length, credentials).toString('base64')
 }
 
 OAuth2Strategy.prototype.base64credentials = base64credentials
@@ -126,16 +126,16 @@ function authorizationRequest (req, options) {
   var endpoints = this.endpoints
   var config = this.client
   var url = URL.parse(endpoints.authorize.url)
-  var response_type = 'code'
-  var client_id = config.client_id
-  var redirect_uri = provider.redirect_uri
+  var responseType = 'code'
+  var clientId = config.clientId
+  var redirectUri = provider.redirectUri
   var state = options.state
 
   // required authorization parameters
   url.query = {
-    response_type: response_type,
-    client_id: client_id,
-    redirect_uri: redirect_uri
+    responseType: responseType,
+    clientId: clientId,
+    redirectUri: redirectUri
   }
 
   // merge default and configured scopes
@@ -177,7 +177,7 @@ function authorizationCodeGrant (code, done) {
   // required token parameters
   params.grant_type = 'authorization_code'
   params.code = code
-  params.redirect_uri = provider.redirect_uri
+  params.redirectUri = provider.redirectUri
 
   // start building the request
   var req = request[method || 'post'](url)
@@ -189,7 +189,7 @@ function authorizationCodeGrant (code, done) {
 
   // Authenticate the client with POST params
   if (auth === 'client_secret_post') {
-    params.client_id = client.client_id
+    params.clientId = client.clientId
     params.client_secret = client.client_secret
   }
 
