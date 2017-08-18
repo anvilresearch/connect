@@ -58,7 +58,7 @@ describe 'OAuthStrategy temporaryCredentials', ->
       req.method.should.equal 'POST'
 
     it 'should set the "Authorization" header', ->
-      expect(headers.authorization).to.be.a.defined
+      expect(headers.authorization).to.not.be.undefined
 
     it 'should use the "OAuth" scheme', ->
       headers.authorization.should.contain 'OAuth'

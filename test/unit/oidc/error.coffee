@@ -152,7 +152,7 @@ describe 'Error Response', ->
       send.should.have.been.calledWith 'Unauthorized<br><br>description'
 
     it 'should challenge to authenticate', ->
-      res.headers['WWW-Authenticate'].should.be.defined
+      res.headers['WWW-Authenticate'].should.not.be.undefined
 
     it 'should provide a realm in the challenge', ->
       res.headers['WWW-Authenticate'].should.contain 'realm="realm"'

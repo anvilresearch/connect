@@ -96,7 +96,7 @@ describe 'Client Token', ->
         aud: 'uuid'
 
       token = new ClientToken payload
-      token.payload.iat.should.be.a.number
+      token.payload.iat.should.be.a('number')
 
     it 'should require "scope"', ->
       ClientToken.registeredClaims.scope.required.should.be.true

@@ -86,39 +86,39 @@ describe 'User Applications', ->
 
   it 'should include client id', ->
     res.forEach (client) ->
-      expect(client._id).to.be.defined
+      expect(client._id).to.not.be.undefined
 
   it 'should include client name', ->
     res.forEach (client) ->
-      expect(client.client_name).to.be.defined
+      expect(client.client_name).to.not.be.undefined
 
   it 'should include client uri', ->
     res.forEach (client) ->
-      expect(client.client_uri).to.be.defined
+      expect(client.client_uri).to.not.be.undefined
 
   it 'should include application_type', ->
     res.forEach (client) ->
-      expect(client.application_type).to.be.defined
+      expect(client.application_type).to.not.be.undefined
 
   it 'should include logo_uri', ->
     res.forEach (client) ->
-      expect(client.logo_uri).to.be.defined
+      expect(client.logo_uri).to.not.be.undefined
 
   it 'should include scopes', ->
     res.forEach (client) ->
-      expect(client.scopes).to.be.defined
+      expect(client.scopes).to.not.be.undefined
 
   it 'should include created', ->
     res.forEach (client) ->
-      expect(client.created).to.be.defined
+      expect(client.created).to.not.be.undefined
 
   it 'should include modified', ->
     res.forEach (client) ->
-      expect(client.modified).to.be.defined
+      expect(client.modified).to.not.be.undefined
 
   it 'should include visited', ->
     res.forEach (client) ->
-      expect(client.visited).to.be.defined
+      expect(client.visited).to.not.be.undefined
 
   it 'should not include client secret', ->
     res.forEach (client) ->

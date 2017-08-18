@@ -102,7 +102,7 @@ describe 'OAuth2Strategy userInfo', ->
       headers = req.req._headers
 
     it 'should set the Authorization header', ->
-      expect(headers.authorization).to.be.defined
+      expect(headers.authorization).to.not.be.undefined
 
     it 'should use the Basic scheme', ->
       expect(headers.authorization).to.contain 'Bearer '
@@ -131,7 +131,7 @@ describe 'OAuth2Strategy userInfo', ->
       headers = req.req._headers
 
     it 'should set a custom header', ->
-      expect(headers['x-custom-header']).to.be.defined
+      expect(headers['x-custom-header']).to.not.be.undefined
 
     it 'should use a custom scheme', ->
       expect(headers['x-custom-header']).to.contain 'OAuth '

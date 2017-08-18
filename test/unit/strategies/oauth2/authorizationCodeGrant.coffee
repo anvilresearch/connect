@@ -109,7 +109,7 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
       headers = req.req._headers
 
     it 'should set the Authorization header', ->
-      expect(headers.authorization).to.be.defined
+      expect(headers.authorization).to.not.be.undefined
 
     it 'should use the Basic scheme', ->
       expect(headers.authorization).to.contain 'Basic '
