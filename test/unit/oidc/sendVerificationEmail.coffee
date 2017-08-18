@@ -23,8 +23,7 @@ OneTimeToken = require '../../../models/OneTimeToken'
 describe 'Send Verification Email', ->
 
   before ->
-    sinon.stub mailer, 'getMailer', ->
-      fakeMailer
+    sinon.stub(mailer, 'getMailer').returns(fakeMailer)
 
   after ->
     mailer.getMailer.restore()
