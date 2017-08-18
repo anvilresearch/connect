@@ -65,7 +65,11 @@ describe 'Signout', ->
           Client.get.restore()
 
         it 'should provide an error', ->
-          next.should.have.been.calledWith new Error()
+          # Next two lines are the proposed replacement test
+          errArg = next.firstCall.args[0]
+          expect(errArg).to.be.instanceof(Error)
+          # Next one line was the original test.
+          # next.should.have.been.calledWith new Error()
 
 
       describe 'and unknown client', ->
@@ -213,7 +217,11 @@ describe 'Signout', ->
         res.redirect.should.not.have.been.called
 
       it 'should provide an error', ->
-        next.should.have.been.calledWith new Error()
+        # Next two lines are the proposed replacement test
+        errArg = next.firstCall.args[0]
+        expect(errArg).to.be.instanceof(Error)
+        # Next one line was the original test.
+        # next.should.have.been.calledWith new Error()
 
       it 'should respond', ->
         res.sendStatus.should.not.have.been.called
