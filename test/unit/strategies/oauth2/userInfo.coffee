@@ -50,6 +50,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .get('/user')
                    .reply(200, { uid: 1234, name: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
+      return
 
     it 'should use the specified endpoint', ->
       req.url.should.equal provider.endpoints.user.url
@@ -78,6 +79,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .patch('/user')
                    .reply(200, { uid: '1234', fullname: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
+      return
 
     it 'should use the specified HTTP method', ->
       req.method.should.equal 'PATCH'
@@ -156,6 +158,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .get('/user?' + auth.query + '=' + token)
                    .reply(200, { fullname: 'Dude' })
       req = strategy.userInfo token, -> done()
+      return
 
     it 'should set a custom parameter', ->
       req.qsRaw.should.contain 'oauth_token=r4nd0m'
@@ -175,6 +178,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .get('/user?foo=bar')
                    .reply(200, { fullname: 'Dude' })
       req = strategy.userInfo token, -> done()
+      return
 
     it 'should set a custom parameter', ->
       req.qs.foo.should.equal 'bar'
@@ -192,13 +196,14 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?entropy=t0k3n')
+        .patch('/user?foo=bar&entropy=t0k3n')
         .reply(400, { error: 'oops' })
 
       req = strategy.userInfo 't0k3n', (error, response) ->
         err = error
         res = response
         done()
+      return
 
     it 'should provide an error', ->
       err.message.should.equal 'oops'
@@ -219,13 +224,14 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?entr0py=t0k3n')
+        .patch('/user?foo=bar&entr0py=t0k3n')
         .reply(200, { uid: 1234, fullname: 'Yoda' })
 
-      req = strategy.userInfo 't0k3n', (error, response) ->
+      strategy.userInfo 't0k3n', (error, response) ->
         err = error
         res = response
         done()
+      return
 
     it 'should not provide an error', ->
       expect(err).to.be.null
