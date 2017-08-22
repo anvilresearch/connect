@@ -77,7 +77,7 @@ describe 'User', ->
       validation = user.validate()
 
     it 'should have unique identifier', ->
-      User.schema[User.uniqueId].should.be.an.object
+      User.schema[User.uniqueId].should.be.a('object')
 
 
     # STANDARD CLAIMS
@@ -386,8 +386,8 @@ describe 'User', ->
   describe 'change password', ->
 
     before ->
-      sinon.stub User, 'patch', (id, data, opts, cb) ->
-        cb null, { _id: id, hash: 'fakehash' }
+      sinon.stub(User, 'patch').callsFake((id, data, opts, cb) ->
+        cb null, { _id: id, hash: 'fakehash' })
 
     after ->
       User.patch.restore()

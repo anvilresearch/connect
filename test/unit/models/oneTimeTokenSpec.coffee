@@ -81,7 +81,7 @@ describe 'OneTimeToken', ->
     {rawToken, rawExpiredToken} = {}
 
     before ->
-      sinon.stub rclient, 'get', (key, callback) ->
+      sinon.stub(rclient, 'get').callsFake((key, callback) ->
         key = key.split(':')[1]
         if (key == 'valid')
           callback null, JSON.stringify(rawToken)
@@ -90,7 +90,7 @@ describe 'OneTimeToken', ->
         else if (key == 'malformed')
           callback null, 'banh_mi'
         else
-          callback null, null
+          callback null, null)
 
     after ->
       rclient.get.restore()
