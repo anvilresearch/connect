@@ -942,7 +942,7 @@ var authenticators = {
   'client_secret_basic': function (req, callback) {
     var authorization = req.headers.authorization.split(' ')
     var scheme = authorization[0]
-    var credentials = Buffer.alloc(authorization[1].length, authorization[1], 'base64')
+    var credentials = Buffer.from(authorization[1], 'base64')
       .toString('ascii')
       .split(':')
     var clientId = credentials[0]

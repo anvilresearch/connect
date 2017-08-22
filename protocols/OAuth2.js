@@ -112,7 +112,7 @@ function base64credentials () {
   var secret = this.client.client_secret
   var credentials = id + ':' + secret
 
-  return Buffer.alloc(credentials.length, credentials).toString('base64')
+  return Buffer.from(credentials).toString('base64')
 }
 
 OAuth2Strategy.prototype.base64credentials = base64credentials
