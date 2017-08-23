@@ -44,7 +44,9 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
       scope    = nock(provider.url)
                    .post('/token')
                    .reply(200, { access_token: 'h3x' })
-      req = strategy.authorizationCodeGrant 'r4nd0m', done
+      req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
+        done()
+      return
 
     it 'should use the specified endpoint', ->
       req.url.should.equal provider.endpoints.token.url
@@ -85,6 +87,7 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
 
       req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
         done()
+      return
 
     it 'should use the correct HTTP method', ->
       req.method.should.equal 'PATCH'
@@ -96,6 +99,8 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
 
     before (done) ->
       provider = _.clone providers.oauth2test, true
+      # Specifically setting the method, was getting holdover from other tests.
+      provider.endpoints.token.method = 'post'
       provider.endpoints.token.auth = 'client_secret_basic'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
@@ -105,8 +110,10 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
         .post('/token')
         .reply(200, { access_token: 'h3x' })
 
-      req = strategy.authorizationCodeGrant 'r4nd0m', done
-      headers = req.req._headers
+      req = strategy.authorizationCodeGrant 'r4nd0m', () -> 
+        headers = req.req._headers
+        done()
+      return 
 
     it 'should set the Authorization header', ->
       expect(headers.authorization).to.not.be.undefined
@@ -133,7 +140,9 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
         .post('/token')
         .reply(200, { access_token: 'h3x' })
 
-      req = strategy.authorizationCodeGrant 'r4nd0m', done
+      req = strategy.authorizationCodeGrant 'r4nd0m', () -> 
+        done()
+      return
 
     it 'should send the client_id', ->
       req._data.should.contain 'client_id=' + client.client_id
@@ -160,9 +169,10 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
         err = error
         res = response
         done()
+      return
 
     it 'should provide an error', ->
-      expect(err).to.be.an.object
+      expect(err).to.be.an('Error')
 
     it 'should not provide a token response', ->
       expect(res).to.be.undefined
@@ -189,6 +199,7 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
         err = error
         res = response
         done()
+      return
 
     it 'should not provide an error', ->
       expect(err).to.be.null
@@ -204,20 +215,20 @@ describe 'OAuth2Strategy authorizationCodeGrant', ->
 
     before (done) ->
       provider = _.clone providers.oauth2test, true
+      provider.endpoints.token.parser = 'json'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
         .post('/token')
-        .reply(200, { access_token: 'h3x' }, {
-          'content-type': 'application/json'
-        })
+        .reply(200, { access_token: 'h3x' })
 
       req = strategy.authorizationCodeGrant 'r4nd0m', (error, response) ->
         err = error
         res = response
         done()
+      return
 
     it 'should not provide an error', ->
       expect(err).to.be.null

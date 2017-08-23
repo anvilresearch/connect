@@ -50,7 +50,7 @@ describe 'OAuth2 Strategy', ->
       name: 'name'
 
   config =
-    client_id:      'id',
+    clientId:      'id',
     client_secret:  'secret'
     scope:          ['c']
 
@@ -179,15 +179,16 @@ describe 'OAuth2 Strategy', ->
       credentials = strategy.base64credentials()
 
     it 'should include the client_id', ->
-      new Buffer(credentials, 'base64')
+
+      Buffer.from(credentials, 'base64')
         .toString().should.contain config.client_id
 
     it 'should include the client_secret', ->
-      new Buffer(credentials, 'base64')
+      Buffer.from(credentials, 'base64')
         .toString().should.contain config.client_secret
 
     it 'should include the separator', ->
-      new Buffer(credentials, 'base64')
+      Buffer.from(credentials, 'base64')
         .toString().should.contain ':'
 
 
@@ -215,7 +216,7 @@ describe 'OAuth2 Strategy', ->
 
       it 'should include client_id', ->
         strategy.redirect.should.have.been.calledWith sinon.match(
-          'client_id=' + config.client_id
+          'client_id=' + config.clientId
         )
       it 'should include redirect_uri', ->
         strategy.redirect.should.have.been.calledWith sinon.match(

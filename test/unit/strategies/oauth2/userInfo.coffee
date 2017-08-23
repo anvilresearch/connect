@@ -190,13 +190,15 @@ describe 'OAuth2Strategy userInfo', ->
 
     before (done) ->
       provider = _.clone providers.oauth2test, true
+      # Specifically setting the method, was getting holdover from other tests.
+      provider.endpoints.user.method = 'get'
       provider.endpoints.user.auth = query: 'entropy'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .patch('/user?foo=bar&entropy=t0k3n')
+        .get('/user?foo=bar&entropy=t0k3n')
         .reply(400, { error: 'oops' })
 
       req = strategy.userInfo 't0k3n', (error, response) ->
@@ -224,7 +226,7 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .patch('/user?foo=bar&entr0py=t0k3n')
+        .get('/user?foo=bar&entr0py=t0k3n')
         .reply(200, { uid: 1234, fullname: 'Yoda' })
 
       strategy.userInfo 't0k3n', (error, response) ->
