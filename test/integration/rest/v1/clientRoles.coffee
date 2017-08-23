@@ -55,6 +55,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
 
@@ -79,6 +80,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -117,6 +119,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -146,6 +149,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -175,6 +179,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
 
@@ -202,6 +207,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -230,6 +236,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -259,6 +266,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -289,6 +297,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
 
@@ -311,6 +320,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -342,6 +352,7 @@ describe 'Client Roles REST Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()

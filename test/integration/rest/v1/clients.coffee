@@ -52,6 +52,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       it 'should respond 40x', ->
         res.statusCode.should.equal 400
@@ -75,6 +76,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -103,6 +105,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       it 'should respond 400', ->
         res.statusCode.should.equal 400
@@ -126,6 +129,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -155,6 +159,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -183,6 +188,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       it 'should respond 40x', ->
         res.statusCode.should.equal 400
@@ -209,6 +215,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -240,6 +247,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -268,6 +276,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       it 'should respond 40x', ->
         res.statusCode.should.equal 400
@@ -291,6 +300,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -321,6 +331,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -352,6 +363,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -380,6 +392,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       it 'should respond 40x', ->
         res.statusCode.should.equal 400
@@ -403,6 +416,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
@@ -432,6 +446,7 @@ describe 'RESTful Client Routes', ->
             err = error
             res = response
             done()
+        return
 
       after ->
         AccessToken.verify.restore()
