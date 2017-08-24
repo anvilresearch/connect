@@ -64,7 +64,7 @@ describe 'RESTful Role Routes', ->
 
       before (done) ->
         sinon.stub(AccessToken, 'verify').callsArgWith(2, null, {})
-        sinon.stub(Role, 'list').callsArgWith 1, null, []
+        sinon.stub(Role, 'list').callsArgWith(1, null, [])
         request
           .get('/v1/roles')
           .set('Authorization', 'Bearer valid.signed.token')
@@ -450,7 +450,3 @@ describe 'RESTful Role Routes', ->
 
       it 'should respond 204', ->
         res.statusCode.should.equal 204
-
-
-
-
