@@ -5,6 +5,7 @@ chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
 expect    = chai.expect
+util      = require 'util'
 
 
 
@@ -157,11 +158,11 @@ describe 'OAuth2Strategy userInfo', ->
       scope    = nock(provider.url)
                    .get('/user?' + auth.query + '=' + token)
                    .reply(200, { fullname: 'Dude' })
-      req = strategy.userInfo token, -> done()
+      req = strategy.userInfo token, () -> done()
       return
 
     it 'should set a custom parameter', ->
-      req.qsRaw.should.contain 'oauth_token=r4nd0m'
+      req.req.path.should.contain 'oauth_token=r4nd0m'
 
 
 
@@ -181,7 +182,7 @@ describe 'OAuth2Strategy userInfo', ->
       return
 
     it 'should set a custom parameter', ->
-      req.qs.foo.should.equal 'bar'
+      req.req.path.should.contain 'foo=bar'
 
 
 
@@ -198,7 +199,7 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?foo=bar&entropy=t0k3n')
+        .get('/user?entropy=t0k3n&foo=bar')
         .reply(400, { error: 'oops' })
 
       req = strategy.userInfo 't0k3n', (error, response) ->
@@ -226,7 +227,7 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?foo=bar&entr0py=t0k3n')
+        .get('/user?entr0py=t0k3n&foo=bar')
         .reply(200, { uid: 1234, fullname: 'Yoda' })
 
       strategy.userInfo 't0k3n', (error, response) ->
@@ -243,7 +244,3 @@ describe 'OAuth2Strategy userInfo', ->
 
     it 'should normalize the provider user id', ->
       res.id.should.equal '1234'
-
-
-
-
