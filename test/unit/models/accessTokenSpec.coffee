@@ -75,7 +75,7 @@ describe 'AccessToken', ->
       validation = instance.validate()
 
     it 'should have unique identifier', ->
-      AccessToken.schema[AccessToken.uniqueId].should.be.an.object
+      AccessToken.schema[AccessToken.uniqueId].should.be.a('object')
 
     it 'should generate a default access token', ->
       instance.at.length.should.equal 20
@@ -198,7 +198,7 @@ describe 'AccessToken', ->
         AccessToken.insert.restore()
 
       it 'should provide an error', ->
-        expect(err).to.be.an.object
+        expect(err).to.be.an('Error')
 
       it 'should not provide a value', ->
         expect(res).to.equal undefined
@@ -261,7 +261,7 @@ describe 'AccessToken', ->
         AccessToken.insert.restore()
 
       it 'should provide an error', ->
-        expect(err).to.be.an.object
+        expect(err).to.be.an('Error')
 
       it 'should not provide a value', ->
         expect(res).to.equal undefined

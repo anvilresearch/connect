@@ -90,8 +90,8 @@ function encodeOAuthData (data) {
   // non-empty data
   } else {
     return encodeURIComponent(data)
-      .replace(/\!/g, '%21')
-      .replace(/\'/g, '%27')
+      .replace(/!/g, '%21')
+      .replace(/'/g, '%27')
       .replace(/\(/g, '%28')
       .replace(/\)/g, '%29')
       .replace(/\*/g, '%2A')
@@ -259,7 +259,6 @@ function sign (method, input, consumerSecret, tokenSecret) {
 
     default:
     // ERROR
-
   }
 
   return result
@@ -516,7 +515,7 @@ function authenticate (req, options) {
   // Initiate the authorization flow
   } else {
     strategy.temporaryCredentials(function (err, response) {
-      if (err || !response && response.oauth_token) {
+      if (err || (!response && response.oauth_token)) {
         return strategy.error(
           new Error('Failed to obtain OAuth request token')
         )

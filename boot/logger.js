@@ -9,7 +9,7 @@ var bunyan = require('express-bunyan-logger')
 var ensureWritableDirectory = require('../lib/fs-utils').ensureWritableDirectory
 var oidc = require('../oidc')
 
-var FN_ARGS_SPLIT = /^[^\(]*\(\s*([^\)]*)\)/m
+var FN_ARGS_SPLIT = /^[^(]*\(\s*([^)]*)\)/m
 
 /**
  * Returns a given function's parameter list in string form.

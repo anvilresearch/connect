@@ -208,7 +208,7 @@ describe 'ID Token', ->
         aud: 'uuid'
 
       token = new IDToken payload
-      token.payload.exp.should.be.a.number
+      token.payload.exp.should.be.a('number')
       new Date(token.payload.exp * 1000).getDay().should.not.equal new Date().getDay()
 
     it 'should require "iat" Issued time', ->
@@ -222,18 +222,18 @@ describe 'ID Token', ->
         exp: Date.now()
 
       token = new IDToken payload
-      token.payload.iat.should.be.a.number
+      token.payload.iat.should.be.a('number')
 
     it 'should conditionally require "auth_time"'
 
     it 'should include "nonce"', ->
-      IDToken.registeredClaims.nonce.should.be.defined
+      IDToken.registeredClaims.nonce.should.not.be.undefined
 
     it 'should optionally include "acr"', ->
-      IDToken.registeredClaims.acr.should.be.defined
+      IDToken.registeredClaims.acr.should.not.be.undefined
 
     it 'should optionally include "amr"', ->
-      IDToken.registeredClaims.amr.should.be.defined
+      IDToken.registeredClaims.amr.should.not.be.undefined
 
     it 'should optionally include "azp"'
     it 'should optionally include other claims defined by the specification'

@@ -76,7 +76,7 @@ describe 'Client', ->
       validation = client.validate()
 
     it 'should have unique identifier', ->
-      Client.schema[Client.uniqueId].should.be.an.object
+      Client.schema[Client.uniqueId].should.be.a('object')
 
 
     # CLIENT METADATA

@@ -149,7 +149,7 @@ module.exports = function (server) {
         if (err && (
           err.name === 'PasswordRequiredError' ||
           err.name === 'InsecurePasswordError'
-          )) {
+        )) {
           return res.render('recovery/resetPassword', {
             validationError: err.message
           })

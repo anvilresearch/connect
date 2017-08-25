@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */ // --> Disable camelcase check because of function declaration below.
+
 /**
  * Module dependencies
  */

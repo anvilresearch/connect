@@ -5,6 +5,7 @@ chai      = require 'chai'
 sinon     = require 'sinon'
 sinonChai = require 'sinon-chai'
 expect    = chai.expect
+util      = require 'util'
 
 
 
@@ -50,6 +51,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .get('/user')
                    .reply(200, { uid: 1234, name: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
+      return
 
     it 'should use the specified endpoint', ->
       req.url.should.equal provider.endpoints.user.url
@@ -78,6 +80,7 @@ describe 'OAuth2Strategy userInfo', ->
                    .patch('/user')
                    .reply(200, { uid: '1234', fullname: 'Dude' })
       req = strategy.userInfo 'r4nd0m', -> done()
+      return
 
     it 'should use the specified HTTP method', ->
       req.method.should.equal 'PATCH'
@@ -102,7 +105,7 @@ describe 'OAuth2Strategy userInfo', ->
       headers = req.req._headers
 
     it 'should set the Authorization header', ->
-      expect(headers.authorization).to.be.defined
+      expect(headers.authorization).to.not.be.undefined
 
     it 'should use the Basic scheme', ->
       expect(headers.authorization).to.contain 'Bearer '
@@ -131,7 +134,7 @@ describe 'OAuth2Strategy userInfo', ->
       headers = req.req._headers
 
     it 'should set a custom header', ->
-      expect(headers['x-custom-header']).to.be.defined
+      expect(headers['x-custom-header']).to.not.be.undefined
 
     it 'should use a custom scheme', ->
       expect(headers['x-custom-header']).to.contain 'OAuth '
@@ -155,10 +158,11 @@ describe 'OAuth2Strategy userInfo', ->
       scope    = nock(provider.url)
                    .get('/user?' + auth.query + '=' + token)
                    .reply(200, { fullname: 'Dude' })
-      req = strategy.userInfo token, -> done()
+      req = strategy.userInfo token, () -> done()
+      return
 
     it 'should set a custom parameter', ->
-      req.qsRaw.should.contain 'oauth_token=r4nd0m'
+      req.req.path.should.contain 'oauth_token=r4nd0m'
 
 
 
@@ -175,9 +179,10 @@ describe 'OAuth2Strategy userInfo', ->
                    .get('/user?foo=bar')
                    .reply(200, { fullname: 'Dude' })
       req = strategy.userInfo token, -> done()
+      return
 
     it 'should set a custom parameter', ->
-      req.qs.foo.should.equal 'bar'
+      req.req.path.should.contain 'foo=bar'
 
 
 
@@ -186,19 +191,22 @@ describe 'OAuth2Strategy userInfo', ->
 
     before (done) ->
       provider = _.clone providers.oauth2test, true
+      # Specifically setting the method, was getting holdover from other tests.
+      provider.endpoints.user.method = 'get'
       provider.endpoints.user.auth = query: 'entropy'
       client = client_id: 'uuid', client_secret: 'h4sh'
       verifier = () ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?entropy=t0k3n')
+        .get('/user?entropy=t0k3n&foo=bar')
         .reply(400, { error: 'oops' })
 
       req = strategy.userInfo 't0k3n', (error, response) ->
         err = error
         res = response
         done()
+      return
 
     it 'should provide an error', ->
       err.message.should.equal 'oops'
@@ -219,13 +227,14 @@ describe 'OAuth2Strategy userInfo', ->
       strategy = new OAuth2Strategy provider, client, verifier
 
       scope = nock(provider.url)
-        .get('/user?entr0py=t0k3n')
+        .get('/user?entr0py=t0k3n&foo=bar')
         .reply(200, { uid: 1234, fullname: 'Yoda' })
 
-      req = strategy.userInfo 't0k3n', (error, response) ->
+      strategy.userInfo 't0k3n', (error, response) ->
         err = error
         res = response
         done()
+      return
 
     it 'should not provide an error', ->
       expect(err).to.be.null
@@ -235,7 +244,3 @@ describe 'OAuth2Strategy userInfo', ->
 
     it 'should normalize the provider user id', ->
       res.id.should.equal '1234'
-
-
-
-
