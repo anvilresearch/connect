@@ -177,7 +177,7 @@ function authorizationCodeGrant (code, done) {
   // required token parameters
   params.grant_type = 'authorization_code'
   params.code = code
-  params.redirectUri = provider.redirect_uri
+  params.redirect_uri = provider.redirect_uri
 
   // start building the request
   var req = request[method || 'post'](url)
