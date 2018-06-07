@@ -127,7 +127,7 @@ function authorizationRequest (req, options) {
   var config = this.client
   var url = URL.parse(endpoints.authorize.url)
   var responseType = 'code'
-  var clientId = config.clientId
+  var clientId = config.client_id
   var redirectUri = provider.redirect_uri
   var state = options.state
 
